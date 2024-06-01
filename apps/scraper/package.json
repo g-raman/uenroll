@@ -7,6 +7,10 @@
   "author": "Raman Gupta",
   "license": "MIT",
   "private": false,
+  "type": "module",
+  "scripts": {
+    "start": "tsx --no-deprecation src"
+  },
   "devDependencies": {
     "@eslint/js": "^9.3.0",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
@@ -15,6 +19,7 @@
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.3.0",
     "prettier": "^3.2.5",
+    "tsx": "^4.11.0",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.11.0"
   },
