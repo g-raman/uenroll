@@ -51,13 +51,13 @@ async function main() {
 
   const listOfSubjects: subject[] = [];
   for (let i = 0; i < alphaNumLinkArr.length; i++) {
-    const currElem = (await alphaNumLinkArr[i].remoteObject()) as Protocol.Runtime.RemoteObject;
-    const currSelector = currElem.description as string;
+    const currObj = (await alphaNumLinkArr[i].remoteObject()) as Protocol.Runtime.RemoteObject;
+    const currSelector = currObj.description as string;
     const currChar = extractCourseStartingLetter(currSelector);
     console.log(`Searching for subjects starting with ${currChar}`);
 
-    const test = await page.$(currSelector);
-    await test?.click();
+    const currElem = await page.$(currSelector);
+    await currElem?.click();
     await page.waitForNetworkIdle({ concurrency: 2 });
 
     const error = await page.$('.PSTEXT');
