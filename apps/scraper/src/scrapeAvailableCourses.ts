@@ -62,10 +62,10 @@ async function main() {
 
     const error = await page.$('.PSTEXT');
     if (error) {
-      console.log('No courses found\n');
+      console.log('No courses found');
       continue;
     }
-    console.log('Courses found\n');
+    console.log('Courses found');
 
     const result = await page.evaluate(async () => {
       const results: subject[] = [];
@@ -81,6 +81,11 @@ async function main() {
       }
       return results;
     });
+
+    if (!result) {
+      console.error(`Error: Something went wrong when scraping courses starting with ${currChar}\n`);
+    }
+    console.log(`Succesfully scraped courses starting with ${currChar}\n`);
 
     listOfSubjects.push(...result);
   }
