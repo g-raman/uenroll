@@ -9,7 +9,12 @@ const supabaseUrl = process.env.SUPABASE_URL as string;
 const supabaseKey = process.env.SUPABASE_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-async function updateAvailableTerms(availableTerms): Promise<void> {
+type term = {
+  value: string;
+  term: string;
+};
+
+async function updateAvailableTerms(availableTerms: term[]): Promise<void> {
   console.log('Inserting new available terms...');
   const { error } = await supabase.from('availableTerms').upsert(availableTerms, { onConflict: 'term' }).select();
   if (error) {
@@ -27,7 +32,7 @@ async function main() {
   await page.goto(URL, { waitUntil: 'networkidle2' });
 
   console.log('Scraping available terms...');
-  const availableTerms = await page.evaluate(() => {
+  const availableTerms: term[] = await page.evaluate(() => {
     const terms: HTMLSelectElement = document.getElementById('CLASS_SRCH_WRK2_STRM$35$') as HTMLSelectElement;
 
     return Array.from(terms.options)
