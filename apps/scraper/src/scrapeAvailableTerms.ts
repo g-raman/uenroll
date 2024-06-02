@@ -10,29 +10,14 @@ const supabaseKey = process.env.SUPABASE_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function updateAvailableTerms(availableTerms): Promise<void> {
-  const { status: softDeleteStatus } = await supabase
-    .from('availableTerms')
-    .update({ isDeleted: true })
-    .eq('isDeleted', false);
-
-  if (!softDeleteStatus) {
-    console.error('Error: Something went wrong when soft deleting old available terms');
-    return;
-  }
-
-  const { error } = await supabase.from('availableTerms').insert(availableTerms).select();
+  console.log('Inserting new available terms...');
+  const { error } = await supabase.from('availableTerms').upsert(availableTerms, { onConflict: 'term' }).select();
   if (error) {
     console.error('Error: Something went wrong when inserting new available terms data');
+    console.log(error);
     return;
   }
   console.log('Successfully inserted new available terms');
-
-  const { status: hardDeleteStatus } = await supabase.from('availableTerms').delete().eq('isDeleted', true);
-  if (!hardDeleteStatus) {
-    console.error('Error: Something went wrong when hard deleting old data');
-    return;
-  }
-  console.log('Successfully hard deleted old available terms');
 }
 
 async function main() {
