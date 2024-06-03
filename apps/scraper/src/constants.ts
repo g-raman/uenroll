@@ -15,3 +15,5 @@ export const URL: string =
   'PortalURI=https%3a%2f%2fuocampus.public.uottawa.ca' +
   '%2fpsc%2fcsprpr9pub%2f&PortalHostNode=SA&' +
   'NoCrumbs=yes&PortalKeyStruct=yes';
+
+export const NUM_YEARS: number = 5;
