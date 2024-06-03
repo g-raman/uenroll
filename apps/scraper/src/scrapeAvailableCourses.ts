@@ -1,10 +1,7 @@
 import puppeteer, { Browser, Page, Protocol } from 'puppeteer';
 import { URL } from './constants';
 import supabase from './supabase';
-
-type subject = {
-  subject: string;
-};
+import { subject } from './types';
 
 async function updateAvailableCourses(availableCourses: subject[]): Promise<void> {
   console.log('Inserting new available courses...');

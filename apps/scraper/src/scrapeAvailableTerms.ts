@@ -1,11 +1,7 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
 import { URL } from './constants';
 import supabase from './supabase';
-
-type term = {
-  value: string;
-  term: string;
-};
+import { term } from './types';
 
 async function updateAvailableTerms(availableTerms: term[]): Promise<void> {
   console.log('Inserting new available terms...');
