@@ -2,27 +2,23 @@ import { Page } from 'puppeteer';
 import supabase from './supabase';
 
 async function updateCourseDetails(course, courseComponents, sessions) {
-  const { data: courseInsertData, error: courseInsertError } = await supabase.from('courses').insert(course);
+  console.log(`Inserting data for ${course.courseCode}...`);
+  const { error: courseInsertError } = await supabase.from('courses').insert(course);
 
   if (courseInsertError) {
     console.log(courseInsertError);
   }
-  console.log(courseInsertData);
 
-  const { data: componentInsertData, error: componentInsertError } = await supabase
-    .from('courseComponents')
-    .insert(courseComponents);
+  const { error: componentInsertError } = await supabase.from('courseComponents').insert(courseComponents);
 
   if (componentInsertError) {
     console.log(componentInsertError);
   }
-  console.log(componentInsertData);
 
-  const { data: sessionInsertData, error: sessionInsertError } = await supabase.from('sessions').insert(sessions);
+  const { error: sessionInsertError } = await supabase.from('sessions').insert(sessions);
   if (sessionInsertError) {
     console.log(sessionInsertError);
   }
-  console.log(sessionInsertData);
 }
 
 async function scrapeSearchResults(page: Page, term: string) {
@@ -68,6 +64,10 @@ async function scrapeSearchResults(page: Page, term: string) {
           const meetingDatesElem = componentDetailElems[4];
           const statusElem = componentDetailElems[5];
 
+          // Sanity checks
+          if (timingElem.innerText.includes('N/A')) {
+            continue;
+          }
           // Extract subSection
           const subSection = sectionInfoElem.innerText.split('-')[0];
 
