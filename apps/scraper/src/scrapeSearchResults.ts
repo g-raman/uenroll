@@ -31,14 +31,14 @@ async function scrapeSearchResults(page: Page, term: string) {
     const courseInfoSelector = '.PAGROUPBOXLABELLEVEL1';
     const courseInfoElements = document.querySelectorAll(courseInfoSelector) as NodeListOf<HTMLTableDataCellElement>;
     const courseInfo = Array.from(courseInfoElements).map((courseTitleElem) => {
-      const [courseCode, courseTitle] = courseTitleElem.innerText.replace(/ /, '').split('-');
+      const [courseCode, courseTitle] = courseTitleElem.innerText.trim().replace(/ /, '').split(' - ');
       return { courseCode, courseTitle };
     });
     return courseInfo;
   });
 
   // Processes the list of components
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < courses.length; i++) {
     const { courseCode, courseTitle } = courses[i];
 
     const { courseComponents, sessions } = await page.evaluate(

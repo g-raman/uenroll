@@ -3,6 +3,7 @@ import { NUM_YEARS, URL } from './constants';
 import supabase from './supabase';
 import { term } from './types';
 import setSearchOptions from './setSearchOptions';
+import scrapeSearchResults from './scrapeSearchResults';
 
 async function main() {
   const coursesResult = await supabase.from('availableCourses').select('subject').order('subject', { ascending: true });
@@ -22,14 +23,15 @@ async function main() {
   const browser: Browser = await puppeteer.launch({ headless: false });
   const page: Page = await browser.newPage();
 
-  for (let i = 0; i < terms.length; i++) {
-    for (let j = 0; j < courses.length; j++) {
-      for (let k = 1; k <= NUM_YEARS; k++) {
-        await page.goto(URL, { waitUntil: 'networkidle2' });
-        setSearchOptions(page, courses[j], k, terms[i]);
-      }
-    }
-  }
+  // for (let i = 0; i < terms.length; i++) {
+  //   for (let j = 0; j < courses.length; j++) {
+  //     for (let k = 1; k <= NUM_YEARS; k++) {}
+  //   }
+  // }
+  await page.goto(URL, { waitUntil: 'networkidle2' });
+  setSearchOptions(page, 'CSI', 2, terms[0]);
+  await page.waitForNetworkIdle({ concurrency: 1 });
+  await scrapeSearchResults(page, terms[0].term);
 }
 
 main();
