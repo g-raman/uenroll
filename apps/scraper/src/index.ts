@@ -1,5 +1,6 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
 import { NUM_YEARS, URL } from './constants';
+import { NUM_YEARS, PUPPETEER_ARGS, URL } from './constants';
 import supabase from './supabase';
 import { term } from './types';
 import setSearchOptions from './setSearchOptions';
@@ -21,6 +22,7 @@ async function main() {
   const terms = termsResult.data as term[];
 
   const browser: Browser = await puppeteer.launch({ headless: false });
+  const browser: Browser = await puppeteer.launch({ args: PUPPETEER_ARGS });
   const page: Page = await browser.newPage();
 
   // for (let i = 0; i < terms.length; i++) {
