@@ -1,12 +1,37 @@
 import { Page } from 'puppeteer';
+import supabase from './supabase';
 
-async function scrapeSearchResults(page: Page) {
+async function updateCourseDetails(course, courseComponents, sessions) {
+  const { data: courseInsertData, error: courseInsertError } = await supabase.from('courses').insert(course);
+
+  if (courseInsertError) {
+    console.log(courseInsertError);
+  }
+  console.log(courseInsertData);
+
+  const { data: componentInsertData, error: componentInsertError } = await supabase
+    .from('courseComponents')
+    .insert(courseComponents);
+
+  if (componentInsertError) {
+    console.log(componentInsertError);
+  }
+  console.log(componentInsertData);
+
+  const { data: sessionInsertData, error: sessionInsertError } = await supabase.from('sessions').insert(sessions);
+  if (sessionInsertError) {
+    console.log(sessionInsertError);
+  }
+  console.log(sessionInsertData);
+}
+
+async function scrapeSearchResults(page: Page, term: string) {
   // Gets a list of all the course titles
   const courses = await page.evaluate(() => {
     const courseInfoSelector = '.PAGROUPBOXLABELLEVEL1';
     const courseInfoElements = document.querySelectorAll(courseInfoSelector) as NodeListOf<HTMLTableDataCellElement>;
     const courseInfo = Array.from(courseInfoElements).map((courseTitleElem) => {
-      const [courseCode, courseTitle] = courseTitleElem.innerText.trim().split(' - ');
+      const [courseCode, courseTitle] = courseTitleElem.innerText.replace(/ /, '').split('-');
       return { courseCode, courseTitle };
     });
     return courseInfo;
@@ -16,8 +41,8 @@ async function scrapeSearchResults(page: Page) {
   for (let i = 0; i < 1; i++) {
     const { courseCode, courseTitle } = courses[i];
 
-    const results = await page.evaluate(
-      (i, courseCode, courseTitle) => {
+    const { courseComponents, sessions } = await page.evaluate(
+      (i, courseCode, term) => {
         const courseComponentTableSelector = `[id^='win0div$ICField48$${i}'`;
         const courseComponentTableElem = document.querySelector(courseComponentTableSelector);
 
@@ -59,10 +84,10 @@ async function scrapeSearchResults(page: Page) {
           const course = {
             courseCode,
             subSection,
-            courseTitle,
             type,
             isOpen,
             section: currSection,
+            term,
           };
 
           const timings = timingElem.innerText.split('\n');
@@ -83,6 +108,7 @@ async function scrapeSearchResults(page: Page) {
 
             const session = {
               courseCode,
+              section: currSection,
               subSection,
               dayOfWeek,
               startTime,
@@ -90,6 +116,7 @@ async function scrapeSearchResults(page: Page) {
               startDate,
               endDate,
               instructor: instructors[k],
+              term,
             };
             sessions.push(session);
           }
@@ -100,9 +127,11 @@ async function scrapeSearchResults(page: Page) {
       },
       i,
       courseCode,
-      courseTitle,
+      term,
     );
-    console.log(results);
+
+    const course = { courseCode, courseTitle, term };
+    updateCourseDetails(course, courseComponents, sessions);
   }
 }
 
