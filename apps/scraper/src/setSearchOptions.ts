@@ -9,10 +9,19 @@ async function setSearchOptions(page: Page, subject: string, year: number, term:
       const courseCodeFilterSelector = 'SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$0';
       const showClosedCourseSelector = 'SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$0';
       const termFieldSelector = 'CLASS_SRCH_WRK2_STRM$35$';
-
-      const yearSelector = `UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_0${year}$chk$0`;
       const gradSelector = 'UO_PUB_SRCH_WRK_GRADUATED_TBL_CD$chk$0';
-      const yearFilterSelector = year < 5 ? yearSelector : gradSelector;
+
+      for (let i = 1; i < 6; i++) {
+        const yearSelector = `UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_0${i}$chk$0`;
+        const yearFilterSelector = i < 5 ? yearSelector : gradSelector;
+        const yearField = document.getElementById(yearFilterSelector) as HTMLInputElement;
+
+        if (i === year) {
+          yearField.value = 'Y';
+        } else {
+          yearField.value = 'N';
+        }
+      }
 
       const submitBtnSelector = 'CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH';
 
@@ -27,9 +36,6 @@ async function setSearchOptions(page: Page, subject: string, year: number, term:
 
       const showClosedCourseField = document.getElementById(showClosedCourseSelector) as HTMLSelectElement;
       showClosedCourseField.value = 'N';
-
-      const yearField = document.getElementById(yearFilterSelector) as HTMLInputElement;
-      yearField.value = 'Y';
 
       const termField = document.getElementById(termFieldSelector) as HTMLSelectElement;
       Array.from(termField.options).forEach((item) => {
