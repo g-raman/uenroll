@@ -5,11 +5,10 @@ import { term } from './types';
 import setSearchOptions from './setSearchOptions';
 import scrapeSearchResults from './scrapeSearchResults';
 import pLimit from 'p-limit';
+import logHeader from './utils/logHeader';
 
 async function main() {
-  console.log('------------------------------');
-  console.log('Pre-Scrape');
-  console.log('------------------------------');
+  logHeader('Pre-Scrape');
 
   console.log('Fetching available terms...');
   const termsResult = await supabase.from('availableTerms').select('term,value').order('term', { ascending: true });
@@ -31,11 +30,7 @@ async function main() {
   const courses = coursesResult?.data?.map((course) => course.subject) as string[];
   console.log('Available courses fetched\n');
 
-  console.log('');
-  console.log('------------------------------');
-  console.log('Scraping');
-  console.log('------------------------------');
-
+  logHeader('Scraping', true, false);
   console.log('Launching puppeteer...');
   const browser: Browser = await puppeteer.launch({ args: PUPPETEER_ARGS });
   const page: Page = await browser.newPage();
@@ -55,10 +50,7 @@ async function main() {
   const limit = pLimit(1);
   await page.goto(URL, { waitUntil: 'networkidle2' });
   for (let i = 0; i < 1; i++) {
-    console.log('\n');
-    console.log('------------------------------');
-    console.log(`Scraping for courses in ${terms[i].term}`);
-    console.log('------------------------------');
+    logHeader(`Scraping for courses in ${terms[i].term}`, true, false);
     for (let j = 0; j < 10; j++) {
       console.log(`Attempting search for ${courses[j]}`);
       for (let k = 1; k <= NUM_YEARS; k++) {
