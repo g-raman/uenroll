@@ -6,19 +6,19 @@ import setSearchOptions from './setSearchOptions';
 import scrapeSearchResults from './scrapeSearchResults';
 
 async function main() {
-  const coursesResult = await supabase.from('availableCourses').select('subject').order('subject', { ascending: true });
-  if (coursesResult.error) {
-    console.error('Error: Something went wrong when fetching list of available courses');
-    console.log(coursesResult.error);
-  }
-  const courses = coursesResult?.data?.map((course) => course.subject) as string[];
-
   const termsResult = await supabase.from('availableTerms').select('term,value').order('term', { ascending: true });
   if (termsResult.error) {
     console.error('Error: Something went wrong when fetching list of available terms');
     console.log(termsResult.error);
   }
   const terms = termsResult.data as term[];
+
+  const coursesResult = await supabase.from('availableCourses').select('subject').order('subject', { ascending: true });
+  if (coursesResult.error) {
+    console.error('Error: Something went wrong when fetching list of available courses');
+    console.log(coursesResult.error);
+  }
+  const courses = coursesResult?.data?.map((course) => course.subject) as string[];
 
   const browser: Browser = await puppeteer.launch({ args: PUPPETEER_ARGS });
   const page: Page = await browser.newPage();
