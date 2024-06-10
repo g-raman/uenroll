@@ -7,17 +7,20 @@ async function updateCourseDetails(course, courseComponents, sessions) {
 
   if (courseInsertError) {
     console.log(courseInsertError);
+    console.log();
   }
 
   const { error: componentInsertError } = await supabase.from('courseComponents').insert(courseComponents);
 
   if (componentInsertError) {
     console.log(componentInsertError);
+    console.log();
   }
 
   const { error: sessionInsertError } = await supabase.from('sessions').insert(sessions);
   if (sessionInsertError) {
     console.log(sessionInsertError);
+    console.log();
   }
 }
 
