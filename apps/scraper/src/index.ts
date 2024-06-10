@@ -4,6 +4,7 @@ import supabase from './supabase';
 import { term } from './types';
 import setSearchOptions from './setSearchOptions';
 import scrapeSearchResults from './scrapeSearchResults';
+import pLimit from 'p-limit';
 
 async function main() {
   console.log('------------------------------');
@@ -30,7 +31,7 @@ async function main() {
   const courses = coursesResult?.data?.map((course) => course.subject) as string[];
   console.log('Available courses fetched\n');
 
-  console.log('\n');
+  console.log('');
   console.log('------------------------------');
   console.log('Scraping');
   console.log('------------------------------');
@@ -50,30 +51,42 @@ async function main() {
     }
   });
 
-  await page.goto(URL, { waitUntil: 'networkidle2' });
-
   const start = performance.now();
+  const limit = pLimit(1);
+  await page.goto(URL, { waitUntil: 'networkidle2' });
   for (let i = 0; i < 1; i++) {
     console.log('\n');
     console.log('------------------------------');
     console.log(`Scraping for courses in ${terms[i].term}`);
     console.log('------------------------------');
     for (let j = 0; j < 10; j++) {
+      console.log(`Attempting search for ${courses[j]}`);
       for (let k = 1; k <= NUM_YEARS; k++) {
-        console.log(`Attempting search for ${courses[j]}, year ${k}`);
-        await setSearchOptions(page, courses[j], k, terms[i]);
+        console.log(`Year: ${k}`);
+        const searchOptionsResult = await setSearchOptions(page, courses[j], k, terms[i]);
+        if (searchOptionsResult) {
+          console.log(searchOptionsResult);
+        }
+
         await page.waitForNetworkIdle({ concurrency: 1 });
         const message = await page.$('.SSSMSGALERTTEXT');
 
         if (message) {
           console.log((await message.evaluate((messageElem) => messageElem.innerText)) + '\n');
           continue;
-        } else {
-          await scrapeSearchResults(page, terms[i].term);
-          await page.click('#CLASS_SRCH_WRK2_SSR_PB_MODIFY');
-          await page.waitForNetworkIdle({ concurrency: 1 });
-          console.log();
         }
+
+        try {
+          const input = [
+            limit(() => scrapeSearchResults(page, terms[i].term)),
+            limit(() => page.click('#CLASS_SRCH_WRK2_SSR_PB_MODIFY')),
+            limit(() => page.waitForNetworkIdle({ concurrency: 1 })),
+          ];
+          await Promise.all(input);
+        } catch (error) {
+          console.log('Couldnt find modify button');
+        }
+        console.log();
       }
     }
   }
