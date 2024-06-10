@@ -1,5 +1,5 @@
 import supabase from '../supabase';
-import { term } from '../types';
+import { term } from '../term';
 
 const getAvailableTerms = async (): Promise<term[]> => {
   console.log('Fetching available terms...');

@@ -1,5 +1,5 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { NUM_YEARS, PUPPETEER_ARGS, URL } from './constants';
+import { NUM_YEARS, PUPPETEER_ARGS, URL } from './utils/constants';
 import setSearchOptions from './setSearchOptions';
 import scrapeSearchResults from './scrapeSearchResults';
 import pLimit from 'p-limit';

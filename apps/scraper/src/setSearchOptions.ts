@@ -1,5 +1,5 @@
 import { Page } from 'puppeteer';
-import { term } from './types';
+import { term } from './utils/types';
 
 async function setSearchOptions(page: Page, subject: string, year: number, term: term) {
   const message = await page.evaluate(

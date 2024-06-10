@@ -1,7 +1,7 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { URL } from './constants';
+import { URL } from './utils/constants';
 import supabase from './supabase';
-import { term } from './types';
+import { term } from './utils/types';
 
 async function updateAvailableTerms(availableTerms: term[]): Promise<void> {
   console.log('Inserting new available terms...');
