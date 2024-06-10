@@ -8,6 +8,7 @@ async function updateCourseDetails(course, courseComponents, sessions) {
   if (courseInsertError) {
     console.log(courseInsertError);
     console.log();
+    return;
   }
 
   const { error: componentInsertError } = await supabase.from('courseComponents').insert(courseComponents);
@@ -15,13 +16,16 @@ async function updateCourseDetails(course, courseComponents, sessions) {
   if (componentInsertError) {
     console.log(componentInsertError);
     console.log();
+    return;
   }
 
   const { error: sessionInsertError } = await supabase.from('sessions').insert(sessions);
   if (sessionInsertError) {
     console.log(sessionInsertError);
     console.log();
+    return;
   }
+  console.log(`Successful inserted ${course.courseCode}`);
 }
 
 async function scrapeSearchResults(page: Page, term: string) {
