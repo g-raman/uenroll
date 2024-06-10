@@ -1,36 +1,18 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
 import { NUM_YEARS, PUPPETEER_ARGS, URL } from './constants';
-import supabase from './supabase';
-import { term } from './types';
 import setSearchOptions from './setSearchOptions';
 import scrapeSearchResults from './scrapeSearchResults';
 import pLimit from 'p-limit';
 import logHeader from './utils/logHeader';
+import getAvailableCourses from './utils/getAvailableCourses';
+import getAvailableTerms from './utils/getAvailableTerms';
 
 async function main() {
   logHeader('Pre-Scrape');
+  const terms = await getAvailableTerms();
+  const courses = await getAvailableCourses();
 
-  console.log('Fetching available terms...');
-  const termsResult = await supabase.from('availableTerms').select('term,value').order('term', { ascending: true });
-  if (termsResult.error) {
-    console.error('Error: Something went wrong when fetching list of available terms');
-    console.log(termsResult.error);
-    console.log();
-  }
-  const terms = termsResult.data as term[];
-  console.log('Available terms fetched\n');
-
-  console.log('Fetching available courses...');
-  const coursesResult = await supabase.from('availableCourses').select('subject').order('subject', { ascending: true });
-  if (coursesResult.error) {
-    console.error('Error: Something went wrong when fetching list of available courses');
-    console.log(coursesResult.error);
-    console.log();
-  }
-  const courses = coursesResult?.data?.map((course) => course.subject) as string[];
-  console.log('Available courses fetched\n');
-
-  logHeader('Scraping', true, false);
+  logHeader('Scraping', true);
   console.log('Launching puppeteer...');
   const browser: Browser = await puppeteer.launch({ args: PUPPETEER_ARGS });
   const page: Page = await browser.newPage();
@@ -50,7 +32,7 @@ async function main() {
   const limit = pLimit(1);
   await page.goto(URL, { waitUntil: 'networkidle2' });
   for (let i = 0; i < 1; i++) {
-    logHeader(`Scraping for courses in ${terms[i].term}`, true, false);
+    logHeader(`Scraping for courses in ${terms[i].term}`, true);
     for (let j = 0; j < 10; j++) {
       console.log(`Attempting search for ${courses[j]}`);
       for (let k = 1; k <= NUM_YEARS; k++) {
