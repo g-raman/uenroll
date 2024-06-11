@@ -31,34 +31,31 @@ async function main() {
   const start = performance.now();
   const limit = pLimit(1);
   await page.goto(URL, { waitUntil: 'networkidle2' });
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < terms.length; i++) {
     logHeader(`Scraping for courses in ${terms[i].term}`, true);
-    for (let j = 0; j < 10; j++) {
+    for (let j = 15; j < courses.length; j++) {
       console.log(`Attempting search for ${courses[j]}`);
       for (let k = 1; k <= NUM_YEARS; k++) {
         console.log(`Year: ${k}`);
-        const searchOptionsResult = await setSearchOptions(page, courses[j], k, terms[i]);
-        if (searchOptionsResult) {
-          console.log(searchOptionsResult);
-        }
-
-        await page.waitForNetworkIdle({ concurrency: 1 });
-        const message = await page.$('.SSSMSGALERTTEXT');
-
-        if (message) {
-          console.log((await message.evaluate((messageElem) => messageElem.innerText)) + '\n');
-          continue;
-        }
+        const queue = [
+          limit((j, k, i) => setSearchOptions(page, courses[j], k, terms[i]), j, k, i),
+          limit(() => page.waitForNetworkIdle({ concurrency: 1 })),
+          limit(async () => {
+            const message = await page.$('.SSSMSGALERTTEXT');
+            if (message) {
+              const error = await message.evaluate((elem) => elem.innerText);
+              throw new Error(error);
+            }
+          }),
+          limit((i) => scrapeSearchResults(page, terms[i].term), i),
+          limit(() => page.waitForNetworkIdle({ concurrency: 1 })),
+        ];
 
         try {
-          const input = [
-            limit(() => scrapeSearchResults(page, terms[i].term)),
-            limit(() => page.click('#CLASS_SRCH_WRK2_SSR_PB_MODIFY')),
-            limit(() => page.waitForNetworkIdle({ concurrency: 1 })),
-          ];
-          await Promise.all(input);
+          await Promise.all(queue);
         } catch (error) {
-          console.log('Couldnt find modify button');
+          console.log(error + '\n');
+          continue;
         }
         console.log();
       }

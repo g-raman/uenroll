@@ -2,7 +2,6 @@ import { Page } from 'puppeteer';
 import supabase from './supabase';
 
 async function updateCourseDetails(course, courseComponents, sessions) {
-  console.log(`Inserting data for ${course.courseCode}...`);
   const { error: courseInsertError } = await supabase.from('courses').insert(course);
 
   if (courseInsertError) {
@@ -140,6 +139,10 @@ async function scrapeSearchResults(page: Page, term: string) {
     const course = { courseCode, courseTitle, term };
     updateCourseDetails(course, courseComponents, sessions);
   }
+
+  await page.evaluate(() => {
+    document.getElementById('CLASS_SRCH_WRK2_SSR_PB_MODIFY')?.click();
+  });
 }
 
 export default scrapeSearchResults;
