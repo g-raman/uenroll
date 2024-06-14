@@ -29,17 +29,18 @@ async function main() {
   });
 
   const start = performance.now();
-  const limit = pLimit(1);
   await page.goto(URL, { waitUntil: 'networkidle2' });
   for (let i = 0; i < terms.length; i++) {
     logHeader(`Scraping for courses in ${terms[i].term}`, true);
     for (let j = 15; j < courses.length; j++) {
       console.log(`Attempting search for ${courses[j]}`);
+      const queue = [];
+      const limit = pLimit(1);
       for (let k = 1; k <= NUM_YEARS; k++) {
         console.log(`Year: ${k}`);
-        const queue = [
-          limit((j, k, i) => setSearchOptions(page, courses[j], k, terms[i]), j, k, i),
-          limit(() => page.waitForNetworkIdle({ concurrency: 1 })),
+        queue.push(limit((j, k, i) => setSearchOptions(page, courses[j], k, terms[i]), j, k, i));
+        queue.push(limit(() => page.waitForNetworkIdle({ concurrency: 1 })));
+        queue.push(
           limit(async () => {
             const message = await page.$('.SSSMSGALERTTEXT');
             if (message) {
@@ -47,9 +48,7 @@ async function main() {
               throw new Error(error);
             }
           }),
-          limit((i) => scrapeSearchResults(page, terms[i].term), i),
-          limit(() => page.waitForNetworkIdle({ concurrency: 1 })),
-        ];
+        );
 
         try {
           await Promise.all(queue);
@@ -57,6 +56,21 @@ async function main() {
           console.log(error + '\n');
           continue;
         }
+
+        queue.push(limit((i) => scrapeSearchResults(page, terms[i].term), i));
+        queue.push(
+          limit(async () => {
+            const modifySearchResultsBtn = await page.waitForSelector('#CLASS_SRCH_WRK2_SSR_PB_MODIFY', {
+              timeout: 2000,
+            });
+            if (!modifySearchResultsBtn) {
+              throw new Error('Could not find modify search button');
+            }
+            modifySearchResultsBtn?.click();
+          }),
+        );
+        queue.push(limit(() => page.waitForNetworkIdle({ concurrency: 1 })));
+
         console.log();
       }
     }

@@ -139,10 +139,6 @@ async function scrapeSearchResults(page: Page, term: string) {
     const course = { courseCode, courseTitle, term };
     updateCourseDetails(course, courseComponents, sessions);
   }
-
-  await page.evaluate(() => {
-    document.getElementById('CLASS_SRCH_WRK2_SSR_PB_MODIFY')?.click();
-  });
 }
 
 export default scrapeSearchResults;
