@@ -1,31 +1,5 @@
 import { Page } from 'puppeteer';
-import supabase from './supabase';
-
-async function updateCourseDetails(course, courseComponents, sessions) {
-  const { error: courseInsertError } = await supabase.from('courses').insert(course);
-
-  if (courseInsertError) {
-    console.log(courseInsertError);
-    console.log();
-    return;
-  }
-
-  const { error: componentInsertError } = await supabase.from('courseComponents').insert(courseComponents);
-
-  if (componentInsertError) {
-    console.log(componentInsertError);
-    console.log();
-    return;
-  }
-
-  const { error: sessionInsertError } = await supabase.from('sessions').insert(sessions);
-  if (sessionInsertError) {
-    console.log(sessionInsertError);
-    console.log();
-    return;
-  }
-  console.log(`Successful inserted ${course.courseCode}`);
-}
+import { upsertCourseDetails } from './supabase';
 
 async function scrapeSearchResults(page: Page, term: string) {
   // Gets a list of all the course titles
@@ -137,7 +111,7 @@ async function scrapeSearchResults(page: Page, term: string) {
     );
 
     const course = { courseCode, courseTitle, term };
-    updateCourseDetails(course, courseComponents, sessions);
+    upsertCourseDetails(course, courseComponents, sessions);
   }
 
   await page.evaluate(() => {
