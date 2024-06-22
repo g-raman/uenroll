@@ -9,7 +9,7 @@ const supabaseKey = process.env.SUPABASE_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function upsertCourseDetails(details: CourseDetails) {
-  const { error: courseInsertError } = await supabase.from('courses').insert(details.courses);
+  const { error: courseInsertError } = await supabase.from('courses').upsert(details.courses);
 
   if (courseInsertError) {
     console.log(courseInsertError);
@@ -17,7 +17,7 @@ export async function upsertCourseDetails(details: CourseDetails) {
     return;
   }
 
-  const { error: componentInsertError } = await supabase.from('courseComponents').insert(details.courseComponents);
+  const { error: componentInsertError } = await supabase.from('courseComponents').upsert(details.courseComponents);
 
   if (componentInsertError) {
     console.log(componentInsertError);
@@ -25,7 +25,7 @@ export async function upsertCourseDetails(details: CourseDetails) {
     return;
   }
 
-  const { error: sessionInsertError } = await supabase.from('sessions').insert(details.sessions);
+  const { error: sessionInsertError } = await supabase.from('sessions').upsert(details.sessions);
   if (sessionInsertError) {
     console.log(sessionInsertError);
     console.log();
