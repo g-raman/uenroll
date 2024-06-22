@@ -33,4 +33,12 @@ export async function upsertCourseDetails(details: CourseDetails) {
   }
 }
 
+export async function markAllAsDeleted(term: string): Promise<void> {
+  const { data, error } = await supabase.from('courses').update({ isDeleted: true }).eq('term', term);
+  console.log(data);
+  console.log(error);
+  await supabase.from('courseComponents').update({ isDeleted: true }).eq('term', term);
+  await supabase.from('sessions').update({ isDeleted: true }).eq('term', term);
+}
+
 export default supabase;
