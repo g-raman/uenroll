@@ -11,6 +11,7 @@ export type Course = {
   courseCode: string;
   courseTitle: string;
   term: string;
+  isDeleted: boolean;
 };
 
 export type CourseComponent = {
@@ -20,6 +21,7 @@ export type CourseComponent = {
   isOpen: boolean;
   section: string;
   term: string;
+  isDeleted: boolean;
 };
 
 export type Session = {
@@ -33,10 +35,11 @@ export type Session = {
   endDate: string;
   instructor: string;
   term: string;
+  isDeleted: boolean;
 };
 
 export type CourseDetails = {
   courses: Course[];
-  courseComponents: CourseComponent;
+  courseComponents: CourseComponent[];
   sessions: Session[];
 };

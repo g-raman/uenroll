@@ -1,5 +1,5 @@
 import { Page } from 'puppeteer';
-import { Course, CourseComponent, Session } from './utils/types';
+import { Course, CourseComponent, CourseDetails, Session } from './utils/types';
 import { upsertCourseDetails } from './supabase';
 
 async function scrapeSearchResults(page: Page, term: string) {
@@ -11,7 +11,7 @@ async function scrapeSearchResults(page: Page, term: string) {
       return { courseCode, courseTitle };
     });
 
-    const details = {
+    const details: CourseDetails = {
       courses: [] as Course[],
       courseComponents: [] as CourseComponent[],
       sessions: [] as Session[],
@@ -71,6 +71,7 @@ async function scrapeSearchResults(page: Page, term: string) {
           isOpen,
           section: currSection,
           term,
+          isDeleted: false,
         };
 
         const timings = timingElem.innerText.split('\n');
@@ -100,6 +101,7 @@ async function scrapeSearchResults(page: Page, term: string) {
             endDate,
             instructor: instructors[k],
             term,
+            isDeleted: false,
           };
           sessions.push(session);
         }
@@ -109,6 +111,7 @@ async function scrapeSearchResults(page: Page, term: string) {
         courseCode: currCourse.courseCode,
         courseTitle: currCourse.courseTitle,
         term,
+        isDeleted: false,
       };
 
       if (courseComponents.length === 0 || sessions.length === 0) {
