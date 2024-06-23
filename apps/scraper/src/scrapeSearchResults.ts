@@ -1,8 +1,7 @@
 import { Page } from 'puppeteer';
 import { Course, CourseComponent, CourseDetails, Session } from './utils/types';
-import { upsertCourseDetails } from './supabase';
 
-async function scrapeSearchResults(page: Page, term: string) {
+async function scrapeSearchResults(page: Page, term: string): Promise<CourseDetails> {
   const details = await page.evaluate((term) => {
     const courseInfoSelector = '.PAGROUPBOXLABELLEVEL1';
     const courseInfoElements = document.querySelectorAll(courseInfoSelector) as NodeListOf<HTMLTableDataCellElement>;
@@ -125,12 +124,10 @@ async function scrapeSearchResults(page: Page, term: string) {
     return details;
   }, term);
 
-  if (details.courses.length !== 0 && details.courseComponents.length !== 0 && details.sessions.length !== 0) {
-    upsertCourseDetails(details);
-  }
   await page.evaluate(() => {
     document.getElementById('CLASS_SRCH_WRK2_SSR_PB_MODIFY')?.click();
   });
+  return details;
 }
 
 export default scrapeSearchResults;
