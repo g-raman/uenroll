@@ -50,7 +50,7 @@ async function setSearchOptions(page: Page, subject: string, year: number, term:
         const submitButton = document.getElementById(submitBtnSelector) as HTMLButtonElement;
         submitButton.click();
         return null;
-      } catch (error) {
+      } catch (error: any) {
         return error.message;
       }
     },
@@ -58,6 +58,8 @@ async function setSearchOptions(page: Page, subject: string, year: number, term:
     year,
     term,
   );
+
+  await page.waitForNetworkIdle({ concurrency: 1 });
   return message;
 }
 

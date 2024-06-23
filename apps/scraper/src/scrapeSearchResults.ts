@@ -1,144 +1,132 @@
 import { Page } from 'puppeteer';
-import supabase from './supabase';
+import { Course, CourseComponent, CourseDetails, Session } from './utils/types';
 
-async function updateCourseDetails(course, courseComponents, sessions) {
-  const { error: courseInsertError } = await supabase.from('courses').insert(course);
-
-  if (courseInsertError) {
-    console.log(courseInsertError);
-    console.log();
-    return;
-  }
-
-  const { error: componentInsertError } = await supabase.from('courseComponents').insert(courseComponents);
-
-  if (componentInsertError) {
-    console.log(componentInsertError);
-    console.log();
-    return;
-  }
-
-  const { error: sessionInsertError } = await supabase.from('sessions').insert(sessions);
-  if (sessionInsertError) {
-    console.log(sessionInsertError);
-    console.log();
-    return;
-  }
-  console.log(`Successful inserted ${course.courseCode}`);
-}
-
-async function scrapeSearchResults(page: Page, term: string) {
-  // Gets a list of all the course titles
-  const courses = await page.evaluate(() => {
+async function scrapeSearchResults(page: Page, term: string): Promise<CourseDetails> {
+  const details = await page.evaluate((term) => {
     const courseInfoSelector = '.PAGROUPBOXLABELLEVEL1';
     const courseInfoElements = document.querySelectorAll(courseInfoSelector) as NodeListOf<HTMLTableDataCellElement>;
     const courseInfo = Array.from(courseInfoElements).map((courseTitleElem) => {
       const [courseCode, courseTitle] = courseTitleElem.innerText.trim().replace(/ /, '').split(' - ');
       return { courseCode, courseTitle };
     });
-    return courseInfo;
-  });
 
-  // Processes the list of components
-  for (let i = 0; i < courses.length; i++) {
-    const { courseCode, courseTitle } = courses[i];
+    const details: CourseDetails = {
+      courses: [] as Course[],
+      courseComponents: [] as CourseComponent[],
+      sessions: [] as Session[],
+    };
 
-    const { courseComponents, sessions } = await page.evaluate(
-      (i, courseCode, term) => {
-        const courseComponentTableSelector = `[id^='win0div$ICField48$${i}'`;
-        const courseComponentTableElem = document.querySelector(courseComponentTableSelector);
+    for (let i = 0; i < courseInfo.length; i++) {
+      const courseComponentTableSelector = `[id^='win0div$ICField48$${i}'`;
+      const courseComponentTableElem = document.querySelector(courseComponentTableSelector);
 
-        const courseComponentSelector = "[id^='ACE_SSR_CLSRSLT_WRK_GROUPBOX3$']";
-        const courseComponentElems = courseComponentTableElem?.querySelectorAll(
-          courseComponentSelector,
-        ) as NodeListOf<HTMLTableElement>;
+      const courseComponentSelector = "[id^='ACE_SSR_CLSRSLT_WRK_GROUPBOX3$']";
+      const courseComponentElems = courseComponentTableElem?.querySelectorAll(
+        courseComponentSelector,
+      ) as NodeListOf<HTMLTableElement>;
 
-        let currSection = '';
-        const courseComponents = [];
-        const sessions = [];
-        for (let j = 0; j < courseComponentElems.length; j++) {
-          const currCourseComponenetElem = courseComponentElems[j] as HTMLTableElement;
+      const currCourse = courseInfo[i];
+      let currSection = '';
+      const courseComponents = [];
+      const sessions = [];
 
-          const componentDetailSelector = '.PSLEVEL3GRIDODDROW';
-          const componentDetailElems = currCourseComponenetElem.querySelectorAll(
-            componentDetailSelector,
-          ) as NodeListOf<HTMLTableCellElement>;
+      for (let j = 0; j < courseComponentElems.length; j++) {
+        const currCourseComponenetElem = courseComponentElems[j] as HTMLTableElement;
 
-          const sectionInfoElem = componentDetailElems[1];
-          const timingElem = componentDetailElems[2];
-          const instructorElem = componentDetailElems[3];
-          const meetingDatesElem = componentDetailElems[4];
-          const statusElem = componentDetailElems[5];
+        const componentDetailSelector = '.PSLEVEL3GRIDODDROW';
+        const componentDetailElems = currCourseComponenetElem.querySelectorAll(
+          componentDetailSelector,
+        ) as NodeListOf<HTMLTableCellElement>;
 
-          // Sanity checks
-          if (timingElem.innerText.includes('N/A')) {
-            continue;
-          }
-          // Extract subSection
-          const subSection = sectionInfoElem.innerText.split('-')[0];
+        const sectionInfoElem = componentDetailElems[1];
+        const timingElem = componentDetailElems[2];
+        const instructorElem = componentDetailElems[3];
+        const meetingDatesElem = componentDetailElems[4];
+        const statusElem = componentDetailElems[5];
 
-          const newSectionRegex = /^[A-Z]?[A-Z]00$/;
-          const isNewSection = newSectionRegex.test(subSection);
-          currSection = isNewSection ? subSection : currSection;
-
-          // Extract component type
-          const type = sectionInfoElem.innerText.split('-')[1].split('\n')[0];
-
-          // Extract status
-          const isOpen = Boolean(statusElem.querySelector('img')?.src.match(/OPEN/));
-
-          const course = {
-            courseCode,
-            subSection,
-            type,
-            isOpen,
-            section: currSection,
-            term,
-          };
-
-          const timings = timingElem.innerText.split('\n');
-          const instructors = instructorElem.innerText.split('\n');
-          const meetingDates = meetingDatesElem.innerText.split('\n');
-
-          for (let k = 0; k < timings.length; k++) {
-            // Extract day of week and time
-            const currTiming = timings[k];
-            const splitDayAndTimings = currTiming.split(' ');
-            const dayOfWeek = splitDayAndTimings[0];
-            const startTime = splitDayAndTimings[1];
-            const endTime = splitDayAndTimings[3];
-
-            // Extract meeting dates
-            const currMeetingDate = meetingDates[k];
-            const [startDate, endDate] = currMeetingDate.split(' - ');
-
-            const session = {
-              courseCode,
-              section: currSection,
-              subSection,
-              dayOfWeek,
-              startTime,
-              endTime,
-              startDate,
-              endDate,
-              instructor: instructors[k],
-              term,
-            };
-            sessions.push(session);
-          }
-
-          courseComponents.push(course);
+        // Sanity checks
+        if (timingElem.innerText.includes('N/A')) {
+          continue;
         }
-        return { courseComponents, sessions };
-      },
-      i,
-      courseCode,
-      term,
-    );
 
-    const course = { courseCode, courseTitle, term };
-    updateCourseDetails(course, courseComponents, sessions);
-  }
+        // Extract subSection
+        const subSection = sectionInfoElem.innerText.split('-')[0];
+
+        // Determine if a new section has started
+        const newSectionRegex = /^[A-Z]?[A-Z]00$/;
+        const isNewSection = newSectionRegex.test(subSection);
+        currSection = isNewSection ? subSection : currSection;
+
+        // Extract component type
+        const type = sectionInfoElem.innerText.split('-')[1].split('\n')[0];
+
+        // Extract status
+        const isOpen = Boolean(statusElem.querySelector('img')?.src.match(/OPEN/));
+
+        const course = {
+          courseCode: currCourse.courseCode,
+          subSection,
+          type,
+          isOpen,
+          section: currSection,
+          term,
+          isDeleted: false,
+        };
+
+        const timings = timingElem.innerText.split('\n');
+        const instructors = instructorElem.innerText.split('\n');
+        const meetingDates = meetingDatesElem.innerText.split('\n');
+
+        for (let k = 0; k < timings.length; k++) {
+          // Extract day of week and time
+          const currTiming = timings[k];
+          const splitDayAndTimings = currTiming.split(' ');
+          const dayOfWeek = splitDayAndTimings[0];
+          const startTime = splitDayAndTimings[1];
+          const endTime = splitDayAndTimings[3];
+
+          // Extract meeting dates
+          const currMeetingDate = meetingDates[k];
+          const [startDate, endDate] = currMeetingDate.split(' - ');
+
+          const session = {
+            courseCode: currCourse.courseCode,
+            section: currSection,
+            subSection,
+            dayOfWeek,
+            startTime,
+            endTime,
+            startDate,
+            endDate,
+            instructor: instructors[k],
+            term,
+            isDeleted: false,
+          };
+          sessions.push(session);
+        }
+        courseComponents.push(course);
+      }
+      const course = {
+        courseCode: currCourse.courseCode,
+        courseTitle: currCourse.courseTitle,
+        term,
+        isDeleted: false,
+      };
+
+      if (courseComponents.length === 0 || sessions.length === 0) {
+        continue;
+      }
+      details.courses.push(course);
+      details.courseComponents.push(...courseComponents);
+      details.sessions.push(...sessions);
+    }
+
+    document.getElementById('CLASS_SRCH_WRK2_SSR_PB_MODIFY')?.click();
+    return details;
+  }, term);
+
+  await page.waitForNetworkIdle({ concurrency: 1 });
+  return details;
 }
 
 export default scrapeSearchResults;
