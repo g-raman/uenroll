@@ -117,8 +117,8 @@ async function scrapeSearchResults(page: Page, term: string): Promise<CourseDeta
         continue;
       }
       details.courses.push(course);
-      details.courseComponents = courseComponents;
-      details.sessions = sessions;
+      details.courseComponents.push(...courseComponents);
+      details.sessions.push(...sessions);
     }
 
     document.getElementById('CLASS_SRCH_WRK2_SSR_PB_MODIFY')?.click();
