@@ -2,10 +2,10 @@ import puppeteer, { Browser, Page } from 'puppeteer';
 import { NUM_YEARS, PUPPETEER_ARGS, URL } from './utils/constants';
 import setSearchOptions from './setSearchOptions';
 import scrapeSearchResults from './scrapeSearchResults';
-import pLimit from 'p-limit';
 import logHeader from './utils/logHeader';
 import getAvailableCourses from './utils/getAvailableCourses';
 import getAvailableTerms from './utils/getAvailableTerms';
+import { deleteAllMarkedAsDeleted, markAllAsDeleted, upsertCourseDetails } from './supabase';
 
 async function main() {
   logHeader('Pre-Scrape');
@@ -29,38 +29,39 @@ async function main() {
   });
 
   const start = performance.now();
-  const limit = pLimit(1);
+  const term = 0;
   await page.goto(URL, { waitUntil: 'networkidle2' });
-  for (let i = 0; i < terms.length; i++) {
-    logHeader(`Scraping for courses in ${terms[i].term}`, true);
-    for (let j = 15; j < courses.length; j++) {
-      console.log(`Attempting search for ${courses[j]}`);
-      for (let k = 1; k <= NUM_YEARS; k++) {
-        console.log(`Year: ${k}`);
-        const queue = [
-          limit((j, k, i) => setSearchOptions(page, courses[j], k, terms[i]), j, k, i),
-          limit(() => page.waitForNetworkIdle({ concurrency: 1 })),
-          limit(async () => {
-            const message = await page.$('.SSSMSGALERTTEXT');
-            if (message) {
-              const error = await message.evaluate((elem) => elem.innerText);
-              throw new Error(error);
-            }
-          }),
-          limit((i) => scrapeSearchResults(page, terms[i].term), i),
-          limit(() => page.waitForNetworkIdle({ concurrency: 1 })),
-        ];
 
-        try {
-          await Promise.all(queue);
-        } catch (error) {
-          console.log(error + '\n');
-          continue;
-        }
+  await markAllAsDeleted(terms[term].term);
+
+  logHeader(`Scraping for courses in ${terms[0].term}`, true);
+  for (let j = 0; j < courses.length; j++) {
+    console.log(`Attempting search for ${courses[j]}`);
+    for (let k = 1; k <= NUM_YEARS; k++) {
+      await setSearchOptions(page, courses[j], k, terms[term]);
+
+      const message = await page.$('.SSSMSGALERTTEXT');
+      if (message) {
+        const error = await message.evaluate((elem) => {
+          const text = elem.textContent;
+          elem.remove();
+          return text;
+        });
+        console.log(`Year: ${k} (${error})`);
         console.log();
+        continue;
+      } else {
+        console.log(`Year: ${k} (Classes found)`);
       }
+
+      const results = await scrapeSearchResults(page, terms[term].term);
+      await upsertCourseDetails(results);
+
+      console.log();
     }
   }
+
+  await deleteAllMarkedAsDeleted();
 
   page.close();
   browser.close();
