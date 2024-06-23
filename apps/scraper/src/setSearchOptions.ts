@@ -58,6 +58,8 @@ async function setSearchOptions(page: Page, subject: string, year: number, term:
     year,
     term,
   );
+
+  await page.waitForNetworkIdle({ concurrency: 1 });
   return message;
 }
 
