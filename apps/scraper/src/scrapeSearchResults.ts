@@ -121,12 +121,11 @@ async function scrapeSearchResults(page: Page, term: string): Promise<CourseDeta
       details.sessions = sessions;
     }
 
+    document.getElementById('CLASS_SRCH_WRK2_SSR_PB_MODIFY')?.click();
     return details;
   }, term);
 
-  await page.evaluate(() => {
-    document.getElementById('CLASS_SRCH_WRK2_SSR_PB_MODIFY')?.click();
-  });
+  await page.waitForNetworkIdle({ concurrency: 1 });
   return details;
 }
 
