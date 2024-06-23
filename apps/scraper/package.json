@@ -26,7 +26,6 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.43.4",
     "dotenv": "^16.4.5",
-    "p-limit": "^5.0.0",
     "puppeteer": "^22.10.0"
   }
 }
