@@ -31,12 +31,13 @@ export async function upsertCourseDetails(details: CourseDetails) {
     console.log();
     return;
   }
+  for (let i = 0; i < details.courses.length; i++) {
+    console.log(`Updated data for ${details.courses[i].courseCode}`);
+  }
 }
 
 export async function markAllAsDeleted(term: string): Promise<void> {
-  const { data, error } = await supabase.from('courses').update({ isDeleted: true }).eq('term', term);
-  console.log(data);
-  console.log(error);
+  await supabase.from('courses').update({ isDeleted: true }).eq('term', term);
   await supabase.from('courseComponents').update({ isDeleted: true }).eq('term', term);
   await supabase.from('sessions').update({ isDeleted: true }).eq('term', term);
 }
