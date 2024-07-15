@@ -23,7 +23,8 @@ async function searchAndScrapeCourses(courses: string[], term: term, browserEndp
       for (let j = 0; j < courses.length; j++) {
         console.log(`Attempting search for ${courses[j]}`);
         for (let k = 1; k <= NUM_YEARS; k++) {
-          await setSearchOptions(page, courses[j], k, term);
+          setSearchOptions(page, courses[j], k, term).subscribe();
+          await page.waitForNetworkIdle({ concurrency: 1 });
 
           const message = await page.$('.SSSMSGALERTTEXT');
           if (message) {
