@@ -3,12 +3,12 @@ import { term } from './utils/types';
 import setSearchOptions from './setSearchOptions';
 import scrapeSearchResults from './scrapeSearchResults';
 import { upsertCourseDetails } from './supabase';
-import { NUM_YEARS, PUPPETEER_ARGS, URL } from './utils/constants';
+import { NUM_YEARS, URL } from './utils/constants';
 
-async function searchAndScrapeCourses(courses: string[], term: term) {
-  console.log('Launching puppeteer...');
-  const browser: Browser = await puppeteer.launch({ args: PUPPETEER_ARGS });
-  console.log('Puppeteer started');
+async function searchAndScrapeCourses(courses: string[], term: term, browserEndpoint: string) {
+  console.log('Connecting to chrome...');
+  const browser: Browser = await puppeteer.connect({ browserWSEndpoint: browserEndpoint });
+  console.log('Connected to chrome');
 
   const page: Page = await browser.newPage();
   await page.goto(URL, { waitUntil: 'networkidle2' });
@@ -49,7 +49,7 @@ async function searchAndScrapeCourses(courses: string[], term: term) {
     }
   }
   await page.close();
-  await browser.close();
+  await browser.disconnect();
 }
 
 export default searchAndScrapeCourses;
