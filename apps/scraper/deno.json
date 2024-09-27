@@ -1,5 +1,8 @@
 {
   "nodeModulesDir": "auto",
+  "compilerOptions": {
+    "lib": ["dom", "deno.ns"]
+  },
   "tasks": {
     "dev": "deno run --watch main.ts",
     "lint": "deno lint ."

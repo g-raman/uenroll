@@ -1,3 +1,7 @@
+/// <reference no-default-lib="true" />
+/// <reference lib="dom" />
+/// <reference lib="deno.ns" />
+
 import logHeader from './utils/logHeader.ts';
 import getAvailableTerms from './utils/getAvailableTerms.ts';
 import searchAndScrapeCourses from './searchAndScrapeCourses.ts';
