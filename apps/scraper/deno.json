@@ -4,7 +4,7 @@
     "lib": ["dom", "deno.ns"]
   },
   "tasks": {
-    "dev": "deno run --watch main.ts",
+    "dev": "deno run --allow-sys --allow-read --allow-write --allow-net --allow-env src/index.ts",
     "lint": "deno lint ."
   },
   "imports": {
