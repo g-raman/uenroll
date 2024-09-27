@@ -1,7 +1,9 @@
 {
   "version": "4",
   "specifiers": {
+    "jsr:@std/dotenv@*": "0.225.2",
     "jsr:@std/dotenv@~0.225.2": "0.225.2",
+    "jsr:@supabase/supabase-js@*": "2.45.4",
     "jsr:@supabase/supabase-js@^2.45.4": "2.45.4",
     "npm:@supabase/auth-js@2.65.0": "2.65.0",
     "npm:@supabase/functions-js@2.4.1": "2.4.1",
@@ -9,7 +11,9 @@
     "npm:@supabase/postgrest-js@1.16.1": "1.16.1",
     "npm:@supabase/realtime-js@2.10.2": "2.10.2",
     "npm:@supabase/storage-js@2.7.0": "2.7.0",
+    "npm:puppeteer@*": "23.4.1_devtools-protocol@0.0.1342118",
     "npm:puppeteer@^23.4.1": "23.4.1_devtools-protocol@0.0.1342118",
+    "npm:rxjs@*": "7.8.1",
     "npm:rxjs@^7.8.1": "7.8.1"
   },
   "jsr": {
