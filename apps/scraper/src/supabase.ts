@@ -1,11 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
-import { configDotenv } from 'dotenv';
-import { CourseDetails } from './utils/types';
+import { CourseDetails } from './utils/types.ts';
+import 'jsr:@std/dotenv/load';
 
-configDotenv({ path: 'src/config.env' });
+const supabaseUrl = Deno.env.get('SUPABASE_URL') as string;
+const supabaseKey = Deno.env.get('SUPABASE_KEY') as string;
 
-const supabaseUrl = process.env.SUPABASE_URL as string;
-const supabaseKey = process.env.SUPABASE_KEY as string;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function upsertCourseDetails(details: CourseDetails): Promise<void> {

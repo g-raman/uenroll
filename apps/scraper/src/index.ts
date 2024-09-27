@@ -7,7 +7,7 @@ async function main() {
   const terms = await getAvailableTerms();
   const term = 1;
 
-  const courses = JSON.parse(process.argv[2]);
+  const courses = JSON.parse(Deno.args[0]);
 
   logHeader(`Scraping for courses in ${terms[term].term}`, true);
 
