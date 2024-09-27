@@ -1,4 +1,4 @@
-import supabase from '../supabase';
+import supabase from '../supabase.ts';
 
 const getAvailableCourses = async () => {
   console.log('Fetching available courses...');

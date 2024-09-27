@@ -1,4 +1,4 @@
-import puppeteer, { Browser, Page } from 'puppeteer';
+import puppeteer, { Browser, Page } from 'npm:puppeteer';
 
 type BrowserFunction = (browser: Browser) => Promise<unknown>;
 type PageFunction = (page: Page) => Promise<unknown>;
