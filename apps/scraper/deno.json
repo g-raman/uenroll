@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts",
+    "lint": "deno lint ."
+  },
+  "imports": {
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@^2.45.4",
+    "puppeteer-core": "npm:puppeteer-core@^23.4.1"
+  }
+}
