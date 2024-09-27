@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from 'jsr:@supabase/supabase-js';
 import { CourseDetails } from './utils/types.ts';
 import 'jsr:@std/dotenv/load';
 

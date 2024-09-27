@@ -1,6 +1,6 @@
-import logHeader from './utils/logHeader';
-import getAvailableTerms from './utils/getAvailableTerms';
-import searchAndScrapeCourses from './searchAndScrapeCourses';
+import logHeader from './utils/logHeader.ts';
+import getAvailableTerms from './utils/getAvailableTerms.ts';
+import searchAndScrapeCourses from './searchAndScrapeCourses.ts';
 
 async function main() {
   logHeader('Pre-Scrape');

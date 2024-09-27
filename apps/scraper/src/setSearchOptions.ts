@@ -1,5 +1,5 @@
-import { Page } from 'puppeteer';
-import { term } from './utils/types';
+import { Page } from 'npm:puppeteer';
+import { term } from './utils/types.ts';
 import { defer, from } from 'rxjs';
 
 function setSearchOptions(page: Page, subject: string, year: number, term: term) {

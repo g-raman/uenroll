@@ -1,5 +1,5 @@
-import { Page } from 'puppeteer';
-import { Course, CourseComponent, CourseDetails, Session } from './utils/types';
+import { Page } from 'npm:puppeteer';
+import { Course, CourseComponent, CourseDetails, Session } from './utils/types.ts';
 
 async function scrapeSearchResults(page: Page, term: string): Promise<CourseDetails> {
   const details = await page.evaluate((term) => {

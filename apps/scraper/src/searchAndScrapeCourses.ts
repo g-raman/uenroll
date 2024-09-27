@@ -1,9 +1,9 @@
-import { term } from './utils/types';
-import setSearchOptions from './setSearchOptions';
-import scrapeSearchResults from './scrapeSearchResults';
-import { upsertCourseDetails } from './supabase';
-import { NUM_YEARS, URL } from './utils/constants';
-import { withBrowser, withPage } from './utils/browser';
+import { term } from './utils/types.ts';
+import setSearchOptions from './setSearchOptions.ts';
+import scrapeSearchResults from './scrapeSearchResults.ts';
+import { upsertCourseDetails } from './supabase.ts';
+import { NUM_YEARS, URL } from './utils/constants.ts';
+import { withBrowser, withPage } from './utils/browser.ts';
 
 async function searchAndScrapeCourses(courses: string[], term: term, browserEndpoint: string) {
   await withBrowser(browserEndpoint, async (browser) => {
