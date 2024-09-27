@@ -9,7 +9,8 @@
     "npm:@supabase/postgrest-js@1.16.1": "1.16.1",
     "npm:@supabase/realtime-js@2.10.2": "2.10.2",
     "npm:@supabase/storage-js@2.7.0": "2.7.0",
-    "npm:puppeteer@^23.4.1": "23.4.1_devtools-protocol@0.0.1342118"
+    "npm:puppeteer@^23.4.1": "23.4.1_devtools-protocol@0.0.1342118",
+    "npm:rxjs@^7.8.1": "7.8.1"
   },
   "jsr": {
     "@std/dotenv@0.225.2": {
@@ -544,6 +545,12 @@
     "resolve-from@4.0.0": {
       "integrity": "sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g=="
     },
+    "rxjs@7.8.1": {
+      "integrity": "sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==",
+      "dependencies": [
+        "tslib"
+      ]
+    },
     "semver@7.6.3": {
       "integrity": "sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A=="
     },
@@ -708,7 +715,8 @@
     "dependencies": [
       "jsr:@std/dotenv@~0.225.2",
       "jsr:@supabase/supabase-js@^2.45.4",
-      "npm:puppeteer@^23.4.1"
+      "npm:puppeteer@^23.4.1",
+      "npm:rxjs@^7.8.1"
     ]
   }
 }
