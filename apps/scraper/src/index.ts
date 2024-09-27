@@ -11,11 +11,9 @@ async function main() {
   const terms = await getAvailableTerms();
   const term = 1;
 
-  const courses = JSON.parse(Deno.args[0]);
+  const courses = Deno.args;
 
   logHeader(`Scraping for courses in ${terms[term].term}`, true);
-  console.log(terms);
-  return;
 
   const res = await fetch('http://localhost:9222/json/version');
   const data = await res.json();
