@@ -57,7 +57,7 @@ async function main() {
     }
     console.log('Courses found');
 
-    const result = await page.evaluate(async () => {
+    const result = await page.evaluate(() => {
       const results: subject[] = [];
 
       const courseCodeElements = document.querySelectorAll('span.PSEDITBOX_DISPONLY');
