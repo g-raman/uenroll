@@ -4,12 +4,23 @@ type BrowserFunction = (browser: Browser) => Promise<unknown>;
 type PageFunction = (page: Page) => Promise<unknown>;
 
 export const withBrowser = async (browserEndpoint: string, fn: BrowserFunction) => {
-  const browser = await puppeteer.connect({ browserWSEndpoint: browserEndpoint });
+  const environment = Deno.env.get('ENVIRONMENT');
+
+  let browser;
+  if (environment === 'DEV') {
+    browser = await puppeteer.launch({ headless: false });
+  } else {
+    browser = await puppeteer.connect({ browserWSEndpoint: browserEndpoint });
+  }
 
   try {
     return await fn(browser);
   } finally {
-    await browser.disconnect();
+    if (environment === 'DEV') {
+      await browser.close();
+    } else {
+      await browser.disconnect();
+    }
   }
 };
 
