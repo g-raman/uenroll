@@ -6,7 +6,7 @@
   },
   "imports": {
     "@std/dotenv": "jsr:@std/dotenv@^0.225.2",
-    "@supabase/supabase-js": "npm:@supabase/supabase-js@^2.45.4",
+    "@supabase/supabase-js": "jsr:@supabase/supabase-js@^2.45.4",
     "puppeteer": "npm:puppeteer@^23.4.1"
   }
 }
