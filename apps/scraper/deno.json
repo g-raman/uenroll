@@ -4,7 +4,9 @@
     "lib": ["dom", "deno.ns"]
   },
   "tasks": {
-    "dev": "deno run --allow-sys --allow-read --allow-write --allow-net --allow-env src/index.ts",
+    "scrape:terms": "deno run --allow-run --allow-sys --allow-read --allow-write --allow-net --allow-env src/scrapeAvailableTerms.ts",
+    "scrape:courses:available": "deno run --allow-run --allow-sys --allow-read --allow-write --allow-net --allow-env src/scrapeAvailableCourses.ts",
+    "scrape:courses": "deno run --allow-run --allow-sys --allow-read --allow-write --allow-net --allow-env src/index.ts",
     "lint": "deno lint ."
   },
   "imports": {
