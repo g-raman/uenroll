@@ -9,6 +9,7 @@ async function updateAvailableCourses(availableCourses: subject[]): Promise<void
     .from('availableCourses')
     .upsert(availableCourses, { onConflict: 'subject' })
     .select();
+
   if (error) {
     console.error('Error: Something went wrong when inserting new available courses data');
     console.log(error);
@@ -52,7 +53,7 @@ async function main() {
 
     const error = await page.$('.PSTEXT');
     if (error) {
-      console.log('No courses found');
+      console.log('No courses found\n');
       continue;
     }
     console.log('Courses found');
