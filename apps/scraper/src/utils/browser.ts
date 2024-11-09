@@ -33,3 +33,11 @@ export const withPage = (browser: Browser) => async (fn: PageFunction) => {
     await page.close();
   }
 };
+
+export const getBrowserEndpoint = async (): Promise<string> => {
+  const res = await fetch('http://localhost:9222/json/version');
+  const data = await res.json();
+  const browserEndpoint = data.webSocketDebuggerUrl as string;
+
+  return browserEndpoint;
+};

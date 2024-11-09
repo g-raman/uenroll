@@ -5,19 +5,18 @@
 import logHeader from './utils/logHeader.ts';
 import getAvailableTerms from './utils/getAvailableTerms.ts';
 import searchAndScrapeCourses from './searchAndScrapeCourses.ts';
+import { getBrowserEndpoint } from './utils/browser.ts';
 
 async function main() {
   logHeader('Pre-Scrape');
   const terms = await getAvailableTerms();
-  const term = 1;
+  const term = 0;
 
   const courses = Deno.args;
 
   logHeader(`Scraping for courses in ${terms[term].term}`, true);
 
-  const res = await fetch('http://localhost:9222/json/version');
-  const data = await res.json();
-  const browserEndpoint = data.webSocketDebuggerUrl;
+  const browserEndpoint = await getBrowserEndpoint();
 
   await searchAndScrapeCourses(courses, terms[term], browserEndpoint);
 }
