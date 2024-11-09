@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+docker container run -d -p 9222:9222 zenika/alpine-chrome --no-sandbox --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 https://www.chromestatus.com/
+
 start_time=$(date +%s)
 TOTAL_SUBJECTS=$(curl "${DB_ENDPOINT}?select=subject&order=subject.asc" \
 -H "apikey: $KEY" \
@@ -21,6 +24,12 @@ do
   curr_execution_time=$((curr_end_time - start_time))
   echo "Execution time so far: $curr_execution_time seconds"
 done
+
+# Stop all containers
+docker stop $(docker ps -q)
+
+# Remove all stopped containers
+docker container prune -f
 
 
 end_time=$(date +%s)
