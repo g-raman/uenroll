@@ -35,16 +35,4 @@ export async function upsertCourseDetails(details: CourseDetails): Promise<void>
   }
 }
 
-export async function markAllAsDeleted(term: string): Promise<void> {
-  await supabase.from('courses').update({ isDeleted: true }).eq('term', term);
-  await supabase.from('courseComponents').update({ isDeleted: true }).eq('term', term);
-  await supabase.from('sessions').update({ isDeleted: true }).eq('term', term);
-}
-
-export async function deleteAllMarkedAsDeleted(): Promise<void> {
-  await supabase.from('courses').delete().eq('isDeleted', true);
-  await supabase.from('courseComponents').delete().eq('isDeleted', true);
-  await supabase.from('sessions').delete().eq('isDeleted', true);
-}
-
 export default supabase;
