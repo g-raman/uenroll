@@ -1,7 +1,7 @@
-import puppeteer, { Browser, Page, Protocol } from 'npm:puppeteer';
 import { URL } from './utils/constants.ts';
 import supabase from './supabase.ts';
 import { subject } from './utils/types.ts';
+import { getBrowserEndpoint, withBrowser, withPage } from './utils/browser.ts';
 
 async function updateAvailableCourses(availableCourses: subject[]): Promise<void> {
   console.log('Inserting new available courses...');
@@ -32,59 +32,60 @@ function extractCourseStartingLetter(selector: string): string {
 }
 
 async function main() {
-  const browser: Browser = await puppeteer.launch();
-  const page: Page = await browser.newPage();
+  const browserEndpoint = await getBrowserEndpoint();
 
-  await page.goto(URL, { waitUntil: 'networkidle2' });
-  await page.click('.SSSBUTTON_ACTIONLINK');
-  await page.waitForNetworkIdle({ concurrency: 2 });
-  const alphaNumLinkArr = await page.$$('a.PSPAGE');
+  withBrowser(browserEndpoint, async (browser) => {
+    await withPage(browser)(async (page) => {
+      await page.goto(URL, { waitUntil: 'networkidle2' });
+      await page.click('.SSSBUTTON_ACTIONLINK');
+      await page.waitForNetworkIdle({ concurrency: 2 });
+      const alphaNumLinkArr = await page.$$('a.PSPAGE');
 
-  const listOfSubjects: subject[] = [];
-  for (let i = 0; i < alphaNumLinkArr.length; i++) {
-    const currObj = (await alphaNumLinkArr[i].remoteObject()) as Protocol.Runtime.RemoteObject;
-    const currSelector = currObj.description as string;
-    const currChar = extractCourseStartingLetter(currSelector);
-    console.log(`Searching for subjects starting with ${currChar}`);
+      const listOfSubjects: subject[] = [];
+      for (let i = 0; i < alphaNumLinkArr.length; i++) {
+        const currObj = await alphaNumLinkArr[i].remoteObject();
+        const currSelector = currObj.description as string;
+        const currChar = extractCourseStartingLetter(currSelector);
 
-    const currElem = await page.$(currSelector);
-    await currElem?.click();
-    await page.waitForNetworkIdle({ concurrency: 2 });
+        console.log(`Searching for subjects starting with ${currChar}`);
 
-    const error = await page.$('.PSTEXT');
-    if (error) {
-      console.log('No courses found\n');
-      continue;
-    }
-    console.log('Courses found');
+        const currElem = await page.$(currSelector);
+        await currElem?.click();
+        await page.waitForNetworkIdle({ concurrency: 2 });
 
-    const result = await page.evaluate(() => {
-      const results: subject[] = [];
-
-      const courseCodeElements = document.querySelectorAll('span.PSEDITBOX_DISPONLY');
-
-      for (let j = 0; j < courseCodeElements.length; j++) {
-        const currElem = courseCodeElements[j].innerHTML;
-        if (currElem !== currElem.toUpperCase() || currElem.length > 4) {
+        const error = await page.$('.PSTEXT');
+        if (error) {
+          console.log('No courses found\n');
           continue;
         }
-        results.push({ subject: courseCodeElements[j].innerHTML });
+        console.log('Courses found');
+
+        const result = await page.evaluate(() => {
+          const results: subject[] = [];
+
+          const courseCodeElements = document.querySelectorAll('span.PSEDITBOX_DISPONLY');
+
+          for (let j = 0; j < courseCodeElements.length; j++) {
+            const currElem = courseCodeElements[j].innerHTML;
+            if (currElem !== currElem.toUpperCase() || currElem.length > 4) {
+              continue;
+            }
+            results.push({ subject: courseCodeElements[j].innerHTML });
+          }
+          return results;
+        });
+
+        if (!result) {
+          console.error(`Error: Something went wrong when scraping courses starting with ${currChar}\n`);
+        }
+        console.log(`Succesfully scraped courses starting with ${currChar}\n`);
+
+        listOfSubjects.push(...result);
       }
-      return results;
+
+      updateAvailableCourses(listOfSubjects);
     });
-
-    if (!result) {
-      console.error(`Error: Something went wrong when scraping courses starting with ${currChar}\n`);
-    }
-    console.log(`Succesfully scraped courses starting with ${currChar}\n`);
-
-    listOfSubjects.push(...result);
-  }
-
-  await page.close();
-  await browser.close();
-
-  updateAvailableCourses(listOfSubjects);
+  });
 }
 
 main();
