@@ -1,10 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,windows,intellij,visualstudiocode,git,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,intellij,visualstudiocode,git,node
 
-### Manual Entries ###
-**config.env
-dist
-
 ### Git ###
 # Created by git for backups. To disable backups in Git:
 # $ git config --global mergetool.keepBackup false

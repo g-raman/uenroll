@@ -1,9 +1,9 @@
-export type term = {
+export type Term = {
   value: string;
   term: string;
 };
 
-export type subject = {
+export type Subject = {
   subject: string;
 };
 
