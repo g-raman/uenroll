@@ -32,7 +32,14 @@ data "aws_ami" "latest_amazon_linux" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
+}
 
+data "aws_secretsmanager_secret" "db_secret" {
+  name = "prod/uenroll/db"
+}
+
+data "aws_secretsmanager_secret_version" "db_secret_version" {
+  secret_id = data.aws_secretsmanager_secret.db_secret.id
 }
 
 resource "aws_security_group" "scraper_sg" {
