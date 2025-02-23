@@ -34,14 +34,6 @@ data "aws_ami" "latest_amazon_linux" {
   }
 }
 
-data "aws_secretsmanager_secret" "db_secret" {
-  name = "prod/uenroll/db"
-}
-
-data "aws_secretsmanager_secret_version" "db_secret_version" {
-  secret_id = data.aws_secretsmanager_secret.db_secret.id
-}
-
 resource "aws_security_group" "scraper_sg" {
   name        = "uenroll-scraper-sg"
   description = "Allow SSH and HTTP traffic"
@@ -82,12 +74,26 @@ resource "local_sensitive_file" "local_scraper_private_key" {
   file_permission = "400"
 }
 
+data "aws_secretsmanager_secret" "db_secret" {
+  name = "prod/uenroll/db"
+}
+
+data "aws_secretsmanager_secret_version" "db_secret_version" {
+  secret_id = data.aws_secretsmanager_secret.db_secret.id
+}
+
+locals {
+  supabase_key = jsondecode(data.aws_secretsmanager_secret_version.db_secret_version.secret_string)["supabase_key"]
+}
+
 resource "aws_instance" "scraper" {
   ami                    = data.aws_ami.latest_amazon_linux.id
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.scraper_key_pair.key_name
   vpc_security_group_ids = [aws_security_group.scraper_sg.id]
-  user_data              = file("${path.module}/setup.sh")
+  user_data = templatefile("${path.module}/setup.sh", {
+    SUPABASE_KEY = local.supabase_key
+  })
 
   tags = {
     Name    = "uenroll-scraper-ec2"

@@ -17,20 +17,24 @@ curl -fsSL https://deno.land/x/install/install.sh | sh -s -- -y
 export DENO_INSTALL="$HOME/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
+# Add Deno to path
 echo 'export DENO_INSTALL="$HOME/.deno"' >> "$HOME/.bashrc"
 echo 'export PATH="$DENO_INSTALL/bin:$PATH"' >>  "$HOME/.bashrc"
 source "$HOME/.bashrc"
 
-# Make director to store logs
-mkdir -p /var/logs/scraper/
-
 # Clone repo
 WORK_DIR="/scraper"
 git clone https://github.com/uoEnroll/scraper.git "$WORK_DIR"
-cd "$WORK_DIR"
+
+# Add API key to .env
+echo "SUPABASE_KEY=\"${SUPABASE_KEY}\"" >> "$HOME/scraper/.env"
 
 # Install dependencies
+cd "$WORK_DIR"
 deno install
 
-chmod +x src/scrape.sh
-./src/scrape.sh >> /var/logs/scraper/scraper.log
+# Make director to store logs
+mkdir -p /var/logs/scraper/
+
+# chmod +x src/scrape.sh
+# ./src/scrape.sh >> /var/logs/scraper/scraper.log
