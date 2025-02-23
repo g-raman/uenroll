@@ -21,6 +21,9 @@ echo 'export DENO_INSTALL="$HOME/.deno"' >> "$HOME/.bashrc"
 echo 'export PATH="$DENO_INSTALL/bin:$PATH"' >>  "$HOME/.bashrc"
 source "$HOME/.bashrc"
 
+# Make director to store logs
+mkdir -p /var/logs/uenroll/
+
 # Clone repo
 WORK_DIR="/scraper"
 git clone https://github.com/uoEnroll/scraper.git "$WORK_DIR"
