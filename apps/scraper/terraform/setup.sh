@@ -1,31 +1,34 @@
 #!/bin/bash
 
-echo "Updating system..."
+# Update system
 sudo yum update -y
 
-echo "Installing git..."
-sudo yum install git -y
-
-echo "Installing docker..."
+# Set up docker
 sudo amazon-linux-extras install docker -y
-
-echo "Setting up docker..."
 sudo systemctl start docker
 sudo systemctl enable docker
 sudo usermod -aG docker ec2-user
 
-echo "Installing deno..."
+# Install git
+sudo yum install git -y
+
+# Install deno
 curl -fsSL https://deno.land/x/install/install.sh | sh -s -- -y
+export DENO_INSTALL="$HOME/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
 
-echo "Setting up deno..."
-echo 'export DENO_INSTALL="$HOME/.deno"' >> ~/.bashrc
-echo 'export PATH="$DENO_INSTALL/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
+echo 'export DENO_INSTALL="$HOME/.deno"' >> "$HOME/.bashrc"
+echo 'export PATH="$DENO_INSTALL/bin:$PATH"' >>  "$HOME/.bashrc"
+source "$HOME/.bashrc"
 
-echo "Installing jq..."
+# Install jq
 sudo yum install jq -y
 
-echo "Cloning scraper repo..."
-git clone https://github.com/uoEnroll/scraper.git
-cd scraper
+
+# Clone repo
+WORK_DIR="/scraper"
+git clone https://github.com/uoEnroll/scraper.git "$WORK_DIR"
+cd "$WORK_DIR"
+
+# Install dependencies
 deno install
