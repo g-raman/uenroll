@@ -43,7 +43,7 @@ data "aws_secretsmanager_secret_version" "db_secret_version" {
 }
 
 resource "aws_security_group" "scraper_sg" {
-  name        = "my-security-group"
+  name        = "uenroll-scraper-sg"
   description = "Allow SSH and HTTP traffic"
 
   ingress {
