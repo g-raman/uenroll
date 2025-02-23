@@ -22,7 +22,7 @@ echo 'export PATH="$DENO_INSTALL/bin:$PATH"' >>  "$HOME/.bashrc"
 source "$HOME/.bashrc"
 
 # Make director to store logs
-mkdir -p /var/logs/uenroll/
+mkdir -p /var/logs/scraper/
 
 # Clone repo
 WORK_DIR="/scraper"
@@ -31,3 +31,6 @@ cd "$WORK_DIR"
 
 # Install dependencies
 deno install
+
+chmod +x src/scrape.sh
+./src/scrape.sh >> /var/logs/scraper/scraper.log
