@@ -5,9 +5,9 @@ docker container run -d -p 9222:9222 zenika/alpine-chrome --no-sandbox --remote-
 
 start_time=$(date +%s)
 
-deno task scrape:terms >> /var/logs/uenroll/terms.log
-deno task scrape:subjects >> /var/logs/uenroll/subjects.log
-deno task scrape:courses >> /var/logs/uenroll/courses.log
+nohup deno task scrape:terms &>/var/logs/uenroll/terms.log &
+nohup deno task scrape:subjects &>/var/logs/uenroll/subjects.log &
+nohup deno task scrape:courses &>/var/logs/uenroll/courses.log &
 
 end_time=$(date +%s)
 execution_time=$((end_time - start_time))
