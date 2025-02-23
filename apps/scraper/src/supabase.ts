@@ -1,8 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 import "jsr:@std/dotenv/load";
 import { CourseDetails, Subject, Term } from "./utils/types.ts";
+import { SUPABASE_URL } from "./utils/constants.ts";
 
-const supabaseUrl = Deno.env.get("SUPABASE_URL") as string;
+const supabaseUrl = SUPABASE_URL;
 const supabaseKey = Deno.env.get("SUPABASE_KEY") as string;
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
