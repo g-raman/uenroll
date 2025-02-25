@@ -1,4 +1,13 @@
 terraform {
+  backend "s3" {
+    bucket                  = "uenroll-scraper"
+    dynamodb_table          = "uenroll-scraper-terraform-state-lock"
+    key                     = "scraper"
+    region                  = "us-east-1"
+    profile                 = "scraper"
+    shared_credentials_file = "~/.aws/credentials"
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
