@@ -1,11 +1,9 @@
 terraform {
   backend "s3" {
-    bucket                  = "uenroll-scraper"
-    dynamodb_table          = "uenroll-scraper-terraform-state-lock"
-    key                     = "scraper"
-    region                  = "us-east-1"
-    profile                 = "scraper"
-    shared_credentials_file = "~/.aws/credentials"
+    bucket         = "uenroll-scraper"
+    dynamodb_table = "uenroll-scraper-terraform-state-lock"
+    key            = "scraper"
+    region         = "us-east-1"
   }
 
   required_providers {
@@ -19,8 +17,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  profile = "scraper"
+  region = "us-east-1"
 }
 
 data "aws_ami" "latest_amazon_linux" {
