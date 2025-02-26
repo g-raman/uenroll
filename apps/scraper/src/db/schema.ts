@@ -15,8 +15,7 @@ import { sql } from "drizzle-orm";
 const readPolicy = pgPolicy("read access for all users policy", {
   for: "select",
   to: "public",
-  using: sql``,
-  withCheck: sql``,
+  using: sql`true`,
 });
 
 export const availableTermsTable = pgTable(
