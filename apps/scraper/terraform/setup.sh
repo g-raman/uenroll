@@ -24,7 +24,7 @@ source "$HOME/.bashrc"
 
 # Clone repo
 WORK_DIR="/scraper"
-git clone https://github.com/uoEnroll/scraper.git "$WORK_DIR"
+git clone https://github.com/g-raman/scraper.git "$WORK_DIR"
 
 # Add API key to .env
 echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$HOME/scraper/.env"
