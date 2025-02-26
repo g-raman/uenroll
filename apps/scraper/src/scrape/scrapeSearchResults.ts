@@ -65,7 +65,7 @@ export default ($: CheerioAPI, term: Term): CourseDetails => {
       currentSection = isNewSection ? subSection : currentSection;
 
       const sessions = processSessions(
-        term.term,
+        term.value,
         courseCode,
         subSection,
         currentSection,
@@ -77,7 +77,7 @@ export default ($: CheerioAPI, term: Term): CourseDetails => {
       details.sessions.push(...sessions);
 
       details.courseComponents.push({
-        term: term.term,
+        term: term.value,
         courseCode,
         section: currentSection,
         subSection,
@@ -95,7 +95,7 @@ export default ($: CheerioAPI, term: Term): CourseDetails => {
     details.courses.push({
       courseCode,
       courseTitle,
-      term: term.term,
+      term: term.value,
       isDeleted: false,
     });
   });

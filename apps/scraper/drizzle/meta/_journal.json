@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1740539957067,
+      "tag": "0000_charming_lilandra",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1740540204939,
+      "tag": "0001_get_course_function",
+      "breakpoints": true
+    }
+  ]
+}

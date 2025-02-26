@@ -2,7 +2,7 @@ import * as cheerio from "cheerio";
 import { getBrowserEndpoint, getBrowser } from "../utils/browser.ts";
 import { COURSE_REGISTRY_URL } from "../utils/constants.ts";
 import { getIdSelector, getIdStartsWithSelector } from "../utils/scrape.ts";
-import { updateAvailableSubjects } from "../supabase.ts";
+import { db, updateAvailableSubjects } from "../supabase.ts";
 import { Subject } from "../utils/types.ts";
 
 const characters = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", ..."0123456789"];
@@ -51,3 +51,4 @@ for (const character of characters) {
 
 await page.close();
 await browser.disconnect();
+await db.$client.end();

@@ -27,7 +27,7 @@ WORK_DIR="/scraper"
 git clone https://github.com/uoEnroll/scraper.git "$WORK_DIR"
 
 # Add API key to .env
-echo "SUPABASE_KEY=\"${SUPABASE_KEY}\"" >> "$HOME/scraper/.env"
+echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$HOME/scraper/.env"
 
 # Install dependencies
 cd "$WORK_DIR"

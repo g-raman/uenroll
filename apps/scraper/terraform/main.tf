@@ -89,7 +89,7 @@ data "aws_secretsmanager_secret_version" "db_secret_version" {
 }
 
 locals {
-  supabase_key = jsondecode(data.aws_secretsmanager_secret_version.db_secret_version.secret_string)["supabase_key"]
+  database_url = jsondecode(data.aws_secretsmanager_secret_version.db_secret_version.secret_string)["database_url"]
 }
 
 resource "aws_instance" "scraper" {
@@ -98,7 +98,7 @@ resource "aws_instance" "scraper" {
   key_name               = aws_key_pair.scraper_key_pair.key_name
   vpc_security_group_ids = [aws_security_group.scraper_sg.id]
   user_data = templatefile("${path.module}/setup.sh", {
-    SUPABASE_KEY = local.supabase_key
+    DATABASE_URL = local.database_url
   })
 
   tags = {

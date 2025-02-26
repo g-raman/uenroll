@@ -4,12 +4,17 @@
     "scrape:courses": "deno run --allow-run --allow-sys --allow-read --allow-write --allow-net --allow-env src/main.ts"
     "scrape:terms": "deno run --allow-run --allow-sys --allow-read --allow-write --allow-net --allow-env src/scrape/scrapeAvailableTerms.ts"
     "scrape:subjects": "deno run --allow-run --allow-sys --allow-read --allow-write --allow-net --allow-env src/scrape/scrapeAvailableSubjects.ts"
+    "db:generate": "deno --env -A --node-modules-dir npm:drizzle-kit generate",
+    "db:migrate": "deno --env -A --node-modules-dir npm:drizzle-kit migrate",
+    "db:function": "deno --env -A --node-modules-dir npm:drizzle-kit generate --custom --name=get_course_function"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
-    "@supabase/supabase-js": "jsr:@supabase/supabase-js@^2.48.1",
     "axios": "npm:axios@^1.7.9",
     "cheerio": "npm:cheerio@^1.0.0",
+    "drizzle-kit": "npm:drizzle-kit@^0.30.4",
+    "drizzle-orm": "npm:drizzle-orm@^0.39.3",
+    "postgres": "npm:postgres@^3.4.5",
     "puppeteer-core": "npm:puppeteer-core@^24.2.1"
   },
   "compilerOptions": {

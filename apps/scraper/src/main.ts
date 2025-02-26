@@ -1,7 +1,7 @@
 import scrapeSearchResults from "./scrape/scrapeSearchResults.ts";
 import searchForCourse from "./scrape/searchForCourse.ts";
 import getAvailableTerms, {
-  getAvailableCourses,
+  getAvailableSubjects,
   upsertCourseDetails,
 } from "./supabase.ts";
 import { getBrowser, getBrowserEndpoint } from "./utils/browser.ts";
@@ -21,7 +21,7 @@ const browser = await getBrowser(browserEndpoint);
 const page = await browser.newPage();
 
 const term = terms[0];
-const courses = await getAvailableCourses();
+const courses = await getAvailableSubjects();
 
 for (const course of courses) {
   for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
