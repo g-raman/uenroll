@@ -14,8 +14,8 @@ interface SearchResultsContextType {
   resetCourses: () => void;
   changeTerm: (term: Term) => void;
   addCourse: (course: Course) => void;
-  addSelectedComponent: (course: SelectedCourse) => void;
-  removeSelectedComponent: (
+  addSelectedSession: (course: SelectedCourse) => void;
+  removeSelectedSession: (
     courseCode: string,
     term: string,
     subSection: string,
@@ -97,17 +97,17 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     setChosenColours(new Set());
   }, []);
 
-  const addSelectedComponent = useCallback((course: SelectedCourse) => {
-    setSelectedSessions((currSelectedComponents) => {
+  const addSelectedSession = useCallback((course: SelectedCourse) => {
+    setSelectedSessions((currSelectedSessions) => {
       if (
-        currSelectedComponents.some(
+        currSelectedSessions.some(
           (elem) =>
             elem.courseDetails.courseCode === course.courseCode &&
             elem.courseDetails.term === course.term &&
             elem.courseDetails.subSection == course.subSection,
         )
       ) {
-        return currSelectedComponents;
+        return currSelectedSessions;
       }
       const sessions = course.sessions.map((session) => {
         return {
@@ -128,14 +128,14 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
           },
         };
       }) as SelectedSession[];
-      return [...sessions, ...currSelectedComponents];
+      return [...sessions, ...currSelectedSessions];
     });
   }, []);
 
-  const removeSelectedComponent = useCallback(
+  const removeSelectedSession = useCallback(
     (courseCode: string, term: string, subSection: string) => {
-      setSelectedSessions((currSelectedCourses) => {
-        const filtered = currSelectedCourses.filter(
+      setSelectedSessions((currSelectedSessions) => {
+        const filtered = currSelectedSessions.filter(
           (course) =>
             !(
               course.courseDetails.courseCode === courseCode &&
@@ -162,8 +162,8 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
         addCourse,
         resetCourses,
         selectedSessions,
-        addSelectedComponent,
-        removeSelectedComponent,
+        addSelectedSession,
+        removeSelectedSession,
         term,
         changeTerm,
       }}
