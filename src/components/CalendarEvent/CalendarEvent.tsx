@@ -15,7 +15,7 @@ export interface CalendarEventProps {
   calendarEvent: ExtendedCalendarEvent;
 }
 
-const TIME_FORMAT = "hh:mm A";
+const TIME_FORMAT = "hh:mm";
 export default function CalendarEvent({ calendarEvent }: CalendarEventProps) {
   const start = dayjs(calendarEvent.start).format(TIME_FORMAT);
   const end = dayjs(calendarEvent.end).format(TIME_FORMAT);
@@ -27,16 +27,13 @@ export default function CalendarEvent({ calendarEvent }: CalendarEventProps) {
         <p className="font-bold">{calendarEvent.title}</p>
         &nbsp;-&nbsp;
         <p className="text-xs">{calendarEvent.subSection}</p>
+        &nbsp;
+        <p className="font-normal">({calendarEvent.type})</p>
       </div>
 
-      <div className="flex items-center gap-2 font-light">
-        <FontAwesomeIcon icon={faClock} />
-        <p className="text-nowrap">
-          {start} - {end}
-        </p>
-      </div>
-
-      <p className="font-light">{calendarEvent.type}</p>
+      <p className="font-light text-nowrap">
+        {start} - {end}
+      </p>
     </div>
   );
 }
