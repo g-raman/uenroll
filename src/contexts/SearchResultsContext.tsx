@@ -1,4 +1,10 @@
-import { Course, SelectedCourse, SelectedSession, Term } from "@/types/Types";
+import {
+  Course,
+  Selected,
+  SelectedCourse,
+  SelectedSession,
+  Term,
+} from "@/types/Types";
 import React, {
   createContext,
   useContext,
@@ -9,10 +15,12 @@ import React, {
 
 interface SearchResultsContextType {
   courses: Course[];
+  selected: Selected[];
   selectedSessions: SelectedSession[];
   term: Term | null;
   resetCourses: () => void;
   changeTerm: (term: Term) => void;
+  addSelected: (selected: Selected) => void;
   addCourse: (course: Course) => void;
   addSelectedSession: (course: SelectedCourse) => void;
   removeSelectedSession: (
@@ -60,6 +68,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   const [chosenColours, setChosenColours] = useState<Set<string>>(
     new Set<string>(),
   );
+  const [selected, setSelected] = useState<Selected[]>([]);
 
   const selectRandomColour = useCallback(() => {
     const filteredColours = availableColours.filter(
@@ -70,6 +79,21 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     setChosenColours((prevSet) => new Set<string>(prevSet).add(chosenColour));
     return chosenColour;
   }, [chosenColours]);
+
+  const addSelected = useCallback((selected: Selected) => {
+    setSelected((currSelected) => {
+      if (
+        currSelected.some(
+          (elem) =>
+            elem.courseCode === selected.courseCode &&
+            elem.subSection === selected.subSection,
+        )
+      ) {
+        return currSelected;
+      }
+      return [selected, ...currSelected];
+    });
+  }, []);
 
   const addCourse = useCallback(
     (course: Course) => {
@@ -159,6 +183,8 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     <SearchResultsContext.Provider
       value={{
         courses,
+        selected,
+        addSelected,
         addCourse,
         resetCourses,
         selectedSessions,
