@@ -33,8 +33,15 @@ function NewCalendar() {
         start: "06:00",
         end: "23:00",
       },
-      weekOptions: {
-        gridHeight: 1000,
+      callbacks: {
+        beforeRender($app) {
+          // Need a multiplier to reduce grid height as some space
+          // is taken up by the calendar navigation
+          const multiplier = 0.735;
+          const height = window.innerHeight * multiplier;
+          $app.config.weekOptions.gridHeight = height;
+          $app.config.weekOptions.v.gridHeight = height;
+        },
       },
     },
     plugins,
