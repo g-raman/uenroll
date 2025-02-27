@@ -11,6 +11,7 @@ import React, {
   useState,
   ReactNode,
   useCallback,
+  useEffect,
 } from "react";
 
 interface SearchResultsContextType {
@@ -22,7 +23,6 @@ interface SearchResultsContextType {
   changeTerm: (term: Term) => void;
   addSelected: (selected: Selected) => void;
   addCourse: (course: Course) => void;
-  addSelectedSession: (course: SelectedCourse) => void;
   removeSelectedSession: (
     courseCode: string,
     term: string,
@@ -95,6 +95,42 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     });
   }, []);
 
+  useEffect(() => {
+    const results: SelectedSession[] = courses.flatMap((course) =>
+      course.sections.flatMap((section) =>
+        section.components.flatMap((component) =>
+          component.sessions
+            .filter((session) =>
+              selected.some(
+                (elem) =>
+                  elem.subSection === component.subSection &&
+                  elem.courseCode === course.courseCode,
+              ),
+            )
+            .map((session) => ({
+              startTime: session.startTime.slice(0, -3),
+              endTime: session.endTime.slice(0, -3),
+              startRecur: session.startDate,
+              endRecur: session.endDate,
+              dayOfWeek: dayOfWeekToNumberMap[session.dayOfWeek] as number,
+              courseDetails: {
+                backgroundColour: course.colour as string,
+                courseCode: course.courseCode,
+                courseTitle: course.courseTitle,
+                term: course.term,
+                subSection: component.subSection,
+                instructor: session.instructor,
+                type: component.type,
+                isOpen: component.isOpen,
+              },
+            })),
+        ),
+      ),
+    );
+
+    setSelectedSessions(results);
+  }, [courses, selected]);
+
   const addCourse = useCallback(
     (course: Course) => {
       setCourses((currCourses) => {
@@ -119,41 +155,6 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     setCourses([]);
     setSelectedSessions([]);
     setChosenColours(new Set());
-  }, []);
-
-  const addSelectedSession = useCallback((course: SelectedCourse) => {
-    setSelectedSessions((currSelectedSessions) => {
-      if (
-        currSelectedSessions.some(
-          (elem) =>
-            elem.courseDetails.courseCode === course.courseCode &&
-            elem.courseDetails.term === course.term &&
-            elem.courseDetails.subSection == course.subSection,
-        )
-      ) {
-        return currSelectedSessions;
-      }
-      const sessions = course.sessions.map((session) => {
-        return {
-          startTime: session.startTime.slice(0, -3),
-          endTime: session.endTime.slice(0, -3),
-          startRecur: session.startDate,
-          endRecur: session.endDate,
-          dayOfWeek: dayOfWeekToNumberMap[session.dayOfWeek] as number,
-          courseDetails: {
-            backgroundColour: course.colour,
-            courseCode: course.courseCode,
-            courseTitle: course.courseTitle,
-            term: course.term,
-            subSection: course.subSection,
-            instructor: session.instructor,
-            type: course.type,
-            isOpen: course.isOpen,
-          },
-        };
-      }) as SelectedSession[];
-      return [...sessions, ...currSelectedSessions];
-    });
   }, []);
 
   const removeSelectedSession = useCallback(
@@ -188,7 +189,6 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
         addCourse,
         resetCourses,
         selectedSessions,
-        addSelectedSession,
         removeSelectedSession,
         term,
         changeTerm,
