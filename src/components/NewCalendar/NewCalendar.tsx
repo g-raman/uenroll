@@ -39,8 +39,7 @@ function NewCalendar() {
           // is taken up by the calendar navigation
           const multiplier = 0.735;
           const height = window.innerHeight * multiplier;
-          $app.config.weekOptions.gridHeight = height;
-          $app.config.weekOptions.v.gridHeight = height;
+          $app.config.weekOptions.value.gridHeight = height;
         },
       },
     },
