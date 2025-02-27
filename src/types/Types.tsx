@@ -57,3 +57,8 @@ export interface SelectedSession {
     backgroundColour: string;
   };
 }
+
+export interface Selected {
+  courseCode: string;
+  subSection: string;
+}
