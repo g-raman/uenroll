@@ -22,12 +22,8 @@ interface SearchResultsContextType {
   resetCourses: () => void;
   changeTerm: (term: Term) => void;
   addSelected: (selected: Selected) => void;
+  removeSelected: (selected: Selected) => void;
   addCourse: (course: Course) => void;
-  removeSelectedSession: (
-    courseCode: string,
-    term: string,
-    subSection: string,
-  ) => void;
 }
 
 const SearchResultsContext = createContext<
@@ -95,6 +91,16 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     });
   }, []);
 
+  const removeSelected = useCallback((selected: Selected) => {
+    setSelected((currSelected) => {
+      return currSelected.filter(
+        (subSection) =>
+          subSection.courseCode !== selected.courseCode ||
+          subSection.subSection !== selected.subSection,
+      );
+    });
+  }, []);
+
   useEffect(() => {
     const results: SelectedSession[] = courses.flatMap((course) =>
       course.sections.flatMap((section) =>
@@ -157,23 +163,6 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     setChosenColours(new Set());
   }, []);
 
-  const removeSelectedSession = useCallback(
-    (courseCode: string, term: string, subSection: string) => {
-      setSelectedSessions((currSelectedSessions) => {
-        const filtered = currSelectedSessions.filter(
-          (course) =>
-            !(
-              course.courseDetails.courseCode === courseCode &&
-              course.courseDetails.term === term &&
-              course.courseDetails.subSection === subSection
-            ),
-        );
-        return filtered;
-      });
-    },
-    [],
-  );
-
   const changeTerm = useCallback((term: Term) => {
     setTerm(term);
     setCourses([]);
@@ -186,10 +175,10 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
         courses,
         selected,
         addSelected,
+        removeSelected,
         addCourse,
         resetCourses,
         selectedSessions,
-        removeSelectedSession,
         term,
         changeTerm,
       }}
