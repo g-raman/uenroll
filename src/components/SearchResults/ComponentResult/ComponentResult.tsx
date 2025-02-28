@@ -21,7 +21,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   subSection,
   colour,
 }) => {
-  const { addSelected, removeSelectedSession } = useSearchResults();
+  const { addSelected, removeSelected } = useSearchResults();
   const [isSelected, setIsSelected] = useState(false);
 
   function handleToggle() {
@@ -32,19 +32,9 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
     if (isSelected) {
       addSelected({ courseCode, subSection });
     } else {
-      removeSelectedSession(courseCode, term, subSection);
+      removeSelected({ courseCode, subSection });
     }
-  }, [
-    isSelected,
-    component,
-    courseCode,
-    courseTitle,
-    subSection,
-    term,
-    removeSelectedSession,
-    colour,
-    addSelected,
-  ]);
+  }, [isSelected, addSelected, removeSelected, courseCode, subSection]);
 
   return (
     <div className="flex items-center justify-between h-full w-full border-b">
