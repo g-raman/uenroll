@@ -103,7 +103,7 @@ export default function SearchBar() {
           className="border-slate-400 bg-slate-100 border text-xs w-full px-4 py-2 rounded-sm disabled:bg-slate-300 md:text-sm"
           type="text"
           placeholder="Course Code Eg. CSI 2101"
-          disabled={isLoading}
+          disabled={isLoading || isLoadingInitial}
         />
 
         <button
