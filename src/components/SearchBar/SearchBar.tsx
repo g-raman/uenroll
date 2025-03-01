@@ -58,8 +58,8 @@ export default function SearchBar() {
       if (!term || !selected) {
         return [];
       }
-      const toFetch = selected.map((course) =>
-        fetchCourses(course.courseCode, term),
+      const toFetch = Object.keys(selected).map((courseCode) =>
+        fetchCourses(courseCode, term),
       );
       try {
         const result = await Promise.all(toFetch);
