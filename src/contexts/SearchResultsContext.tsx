@@ -115,10 +115,10 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
 
   useEffect(() => {
+    if (!selected) {
+      return;
+    }
     const results: SelectedSession[] = courses.flatMap((course) => {
-      if (!selected) {
-        return [];
-      }
       return course.sections.flatMap((section) =>
         section.components.flatMap((component) =>
           component.sessions
