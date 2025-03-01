@@ -26,6 +26,7 @@ interface SearchResultsContextType {
   changeTerm: (term: Term) => void;
   addSelected: (selected: Selected) => void;
   removeSelected: (selected: Selected) => void;
+  resetSelected: () => void;
   addCourse: (course: Course) => void;
 }
 
@@ -138,6 +139,10 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     });
   }, []);
 
+  const resetSelected = useCallback(() => {
+    setSelected([]);
+  }, []);
+
   useEffect(() => {
     if (!selected) {
       return;
@@ -213,6 +218,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
         selected,
         addSelected,
         removeSelected,
+        resetSelected,
         addCourse,
         resetCourses,
         selectedSessions,
