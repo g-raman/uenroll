@@ -82,43 +82,37 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     return chosenColour;
   }, [chosenColours]);
 
-  const addSelected = useCallback(
-    (selected: Selected) => {
-      setSelected((currSelected: Selected[]) => {
-        if (!currSelected) {
-          return [];
-        }
+  const addSelected = useCallback((selected: Selected) => {
+    setSelected((currSelected: Selected[]) => {
+      if (!currSelected) {
+        return [];
+      }
 
-        if (
-          currSelected.some(
-            (elem) =>
-              elem.courseCode === selected.courseCode &&
-              elem.subSection === selected.subSection,
-          )
-        ) {
-          return currSelected;
-        }
-        return [selected, ...currSelected];
-      });
-    },
-    [setSelected],
-  );
+      if (
+        currSelected.some(
+          (elem) =>
+            elem.courseCode === selected.courseCode &&
+            elem.subSection === selected.subSection,
+        )
+      ) {
+        return currSelected;
+      }
+      return [selected, ...currSelected];
+    });
+  }, []);
 
-  const removeSelected = useCallback(
-    (selected: Selected) => {
-      setSelected((currSelected: Selected[]) => {
-        if (!currSelected) {
-          return [];
-        }
-        return currSelected.filter(
-          (subSection) =>
-            subSection.courseCode !== selected.courseCode ||
-            subSection.subSection !== selected.subSection,
-        );
-      });
-    },
-    [setSelected],
-  );
+  const removeSelected = useCallback((selected: Selected) => {
+    setSelected((currSelected: Selected[]) => {
+      if (!currSelected) {
+        return [];
+      }
+      return currSelected.filter(
+        (subSection) =>
+          subSection.courseCode !== selected.courseCode ||
+          subSection.subSection !== selected.subSection,
+      );
+    });
+  }, []);
 
   useEffect(() => {
     const results: SelectedSession[] = courses.flatMap((course) => {
