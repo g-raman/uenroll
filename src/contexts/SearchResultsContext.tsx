@@ -16,6 +16,7 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
+import LZString from "lz-string";
 
 interface SearchResultsContextType {
   courses: Course[];
@@ -93,8 +94,8 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   const [selected, setSelected] = useQueryState("data", {
     defaultValue: null,
     history: "push",
-    parse: JSON.parse,
-    serialize: JSON.stringify,
+    parse: (value) => JSON.parse(LZString.decompressFromBase64(value)),
+    serialize: (value) => LZString.compressToBase64(JSON.stringify(value)),
   });
 
   const selectRandomColour = useCallback(() => {
