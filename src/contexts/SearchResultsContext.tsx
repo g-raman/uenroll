@@ -94,7 +94,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     new Set<string>(),
   );
   const [selected, setSelected] = useQueryState("data", {
-    defaultValue: {},
+    defaultValue: "{}",
     history: "push",
     parse: (value) => JSON.parse(LZString.decompressFromBase64(value)),
     serialize: (value) => LZString.compressToBase64(JSON.stringify(value)),
