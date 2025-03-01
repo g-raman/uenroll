@@ -5,6 +5,7 @@ import {
   SelectedSession,
   Term,
 } from "@/types/Types";
+import { useQueryState } from "nuqs";
 import React, {
   createContext,
   useContext,
@@ -64,7 +65,12 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   const [chosenColours, setChosenColours] = useState<Set<string>>(
     new Set<string>(),
   );
-  const [selected, setSelected] = useState<Selected[]>([]);
+  const [selected, setSelected] = useQueryState("data", {
+    defaultValue: null,
+    history: "push",
+    parse: JSON.parse,
+    serialize: JSON.stringify,
+  });
 
   const selectRandomColour = useCallback(() => {
     const filteredColours = availableColours.filter(
@@ -76,39 +82,55 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     return chosenColour;
   }, [chosenColours]);
 
-  const addSelected = useCallback((selected: Selected) => {
-    setSelected((currSelected) => {
-      if (
-        currSelected.some(
-          (elem) =>
-            elem.courseCode === selected.courseCode &&
-            elem.subSection === selected.subSection,
-        )
-      ) {
-        return currSelected;
-      }
-      return [selected, ...currSelected];
-    });
-  }, []);
+  const addSelected = useCallback(
+    (selected: Selected) => {
+      setSelected((currSelected: Selected[]) => {
+        if (!currSelected) {
+          return [];
+        }
 
-  const removeSelected = useCallback((selected: Selected) => {
-    setSelected((currSelected) => {
-      return currSelected.filter(
-        (subSection) =>
-          subSection.courseCode !== selected.courseCode ||
-          subSection.subSection !== selected.subSection,
-      );
-    });
-  }, []);
+        if (
+          currSelected.some(
+            (elem) =>
+              elem.courseCode === selected.courseCode &&
+              elem.subSection === selected.subSection,
+          )
+        ) {
+          return currSelected;
+        }
+        return [selected, ...currSelected];
+      });
+    },
+    [setSelected],
+  );
+
+  const removeSelected = useCallback(
+    (selected: Selected) => {
+      setSelected((currSelected: Selected[]) => {
+        if (!currSelected) {
+          return [];
+        }
+        return currSelected.filter(
+          (subSection) =>
+            subSection.courseCode !== selected.courseCode ||
+            subSection.subSection !== selected.subSection,
+        );
+      });
+    },
+    [setSelected],
+  );
 
   useEffect(() => {
-    const results: SelectedSession[] = courses.flatMap((course) =>
-      course.sections.flatMap((section) =>
+    const results: SelectedSession[] = courses.flatMap((course) => {
+      if (!selected) {
+        return [];
+      }
+      return course.sections.flatMap((section) =>
         section.components.flatMap((component) =>
           component.sessions
             .filter((session) =>
               selected.some(
-                (elem) =>
+                (elem: Selected) =>
                   elem.subSection === component.subSection &&
                   elem.courseCode === course.courseCode,
               ),
@@ -131,8 +153,8 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
               },
             })),
         ),
-      ),
-    );
+      );
+    });
 
     setSelectedSessions(results);
   }, [courses, selected]);
