@@ -23,13 +23,13 @@ export default function TermSelector() {
       return data.data as Term[];
     },
   });
-  const { term, changeTerm } = useSearchResults();
+  const { term, initializeTerm, changeTerm } = useSearchResults();
 
   React.useEffect(() => {
     if (data && data.length > 0 && !term) {
-      changeTerm(data[0]);
+      initializeTerm(data[0]);
     }
-  }, [changeTerm, data, term]);
+  }, [data, initializeTerm, term]);
 
   if (isError) {
     toast.error(error.message);

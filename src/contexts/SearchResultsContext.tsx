@@ -25,6 +25,7 @@ interface SearchResultsContextType {
   term: Term | null;
   resetCourses: () => void;
   changeTerm: (term: Term) => void;
+  initializeTerm: (term: Term) => void;
   addSelected: (selected: Selected) => void;
   removeSelected: (selected: Selected) => void;
   resetSelected: () => void;
@@ -202,14 +203,18 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
 
   const resetCourses = useCallback(() => {
     setCourses([]);
-    setSelectedSessions([]);
+    setSelected([]);
     setChosenColours(new Set());
   }, []);
 
   const changeTerm = useCallback((term: Term) => {
     setTerm(term);
     setCourses([]);
-    setSelectedSessions([]);
+    setSelected([]);
+  }, []);
+
+  const initializeTerm = useCallback((term: Term) => {
+    setTerm(term);
   }, []);
 
   return (
@@ -225,6 +230,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
         selectedSessions,
         term,
         changeTerm,
+        initializeTerm,
       }}
     >
       {children}
