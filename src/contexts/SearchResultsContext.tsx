@@ -1,8 +1,10 @@
 import {
+  Component,
   Course,
   Selected,
   SelectedCourse,
   SelectedSession,
+  Session,
   Term,
 } from "@/types/Types";
 import { useQueryState } from "nuqs";
@@ -53,6 +55,28 @@ const availableColours = [
   "bg-orange-500 text-white border-l-orange-500",
   "bg-blue-500 text-white border-l-blue-500",
 ];
+
+const createSession = (
+  session: Session,
+  component: Component,
+  course: Course,
+) => ({
+  startTime: session.startTime.slice(0, -3),
+  endTime: session.endTime.slice(0, -3),
+  startRecur: session.startDate,
+  endRecur: session.endDate,
+  dayOfWeek: dayOfWeekToNumberMap[session.dayOfWeek] as number,
+  courseDetails: {
+    backgroundColour: course.colour as string,
+    courseCode: course.courseCode,
+    courseTitle: course.courseTitle,
+    term: course.term,
+    subSection: component.subSection,
+    instructor: session.instructor,
+    type: component.type,
+    isOpen: component.isOpen,
+  },
+});
 
 export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -118,37 +142,22 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     if (!selected) {
       return;
     }
-    const results: SelectedSession[] = courses.flatMap((course) => {
-      return course.sections.flatMap((section) =>
+    const isSelected = (component: Component, course: Course) =>
+      selected.some(
+        (elem: Selected) =>
+          elem.subSection === component.subSection &&
+          elem.courseCode === course.courseCode,
+      );
+
+    const results: SelectedSession[] = courses.flatMap((course) =>
+      course.sections.flatMap((section) =>
         section.components.flatMap((component) =>
           component.sessions
-            .filter((session) =>
-              selected.some(
-                (elem: Selected) =>
-                  elem.subSection === component.subSection &&
-                  elem.courseCode === course.courseCode,
-              ),
-            )
-            .map((session) => ({
-              startTime: session.startTime.slice(0, -3),
-              endTime: session.endTime.slice(0, -3),
-              startRecur: session.startDate,
-              endRecur: session.endDate,
-              dayOfWeek: dayOfWeekToNumberMap[session.dayOfWeek] as number,
-              courseDetails: {
-                backgroundColour: course.colour as string,
-                courseCode: course.courseCode,
-                courseTitle: course.courseTitle,
-                term: course.term,
-                subSection: component.subSection,
-                instructor: session.instructor,
-                type: component.type,
-                isOpen: component.isOpen,
-              },
-            })),
+            .filter((session) => isSelected(component, course))
+            .map((session) => createSession(session, component, course)),
         ),
-      );
-    });
+      ),
+    );
 
     setSelectedSessions(results);
   }, [courses, selected]);
