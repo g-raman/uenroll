@@ -178,12 +178,14 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
         course.colour = colour;
         course.sections.forEach((section) =>
           section.components.forEach((component) => {
-            component.isSelected = selected.some((selectedCourse: Selected) => {
-              return (
-                selectedCourse.courseCode === course.courseCode &&
-                selectedCourse.subSection === component.subSection
-              );
-            });
+            component.isSelected = !selected
+              ? false
+              : selected.some((selectedCourse: Selected) => {
+                  return (
+                    selectedCourse.courseCode === course.courseCode &&
+                    selectedCourse.subSection === component.subSection
+                  );
+                });
           }),
         );
         return [course, ...currCourses];
