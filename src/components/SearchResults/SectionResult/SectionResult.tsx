@@ -47,6 +47,7 @@ export const SectionResult: React.FC<SectionResultProps> = ({
               term={term}
               section={section.section}
               subSection={component.subSection}
+              isSelectedInitial={component.isSelected}
               colour={colour}
             />
           </div>

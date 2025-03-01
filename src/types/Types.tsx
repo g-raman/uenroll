@@ -15,6 +15,7 @@ export interface Component {
   type: string;
   isOpen: boolean;
   subSection: string;
+  isSelected: boolean;
   sessions: Session[];
 }
 
