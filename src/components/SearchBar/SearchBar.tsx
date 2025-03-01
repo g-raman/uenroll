@@ -1,7 +1,7 @@
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Course, Term } from "@/types/Types";
 import { useQuery } from "@tanstack/react-query";
-import React, { ChangeEvent, useCallback, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -39,13 +39,36 @@ async function fetchCourses(courseCode: string, term: Term | null) {
 export default function SearchBar() {
   const [query, setQuery] = useState("");
   const { term } = useSearchResults();
-  const { courses, addCourse, resetCourses } = useSearchResults();
+  const { courses, selected, addCourse, resetCourses } = useSearchResults();
   const { data, error, isLoading, isSuccess, refetch } = useQuery<Course>({
     queryKey: ["courses", query, term],
     queryFn: () => fetchCourses(query, term),
     enabled: false,
     retry: false,
   });
+
+  const {
+    isLoading: isLoadingInitial,
+    error: errorInitial,
+    data: dataInitial,
+  } = useQuery<Course[]>({
+    queryKey: ["coursesInitial"],
+    queryFn: async () => {
+      const toFetch = selected.map((course) =>
+        fetchCourses(course.courseCode, term),
+      );
+      const result = await Promise.all(toFetch);
+      return result;
+    },
+  });
+
+  useEffect(() => {
+    if (!selected || !term || !dataInitial) {
+      return;
+    }
+
+    dataInitial.forEach((course) => addCourse(course));
+  }, [addCourse, dataInitial, selected, term]);
 
   React.useEffect(() => {
     if (isSuccess) {
