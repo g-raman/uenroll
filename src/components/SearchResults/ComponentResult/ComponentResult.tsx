@@ -32,9 +32,9 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
 
   useEffect(() => {
     if (isSelected) {
-      addSelected({ courseCode, subSection });
+      addSelected(courseCode, subSection);
     } else {
-      removeSelected({ courseCode, subSection });
+      removeSelected(courseCode, subSection);
     }
   }, [isSelected, addSelected, removeSelected, courseCode, subSection]);
 

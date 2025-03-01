@@ -17,6 +17,7 @@ import React, {
   useEffect,
 } from "react";
 import LZString from "lz-string";
+import { serialize } from "v8";
 
 interface SearchResultsContextType {
   courses: Course[];
@@ -26,8 +27,8 @@ interface SearchResultsContextType {
   resetCourses: () => void;
   changeTerm: (term: Term) => void;
   initializeTerm: (term: Term) => void;
-  addSelected: (selected: Selected) => void;
-  removeSelected: (selected: Selected) => void;
+  addSelected: (courseCode: string, subSection: string) => void;
+  removeSelected: (courseCode: string, subSection: string) => void;
   resetSelected: () => void;
   addCourse: (course: Course) => void;
 }
@@ -93,7 +94,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     new Set<string>(),
   );
   const [selected, setSelected] = useQueryState("data", {
-    defaultValue: null,
+    defaultValue: {},
     history: "push",
     parse: (value) => JSON.parse(LZString.decompressFromBase64(value)),
     serialize: (value) => LZString.compressToBase64(JSON.stringify(value)),
@@ -109,52 +110,65 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     return chosenColour;
   }, [chosenColours]);
 
-  const addSelected = useCallback((selected: Selected) => {
-    setSelected((currSelected: Selected[]) => {
+  const addSelected = useCallback((courseCode: string, subSection: string) => {
+    setSelected((currSelected: Selected) => {
       if (!currSelected) {
-        return [];
+        return {};
       }
 
-      if (
-        currSelected.some(
-          (elem) =>
-            elem.courseCode === selected.courseCode &&
-            elem.subSection === selected.subSection,
-        )
-      ) {
-        return currSelected;
+      if (!currSelected[courseCode]) {
+        const selected = { ...currSelected };
+        selected[courseCode] = [subSection];
+        return selected;
       }
-      return [selected, ...currSelected];
-    });
-  }, []);
 
-  const removeSelected = useCallback((selected: Selected) => {
-    setSelected((currSelected: Selected[]) => {
-      if (!currSelected) {
-        return [];
-      }
-      return currSelected.filter(
-        (subSection) =>
-          subSection.courseCode !== selected.courseCode ||
-          subSection.subSection !== selected.subSection,
+      const alreadySelected = currSelected[courseCode].some(
+        (section) => section === subSection,
       );
+      if (alreadySelected) return currSelected;
+
+      const selected = { ...currSelected };
+      selected[courseCode].push(subSection);
+
+      return currSelected;
     });
   }, []);
+
+  const removeSelected = useCallback(
+    (courseCode: string, subSection: string) => {
+      setSelected((currSelected: Selected) => {
+        if (!currSelected) return {};
+
+        if (!currSelected[courseCode]) return currSelected;
+
+        const selected = { ...currSelected };
+        const filtered = currSelected[courseCode].filter(
+          (section) => section !== subSection,
+        );
+        selected[courseCode] = filtered;
+        if (filtered.length === 0) delete selected[courseCode];
+
+        return selected;
+      });
+    },
+    [],
+  );
 
   const resetSelected = useCallback(() => {
-    setSelected([]);
+    setSelected({});
   }, []);
 
   useEffect(() => {
     if (!selected) {
       return;
     }
-    const isSelected = (component: Component, course: Course) =>
-      selected.some(
-        (elem: Selected) =>
-          elem.subSection === component.subSection &&
-          elem.courseCode === course.courseCode,
+    const isSelected = (component: Component, course: Course) => {
+      if (!selected[course.courseCode]) return false;
+
+      return selected[course.courseCode].some(
+        (section: string) => component.subSection === section,
       );
+    };
 
     const results: SelectedSession[] = courses.flatMap((course) =>
       course.sections.flatMap((section) =>
@@ -185,14 +199,12 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
         course.colour = colour;
         course.sections.forEach((section) =>
           section.components.forEach((component) => {
-            component.isSelected = !selected
-              ? false
-              : selected.some((selectedCourse: Selected) => {
-                  return (
-                    selectedCourse.courseCode === course.courseCode &&
-                    selectedCourse.subSection === component.subSection
-                  );
-                });
+            component.isSelected =
+              !selected || !selected[course.courseCode]
+                ? false
+                : selected[course.courseCode].some((section: string) => {
+                    return section === component.subSection;
+                  });
           }),
         );
         return [course, ...currCourses];
@@ -203,14 +215,14 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
 
   const resetCourses = useCallback(() => {
     setCourses([]);
-    setSelected([]);
+    setSelected({});
     setChosenColours(new Set());
   }, []);
 
   const changeTerm = useCallback((term: Term) => {
     setTerm(term);
     setCourses([]);
-    setSelected([]);
+    setSelected({});
   }, []);
 
   const initializeTerm = useCallback((term: Term) => {

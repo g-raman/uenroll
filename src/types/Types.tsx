@@ -60,6 +60,5 @@ export interface SelectedSession {
 }
 
 export interface Selected {
-  courseCode: string;
-  subSection: string;
+  [key: string]: string[];
 }
