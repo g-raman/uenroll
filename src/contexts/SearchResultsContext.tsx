@@ -176,6 +176,16 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
         }
         const colour = selectRandomColour();
         course.colour = colour;
+        course.sections.forEach((section) =>
+          section.components.forEach((component) => {
+            component.isSelected = selected.some((selectedCourse: Selected) => {
+              return (
+                selectedCourse.courseCode === course.courseCode &&
+                selectedCourse.subSection === component.subSection
+              );
+            });
+          }),
+        );
         return [course, ...currCourses];
       });
     },
