@@ -39,7 +39,8 @@ async function fetchCourses(courseCode: string, term: Term | null) {
 export default function SearchBar() {
   const [query, setQuery] = useState("");
   const { term } = useSearchResults();
-  const { courses, selected, addCourse, resetCourses } = useSearchResults();
+  const { courses, selected, addCourse, resetCourses, resetSelected } =
+    useSearchResults();
   const { data, error, isLoading, isSuccess, refetch } = useQuery<Course>({
     queryKey: ["courses", query, term],
     queryFn: () => fetchCourses(query, term),
@@ -52,25 +53,34 @@ export default function SearchBar() {
     error: errorInitial,
     data: dataInitial,
   } = useQuery<Course[]>({
-    queryKey: ["coursesInitial"],
+    queryKey: ["coursesInitial", term, selected],
     queryFn: async () => {
+      if (!term || !selected) {
+        return [];
+      }
       const toFetch = selected.map((course) =>
         fetchCourses(course.courseCode, term),
       );
-      const result = await Promise.all(toFetch);
-      return result;
+      try {
+        const result = await Promise.all(toFetch);
+        return result;
+      } catch (error) {
+        throw new Error(error as string);
+      }
+      return [];
     },
+    retry: false,
   });
 
   useEffect(() => {
-    if (!selected || !term || !dataInitial) {
-      return;
-    }
+    if (errorInitial) resetSelected();
+
+    if (!dataInitial) return;
 
     dataInitial.forEach((course) => addCourse(course));
-  }, [addCourse, dataInitial, selected, term]);
+  }, [addCourse, resetSelected, dataInitial, errorInitial]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isSuccess) {
       addCourse(data);
       setQuery("");
