@@ -130,7 +130,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
       const selected = { ...currSelected };
       selected[courseCode].push(subSection);
 
-      return currSelected;
+      return selected;
     });
   }, []);
 
@@ -162,6 +162,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     if (!selected) {
       return;
     }
+
     const isSelected = (component: Component, course: Course) => {
       if (!selected[course.courseCode]) return false;
 
