@@ -125,7 +125,7 @@ export default function SearchBar() {
 
         <button
           onClick={handleSearchClick}
-          className="w-min bg-red-700 p-2 h-full rounded-sm text-white disabled:bg-opacity-40"
+          className="w-min bg-[#8f001b] p-2 h-full rounded-sm text-white disabled:bg-opacity-40"
           disabled={isLoading}
         >
           {isLoading ? (
