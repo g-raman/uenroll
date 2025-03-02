@@ -3,7 +3,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { SectionResult } from "../SectionResult/SectionResult";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faChevronUp, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useSearchResults } from "@/contexts/SearchResultsContext";
 
 interface CourseResultProps {
   course: Course;
@@ -11,6 +12,7 @@ interface CourseResultProps {
 
 const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { removeCourse } = useSearchResults();
 
   return (
     <div className="px-4 pb-4 md:text-sm">
@@ -24,10 +26,16 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
               <span>{`${course.courseCode}: ${course.courseTitle}`}</span>
             </div>
 
-            <FontAwesomeIcon
-              className={`transition-all ease-in delay-100 ${isOpen ? "rotate-0" : "rotate-180"}`}
-              icon={faChevronUp}
-            />
+            <div className="flex gap-4 ml-4 items-baseline">
+              <FontAwesomeIcon
+                onClick={() => removeCourse(course)}
+                icon={faTrash}
+              />
+              <FontAwesomeIcon
+                className={`transition-all ease-in delay-100 ${isOpen ? "rotate-0" : "rotate-180"}`}
+                icon={faChevronUp}
+              />
+            </div>
           </div>
         </div>
         {course.sections.map((section) => {

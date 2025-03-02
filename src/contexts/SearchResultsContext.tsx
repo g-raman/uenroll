@@ -31,6 +31,7 @@ interface SearchResultsContextType {
   removeSelected: (courseCode: string, subSection: string) => void;
   resetSelected: () => void;
   addCourse: (course: Course) => void;
+  removeCourse: (course: Course) => void;
 }
 
 const SearchResultsContext = createContext<
@@ -214,6 +215,19 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     [selectRandomColour],
   );
 
+  const removeCourse = useCallback((course: Course) => {
+    setCourses((currCourses) =>
+      currCourses.filter(
+        (currCourse) => currCourse.courseCode !== course.courseCode,
+      ),
+    );
+
+    setSelected((currSelected: Selected) => {
+      delete currSelected[course.courseCode];
+      return currSelected;
+    });
+  }, []);
+
   const resetCourses = useCallback(() => {
     setCourses([]);
     setSelected({});
@@ -239,6 +253,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
         removeSelected,
         resetSelected,
         addCourse,
+        removeCourse,
         resetCourses,
         selectedSessions,
         term,
