@@ -1,5 +1,3 @@
-import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Footer } from "../Footer/Footer";
 
 export default function Sidebar({
