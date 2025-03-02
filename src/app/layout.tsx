@@ -12,6 +12,20 @@ const font = Poppins({
 export const metadata: Metadata = {
   title: "uEnroll",
   description: "A modern course selection tool for uOttawa students",
+  icons: {
+    icon: [
+      {
+        media: "(prefers-color-scheme: light)",
+        url: "/favicon-light.png",
+        href: "/favicon-light.png",
+      },
+      {
+        media: "(prefers-color-scheme: dark)",
+        url: "/favicon-dark.png",
+        href: "/favicon-dark.png",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
