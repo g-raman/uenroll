@@ -44,7 +44,7 @@ const dayOfWeekToNumberMap: { [key: string]: number } = {
   Th: 4,
   Fr: 5,
   Sa: 6,
-  Su: 0,
+  Su: 7,
 };
 
 const availableColours = [
