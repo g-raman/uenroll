@@ -48,7 +48,7 @@ export default function TermSelector() {
         <select
           value={term ? JSON.stringify(term) : ""}
           onChange={handleSelect}
-          className="w-full bg-slate-100 border-slate-400 border p-2 rounded-sm md:text-sm"
+          className="w-full bg-slate-100 border-slate-400 border p-2 rounded-sm text-sm"
         >
           {isSuccess &&
             data?.map((elem) => (

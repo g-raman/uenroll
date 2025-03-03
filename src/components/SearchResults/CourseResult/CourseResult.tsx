@@ -15,7 +15,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
   const { removeCourse } = useSearchResults();
 
   return (
-    <div className="px-4 pb-4 text-base md:text-sm">
+    <div className="px-4 pb-4 text-sm">
       <div className="border rounded-md overflow-hidden">
         <div
           onClick={() => setIsOpen((is) => !is)}
