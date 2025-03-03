@@ -59,12 +59,10 @@ function NewCalendar() {
     }
 
     const events = selectedSessions.map((session) => {
-      const startDate = dayjs(session.startRecur).add(
-        session.dayOfWeek - 1,
-        "day",
-      );
-
-      const endDate = dayjs(session.endRecur).add(session.dayOfWeek - 1, "day");
+      const baseStartDate = dayjs(session.startRecur);
+      const dayOffset = Math.abs(baseStartDate.get("d") - session.dayOfWeek);
+      const startDate = baseStartDate.add(dayOffset, "days");
+      const endDate = dayjs(session.endRecur);
 
       const rrule = new RRule({
         freq: RRule.WEEKLY,
