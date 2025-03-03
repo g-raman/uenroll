@@ -1,7 +1,7 @@
 "use client";
 
 import { useNextCalendarApp, ScheduleXCalendar } from "@schedule-x/react";
-import { createViewDay, createViewWeek } from "@schedule-x/calendar";
+import { createViewMonthAgenda, createViewWeek } from "@schedule-x/calendar";
 import { createEventsServicePlugin } from "@schedule-x/events-service";
 
 import "@schedule-x/theme-shadcn/dist/index.css";
@@ -27,7 +27,7 @@ function NewCalendar() {
 
   const calendar = useNextCalendarApp(
     {
-      views: [createViewDay(), createViewWeek()],
+      views: [createViewWeek(), createViewMonthAgenda()],
       theme: "shadcn",
       dayBoundaries: {
         start: "06:00",
@@ -98,9 +98,13 @@ function NewCalendar() {
     // @ts-ignore
     const currentView = calendar.calendarControls.getView();
     // @ts-ignore
-    calendar.calendarControls.setView(currentView === "day" ? "week" : "day");
+    calendar.calendarControls.setView(
+      currentView === "month-agenda" ? "week" : "month-agenda",
+    );
     // @ts-ignore
-    calendar.calendarControls.setView(currentView === "day" ? "day" : "week");
+    calendar.calendarControls.setView(
+      currentView === "month-agenda" ? "month-agenda" : "week",
+    );
   }, [calendar, selectedSessions]);
 
   return (
@@ -109,6 +113,7 @@ function NewCalendar() {
         calendarApp={calendar}
         customComponents={{
           timeGridEvent: CalendarEvent,
+          monthAgendaEvent: CalendarEvent,
           eventModal: EventModal,
         }}
       />
