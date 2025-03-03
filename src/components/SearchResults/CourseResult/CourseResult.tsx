@@ -15,7 +15,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
   const { removeCourse } = useSearchResults();
 
   return (
-    <div className="px-4 pb-4 md:text-sm">
+    <div className="px-4 pb-4 text-base md:text-sm">
       <div className="border rounded-md overflow-hidden">
         <div
           onClick={() => setIsOpen((is) => !is)}
@@ -26,7 +26,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
               <span>{`${course.courseCode}: ${course.courseTitle}`}</span>
             </div>
 
-            <div className="flex gap-4 ml-4 items-baseline">
+            <div className="flex gap-6 md:gap-4 ml-4 items-baseline">
               <FontAwesomeIcon
                 onClick={() => removeCourse(course)}
                 icon={faTrash}
