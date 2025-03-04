@@ -15,12 +15,15 @@ export const SessionResult: React.FC<SessionResultProps> = ({ session }) => {
   return (
     <ul>
       <li>
-        <div className="mb-1 flex gap-1 flex-wrap">
-          <span className="font-bold">{session.dayOfWeek}</span>
-          <span className="truncate">{session.instructor}</span>
-          <span className="truncate text-slate-600">{`${startTime} - ${endTime}`}</span>
+        <div>
+          <span className="font-medium truncate">{session.instructor}</span>
+          <br />
+          <span className="font-semibold">{session.dayOfWeek}</span>
+          &nbsp;
+          <span className="font-normal truncate text-slate-600">{`${startTime} - ${endTime}`}</span>
+          <br />
+          <span className="truncate text-gray-400">{`${startDate} to ${endDate}`}</span>
         </div>
-        <span className="truncate text-gray-400">{`${startDate} to ${endDate}`}</span>
       </li>
     </ul>
   );
