@@ -11,7 +11,7 @@ interface CourseResultProps {
 }
 
 const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const { removeCourse } = useSearchResults();
 
   return (
