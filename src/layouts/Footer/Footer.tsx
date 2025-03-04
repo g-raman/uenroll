@@ -1,7 +1,7 @@
 export const Footer = (props: {}) => {
   const year = new Date().getFullYear();
   return (
-    <div className="hidden md:block mt-auto p-4 text-center text-sm">
+    <div className="hidden md:block mt-auto text-center text-sm">
       <p className="inline-block">Mantained by</p>
       &nbsp;
       <a
