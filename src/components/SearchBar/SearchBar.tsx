@@ -39,8 +39,7 @@ async function fetchCourses(courseCode: string, term: Term | null) {
 export default function SearchBar() {
   const [query, setQuery] = useState("");
   const { term } = useSearchResults();
-  const { courses, selected, addCourse, resetCourses, resetSelected } =
-    useSearchResults();
+  const { courses, selected, addCourse, resetSelected } = useSearchResults();
   const { data, error, isLoading, isSuccess, refetch } = useQuery<Course>({
     queryKey: ["courses", query, term],
     queryFn: () => fetchCourses(query, term),
@@ -101,7 +100,7 @@ export default function SearchBar() {
   }
 
   return (
-    <div className="sticky p-4 top-0 bg-white z-10 flex flex-col gap-2">
+    <div className="sticky mb-2 mt-4 top-0 bg-white z-10 flex flex-col gap-2">
       <TermSelector />
       <div className="flex items-center justify-between gap-2">
         <input
@@ -115,13 +114,6 @@ export default function SearchBar() {
           placeholder="Course Code Eg. CSI 2101"
           disabled={isLoading || isLoadingInitial}
         />
-
-        <button
-          onClick={resetCourses}
-          className="w-min border-slate-400 border p-2 h-full rounded-sm text-black"
-        >
-          <FontAwesomeIcon className="h-4 aspect-square" icon={faTrash} />
-        </button>
 
         <button
           onClick={handleSearchClick}
