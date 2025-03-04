@@ -45,7 +45,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
       </div>
 
       <div
-        className={`w-full ml-4 overflow-hidden flex flex-col gap-2 max-h-20 overflow-y-scroll ${component.sessions.length === 1 ? "no-scrollbar" : ""}`}
+        className={`w-full ml-4 flex flex-col gap-2 max-h-20 overflow-y-scroll ${component.sessions.length === 1 ? "no-scrollbar" : ""}`}
       >
         {component.sessions.map((session) => (
           <SessionResult

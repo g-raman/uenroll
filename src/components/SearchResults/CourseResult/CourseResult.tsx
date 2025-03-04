@@ -41,7 +41,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
         {course.sections.map((section) => {
           return (
             <div
-              className={`overflow-hidden transition-all ease-in delay-100 ${isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}`}
+              className={`overflow-hidden transition-all ease-in delay-100 ${isOpen ? "opacity-100" : "max-h-0 opacity-0"}`}
               key={`${course.courseCode}${course.term}${section.section}`}
             >
               <SectionResult
