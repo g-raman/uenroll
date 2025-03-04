@@ -9,6 +9,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SearchResultsProvider } from "@/contexts/SearchResultsContext";
 import SearchResults from "@/components/SearchResults/SearchResults";
 import { Suspense } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
+import { CopyLinkButton } from "@/components/CopyLinkButton/CopyLinkButton";
+import { DeleteSearchResultsButton } from "@/components/DeleteSearchResultsButton/DeleteSearchResultsButton";
 
 export default function Page() {
   const queryClient = new QueryClient();
@@ -24,6 +28,10 @@ export default function Page() {
 
             <Sidebar>
               <SearchBar />
+              <div className="mb-4 flex gap-4">
+                <DeleteSearchResultsButton />
+                <CopyLinkButton />
+              </div>
               <SearchResults />
             </Sidebar>
           </App>
