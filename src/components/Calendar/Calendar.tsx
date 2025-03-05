@@ -11,9 +11,9 @@ import dayjs from "dayjs";
 import { createEventRecurrencePlugin } from "@schedule-x/event-recurrence";
 import { datetime, RRule } from "rrule";
 import { createCalendarControlsPlugin } from "@schedule-x/calendar-controls";
-import CalendarEvent from "../CalendarEvent/CalendarEvent";
+import CalendarEvent from "./CalendarEvent/CalendarEvent";
 import { createEventModalPlugin } from "@schedule-x/event-modal";
-import EventModal from "../EventModal/EventModal";
+import EventModal from "./EventModal/EventModal";
 
 const DATE_FORMAT = "YYYY-MM-DD";
 function Calendar() {
