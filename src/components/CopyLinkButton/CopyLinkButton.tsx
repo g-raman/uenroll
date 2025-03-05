@@ -6,7 +6,7 @@ export const CopyLinkButton = (props: {}) => {
   const [isCopied, setIsCopied] = useState(false);
   return (
     <button
-      className="flex gap-2 justify-center items-center p-2 w-full h-full transition-all hover:opacity-90 active:opacity-75 bg-[#8f001b] text-white rounded-sm"
+      className="text-sm flex gap-2 justify-center items-center p-2 w-full h-full transition-all hover:opacity-90 active:opacity-75 bg-[#8f001b] text-white rounded-sm"
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(window.location.href);
