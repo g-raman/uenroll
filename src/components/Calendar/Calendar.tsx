@@ -13,7 +13,7 @@ import { datetime, RRule } from "rrule";
 import { createCalendarControlsPlugin } from "@schedule-x/calendar-controls";
 import CalendarEvent from "./CalendarEvent/CalendarEvent";
 import { createEventModalPlugin } from "@schedule-x/event-modal";
-import EventModal from "./EventModal/EventModal";
+import CalendarEventModal from "./CalendarEventModal/CalendarEventModal";
 
 const DATE_FORMAT = "YYYY-MM-DD";
 function Calendar() {
@@ -112,7 +112,7 @@ function Calendar() {
         customComponents={{
           timeGridEvent: CalendarEvent,
           monthAgendaEvent: CalendarEvent,
-          eventModal: EventModal,
+          eventModal: CalendarEventModal,
         }}
       />
     </div>

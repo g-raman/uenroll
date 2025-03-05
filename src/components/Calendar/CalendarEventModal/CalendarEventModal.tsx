@@ -11,7 +11,9 @@ import {
 import dayjs from "dayjs";
 
 const TIME_FORMAT = "hh:mm A";
-export default function EventModal({ calendarEvent }: CalendarEventProps) {
+export default function CalendarEventModal({
+  calendarEvent,
+}: CalendarEventProps) {
   const start = dayjs(calendarEvent.start).format(TIME_FORMAT);
   const end = dayjs(calendarEvent.end).format(TIME_FORMAT);
 
