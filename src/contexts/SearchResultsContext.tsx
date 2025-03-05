@@ -17,7 +17,6 @@ import React, {
   useEffect,
 } from "react";
 import LZString from "lz-string";
-import { serialize } from "v8";
 
 interface SearchResultsContextType {
   courses: Course[];
