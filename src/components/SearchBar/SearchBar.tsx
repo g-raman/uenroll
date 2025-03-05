@@ -76,7 +76,21 @@ export default function SearchBar() {
 
     if (!dataInitial) return;
 
-    dataInitial.forEach((course) => addCourse(course));
+    /*
+     * Using a setTimeout here to avoid a race condition
+     * when adding new courses.
+     * The colour for each course is assigned in a useEffect on mount/unmount
+     * and they all mutate the same variable.
+     * Simple but hacky fix to just add a delay between each course.
+     */
+    const processCourses = async (courses: Course[]) => {
+      for (const course of courses) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        addCourse(course);
+      }
+    };
+
+    processCourses(dataInitial);
   }, [addCourse, resetSelected, dataInitial, errorInitial]);
 
   useEffect(() => {
@@ -118,9 +132,9 @@ export default function SearchBar() {
         <button
           onClick={handleSearchClick}
           className="w-min bg-[#8f001b] p-2 h-full rounded-sm text-white disabled:bg-opacity-40"
-          disabled={isLoading}
+          disabled={isLoading || isLoadingInitial}
         >
-          {isLoading ? (
+          {isLoading || isLoadingInitial ? (
             <FontAwesomeIcon className="size-4 animate-spin" icon={faSpinner} />
           ) : (
             <FontAwesomeIcon className="size-4" icon={faMagnifyingGlass} />
