@@ -4,7 +4,6 @@ import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Term } from "@/types/Types";
 import { useQuery } from "@tanstack/react-query";
 import React, { ChangeEvent } from "react";
-import { SkeletonBar } from "../SkeletonBar/SkeletonBar";
 import toast from "react-hot-toast";
 
 export default function TermSelector() {
@@ -43,7 +42,7 @@ export default function TermSelector() {
   return (
     <>
       {isLoading ? (
-        <SkeletonBar />
+        <div className="h-8 animate-pulse p-2 bg-slate-200 border-slate-400 border rounded-sm"></div>
       ) : (
         <select
           value={term ? JSON.stringify(term) : ""}
