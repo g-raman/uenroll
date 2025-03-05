@@ -1,7 +1,6 @@
 "use client";
 
 import App from "@/layouts/App/App";
-import NewCalendar from "@/components/NewCalendar/NewCalendar";
 import Main from "@/layouts/Main/Main";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import Sidebar from "@/layouts/Sidebar/Sidebar";
@@ -13,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { CopyLinkButton } from "@/components/CopyLinkButton/CopyLinkButton";
 import { DeleteSearchResultsButton } from "@/components/DeleteSearchResultsButton/DeleteSearchResultsButton";
+import Calendar from "@/components/Calendar/Calendar";
 
 export default function Page() {
   const queryClient = new QueryClient();
@@ -23,7 +23,7 @@ export default function Page() {
         <SearchResultsProvider>
           <App>
             <Main>
-              <NewCalendar />
+              <Calendar />
             </Main>
 
             <Sidebar>

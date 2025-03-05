@@ -16,7 +16,7 @@ import { createEventModalPlugin } from "@schedule-x/event-modal";
 import EventModal from "../EventModal/EventModal";
 
 const DATE_FORMAT = "YYYY-MM-DD";
-function NewCalendar() {
+function Calendar() {
   const plugins = [
     createEventsServicePlugin(),
     createEventRecurrencePlugin(),
@@ -119,4 +119,4 @@ function NewCalendar() {
   );
 }
 
-export default NewCalendar;
+export default Calendar;
