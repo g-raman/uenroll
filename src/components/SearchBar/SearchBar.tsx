@@ -10,6 +10,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
+import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 
 async function fetchCourses(courseCode: string, term: Term | null) {
   if (!term) {
@@ -45,7 +46,18 @@ export default function SearchBar() {
     queryFn: () => fetchCourses(query, term),
     enabled: false,
     retry: false,
+    gcTime: 0,
+    networkMode: "online",
   });
+  /*
+   * TODO: Fix caching
+   * If caching is enabled. A course is automatically added
+   * to results list without the user hitting enter or the
+   * search button.
+   *
+   * It bypasses the check for whether you're allowed to add
+   * another result
+   */
 
   const {
     isLoading: isLoadingInitial,
@@ -97,15 +109,19 @@ export default function SearchBar() {
     if (isSuccess) {
       addCourse(data);
       setQuery("");
-    } else if (error) {
-      toast.error(error.message);
-    }
+    } else if (error) toast.error(error.message);
   }, [addCourse, data, isSuccess, error]);
 
   const handleSearchClick = useCallback(() => {
     if (query.length === 0) return;
+
+    if (courses.length >= MAX_RESULTS_ALLOWED) {
+      toast.error("Max search results reached.");
+      return;
+    }
+
     refetch();
-  }, [query, refetch]);
+  }, [courses, query, refetch]);
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
