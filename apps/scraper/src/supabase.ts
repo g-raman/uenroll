@@ -3,9 +3,9 @@ import {
   Course,
   CourseComponent,
   CourseDetails,
+  Session,
   Subject,
   Term,
-  Session,
 } from "./utils/types.ts";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";

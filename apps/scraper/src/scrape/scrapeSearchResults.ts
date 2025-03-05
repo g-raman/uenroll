@@ -7,16 +7,16 @@ import {
   Term,
 } from "../utils/types.ts";
 import {
-  getIdStartsWithSelector,
-  getIdSelector,
   getCourseCodeAndCourseTitle,
-  getSectionAndType,
-  getInstructors,
   getDates,
-  getTimings,
+  getIdSelector,
+  getIdStartsWithSelector,
+  getInstructors,
+  getSectionAndType,
   getStatus,
-  processSessions,
+  getTimings,
   getTotalSections,
+  processSessions,
 } from "../utils/scrape.ts";
 
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";

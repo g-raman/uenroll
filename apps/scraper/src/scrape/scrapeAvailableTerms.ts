@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio/slim";
-import { getBrowserEndpoint, getBrowser } from "../utils/browser.ts";
+import { getBrowser, getBrowserEndpoint } from "../utils/browser.ts";
 import { COURSE_REGISTRY_URL } from "../utils/constants.ts";
 import { Term } from "../utils/types.ts";
 import { db, updateAvailableTerms } from "../supabase.ts";
