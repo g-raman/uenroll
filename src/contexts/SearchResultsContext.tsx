@@ -105,7 +105,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   const [availableColours, setAvailableColours] =
     useState<string[]>(shuffledColours);
   const [selected, setSelected] = useQueryState("data", {
-    defaultValue: "{}",
+    defaultValue: null,
     history: "push",
     parse: (value) => JSON.parse(LZString.decompressFromBase64(value)),
     serialize: (value) => LZString.compressToBase64(JSON.stringify(value)),
@@ -129,7 +129,9 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   const addSelected = useCallback((courseCode: string, subSection: string) => {
     setSelected((currSelected: Selected) => {
       if (!currSelected) {
-        return {};
+        const selected: Selected = {};
+        selected[courseCode] = [subSection];
+        return selected;
       }
 
       if (!currSelected[courseCode]) {
@@ -153,7 +155,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   const removeSelected = useCallback(
     (courseCode: string, subSection: string) => {
       setSelected((currSelected: Selected) => {
-        if (!currSelected) return {};
+        if (!currSelected) return null;
 
         if (!currSelected[courseCode]) return currSelected;
 
@@ -164,6 +166,8 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
         selected[courseCode] = filtered;
         if (filtered.length === 0) delete selected[courseCode];
 
+        if (Object.keys(selected).length === 0) return null;
+
         return selected;
       });
     },
@@ -171,11 +175,12 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   );
 
   const resetSelected = useCallback(() => {
-    setSelected({});
+    setSelected(null);
   }, []);
 
   useEffect(() => {
     if (!selected) {
+      setSelectedSessions([]);
       return;
     }
 
@@ -232,14 +237,20 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     );
 
     setSelected((currSelected: Selected) => {
-      delete currSelected[course.courseCode];
-      return currSelected;
+      if (!currSelected) return null;
+
+      const selected = { ...currSelected };
+      delete selected[course.courseCode];
+
+      if (Object.keys(selected).length === 0) return null;
+
+      return selected;
     });
   }, []);
 
   const resetCourses = useCallback(() => {
     setCourses([]);
-    setSelected({});
+    resetSelected();
   }, []);
 
   const changeTerm = useCallback((term: Term) => {
