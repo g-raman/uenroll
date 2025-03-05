@@ -28,7 +28,7 @@ export default function Page() {
 
             <Sidebar>
               <SearchBar />
-              <div className="mb-4 flex gap-4">
+              <div className="mb-4 flex gap-2">
                 <DeleteSearchResultsButton />
                 <CopyLinkButton />
               </div>
