@@ -31,6 +31,8 @@ interface SearchResultsContextType {
   resetSelected: () => void;
   addCourse: (course: Course) => void;
   removeCourse: (course: Course) => void;
+  selectRandomColour: () => string;
+  addAvailableColour: (colour: string) => void;
 }
 
 const SearchResultsContext = createContext<
@@ -46,7 +48,7 @@ const dayOfWeekToNumberMap: { [key: string]: number } = {
   Su: 7,
 };
 
-const availableColours = [
+const INITIAL_COLOURS = [
   "bg-red-300 text-black border-l-red-400",
   "bg-sky-300 text-black border-l-sky-500",
   "bg-lime-200 text-black border-l-lime-400",
@@ -59,6 +61,16 @@ const availableColours = [
   "bg-orange-500 text-white border-l-orange-500",
   "bg-blue-500 text-white border-l-blue-500",
 ];
+
+const shuffledColours = shuffleArray(INITIAL_COLOURS);
+
+function shuffleArray(array: string[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 
 const createSession = (
   session: Session,
@@ -90,9 +102,8 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     [],
   );
   const [term, setTerm] = useState<Term | null>(null);
-  const [chosenColours, setChosenColours] = useState<Set<string>>(
-    new Set<string>(),
-  );
+  const [availableColours, setAvailableColours] =
+    useState<string[]>(shuffledColours);
   const [selected, setSelected] = useQueryState("data", {
     defaultValue: "{}",
     history: "push",
@@ -101,14 +112,19 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   });
 
   const selectRandomColour = useCallback(() => {
-    const filteredColours = availableColours.filter(
-      (colour) => !chosenColours.has(colour),
+    const colour = availableColours.at(-1) as string;
+    setAvailableColours((prevAvailableColours) =>
+      prevAvailableColours.slice(0, -1),
     );
-    const randomIndex = Math.floor(Math.random() * filteredColours.length);
-    const chosenColour = filteredColours[randomIndex];
-    setChosenColours((prevSet) => new Set<string>(prevSet).add(chosenColour));
-    return chosenColour;
-  }, [chosenColours]);
+    return colour;
+  }, [availableColours]);
+
+  const addAvailableColour = useCallback((colour: string) => {
+    setAvailableColours((prevAvailableColours) => [
+      ...prevAvailableColours,
+      colour,
+    ]);
+  }, []);
 
   const addSelected = useCallback((courseCode: string, subSection: string) => {
     setSelected((currSelected: Selected) => {
@@ -184,35 +200,29 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     setSelectedSessions(results);
   }, [courses, selected]);
 
-  const addCourse = useCallback(
-    (course: Course) => {
-      setCourses((currCourses) => {
-        if (
-          currCourses.some(
-            (elem) =>
-              elem.courseCode === course.courseCode &&
-              elem.term === course.term,
-          )
-        ) {
-          return currCourses;
-        }
-        const colour = selectRandomColour();
-        course.colour = colour;
-        course.sections.forEach((section) =>
-          section.components.forEach((component) => {
-            component.isSelected =
-              !selected || !selected[course.courseCode]
-                ? false
-                : selected[course.courseCode].some((section: string) => {
-                    return section === component.subSection;
-                  });
-          }),
-        );
-        return [course, ...currCourses];
-      });
-    },
-    [selectRandomColour],
-  );
+  const addCourse = useCallback((course: Course) => {
+    setCourses((currCourses) => {
+      if (
+        currCourses.some(
+          (elem) =>
+            elem.courseCode === course.courseCode && elem.term === course.term,
+        )
+      ) {
+        return currCourses;
+      }
+      course.sections.forEach((section) =>
+        section.components.forEach((component) => {
+          component.isSelected =
+            !selected || !selected[course.courseCode]
+              ? false
+              : selected[course.courseCode].some((section: string) => {
+                  return section === component.subSection;
+                });
+        }),
+      );
+      return [course, ...currCourses];
+    });
+  }, []);
 
   const removeCourse = useCallback((course: Course) => {
     setCourses((currCourses) =>
@@ -230,7 +240,6 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   const resetCourses = useCallback(() => {
     setCourses([]);
     setSelected({});
-    setChosenColours(new Set());
   }, []);
 
   const changeTerm = useCallback((term: Term) => {
@@ -258,6 +267,8 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
         term,
         changeTerm,
         initializeTerm,
+        selectRandomColour,
+        addAvailableColour,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 import { Course } from "@/types/Types";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SectionResult } from "../SectionResult/SectionResult";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +12,15 @@ interface CourseResultProps {
 
 const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const { removeCourse } = useSearchResults();
+  const { removeCourse, selectRandomColour, addAvailableColour } =
+    useSearchResults();
+
+  useEffect(() => {
+    const colour = selectRandomColour();
+    course.colour = colour;
+
+    return () => addAvailableColour(course.colour as string);
+  }, []);
 
   return (
     <div className="pb-4 text-sm">
