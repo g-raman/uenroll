@@ -96,13 +96,25 @@ const reducer = (state: StateType, action: ActionType) => {
         (addedCourse) => addedCourse.courseCode !== courseToRemove.courseCode,
       );
 
-      let newSelected = null;
-      if (state.selected !== null) {
-        newSelected = { ...state.selected };
-        delete newSelected[courseToRemove.courseCode];
-
-        if (Object.keys(newSelected).length === 0) newSelected = null;
+      if (
+        state.selected === null ||
+        !state.selected[courseToRemove.courseCode]
+      ) {
+        return {
+          ...state,
+          courses: filteredCourses,
+        };
       }
+      const newSelected = { ...state.selected };
+      delete newSelected[courseToRemove.courseCode];
+
+      if (Object.keys(newSelected).length === 0)
+        return {
+          ...state,
+          courses: filteredCourses,
+          selected: null,
+          selectedSessions: [],
+        };
 
       const newSelectedSessions = createNewSelectedSessions(
         filteredCourses,
