@@ -242,6 +242,9 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     parse: (value) => JSON.parse(LZString.decompressFromBase64(value)),
     serialize: (value) => LZString.compressToBase64(JSON.stringify(value)),
   });
+  const [term, setTerm] = useQueryState("term", {
+    history: "replace",
+  });
 
   const {
     data: termsData,
@@ -272,6 +275,10 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     setSelected(state.selected);
   }, [state.selected, setSelected]);
+
+  useEffect(() => {
+    setTerm(state.term ? state.term.value : null);
+  }, [state.term, setTerm]);
 
   return (
     <SearchResultsContext.Provider value={{ state, dispatch, termsQueryState }}>
