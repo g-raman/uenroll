@@ -2,6 +2,7 @@
 
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Term } from "@/types/Types";
+import { fetchTerms } from "@/utils/fetchData";
 import { useQuery } from "@tanstack/react-query";
 import React, { ChangeEvent } from "react";
 import toast from "react-hot-toast";
@@ -9,18 +10,7 @@ import toast from "react-hot-toast";
 export default function TermSelector() {
   const { isLoading, isError, isSuccess, data, error } = useQuery({
     queryKey: ["availableTerms"],
-    queryFn: async () => {
-      const res = await fetch("/api/v1/terms");
-      if (!res.ok) {
-        throw new Error("Something went wrong. Please report this error.");
-      }
-
-      const data = await res.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      return data.data as Term[];
-    },
+    queryFn: fetchTerms,
   });
   const { state, dispatch } = useSearchResults();
 
