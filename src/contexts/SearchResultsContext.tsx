@@ -3,6 +3,7 @@ import {
   Course,
   Selected,
   SelectedCourse,
+  SelectedKey,
   SelectedSession,
   Session,
   Term,
@@ -15,44 +16,203 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useReducer,
+  Reducer,
 } from "react";
 import LZString from "lz-string";
 import { dayOfWeekToNumberMap, INITIAL_COLOURS } from "@/utils/constants";
-import { createSession, shuffleArray } from "@/utils/helpers";
+import {
+  createNewSelectedSessions,
+  createSession,
+  shuffleArray,
+} from "@/utils/helpers";
 
 interface SearchResultsContextType {
-  courses: Course[];
-  selected: Selected[];
-  selectedSessions: SelectedSession[];
-  term: Term | null;
-  resetCourses: () => void;
-  changeTerm: (term: Term) => void;
-  initializeTerm: (term: Term) => void;
-  addSelected: (courseCode: string, subSection: string) => void;
-  removeSelected: (courseCode: string, subSection: string) => void;
-  resetSelected: () => void;
-  addCourse: (course: Course) => void;
-  removeCourse: (course: Course) => void;
-  selectRandomColour: () => string;
-  addAvailableColour: (colour: string) => void;
+  state: typeof initialState;
+  dispatch: React.Dispatch<ActionType>;
 }
+
+interface StateType {
+  courses: Course[];
+  selected: Selected | null;
+  selectedSessions: SelectedSession[];
+  colours: string[];
+  term: Term | null;
+}
+type ActionType =
+  | { type: "initialize_term"; payload: Term }
+  | { type: "change_term"; payload: Term }
+  | { type: "add_course"; payload: Course }
+  | { type: "remove_course"; payload: Course }
+  | { type: "reset_courses" }
+  | { type: "add_selected"; payload: SelectedKey }
+  | { type: "remove_selected"; payload: SelectedKey }
+  | { type: "reset_selected" };
+
+const shuffledColours = shuffleArray(INITIAL_COLOURS);
+const initialState = {
+  courses: [] as Course[],
+  selected: null as Selected | null,
+  selectedSessions: [] as SelectedSession[],
+  colours: shuffledColours,
+  term: null as Term | null,
+};
+
+const reducer = (state: StateType, action: ActionType) => {
+  switch (action.type) {
+    case "initialize_term": {
+      return { ...state, term: action.payload };
+    }
+
+    case "change_term": {
+      return {
+        ...state,
+        courses: [],
+        selected: null,
+        selectedSessions: [],
+        term: action.payload,
+      };
+    }
+
+    case "add_course": {
+      const courseToAdd = action.payload;
+      const isAlreadyAdded = state.courses.some(
+        (addedCourse) => addedCourse.courseCode === courseToAdd.courseCode,
+      );
+      const [colour, ...restColours] = state.colours;
+
+      return isAlreadyAdded
+        ? state
+        : {
+            ...state,
+            colours: restColours,
+            courses: [{ ...courseToAdd, colour }, ...state.courses],
+          };
+    }
+
+    case "remove_course": {
+      const courseToRemove: Course = action.payload;
+      const filteredCourses = state.courses.filter(
+        (addedCourse) => addedCourse.courseCode !== courseToRemove.courseCode,
+      );
+
+      let newSelected = null;
+      if (state.selected !== null) {
+        newSelected = { ...state.selected };
+        delete newSelected[courseToRemove.courseCode];
+
+        if (Object.keys(newSelected).length === 0) newSelected = null;
+      }
+
+      const newSelectedSessions = createNewSelectedSessions(
+        filteredCourses,
+        newSelected,
+      );
+
+      return {
+        ...state,
+        courses: filteredCourses,
+        selected: newSelected,
+        selectedSessions: newSelectedSessions,
+        colours: [...state.colours, courseToRemove.colour as string],
+      };
+    }
+
+    case "reset_courses": {
+      return {
+        ...state,
+        courses: [],
+        selected: null,
+        selectedSessions: [],
+      };
+    }
+
+    case "add_selected": {
+      const selectedToAdd: SelectedKey = action.payload;
+      let newSelected: Selected | null = null;
+      if (state.selected === null) {
+        newSelected = {};
+        newSelected[selectedToAdd.courseCode] = [selectedToAdd.subSection];
+      } else if (!state.selected[selectedToAdd.courseCode]) {
+        newSelected = { ...state.selected };
+        newSelected[selectedToAdd.courseCode] = [selectedToAdd.subSection];
+      } else if (
+        state.selected[selectedToAdd.courseCode].some(
+          (section) => section === selectedToAdd.subSection,
+        )
+      ) {
+        newSelected = state.selected;
+      } else {
+        newSelected = { ...state.selected };
+        newSelected[selectedToAdd.courseCode].push(selectedToAdd.subSection);
+      }
+
+      const newSelectedSessions = createNewSelectedSessions(
+        state.courses,
+        newSelected,
+      );
+
+      return {
+        ...state,
+        selected: newSelected,
+        selectedSessions: newSelectedSessions,
+      };
+    }
+
+    case "remove_selected": {
+      const toRemove: SelectedKey = action.payload;
+
+      if (state.selected === null) return state;
+
+      if (!state.selected[toRemove.courseCode]) return state;
+
+      const filteredSubsections = state.selected[toRemove.courseCode].filter(
+        (subSection) => subSection !== toRemove.subSection,
+      );
+
+      const newSelected = { ...state.selected };
+      if (filteredSubsections.length === 0)
+        delete newSelected[toRemove.courseCode];
+
+      if (Object.keys(newSelected).length === 0)
+        return { ...state, selected: null, selectedSessions: [] };
+      newSelected[toRemove.courseCode] = filteredSubsections;
+
+      const newSelectedSessions = createNewSelectedSessions(
+        state.courses,
+        newSelected,
+      );
+
+      return {
+        ...state,
+        selected: newSelected,
+        selectedSessions: newSelectedSessions,
+      };
+    }
+
+    case "reset_selected": {
+      return {
+        ...state,
+        selected: null,
+        selectedSessions: [],
+      };
+    }
+    default:
+      return state;
+  }
+};
 
 const SearchResultsContext = createContext<
   SearchResultsContextType | undefined
 >(undefined);
 
-const shuffledColours = shuffleArray(INITIAL_COLOURS);
-
 export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [selectedSessions, setSelectedSessions] = useState<SelectedSession[]>(
-    [],
+  const [state, dispatch] = useReducer<Reducer<StateType, ActionType>>(
+    reducer,
+    initialState,
   );
-  const [term, setTerm] = useState<Term | null>(null);
-  const [availableColours, setAvailableColours] =
-    useState<string[]>(shuffledColours);
   const [selected, setSelected] = useQueryState("data", {
     defaultValue: null,
     history: "push",
@@ -60,177 +220,8 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     serialize: (value) => LZString.compressToBase64(JSON.stringify(value)),
   });
 
-  const selectRandomColour = useCallback(() => {
-    const colour = availableColours.at(-1) as string;
-    setAvailableColours((prevAvailableColours) =>
-      prevAvailableColours.slice(0, -1),
-    );
-    return colour;
-  }, [availableColours]);
-
-  const addAvailableColour = useCallback((colour: string) => {
-    setAvailableColours((prevAvailableColours) => [
-      ...prevAvailableColours,
-      colour,
-    ]);
-  }, []);
-
-  const addSelected = useCallback((courseCode: string, subSection: string) => {
-    setSelected((currSelected: Selected) => {
-      if (!currSelected) {
-        const selected: Selected = {};
-        selected[courseCode] = [subSection];
-        return selected;
-      }
-
-      if (!currSelected[courseCode]) {
-        const selected = { ...currSelected };
-        selected[courseCode] = [subSection];
-        return selected;
-      }
-
-      const alreadySelected = currSelected[courseCode].some(
-        (section) => section === subSection,
-      );
-      if (alreadySelected) return currSelected;
-
-      const selected = { ...currSelected };
-      selected[courseCode].push(subSection);
-
-      return selected;
-    });
-  }, []);
-
-  const removeSelected = useCallback(
-    (courseCode: string, subSection: string) => {
-      setSelected((currSelected: Selected) => {
-        if (!currSelected) return null;
-
-        if (!currSelected[courseCode]) return currSelected;
-
-        const selected = { ...currSelected };
-        const filtered = currSelected[courseCode].filter(
-          (section) => section !== subSection,
-        );
-        selected[courseCode] = filtered;
-        if (filtered.length === 0) delete selected[courseCode];
-
-        if (Object.keys(selected).length === 0) return null;
-
-        return selected;
-      });
-    },
-    [],
-  );
-
-  const resetSelected = useCallback(() => {
-    setSelected(null);
-  }, []);
-
-  useEffect(() => {
-    if (!selected) {
-      setSelectedSessions([]);
-      return;
-    }
-
-    const isSelected = (component: Component, course: Course) => {
-      if (!selected[course.courseCode]) return false;
-
-      return selected[course.courseCode].some(
-        (section: string) => component.subSection === section,
-      );
-    };
-
-    const results: SelectedSession[] = courses.flatMap((course) =>
-      course.sections.flatMap((section) =>
-        section.components.flatMap((component) =>
-          component.sessions
-            .filter((session) => isSelected(component, course))
-            .map((session) => createSession(session, component, course)),
-        ),
-      ),
-    );
-
-    setSelectedSessions(results);
-  }, [courses, selected]);
-
-  const addCourse = useCallback((course: Course) => {
-    setCourses((currCourses) => {
-      if (
-        currCourses.some(
-          (elem) =>
-            elem.courseCode === course.courseCode && elem.term === course.term,
-        )
-      ) {
-        return currCourses;
-      }
-      course.sections.forEach((section) =>
-        section.components.forEach((component) => {
-          component.isSelected =
-            !selected || !selected[course.courseCode]
-              ? false
-              : selected[course.courseCode].some((section: string) => {
-                  return section === component.subSection;
-                });
-        }),
-      );
-      return [course, ...currCourses];
-    });
-  }, []);
-
-  const removeCourse = useCallback((course: Course) => {
-    setCourses((currCourses) =>
-      currCourses.filter(
-        (currCourse) => currCourse.courseCode !== course.courseCode,
-      ),
-    );
-
-    setSelected((currSelected: Selected) => {
-      if (!currSelected) return null;
-
-      const selected = { ...currSelected };
-      delete selected[course.courseCode];
-
-      if (Object.keys(selected).length === 0) return null;
-
-      return selected;
-    });
-  }, []);
-
-  const resetCourses = useCallback(() => {
-    setCourses([]);
-    resetSelected();
-  }, []);
-
-  const changeTerm = useCallback((term: Term) => {
-    setTerm(term);
-    setCourses([]);
-    setSelected({});
-  }, []);
-
-  const initializeTerm = useCallback((term: Term) => {
-    setTerm(term);
-  }, []);
-
   return (
-    <SearchResultsContext.Provider
-      value={{
-        courses,
-        selected,
-        addSelected,
-        removeSelected,
-        resetSelected,
-        addCourse,
-        removeCourse,
-        resetCourses,
-        selectedSessions,
-        term,
-        changeTerm,
-        initializeTerm,
-        selectRandomColour,
-        addAvailableColour,
-      }}
-    >
+    <SearchResultsContext.Provider value={{ state, dispatch }}>
       {children}
     </SearchResultsContext.Provider>
   );

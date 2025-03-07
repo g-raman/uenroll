@@ -23,7 +23,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   isSelectedInitial,
   colour,
 }) => {
-  const { addSelected, removeSelected } = useSearchResults();
+  const { dispatch } = useSearchResults();
   const [isSelected, setIsSelected] = useState(isSelectedInitial);
 
   function handleToggle() {
@@ -32,11 +32,14 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
 
   useEffect(() => {
     if (isSelected) {
-      addSelected(courseCode, subSection);
+      dispatch({ type: "add_selected", payload: { courseCode, subSection } });
     } else {
-      removeSelected(courseCode, subSection);
+      dispatch({
+        type: "remove_selected",
+        payload: { courseCode, subSection },
+      });
     }
-  }, [isSelected, addSelected, removeSelected, courseCode, subSection]);
+  }, [isSelected, courseCode, subSection, dispatch]);
 
   return (
     <div className="flex items-center justify-between h-full w-full border-b">
