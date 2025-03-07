@@ -227,10 +227,15 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   );
   const [selected, setSelected] = useQueryState("data", {
     defaultValue: null,
-    history: "push",
+    history: "replace",
     parse: (value) => JSON.parse(LZString.decompressFromBase64(value)),
     serialize: (value) => LZString.compressToBase64(JSON.stringify(value)),
   });
+
+  // Sync reducer state back to URL whenever selected sections change
+  useEffect(() => {
+    setSelected(state.selected);
+  }, [state.selected, setSelected]);
 
   return (
     <SearchResultsContext.Provider value={{ state, dispatch }}>
