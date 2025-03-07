@@ -26,10 +26,21 @@ import {
   createSession,
   shuffleArray,
 } from "@/utils/helpers";
+import { useQuery } from "@tanstack/react-query";
+import { fetchTerms } from "@/utils/fetchData";
 
 interface SearchResultsContextType {
   state: typeof initialState;
   dispatch: React.Dispatch<ActionType>;
+  termsQueryState: TermsQueryState;
+}
+
+interface TermsQueryState {
+  isLoading: boolean;
+  isError: boolean;
+  isSuccess: boolean;
+  error: Error | null;
+  data: Term[] | undefined;
 }
 
 interface StateType {
@@ -232,13 +243,39 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     serialize: (value) => LZString.compressToBase64(JSON.stringify(value)),
   });
 
+  const {
+    data: termsData,
+    isLoading: isLoadingTerms,
+    isError: isErrorTerms,
+    isSuccess: isSuccessTerms,
+    error: errorTerms,
+    data: dataTerms,
+  } = useQuery({
+    queryKey: ["term"],
+    queryFn: fetchTerms,
+  });
+
+  const termsQueryState = {
+    isLoading: isLoadingTerms,
+    isError: isErrorTerms,
+    isSuccess: isSuccessTerms,
+    error: errorTerms,
+    data: dataTerms,
+  };
+
+  useEffect(() => {
+    if (isSuccessTerms) {
+      dispatch({ type: "initialize_term", payload: termsData[0] });
+    }
+  }, []);
+
   // Sync reducer state back to URL whenever selected sections change
   useEffect(() => {
     setSelected(state.selected);
   }, [state.selected, setSelected]);
 
   return (
-    <SearchResultsContext.Provider value={{ state, dispatch }}>
+    <SearchResultsContext.Provider value={{ state, dispatch, termsQueryState }}>
       {children}
     </SearchResultsContext.Provider>
   );

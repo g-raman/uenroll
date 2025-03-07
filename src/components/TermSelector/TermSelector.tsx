@@ -8,20 +8,10 @@ import React, { ChangeEvent } from "react";
 import toast from "react-hot-toast";
 
 export default function TermSelector() {
-  const { isLoading, isError, isSuccess, data, error } = useQuery({
-    queryKey: ["availableTerms"],
-    queryFn: fetchTerms,
-  });
-  const { state, dispatch } = useSearchResults();
+  const { state, dispatch, termsQueryState } = useSearchResults();
 
-  React.useEffect(() => {
-    if (data && data.length > 0 && !state.term) {
-      dispatch({ type: "initialize_term", payload: data[0] });
-    }
-  }, [data, dispatch, state.term]);
-
-  if (isError) {
-    toast.error(error.message);
+  if (termsQueryState.isError && termsQueryState.error) {
+    toast.error(termsQueryState.error.message);
   }
 
   function handleSelect(event: ChangeEvent<HTMLSelectElement>) {
@@ -31,7 +21,7 @@ export default function TermSelector() {
 
   return (
     <>
-      {isLoading ? (
+      {termsQueryState.isLoading ? (
         <div className="h-8 animate-pulse p-2 bg-slate-200 border-slate-400 border rounded-sm"></div>
       ) : (
         <select
@@ -39,8 +29,8 @@ export default function TermSelector() {
           onChange={handleSelect}
           className="w-full bg-slate-100 border-slate-400 border p-2 rounded-sm text-sm"
         >
-          {isSuccess &&
-            data?.map((elem) => (
+          {termsQueryState.isSuccess &&
+            termsQueryState.data?.map((elem) => (
               <option key={elem.value} value={JSON.stringify(elem)}>
                 {elem.term}
               </option>
