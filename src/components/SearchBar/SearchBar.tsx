@@ -11,31 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
-
-async function fetchCourses(courseCode: string, term: Term | null) {
-  if (!term) {
-    throw new Error("No Term Selected");
-  }
-
-  if (courseCode.length < 7) {
-    throw new Error("Not a valid course code");
-  }
-
-  const containsNumber = (str: string): boolean => /\d/.test(str);
-  const containsLetters = (str: string): boolean => /[a-zA-Z]/.test(str);
-
-  if (!containsNumber(courseCode) || !containsLetters(courseCode)) {
-    throw new Error("Not a valid course code");
-  }
-
-  const res = await fetch(`/api/v1/terms/${term.value}/courses/${courseCode}`);
-
-  const data = await res.json();
-  if (data.error) {
-    throw new Error(data.error);
-  }
-  return data.data;
-}
+import { fetchCourses } from "@/utils/fetchData";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
