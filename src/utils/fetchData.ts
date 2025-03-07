@@ -24,3 +24,16 @@ export const fetchCourses = async (courseCode: string, term: Term | null) => {
   }
   return data.data;
 };
+
+export const fetchTerms = async () => {
+  const res = await fetch("/api/v1/terms");
+  if (!res.ok) {
+    throw new Error("Something went wrong. Please report this error.");
+  }
+
+  const data = await res.json();
+  if (data.error) {
+    throw new Error(data.error);
+  }
+  return data.data as Term[];
+};
