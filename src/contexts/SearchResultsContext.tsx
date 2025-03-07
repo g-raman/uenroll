@@ -249,7 +249,6 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     isError: isErrorTerms,
     isSuccess: isSuccessTerms,
     error: errorTerms,
-    data: dataTerms,
   } = useQuery({
     queryKey: ["term"],
     queryFn: fetchTerms,
@@ -260,14 +259,14 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     isError: isErrorTerms,
     isSuccess: isSuccessTerms,
     error: errorTerms,
-    data: dataTerms,
+    data: termsData,
   };
 
   useEffect(() => {
     if (isSuccessTerms) {
       dispatch({ type: "initialize_term", payload: termsData[0] });
     }
-  }, []);
+  }, [isSuccessTerms, termsData]);
 
   // Sync reducer state back to URL whenever selected sections change
   useEffect(() => {
