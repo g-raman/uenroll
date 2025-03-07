@@ -62,3 +62,8 @@ export interface SelectedSession {
 export interface Selected {
   [key: string]: string[];
 }
+
+export interface SelectedKey {
+  courseCode: string;
+  subSection: string;
+}

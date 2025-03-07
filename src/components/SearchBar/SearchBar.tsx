@@ -39,11 +39,10 @@ async function fetchCourses(courseCode: string, term: Term | null) {
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
-  const { term } = useSearchResults();
-  const { courses, selected, addCourse, resetSelected } = useSearchResults();
+  const { state, dispatch } = useSearchResults();
   const { data, error, isLoading, isSuccess, refetch } = useQuery<Course>({
-    queryKey: ["courses", query, term],
-    queryFn: () => fetchCourses(query, term),
+    queryKey: ["courses", query, state.term],
+    queryFn: () => fetchCourses(query, state.term),
     enabled: false,
     retry: false,
     gcTime: 0,
@@ -64,13 +63,13 @@ export default function SearchBar() {
     error: errorInitial,
     data: dataInitial,
   } = useQuery<Course[]>({
-    queryKey: ["coursesInitial", term, selected],
+    queryKey: ["coursesInitial", state.term, state.selected],
     queryFn: async () => {
-      if (!term || !selected) {
+      if (!state.term || !state.selected) {
         return [];
       }
-      const toFetch = Object.keys(selected).map((courseCode) =>
-        fetchCourses(courseCode, term),
+      const toFetch = Object.keys(state.selected).map((courseCode) =>
+        fetchCourses(courseCode, state.term),
       );
       try {
         const result = await Promise.all(toFetch);
@@ -84,7 +83,7 @@ export default function SearchBar() {
   });
 
   useEffect(() => {
-    if (errorInitial) resetSelected();
+    if (errorInitial) dispatch({ type: "reset_selected" });
 
     if (!dataInitial) return;
 
@@ -98,30 +97,30 @@ export default function SearchBar() {
     const processCourses = async (courses: Course[]) => {
       for (const course of courses) {
         await new Promise((resolve) => setTimeout(resolve, 100));
-        addCourse(course);
+        dispatch({ type: "add_course", payload: course });
       }
     };
 
     processCourses(dataInitial);
-  }, [addCourse, resetSelected, dataInitial, errorInitial]);
+  }, [dataInitial, dispatch, errorInitial]);
 
   useEffect(() => {
     if (isSuccess) {
-      addCourse(data);
+      dispatch({ type: "add_course", payload: data });
       setQuery("");
     } else if (error) toast.error(error.message);
-  }, [addCourse, data, isSuccess, error]);
+  }, [data, isSuccess, error, dispatch]);
 
   const handleSearchClick = useCallback(() => {
     if (query.length === 0) return;
 
-    if (courses.length >= MAX_RESULTS_ALLOWED) {
+    if (state.courses.length >= MAX_RESULTS_ALLOWED) {
       toast.error("Max search results reached.");
       return;
     }
 
     refetch();
-  }, [courses, query, refetch]);
+  }, [query.length, refetch, state.courses.length]);
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {

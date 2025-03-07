@@ -23,7 +23,7 @@ function Calendar() {
     createCalendarControlsPlugin(),
     createEventModalPlugin(),
   ];
-  const { selectedSessions } = useSearchResults();
+  const { state } = useSearchResults();
 
   const calendar = useNextCalendarApp(
     {
@@ -51,14 +51,14 @@ function Calendar() {
       return;
     }
 
-    if (selectedSessions.length === 0) {
+    if (state.selectedSessions.length === 0) {
       // Typescript doesn't pick up the additionaly fields but they exist
       // @ts-expect-error
       calendar.eventsService.set([]);
       return;
     }
 
-    const events = selectedSessions.map((session) => {
+    const events = state.selectedSessions.map((session) => {
       const baseStartDate = dayjs(session.startRecur);
       const dayOffset = Math.abs(baseStartDate.get("d") - session.dayOfWeek);
       const startDate = baseStartDate.add(dayOffset, "days");
@@ -103,7 +103,7 @@ function Calendar() {
     calendar.calendarControls.setView(
       currentView === "month-agenda" ? "month-agenda" : "week",
     );
-  }, [calendar, selectedSessions]);
+  }, [calendar, state.selectedSessions]);
 
   return (
     <div className="h-full overflow-scroll">

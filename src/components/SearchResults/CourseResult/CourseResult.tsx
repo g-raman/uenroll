@@ -12,15 +12,7 @@ interface CourseResultProps {
 
 const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { removeCourse, selectRandomColour, addAvailableColour } =
-    useSearchResults();
-
-  useEffect(() => {
-    const colour = selectRandomColour();
-    course.colour = colour;
-
-    return () => addAvailableColour(course.colour as string);
-  }, []);
+  const { dispatch } = useSearchResults();
 
   return (
     <div className="pb-4 text-sm">
@@ -36,7 +28,9 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
 
             <div className="flex gap-6 md:gap-4 ml-4 items-baseline">
               <FontAwesomeIcon
-                onClick={() => removeCourse(course)}
+                onClick={() =>
+                  dispatch({ type: "remove_course", payload: course })
+                }
                 icon={faTrash}
               />
               <FontAwesomeIcon
