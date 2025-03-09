@@ -1,6 +1,5 @@
 import { Course } from "@/types/Types";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SectionResult } from "../SectionResult/SectionResult";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -29,7 +28,8 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
             <div className="flex gap-6 md:gap-4 ml-4 items-baseline">
               <FontAwesomeIcon
                 onClick={() =>
-                  dispatch({ type: "remove_course", payload: course })}
+                  dispatch({ type: "remove_course", payload: course })
+                }
                 icon={faTrash}
               />
               <FontAwesomeIcon
