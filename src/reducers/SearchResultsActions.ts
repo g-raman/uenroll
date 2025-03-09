@@ -168,7 +168,7 @@ export const handleRemoveSelected = (
   if (!state.selected[courseCode]) return state;
 
   const filteredSubsections = state.selected[courseCode].filter(
-    (subSection) => subSection !== subSection,
+    (section) => section !== subSection,
   );
 
   const selected = { ...state.selected };
