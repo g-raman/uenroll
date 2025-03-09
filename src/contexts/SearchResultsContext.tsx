@@ -73,7 +73,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
       }
 
       const toFetch = Object.keys(selected).map((courseCode) =>
-        fetchCourses(courseCode, selectedTerm),
+        fetchCourses(courseCode, selectedTerm)
       );
       const results = await Promise.allSettled(toFetch);
 
