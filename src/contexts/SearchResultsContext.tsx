@@ -32,7 +32,6 @@ import { fetchCourses, fetchTerms } from "@/utils/fetchData";
 interface SearchResultsContextType {
   state: StateType;
   dispatch: React.Dispatch<ActionType>;
-  termsQueryState: TermsQueryState;
 }
 
 interface TermsQueryState {
@@ -270,25 +269,6 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     history: "replace",
   });
 
-  const {
-    data: termsData,
-    isLoading: isLoadingTerms,
-    isError: isErrorTerms,
-    isSuccess: isSuccessTerms,
-    error: errorTerms,
-  } = useQuery({
-    queryKey: ["term"],
-    queryFn: fetchTerms,
-  });
-
-  const termsQueryState = {
-    isLoading: isLoadingTerms,
-    isError: isErrorTerms,
-    isSuccess: isSuccessTerms,
-    error: errorTerms,
-    data: termsData,
-  };
-
   useEffect(() => {
     const fetchInitialData = async () => {
       const terms = await fetchTerms();
@@ -342,7 +322,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   }, [state.term, setTerm]);
 
   return (
-    <SearchResultsContext.Provider value={{ state, dispatch, termsQueryState }}>
+    <SearchResultsContext.Provider value={{ state, dispatch }}>
       {children}
     </SearchResultsContext.Provider>
   );
