@@ -1,6 +1,5 @@
 import { Section } from "@/types/Types";
-import React, { useState } from "react";
-import Image from "next/image";
+import { useState } from "react";
 import { ComponentResult } from "../ComponentResult/ComponentResult";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";

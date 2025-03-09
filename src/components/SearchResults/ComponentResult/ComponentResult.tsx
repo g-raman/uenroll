@@ -1,5 +1,5 @@
 import { Component } from "@/types/Types";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { SessionResult } from "../SessionResult/SessionResult";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 
