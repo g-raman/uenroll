@@ -7,7 +7,7 @@ import {
   handleRemoveSelected,
   handleResetCourses,
   handleResetSelected,
-} from "./SearchResultsActions";
+} from "./searchResultsActions";
 import { ActionType, StateType } from "./types";
 
 export const searchResultsRedcuer = (state: StateType, action: ActionType) => {

@@ -14,7 +14,7 @@ import { shuffleArray } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCourses, fetchTerms } from "@/utils/fetchData";
 import { ActionType, StateType } from "@/reducers/types";
-import { searchResultsRedcuer } from "@/reducers/SearchResultsReducer";
+import { searchResultsRedcuer } from "@/reducers/searchResultsReducer";
 
 interface SearchResultsContextType {
   state: StateType;
@@ -73,7 +73,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
       }
 
       const toFetch = Object.keys(selected).map((courseCode) =>
-        fetchCourses(courseCode, selectedTerm)
+        fetchCourses(courseCode, selectedTerm),
       );
       const results = await Promise.allSettled(toFetch);
 
