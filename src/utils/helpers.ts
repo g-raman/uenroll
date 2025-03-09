@@ -61,8 +61,8 @@ export const createNewSelectedSessions = (
       section.components.flatMap((component) =>
         component.sessions
           .filter((session) => isSelected(component, course, selected))
-          .map((session) => createSession(session, component, course)),
-      ),
-    ),
+          .map((session) => createSession(session, component, course))
+      )
+    )
   );
 };

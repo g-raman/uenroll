@@ -11,13 +11,13 @@ import {
 import { useQueryState } from "nuqs";
 import React, {
   createContext,
-  useContext,
-  useState,
   ReactNode,
+  Reducer,
   useCallback,
+  useContext,
   useEffect,
   useReducer,
-  Reducer,
+  useState,
 } from "react";
 import LZString from "lz-string";
 import { dayOfWeekToNumberMap, INITIAL_COLOURS } from "@/utils/constants";
@@ -52,14 +52,14 @@ interface StateType {
 }
 type ActionType =
   | {
-      type: "initialize_data";
-      payload: {
-        courses: Course[];
-        selected: Selected | null;
-        term: Term;
-        availableTerms: Term[];
-      };
-    }
+    type: "initialize_data";
+    payload: {
+      courses: Course[];
+      selected: Selected | null;
+      term: Term;
+      availableTerms: Term[];
+    };
+  }
   | { type: "change_term"; payload: Term }
   | { type: "add_course"; payload: Course }
   | { type: "remove_course"; payload: Course }
@@ -114,13 +114,11 @@ const reducer = (state: StateType, action: ActionType) => {
       );
       const [colour, ...restColours] = state.colours;
 
-      return isAlreadyAdded
-        ? state
-        : {
-            ...state,
-            colours: restColours,
-            courses: [{ ...courseToAdd, colour }, ...state.courses],
-          };
+      return isAlreadyAdded ? state : {
+        ...state,
+        colours: restColours,
+        courses: [{ ...courseToAdd, colour }, ...state.courses],
+      };
     }
 
     case "remove_course": {
@@ -141,13 +139,14 @@ const reducer = (state: StateType, action: ActionType) => {
       const selected = { ...state.selected };
       delete selected[courseToRemove.courseCode];
 
-      if (Object.keys(selected).length === 0)
+      if (Object.keys(selected).length === 0) {
         return {
           ...state,
           courses: filteredCourses,
           selected: null,
           selectedSessions: [],
         };
+      }
 
       const selectedSessions = createNewSelectedSessions(
         filteredCourses,
@@ -217,11 +216,13 @@ const reducer = (state: StateType, action: ActionType) => {
       );
 
       const selected = { ...state.selected };
-      if (filteredSubsections.length === 0)
+      if (filteredSubsections.length === 0) {
         delete selected[toRemove.courseCode];
+      }
 
-      if (Object.keys(selected).length === 0)
+      if (Object.keys(selected).length === 0) {
         return { ...state, selected: null, selectedSessions: [] };
+      }
       selected[toRemove.courseCode] = filteredSubsections;
 
       const selectedSessions = createNewSelectedSessions(
@@ -289,7 +290,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
       }
 
       const toFetch = Object.keys(selected).map((courseCode) =>
-        fetchCourses(courseCode, selectedTerm),
+        fetchCourses(courseCode, selectedTerm)
       );
       const results = await Promise.allSettled(toFetch);
 

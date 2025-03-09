@@ -66,8 +66,7 @@ export default function SearchBar() {
           value={query}
           onKeyDown={handleKeyDown}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            setQuery(event.target.value.toUpperCase())
-          }
+            setQuery(event.target.value.toUpperCase())}
           className="border-slate-400 bg-slate-100 border text-sm w-full px-4 py-2 rounded-sm disabled:bg-slate-300"
           type="text"
           placeholder="Course Code Eg. CSI 2101"
@@ -79,11 +78,14 @@ export default function SearchBar() {
           className="w-min h-full px-4 bg-[#8f001b] rounded-sm text-white disabled:bg-opacity-40"
           disabled={isLoading}
         >
-          {isLoading ? (
-            <FontAwesomeIcon className="size-4 animate-spin" icon={faSpinner} />
-          ) : (
-            <FontAwesomeIcon className="size-4" icon={faMagnifyingGlass} />
-          )}
+          {isLoading
+            ? (
+              <FontAwesomeIcon
+                className="size-4 animate-spin"
+                icon={faSpinner}
+              />
+            )
+            : <FontAwesomeIcon className="size-4" icon={faMagnifyingGlass} />}
         </button>
       </div>
     </div>

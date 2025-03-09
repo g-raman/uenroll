@@ -29,12 +29,13 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
             <div className="flex gap-6 md:gap-4 ml-4 items-baseline">
               <FontAwesomeIcon
                 onClick={() =>
-                  dispatch({ type: "remove_course", payload: course })
-                }
+                  dispatch({ type: "remove_course", payload: course })}
                 icon={faTrash}
               />
               <FontAwesomeIcon
-                className={`transition-all ease-in delay-100 ${isOpen ? "rotate-0" : "rotate-180"}`}
+                className={`transition-all ease-in delay-100 ${
+                  isOpen ? "rotate-0" : "rotate-180"
+                }`}
                 icon={faChevronUp}
               />
             </div>
@@ -43,7 +44,9 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
         {course.sections.map((section) => {
           return (
             <div
-              className={`overflow-hidden transition-all ease-in delay-100 ${isOpen ? "opacity-100" : "max-h-0 opacity-0"}`}
+              className={`overflow-hidden transition-all ease-in delay-100 ${
+                isOpen ? "opacity-100" : "max-h-0 opacity-0"
+              }`}
               key={`${course.courseCode}${course.term}${section.section}`}
             >
               <SectionResult
