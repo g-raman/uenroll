@@ -22,7 +22,8 @@ export default function CalendarEventModal({
       <div className="flex items-center text-lg">
         <div
           className={`size-5 mr-2 rounded-sm ${calendarEvent.backgroundColour}`}
-        ></div>
+        >
+        </div>
         <p className="font-bold">{calendarEvent.courseCode}</p>
         &nbsp;-&nbsp;
         <p>{calendarEvent.subSection}</p>
@@ -47,7 +48,9 @@ export default function CalendarEventModal({
 
       <div className="text-base flex items-center gap-2 font-light">
         <FontAwesomeIcon
-          className={`${calendarEvent.isOpen ? "text-green-400" : "text-red-500"}`}
+          className={`${
+            calendarEvent.isOpen ? "text-green-400" : "text-red-500"
+          }`}
           icon={calendarEvent.isOpen ? faCheck : faXmark}
         />
         <p className="text-nowrap">

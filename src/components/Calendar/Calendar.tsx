@@ -1,6 +1,6 @@
 "use client";
 
-import { useNextCalendarApp, ScheduleXCalendar } from "@schedule-x/react";
+import { ScheduleXCalendar, useNextCalendarApp } from "@schedule-x/react";
 import { createViewMonthAgenda, createViewWeek } from "@schedule-x/calendar";
 import { createEventsServicePlugin } from "@schedule-x/events-service";
 
@@ -79,7 +79,8 @@ function Calendar() {
       });
 
       return {
-        id: `${session.courseDetails.courseCode}${session.courseDetails.subSection}`,
+        id:
+          `${session.courseDetails.courseCode}${session.courseDetails.subSection}`,
         title: `${session.courseDetails.courseCode}`,
         start: `${startDate.format(DATE_FORMAT)} ${session.startTime}`,
         end: `${startDate.format(DATE_FORMAT)} ${session.endTime}`,

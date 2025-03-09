@@ -51,7 +51,9 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
       </div>
 
       <div
-        className={`w-full ml-4 flex flex-col gap-2 max-h-20 overflow-y-scroll ${component.sessions.length === 1 ? "no-scrollbar" : ""}`}
+        className={`w-full ml-4 flex flex-col gap-2 max-h-20 overflow-y-scroll ${
+          component.sessions.length === 1 ? "no-scrollbar" : ""
+        }`}
       >
         {component.sessions.map((session) => (
           <SessionResult
@@ -63,7 +65,9 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
 
       <div className="flex w-1/3 h-full flex-col items-center uppercase border-l-slate-400 border-l p-6">
         <span
-          className={`font-bold text-base ${component.isOpen ? "text-lime-600" : "text-red-800"}`}
+          className={`font-bold text-base ${
+            component.isOpen ? "text-lime-600" : "text-red-800"
+          }`}
         >
           {component.subSection}
         </span>
