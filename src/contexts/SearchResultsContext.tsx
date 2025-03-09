@@ -267,9 +267,14 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     if (isSuccessTerms) {
-      dispatch({ type: "initialize_term", payload: termsData[0] });
+      const initialTerm = termsData.find((termData) => termData.value === term);
+      if (!initialTerm) {
+        dispatch({ type: "initialize_term", payload: termsData[0] });
+        return;
+      }
+      dispatch({ type: "initialize_term", payload: initialTerm });
     }
-  }, [isSuccessTerms, termsData]);
+  }, [isSuccessTerms, term, termsData]);
 
   // Sync reducer state back to URL whenever selected sections change
   useEffect(() => {
