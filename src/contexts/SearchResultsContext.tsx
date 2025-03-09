@@ -59,7 +59,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
       const initialTerm = terms.find((termData) => termData.value === term);
       const selectedTerm = initialTerm ? initialTerm : terms[0];
 
-      if (!selected) {
+      if (!initialTerm || !selected) {
         dispatch({
           type: "initialize_data",
           payload: {
