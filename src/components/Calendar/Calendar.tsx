@@ -5,7 +5,7 @@ import { createViewMonthAgenda, createViewWeek } from "@schedule-x/calendar";
 import { createEventsServicePlugin } from "@schedule-x/events-service";
 
 import "@schedule-x/theme-shadcn/dist/index.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 import dayjs from "dayjs";
 import { createEventRecurrencePlugin } from "@schedule-x/event-recurrence";
@@ -17,11 +17,15 @@ import CalendarEventModal from "./CalendarEventModal/CalendarEventModal";
 
 const DATE_FORMAT = "YYYY-MM-DD";
 function Calendar() {
+  const eventsService = useState(() => createEventsServicePlugin())[0];
+  const eventRecurrence = useState(() => createEventRecurrencePlugin())[0];
+  const eventModal = useState(() => createEventModalPlugin())[0];
+  const calendarControls = useState(() => createCalendarControlsPlugin())[0];
   const plugins = [
-    createEventsServicePlugin(),
-    createEventRecurrencePlugin(),
-    createCalendarControlsPlugin(),
-    createEventModalPlugin(),
+    eventsService,
+    eventRecurrence,
+    calendarControls,
+    eventModal,
   ];
   const { state } = useSearchResults();
 
@@ -47,14 +51,12 @@ function Calendar() {
   );
 
   useEffect(() => {
-    if (!calendar) {
+    if (!calendar || !eventsService || !calendarControls) {
       return;
     }
 
     if (state.selectedSessions.length === 0) {
-      // Typescript doesn't pick up the additionaly fields but they exist
-      // @ts-expect-error
-      calendar.eventsService.set([]);
+      eventsService.set([]);
       return;
     }
 
@@ -79,8 +81,7 @@ function Calendar() {
       });
 
       return {
-        id:
-          `${session.courseDetails.courseCode}${session.courseDetails.subSection}`,
+        id: `${session.courseDetails.courseCode}${session.courseDetails.subSection}`,
         title: `${session.courseDetails.courseCode}`,
         start: `${startDate.format(DATE_FORMAT)} ${session.startTime}`,
         end: `${startDate.format(DATE_FORMAT)} ${session.endTime}`,
@@ -89,22 +90,21 @@ function Calendar() {
       };
     });
 
-    // Typescript doesn't pick up the additionaly fields but they exist
-    // @ts-expect-error
-    calendar.eventsService.set(events);
+    eventsService.set(events);
 
     // HACK: This a temporary way to programatically refresh the calendar
     // @ts-ignore
-    const currentView = calendar.calendarControls.getView();
+    const currentView = calendarControls.getView();
+
     // @ts-ignore
-    calendar.calendarControls.setView(
+    calendarControls.setView(
       currentView === "month-agenda" ? "week" : "month-agenda",
     );
     // @ts-ignore
-    calendar.calendarControls.setView(
+    calendarControls.setView(
       currentView === "month-agenda" ? "month-agenda" : "week",
     );
-  }, [calendar, state.selectedSessions]);
+  }, [state.selectedSessions]);
 
   return (
     <div className="h-full overflow-scroll">
