@@ -10,7 +10,6 @@ interface ComponentResultProps {
   term: string;
   section: string;
   subSection: string;
-  isSelectedInitial: boolean;
   colour: string;
 }
 export const ComponentResult: React.FC<ComponentResultProps> = ({
@@ -20,11 +19,15 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   term,
   section,
   subSection,
-  isSelectedInitial,
   colour,
 }) => {
-  const { dispatch } = useSearchResults();
-  const [isSelected, setIsSelected] = useState(isSelectedInitial);
+  const { state, dispatch } = useSearchResults();
+  const isSelectedInitially = Boolean(
+    state.selected &&
+      state.selected[courseCode] &&
+      state.selected[courseCode].includes(subSection),
+  );
+  const [isSelected, setIsSelected] = useState(isSelectedInitially);
 
   function handleToggle() {
     setIsSelected((is) => !is);
