@@ -172,35 +172,42 @@ const reducer = (state: StateType, action: ActionType) => {
     }
 
     case "add_selected": {
-      const selectedToAdd: SelectedKey = action.payload;
-      let selected: Selected | null = null;
+      const { courseCode, subSection }: SelectedKey = action.payload;
 
       if (state.selected === null) {
-        selected = {};
-        selected[selectedToAdd.courseCode] = [selectedToAdd.subSection];
-      } else if (!state.selected[selectedToAdd.courseCode]) {
-        selected = { ...state.selected };
-        selected[selectedToAdd.courseCode] = [selectedToAdd.subSection];
+        const selected: Selected = {};
+        selected[courseCode] = [subSection];
+        return {
+          ...state,
+          selected,
+          selectedSessions: createNewSelectedSessions(state.courses, selected),
+        };
+      } else if (!state.selected[courseCode]) {
+        const selected = { ...state.selected };
+        selected[courseCode] = [subSection];
+        return {
+          ...state,
+          selected,
+          selectedSessions: createNewSelectedSessions(state.courses, selected),
+        };
       } else if (
-        state.selected[selectedToAdd.courseCode].some(
-          (section) => section === selectedToAdd.subSection,
-        )
+        state.selected[courseCode].some((section) => section === subSection)
       ) {
-        selected = state.selected;
-      } else {
-        selected = { ...state.selected };
-        selected[selectedToAdd.courseCode].push(selectedToAdd.subSection);
+        return {
+          ...state,
+          selectedSessions: createNewSelectedSessions(
+            state.courses,
+            state.selected,
+          ),
+        };
       }
 
-      const selectedSessions = createNewSelectedSessions(
-        state.courses,
-        selected,
-      );
-
+      const selected = { ...state.selected };
+      selected[courseCode].push(subSection);
       return {
         ...state,
         selected,
-        selectedSessions,
+        selectedSessions: createNewSelectedSessions(state.courses, selected),
       };
     }
 
