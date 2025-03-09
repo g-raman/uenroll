@@ -30,7 +30,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchCourses, fetchTerms } from "@/utils/fetchData";
 
 interface SearchResultsContextType {
-  state: typeof initialState;
+  state: StateType;
   dispatch: React.Dispatch<ActionType>;
   termsQueryState: TermsQueryState;
 }
@@ -49,11 +49,17 @@ interface StateType {
   selectedSessions: SelectedSession[];
   colours: string[];
   term: Term | null;
+  availableTerms: Term[];
 }
 type ActionType =
   | {
       type: "initialize_data";
-      payload: { courses: Course[]; selected: Selected | null; term: Term };
+      payload: {
+        courses: Course[];
+        selected: Selected | null;
+        term: Term;
+        availableTerms: Term[];
+      };
     }
   | { type: "change_term"; payload: Term }
   | { type: "add_course"; payload: Course }
@@ -70,6 +76,7 @@ const initialState = {
   selectedSessions: [] as SelectedSession[],
   colours: shuffledColours,
   term: null as Term | null,
+  availableTerms: [],
 };
 
 const reducer = (state: StateType, action: ActionType) => {
@@ -291,7 +298,12 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
       if (!selected) {
         dispatch({
           type: "initialize_data",
-          payload: { courses: [], selected: null, term: selectedTerm },
+          payload: {
+            courses: [],
+            selected: null,
+            term: selectedTerm,
+            availableTerms: terms,
+          },
         });
         return;
       }
@@ -309,7 +321,12 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
 
       dispatch({
         type: "initialize_data",
-        payload: { courses, selected, term: selectedTerm },
+        payload: {
+          courses,
+          selected,
+          term: selectedTerm,
+          availableTerms: terms,
+        },
       });
     };
     fetchInitialData();
