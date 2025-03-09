@@ -30,19 +30,16 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   const [isSelected, setIsSelected] = useState(isSelectedInitially);
 
   function handleToggle() {
-    setIsSelected((is) => !is);
-  }
+    setIsSelected((previous) => {
+      const isGoingToBeSelected = !previous;
+      const actionType = isGoingToBeSelected
+        ? "add_selected"
+        : "remove_selected";
+      dispatch({ type: actionType, payload: { courseCode, subSection } });
 
-  useEffect(() => {
-    if (isSelected) {
-      dispatch({ type: "add_selected", payload: { courseCode, subSection } });
-    } else {
-      dispatch({
-        type: "remove_selected",
-        payload: { courseCode, subSection },
-      });
-    }
-  }, [isSelected, courseCode, subSection, dispatch]);
+      return !previous;
+    });
+  }
 
   return (
     <div className="flex items-center justify-between h-full w-full border-b">
