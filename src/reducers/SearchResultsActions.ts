@@ -58,11 +58,13 @@ export const handleAddCourse = (
   );
   const [colour, ...restColours] = state.colours;
 
-  return isAlreadyAdded ? state : {
-    ...state,
-    colours: restColours,
-    courses: [{ ...courseToAdd, colour }, ...state.courses],
-  };
+  return isAlreadyAdded
+    ? state
+    : {
+        ...state,
+        colours: restColours,
+        courses: [{ ...courseToAdd, colour }, ...state.courses],
+      };
 };
 
 export const handleRemoveCourse = (
@@ -159,25 +161,23 @@ export const handleRemoveSelected = (
   state: StateType,
   action: { type: "remove_selected"; payload: RemoveSelectedPayload },
 ) => {
-  const toRemove: SelectedKey = action.payload;
+  const { courseCode, subSection }: SelectedKey = action.payload;
 
   if (state.selected === null) return state;
 
-  if (!state.selected[toRemove.courseCode]) return state;
+  if (!state.selected[courseCode]) return state;
 
-  const filteredSubsections = state.selected[toRemove.courseCode].filter(
-    (subSection) => subSection !== toRemove.subSection,
+  const filteredSubsections = state.selected[courseCode].filter(
+    (subSection) => subSection !== subSection,
   );
 
   const selected = { ...state.selected };
-  if (filteredSubsections.length === 0) {
-    delete selected[toRemove.courseCode];
-  }
+  selected[courseCode] = filteredSubsections;
 
-  if (Object.keys(selected).length === 0) {
+  if (filteredSubsections.length === 0) delete selected[courseCode];
+
+  if (Object.keys(selected).length === 0)
     return { ...state, selected: null, selectedSessions: [] };
-  }
-  selected[toRemove.courseCode] = filteredSubsections;
 
   const selectedSessions = createNewSelectedSessions(state.courses, selected);
 
