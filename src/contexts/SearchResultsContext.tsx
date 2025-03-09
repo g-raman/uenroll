@@ -83,10 +83,9 @@ const reducer = (state: StateType, action: ActionType) => {
     case "initialize_data": {
       const courses = action.payload.courses;
       const colours = [...state.colours];
-      courses.forEach((course) => {
-        course.colour = colours.pop();
-      });
-      const newSelectedSessions = createNewSelectedSessions(
+      courses.forEach((course) => (course.colour = colours.pop()));
+
+      const selectedSessions = createNewSelectedSessions(
         courses,
         action.payload.selected,
       );
@@ -94,7 +93,7 @@ const reducer = (state: StateType, action: ActionType) => {
         ...state,
         ...action.payload,
         colours,
-        selectedSessions: newSelectedSessions,
+        selectedSessions,
       };
     }
 
@@ -139,10 +138,10 @@ const reducer = (state: StateType, action: ActionType) => {
           courses: filteredCourses,
         };
       }
-      const newSelected = { ...state.selected };
-      delete newSelected[courseToRemove.courseCode];
+      const selected = { ...state.selected };
+      delete selected[courseToRemove.courseCode];
 
-      if (Object.keys(newSelected).length === 0)
+      if (Object.keys(selected).length === 0)
         return {
           ...state,
           courses: filteredCourses,
@@ -150,16 +149,16 @@ const reducer = (state: StateType, action: ActionType) => {
           selectedSessions: [],
         };
 
-      const newSelectedSessions = createNewSelectedSessions(
+      const selectedSessions = createNewSelectedSessions(
         filteredCourses,
-        newSelected,
+        selected,
       );
 
       return {
         ...state,
         courses: filteredCourses,
-        selected: newSelected,
-        selectedSessions: newSelectedSessions,
+        selected,
+        selectedSessions,
         colours: [...state.colours, courseToRemove.colour as string],
       };
     }
@@ -175,33 +174,34 @@ const reducer = (state: StateType, action: ActionType) => {
 
     case "add_selected": {
       const selectedToAdd: SelectedKey = action.payload;
-      let newSelected: Selected | null = null;
+      let selected: Selected | null = null;
+
       if (state.selected === null) {
-        newSelected = {};
-        newSelected[selectedToAdd.courseCode] = [selectedToAdd.subSection];
+        selected = {};
+        selected[selectedToAdd.courseCode] = [selectedToAdd.subSection];
       } else if (!state.selected[selectedToAdd.courseCode]) {
-        newSelected = { ...state.selected };
-        newSelected[selectedToAdd.courseCode] = [selectedToAdd.subSection];
+        selected = { ...state.selected };
+        selected[selectedToAdd.courseCode] = [selectedToAdd.subSection];
       } else if (
         state.selected[selectedToAdd.courseCode].some(
           (section) => section === selectedToAdd.subSection,
         )
       ) {
-        newSelected = state.selected;
+        selected = state.selected;
       } else {
-        newSelected = { ...state.selected };
-        newSelected[selectedToAdd.courseCode].push(selectedToAdd.subSection);
+        selected = { ...state.selected };
+        selected[selectedToAdd.courseCode].push(selectedToAdd.subSection);
       }
 
-      const newSelectedSessions = createNewSelectedSessions(
+      const selectedSessions = createNewSelectedSessions(
         state.courses,
-        newSelected,
+        selected,
       );
 
       return {
         ...state,
-        selected: newSelected,
-        selectedSessions: newSelectedSessions,
+        selected,
+        selectedSessions,
       };
     }
 
@@ -216,23 +216,23 @@ const reducer = (state: StateType, action: ActionType) => {
         (subSection) => subSection !== toRemove.subSection,
       );
 
-      const newSelected = { ...state.selected };
+      const selected = { ...state.selected };
       if (filteredSubsections.length === 0)
-        delete newSelected[toRemove.courseCode];
+        delete selected[toRemove.courseCode];
 
-      if (Object.keys(newSelected).length === 0)
+      if (Object.keys(selected).length === 0)
         return { ...state, selected: null, selectedSessions: [] };
-      newSelected[toRemove.courseCode] = filteredSubsections;
+      selected[toRemove.courseCode] = filteredSubsections;
 
-      const newSelectedSessions = createNewSelectedSessions(
+      const selectedSessions = createNewSelectedSessions(
         state.courses,
-        newSelected,
+        selected,
       );
 
       return {
         ...state,
-        selected: newSelected,
-        selectedSessions: newSelectedSessions,
+        selected,
+        selectedSessions,
       };
     }
 
