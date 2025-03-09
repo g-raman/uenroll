@@ -53,7 +53,7 @@ interface StateType {
 type ActionType =
   | {
       type: "initialize_data";
-      payload: { courses: Course[]; selected: Selected; term: Term };
+      payload: { courses: Course[]; selected: Selected | null; term: Term };
     }
   | { type: "change_term"; payload: Term }
   | { type: "add_course"; payload: Course }
@@ -284,11 +284,17 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     const fetchInitialData = async () => {
-      if (!term && !selected) return;
-
       const terms = await fetchTerms();
       const initialTerm = terms.find((termData) => termData.value === term);
       const selectedTerm = initialTerm ? initialTerm : terms[0];
+
+      if (!selected) {
+        dispatch({
+          type: "initialize_data",
+          payload: { courses: [], selected: null, term: selectedTerm },
+        });
+        return;
+      }
 
       const toFetch = Object.keys(selected).map((courseCode) =>
         fetchCourses(courseCode, selectedTerm),
