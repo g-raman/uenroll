@@ -27,7 +27,7 @@ import {
   shuffleArray,
 } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
-import { fetchTerms } from "@/utils/fetchData";
+import { fetchCourses, fetchTerms } from "@/utils/fetchData";
 
 interface SearchResultsContextType {
   state: typeof initialState;
@@ -51,7 +51,10 @@ interface StateType {
   term: Term | null;
 }
 type ActionType =
-  | { type: "initialize_term"; payload: Term }
+  | {
+      type: "initialize_data";
+      payload: { courses: Course[]; selected: Selected; term: Term };
+    }
   | { type: "change_term"; payload: Term }
   | { type: "add_course"; payload: Course }
   | { type: "remove_course"; payload: Course }
@@ -71,8 +74,22 @@ const initialState = {
 
 const reducer = (state: StateType, action: ActionType) => {
   switch (action.type) {
-    case "initialize_term": {
-      return { ...state, term: action.payload };
+    case "initialize_data": {
+      const courses = action.payload.courses;
+      const colours = [...state.colours];
+      courses.forEach((course) => {
+        course.colour = colours.pop();
+      });
+      const newSelectedSessions = createNewSelectedSessions(
+        courses,
+        action.payload.selected,
+      );
+      return {
+        ...state,
+        ...action.payload,
+        colours,
+        selectedSessions: newSelectedSessions,
+      };
     }
 
     case "change_term": {
@@ -266,17 +283,33 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
-    if (isSuccessTerms) {
-      const initialTerm = termsData.find((termData) => termData.value === term);
-      if (!initialTerm) {
-        dispatch({ type: "initialize_term", payload: termsData[0] });
-        return;
-      }
-      dispatch({ type: "initialize_term", payload: initialTerm });
-    }
-  }, [isSuccessTerms, term, termsData]);
+    const fetchInitialData = async () => {
+      if (!term && !selected) return;
 
-  // Sync reducer state back to URL whenever selected sections change
+      const terms = await fetchTerms();
+      const initialTerm = terms.find((termData) => termData.value === term);
+      const selectedTerm = initialTerm ? initialTerm : terms[0];
+
+      const toFetch = Object.keys(selected).map((courseCode) =>
+        fetchCourses(courseCode, selectedTerm),
+      );
+      const results = await Promise.allSettled(toFetch);
+
+      if (results.some((result) => result.status === "rejected")) return;
+
+      const courses = results
+        .filter((result) => result.status !== "rejected")
+        .map((result) => result.value);
+
+      dispatch({
+        type: "initialize_data",
+        payload: { courses, selected, term: selectedTerm },
+      });
+    };
+    fetchInitialData();
+  }, []);
+
+  // Sync reducer state back to URL whenever data changes
   useEffect(() => {
     setSelected(state.selected);
   }, [state.selected, setSelected]);
