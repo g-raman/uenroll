@@ -77,7 +77,18 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
       );
       const results = await Promise.allSettled(toFetch);
 
-      if (results.some((result) => result.status === "rejected")) return;
+      if (results.some((result) => result.status === "rejected")) {
+        dispatch({
+          type: "initialize_data",
+          payload: {
+            courses: [],
+            selected: null,
+            term: selectedTerm,
+            availableTerms: terms,
+          },
+        });
+        return;
+      }
 
       const courses = results
         .filter((result) => result.status !== "rejected")
