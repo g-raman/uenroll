@@ -1,20 +1,15 @@
-import { ActionType, StateType } from "@/contexts/SearchResultsContext";
 import { Course, Selected, SelectedKey, Term } from "@/types/Types";
 import { createNewSelectedSessions } from "@/utils/helpers";
 import assert from "assert";
-
-type InitializeDataPayload = {
-  courses: Course[];
-  selected: Selected | null;
-  term: Term;
-  availableTerms: Term[];
-};
-
-type ChangeTermPayload = Term;
-type AddCoursePayload = Course;
-type RemoveCoursePayload = Course;
-type AddSelectedPayload = SelectedKey;
-type RemoveSelectedPayload = SelectedKey;
+import {
+  AddCoursePayload,
+  AddSelectedPayload,
+  ChangeTermPayload,
+  InitializeDataPayload,
+  RemoveCoursePayload,
+  RemoveSelectedPayload,
+  StateType,
+} from "./types";
 
 export const handleInitializeData = (
   state: StateType,
