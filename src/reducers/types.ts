@@ -29,19 +29,11 @@ export interface StateType {
 }
 
 export type ActionType =
-  | {
-      type: "initialize_data";
-      payload: {
-        courses: Course[];
-        selected: Selected | null;
-        term: Term;
-        availableTerms: Term[];
-      };
-    }
-  | { type: "change_term"; payload: Term }
-  | { type: "add_course"; payload: Course }
-  | { type: "remove_course"; payload: Course }
+  | { type: "initialize_data"; payload: InitializeDataPayload }
+  | { type: "change_term"; payload: ChangeTermPayload }
+  | { type: "add_course"; payload: AddCoursePayload }
+  | { type: "remove_course"; payload: RemoveCoursePayload }
   | { type: "reset_courses" }
-  | { type: "add_selected"; payload: SelectedKey }
-  | { type: "remove_selected"; payload: SelectedKey }
+  | { type: "add_selected"; payload: AddSelectedPayload }
+  | { type: "remove_selected"; payload: RemoveSelectedPayload }
   | { type: "reset_selected" };

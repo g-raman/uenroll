@@ -58,13 +58,11 @@ export const handleAddCourse = (
   );
   const [colour, ...restColours] = state.colours;
 
-  return isAlreadyAdded
-    ? state
-    : {
-        ...state,
-        colours: restColours,
-        courses: [{ ...courseToAdd, colour }, ...state.courses],
-      };
+  return isAlreadyAdded ? state : {
+    ...state,
+    colours: restColours,
+    courses: [{ ...courseToAdd, colour }, ...state.courses],
+  };
 };
 
 export const handleRemoveCourse = (
