@@ -30,7 +30,7 @@ export default function TermSelector() {
           className="w-full bg-slate-100 border-slate-400 border p-2 rounded-sm text-sm"
         >
           {termsQueryState.isSuccess &&
-            termsQueryState.data?.map((elem) => (
+            state.availableTerms.map((elem) => (
               <option key={elem.value} value={JSON.stringify(elem)}>
                 {elem.term}
               </option>
