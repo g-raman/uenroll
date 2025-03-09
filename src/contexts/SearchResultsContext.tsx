@@ -28,21 +28,23 @@ import {
 } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCourses, fetchTerms } from "@/utils/fetchData";
+import {
+  handleAddCourse,
+  handleAddSelected,
+  handleChangeTerm,
+  handleInitializeData,
+  handleRemoveCourse,
+  handleRemoveSelected,
+  handleResetCourses,
+  handleResetSelected,
+} from "@/reducers/SearchResultsActions";
 
 interface SearchResultsContextType {
   state: StateType;
   dispatch: React.Dispatch<ActionType>;
 }
 
-interface TermsQueryState {
-  isLoading: boolean;
-  isError: boolean;
-  isSuccess: boolean;
-  error: Error | null;
-  data: Term[] | undefined;
-}
-
-interface StateType {
+export interface StateType {
   courses: Course[];
   selected: Selected | null;
   selectedSessions: SelectedSession[];
@@ -50,16 +52,17 @@ interface StateType {
   term: Term | null;
   availableTerms: Term[];
 }
-type ActionType =
+
+export type ActionType =
   | {
-    type: "initialize_data";
-    payload: {
-      courses: Course[];
-      selected: Selected | null;
-      term: Term;
-      availableTerms: Term[];
-    };
-  }
+      type: "initialize_data";
+      payload: {
+        courses: Course[];
+        selected: Selected | null;
+        term: Term;
+        availableTerms: Term[];
+      };
+    }
   | { type: "change_term"; payload: Term }
   | { type: "add_course"; payload: Course }
   | { type: "remove_course"; payload: Course }
@@ -80,177 +83,30 @@ const initialState = {
 
 const reducer = (state: StateType, action: ActionType) => {
   switch (action.type) {
-    case "initialize_data": {
-      const courses = action.payload.courses;
-      const colours = [...state.colours];
-      courses.forEach((course) => (course.colour = colours.pop()));
+    case "initialize_data":
+      return handleInitializeData(state, action);
 
-      const selectedSessions = createNewSelectedSessions(
-        courses,
-        action.payload.selected,
-      );
-      return {
-        ...state,
-        ...action.payload,
-        colours,
-        selectedSessions,
-      };
-    }
+    case "change_term":
+      return handleChangeTerm(state, action);
 
-    case "change_term": {
-      return {
-        ...state,
-        courses: [],
-        selected: null,
-        selectedSessions: [],
-        term: action.payload,
-      };
-    }
+    case "add_course":
+      return handleAddCourse(state, action);
 
-    case "add_course": {
-      const courseToAdd = action.payload;
-      const isAlreadyAdded = state.courses.some(
-        (addedCourse) => addedCourse.courseCode === courseToAdd.courseCode,
-      );
-      const [colour, ...restColours] = state.colours;
+    case "remove_course":
+      return handleRemoveCourse(state, action);
 
-      return isAlreadyAdded ? state : {
-        ...state,
-        colours: restColours,
-        courses: [{ ...courseToAdd, colour }, ...state.courses],
-      };
-    }
+    case "reset_courses":
+      return handleResetCourses(state);
 
-    case "remove_course": {
-      const courseToRemove: Course = action.payload;
-      const filteredCourses = state.courses.filter(
-        (addedCourse) => addedCourse.courseCode !== courseToRemove.courseCode,
-      );
+    case "add_selected":
+      return handleAddSelected(state, action);
 
-      if (
-        state.selected === null ||
-        !state.selected[courseToRemove.courseCode]
-      ) {
-        return {
-          ...state,
-          courses: filteredCourses,
-        };
-      }
-      const selected = { ...state.selected };
-      delete selected[courseToRemove.courseCode];
+    case "remove_selected":
+      return handleRemoveSelected(state, action);
 
-      if (Object.keys(selected).length === 0) {
-        return {
-          ...state,
-          courses: filteredCourses,
-          selected: null,
-          selectedSessions: [],
-        };
-      }
+    case "reset_selected":
+      return handleResetSelected(state);
 
-      const selectedSessions = createNewSelectedSessions(
-        filteredCourses,
-        selected,
-      );
-
-      return {
-        ...state,
-        courses: filteredCourses,
-        selected,
-        selectedSessions,
-        colours: [...state.colours, courseToRemove.colour as string],
-      };
-    }
-
-    case "reset_courses": {
-      return {
-        ...state,
-        courses: [],
-        selected: null,
-        selectedSessions: [],
-      };
-    }
-
-    case "add_selected": {
-      const { courseCode, subSection }: SelectedKey = action.payload;
-
-      if (state.selected === null) {
-        const selected: Selected = {};
-        selected[courseCode] = [subSection];
-        return {
-          ...state,
-          selected,
-          selectedSessions: createNewSelectedSessions(state.courses, selected),
-        };
-      } else if (!state.selected[courseCode]) {
-        const selected = { ...state.selected };
-        selected[courseCode] = [subSection];
-        return {
-          ...state,
-          selected,
-          selectedSessions: createNewSelectedSessions(state.courses, selected),
-        };
-      } else if (
-        state.selected[courseCode].some((section) => section === subSection)
-      ) {
-        return {
-          ...state,
-          selectedSessions: createNewSelectedSessions(
-            state.courses,
-            state.selected,
-          ),
-        };
-      }
-
-      const selected = { ...state.selected };
-      selected[courseCode].push(subSection);
-      return {
-        ...state,
-        selected,
-        selectedSessions: createNewSelectedSessions(state.courses, selected),
-      };
-    }
-
-    case "remove_selected": {
-      const toRemove: SelectedKey = action.payload;
-
-      if (state.selected === null) return state;
-
-      if (!state.selected[toRemove.courseCode]) return state;
-
-      const filteredSubsections = state.selected[toRemove.courseCode].filter(
-        (subSection) => subSection !== toRemove.subSection,
-      );
-
-      const selected = { ...state.selected };
-      if (filteredSubsections.length === 0) {
-        delete selected[toRemove.courseCode];
-      }
-
-      if (Object.keys(selected).length === 0) {
-        return { ...state, selected: null, selectedSessions: [] };
-      }
-      selected[toRemove.courseCode] = filteredSubsections;
-
-      const selectedSessions = createNewSelectedSessions(
-        state.courses,
-        selected,
-      );
-
-      return {
-        ...state,
-        selected,
-        selectedSessions,
-      };
-    }
-
-    case "reset_selected": {
-      return {
-        ...state,
-        selected: null,
-        selectedSessions: [],
-      };
-    }
     default:
       return state;
   }
@@ -297,7 +153,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
       }
 
       const toFetch = Object.keys(selected).map((courseCode) =>
-        fetchCourses(courseCode, selectedTerm)
+        fetchCourses(courseCode, selectedTerm),
       );
       const results = await Promise.allSettled(toFetch);
 
