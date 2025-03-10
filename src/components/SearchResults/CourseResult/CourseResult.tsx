@@ -2,7 +2,11 @@ import { Course } from "@/types/Types";
 import { useState } from "react";
 import { SectionResult } from "../SectionResult/SectionResult";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowUpRightFromSquare,
+  faChevronUp,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 
 interface CourseResultProps {
@@ -24,18 +28,26 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
   return (
     <div className="pb-4 text-sm">
       <div className="border rounded-md overflow-hidden">
-        <div
-          onClick={handleCourseToggle}
-          className={`hover:cursor-pointer p-2 ${course.colour}`}
-        >
-          <div className="flex items-center justify-between">
+        <div className={`cursor-pointer p-2 ${course.colour}`}>
+          <div
+            onClick={handleCourseToggle}
+            className="flex items-center justify-between"
+          >
             <div className="truncate">
-              <span>{`${course.courseCode}: ${course.courseTitle}`}</span>
+              {`${course.courseCode}: ${course.courseTitle}`}
             </div>
 
-            <div className="flex gap-6 md:gap-4 ml-4 items-baseline">
+            <div className="flex gap-6 md:gap-5 ml-4 items-center">
+              <a
+                className="underline cursor-pointer"
+                href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
+                target="_blank"
+              >
+                <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+              </a>
               <FontAwesomeIcon onClick={handleCourseRemoval} icon={faTrash} />
               <FontAwesomeIcon
+                onClick={handleCourseToggle}
                 className={`transition-all ease-in delay-100 ${
                   isOpen ? "rotate-0" : "rotate-180"
                 }`}
