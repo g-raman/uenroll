@@ -51,7 +51,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
               className={`overflow-hidden transition-all ease-in delay-100 ${
                 isOpen ? "opacity-100" : "max-h-0 opacity-0"
               }`}
-              key={`${course.courseCode}${course.term}${section.section}`}
+              key={`${course.courseCode}${section.section}`}
             >
               <SectionResult
                 courseCode={course.courseCode}

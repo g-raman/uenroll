@@ -7,12 +7,7 @@ export default function SearchResults() {
   return (
     <>
       {state.courses.map((course) => {
-        return (
-          <CourseResult
-            key={`${course.courseCode}${course.term}`}
-            course={course}
-          />
-        );
+        return <CourseResult key={`${course.courseCode}`} course={course} />;
       })}
     </>
   );
