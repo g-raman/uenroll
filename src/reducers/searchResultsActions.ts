@@ -80,6 +80,7 @@ export const handleRemoveCourse = (
     return {
       ...state,
       courses: filteredCourses,
+      colours: [...state.colours, courseToRemove.colour as string],
     };
   }
   const selected = { ...state.selected };
@@ -91,6 +92,7 @@ export const handleRemoveCourse = (
       courses: filteredCourses,
       selected: null,
       selectedSessions: [],
+      colours: [...state.colours, courseToRemove.colour as string],
     };
   }
 
