@@ -24,16 +24,13 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   );
   const [isSelected, setIsSelected] = useState(isSelectedInitially);
 
-  function handleToggle() {
-    setIsSelected((previous) => {
-      const isGoingToBeSelected = !previous;
-      const actionType = isGoingToBeSelected
-        ? "add_selected"
-        : "remove_selected";
-      dispatch({ type: actionType, payload: { courseCode, subSection } });
+  useEffect(() => {
+    const actionType = isSelected ? "add_selected" : "remove_selected";
+    dispatch({ type: actionType, payload: { courseCode, subSection } });
+  }, [isSelected, dispatch, courseCode, subSection]);
 
-      return !previous;
-    });
+  function handleToggle() {
+    setIsSelected((previous) => !previous);
   }
 
   return (
