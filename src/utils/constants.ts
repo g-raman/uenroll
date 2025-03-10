@@ -3,13 +3,13 @@ export const INITIAL_COLOURS = [
   "bg-sky-300 text-black border-l-sky-500",
   "bg-lime-200 text-black border-l-lime-400",
   "bg-yellow-200 text-black border-l-yellow-400",
-  "bg-amber-400 text-black border-l-amber-500",
-  "bg-emerald-500 text-black border-l-emerald-600",
-  "bg-indigo-400 text-black border-l-indigo-500",
-  "bg-pink-400 text-black border-l-pink-500",
-  "bg-violet-500 text-black border-l-violet-600",
-  "bg-orange-500 text-white border-l-orange-500",
-  "bg-blue-500 text-white border-l-blue-500",
+  "bg-amber-300 text-black border-l-amber-500",
+  "bg-emerald-400 text-black border-l-emerald-800",
+  "bg-indigo-400 text-black border-l-indigo-800",
+  "bg-pink-300 text-black border-l-pink-500",
+  "bg-violet-300 text-black border-l-violet-600",
+  "bg-orange-300 text-black border-l-orange-500",
+  "bg-blue-300 text-black border-l-blue-500",
 ];
 
 export const MAX_RESULTS_ALLOWED = INITIAL_COLOURS.length;
