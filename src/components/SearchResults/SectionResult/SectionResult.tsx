@@ -45,7 +45,7 @@ export const SectionResult: React.FC<SectionResultProps> = ({
             className={`transition-all ease-in delay-100 md:text-xs ${
               isOpen ? "opacity-100" : "max-h-0 opacity-0"
             }`}
-            key={`${courseCode}${term}${section.section}${component.subSection}`}
+            key={`${courseCode}${section.section}${component.subSection}`}
           >
             <ComponentResult
               component={component}

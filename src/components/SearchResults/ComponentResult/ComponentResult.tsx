@@ -54,7 +54,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
       >
         {component.sessions.map((session) => (
           <SessionResult
-            key={`${courseCode}${term}${section}${subSection}${session.startDate}${session.dayOfWeek}${session.startTime}`}
+            key={`${courseCode}${section}${subSection}${session.startDate}${session.dayOfWeek}${session.startTime}`}
             session={session}
           />
         ))}
