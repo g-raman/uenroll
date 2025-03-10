@@ -1,27 +1,22 @@
-import { Component } from "@/types/Types";
+import { Component, Course } from "@/types/Types";
 import { useEffect, useState } from "react";
 import { SessionResult } from "../SessionResult/SessionResult";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 
 interface ComponentResultProps {
   component: Component;
-  courseCode: string;
-  courseTitle: string;
-  term: string;
+  course: Course;
   section: string;
   subSection: string;
-  colour: string;
 }
 export const ComponentResult: React.FC<ComponentResultProps> = ({
   component,
-  courseCode,
-  courseTitle,
-  term,
+  course,
   section,
   subSection,
-  colour,
 }) => {
   const { state, dispatch } = useSearchResults();
+  const { courseCode } = course;
   const isSelectedInitially = Boolean(
     state.selected &&
       state.selected[courseCode] &&

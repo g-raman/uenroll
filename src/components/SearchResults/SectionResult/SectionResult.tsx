@@ -1,4 +1,4 @@
-import { Section } from "@/types/Types";
+import { Course, Section } from "@/types/Types";
 import { useState } from "react";
 import { ComponentResult } from "../ComponentResult/ComponentResult";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,19 +6,14 @@ import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 interface SectionResultProps {
   section: Section;
-  courseCode: string;
-  courseTitle: string;
-  term: string;
-  colour: string;
+  course: Course;
 }
 export const SectionResult: React.FC<SectionResultProps> = ({
   section,
-  courseCode,
-  courseTitle,
-  term,
-  colour,
+  course,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { courseCode, courseTitle, colour } = course;
 
   const handleSectionToggle = () => {
     setIsOpen((previous) => !previous);
@@ -49,12 +44,9 @@ export const SectionResult: React.FC<SectionResultProps> = ({
           >
             <ComponentResult
               component={component}
-              courseCode={courseCode}
-              courseTitle={courseTitle}
-              term={term}
+              course={course}
               section={section.section}
               subSection={component.subSection}
-              colour={colour}
             />
           </div>
         );
