@@ -10,6 +10,7 @@ import {
   RemoveSelectedPayload,
   StateType,
 } from "./types";
+import { INITIAL_COLOURS } from "@/utils/constants";
 
 export const handleInitializeData = (
   state: StateType,
@@ -113,6 +114,7 @@ export const handleResetCourses = (state: StateType) => {
     courses: [],
     selected: null,
     selectedSessions: [],
+    colours: INITIAL_COLOURS,
   };
 };
 
