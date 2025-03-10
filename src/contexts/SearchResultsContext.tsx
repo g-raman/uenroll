@@ -39,10 +39,7 @@ const SearchResultsContext = createContext<
 export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [state, dispatch] = useReducer<Reducer<StateType, ActionType>>(
-    searchResultsRedcuer,
-    initialState,
-  );
+  const [state, dispatch] = useReducer(searchResultsRedcuer, initialState);
   const [selected, setSelected] = useQueryState("data", {
     defaultValue: null,
     history: "replace",
