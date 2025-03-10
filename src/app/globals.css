@@ -1,45 +1,69 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 .fc-button-primary {
-  @apply bg-red-700 border-none text-xs rounded-sm md:text-base !important;
+  @apply bg-red-700! border-none! text-xs! rounded-xs! md:text-base!;
 }
 
 .fc-button-active {
-  @apply bg-red-900 !important;
+  @apply bg-red-900!;
 }
 
 .fc-day-today {
-  @apply bg-transparent !important;
+  @apply bg-transparent!;
 }
 
 .fc-button-group {
-  @apply flex gap-1 !important;
+  @apply flex! gap-1!;
 }
 
 .fc-toolbar-title {
-  @apply text-base font-bold md:text-2xl !important;
+  @apply text-base! font-bold! md:text-2xl!;
 }
 
 .fc-col-header-cell-cushion {
-  @apply text-xs !important;
+  @apply text-xs!;
 }
 
 .fc-timegrid-slot-minor {
-  @apply border-none !important;
+  @apply border-none!;
 }
 
 .fc-timegrid-slot-label-cushion {
-  @apply text-xs !important;
+  @apply text-xs!;
 }
 
 .fc-event-main {
-  @apply overflow-hidden !important;
+  @apply overflow-hidden!;
 }
 
 .fc-event {
-  @apply bg-transparent border-0 !important;
+  @apply bg-transparent! border-0!;
 }
 
 :root {

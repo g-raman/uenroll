@@ -9,7 +9,7 @@ export const DeleteSearchResultsButton = (props: {}) => {
   return (
     <button
       onClick={() => dispatch({ type: "reset_courses" })}
-      className="text-sm flex gap-2 justify-center items-center w-full border-slate-400 border p-2 h-full rounded-sm text-black"
+      className="text-sm flex gap-2 justify-center items-center w-full border-slate-400 border p-2 h-full rounded-xs text-black"
     >
       <p>Clear Results</p>
       <FontAwesomeIcon className="size-4" icon={faTrash} />
