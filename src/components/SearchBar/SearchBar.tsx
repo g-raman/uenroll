@@ -76,7 +76,7 @@ export default function SearchBar() {
 
         <button
           onClick={handleSearchClick}
-          className="cursor-pointer w-min h-full px-4 bg-[#8f001b] rounded-xs text-white disabled:bg-opacity-40"
+          className="cursor-pointer w-min h-full px-4 bg-[#8f001b] rounded-xs text-white disabled:bg-[#8f001b]-40"
           disabled={isLoading}
         >
           {isLoading ? (
