@@ -1,7 +1,8 @@
 import supabase from "@/supabase/supabase";
 
-export async function GET(req: Request, context: any) {
-  const { params } = context;
+type Params = Promise<{ term: string; courseCode: string }>;
+export async function GET(req: Request, segmentData: { params: Params }) {
+  const params = await segmentData.params;
 
   if (!params.term) {
     return Response.json({
