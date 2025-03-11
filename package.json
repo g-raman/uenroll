@@ -25,6 +25,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "dayjs": "^1.11.13",
     "lz-string": "^1.5.0",
+    "minisearch": "^7.1.2",
     "moment": "^2.30.1",
     "next": "15.2.1",
     "nuqs": "^2.4.0",
