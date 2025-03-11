@@ -2,10 +2,7 @@
 
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Term } from "@/types/Types";
-import { fetchTerms } from "@/utils/fetchData";
-import { useQuery } from "@tanstack/react-query";
 import React, { ChangeEvent } from "react";
-import toast from "react-hot-toast";
 
 export default function TermSelector() {
   const { state, dispatch } = useSearchResults();
