@@ -1,4 +1,4 @@
-export const Footer = (props: {}) => {
+export const Footer = () => {
   const year = new Date().getFullYear();
   return (
     <div className="hidden md:block mt-auto text-center text-sm">
