@@ -37,3 +37,16 @@ export const fetchTerms = async () => {
   }
   return data.data as Term[];
 };
+
+export const fetchAllCourses = async () => {
+  const res = await fetch("/api/v1/terms/2251/courses");
+
+  if (!res.ok) {
+    throw new Error("Something went wrong. Please report this error.");
+  }
+  const data = await res.json();
+  if (data.error) {
+    throw new Error(data.error);
+  }
+  return data.data;
+};
