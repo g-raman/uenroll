@@ -1,6 +1,4 @@
 import { SelectedSession } from "@/types/Types";
-import { faClock, faClockFour } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import dayjs from "dayjs";
 import React from "react";
 
