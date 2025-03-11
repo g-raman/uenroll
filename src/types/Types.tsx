@@ -67,3 +67,8 @@ export interface SelectedKey {
   courseCode: string;
   subSection: string;
 }
+
+export interface CourseAutocomplete {
+  course_code: string;
+  course_title: string;
+}
