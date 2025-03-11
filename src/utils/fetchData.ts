@@ -1,4 +1,4 @@
-import { Term } from "@/types/Types";
+import { CourseAutocomplete, Term } from "@/types/Types";
 
 export const fetchCourses = async (courseCode: string, term: Term | null) => {
   if (!term) {
@@ -38,7 +38,7 @@ export const fetchTerms = async () => {
   return data.data as Term[];
 };
 
-export const fetchAllCourses = async () => {
+export const fetchAllCourses = async (): Promise<CourseAutocomplete[]> => {
   const res = await fetch("/api/v1/terms/2251/courses");
 
   if (!res.ok) {
