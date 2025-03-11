@@ -1,6 +1,5 @@
-import { Course, Selected, SelectedKey, Term } from "@/types/Types";
+import { Course, Selected, SelectedKey } from "@/types/Types";
 import { createNewSelectedSessions } from "@/utils/helpers";
-import assert from "assert";
 import {
   AddCoursePayload,
   AddSelectedPayload,
