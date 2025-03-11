@@ -93,14 +93,12 @@ function Calendar() {
     eventsService.set(events);
 
     // HACK: This a temporary way to programatically refresh the calendar
-    // @ts-ignore
     const currentView = calendarControls.getView();
 
-    // @ts-ignore
     calendarControls.setView(
       currentView === "month-agenda" ? "week" : "month-agenda",
     );
-    // @ts-ignore
+
     calendarControls.setView(
       currentView === "month-agenda" ? "month-agenda" : "week",
     );
