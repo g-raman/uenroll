@@ -8,8 +8,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SearchResultsProvider } from "@/contexts/SearchResultsContext";
 import SearchResults from "@/components/SearchResults/SearchResults";
 import { Suspense } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { CopyLinkButton } from "@/components/CopyLinkButton/CopyLinkButton";
 import { DeleteSearchResultsButton } from "@/components/DeleteSearchResultsButton/DeleteSearchResultsButton";
 import Calendar from "@/components/Calendar/Calendar";
