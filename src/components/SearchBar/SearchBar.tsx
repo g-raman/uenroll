@@ -1,5 +1,5 @@
 import { useSearchResults } from "@/contexts/SearchResultsContext";
-import { Course, Term } from "@/types/Types";
+import { Course } from "@/types/Types";
 import { useQuery } from "@tanstack/react-query";
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
   faSpinner,
-  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
