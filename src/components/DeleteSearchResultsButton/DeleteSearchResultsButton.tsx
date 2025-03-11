@@ -10,7 +10,7 @@ export const DeleteSearchResultsButton = () => {
     <button
       onClick={() => dispatch({ type: "reset_courses" })}
       className="hover:bg-slate-100 active:bg-slate-200 disabled:hover:bg-transparent disabled:cursor-not-allowed disabled:text-gray-300 cursor-pointer flex gap-1 justify-center items-center w-full border-slate-400 border py-3 px-2 h-full rounded-xs text-black"
-      disabled={state.selectedSessions.length === 0}
+      disabled={state.courses.length === 0}
     >
       <FontAwesomeIcon className="size-4" icon={faTrash} />
       <p className="text-xs ">Delete</p>
