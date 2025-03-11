@@ -2,16 +2,13 @@ import { useQueryState } from "nuqs";
 import React, {
   createContext,
   ReactNode,
-  Reducer,
   useContext,
   useEffect,
   useReducer,
-  useState,
 } from "react";
 import LZString from "lz-string";
 import { INITIAL_COLOURS } from "@/utils/constants";
 import { shuffleArray } from "@/utils/helpers";
-import { useQuery } from "@tanstack/react-query";
 import { fetchCourses, fetchTerms } from "@/utils/fetchData";
 import { ActionType, StateType } from "@/reducers/types";
 import { searchResultsRedcuer } from "@/reducers/searchResultsReducer";
