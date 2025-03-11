@@ -158,8 +158,11 @@ export default function SearchBar() {
               className="px-4 py-2 cursor-pointer hover:bg-gray-200"
             >
               <div className="text-sm font-medium text-gray-800">
-                {dataAllCourses[result.id].course_code}:{" "}
-                {dataAllCourses[result.id].course_title}
+                {dataAllCourses[result.id].course_code}:&nbsp;
+                {dataAllCourses[result.id].course_title.replaceAll(
+                  "(+1 combined)",
+                  "",
+                )}
               </div>
             </li>
           ))}
