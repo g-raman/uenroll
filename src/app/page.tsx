@@ -11,6 +11,7 @@ import { Suspense } from "react";
 import { CopyLinkButton } from "@/components/CopyLinkButton/CopyLinkButton";
 import { DeleteSearchResultsButton } from "@/components/DeleteSearchResultsButton/DeleteSearchResultsButton";
 import Calendar from "@/components/Calendar/Calendar";
+import DownloadCalendarButton from "@/components/DownloadCalendarButton/DownloadCalendarButton";
 
 export default function Page() {
   const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ export default function Page() {
               <div className="mb-4 flex gap-2">
                 <DeleteSearchResultsButton />
                 <CopyLinkButton />
+                <DownloadCalendarButton />
               </div>
               <SearchResults />
             </Sidebar>
