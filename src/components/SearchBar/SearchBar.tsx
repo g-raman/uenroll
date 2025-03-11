@@ -23,6 +23,7 @@ export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [autoComplete, setAutoComplete] = useState<SearchResult[]>([]);
   const [isAutoCompleteLoading, setIsAutoCompleteLoading] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const { state, dispatch } = useSearchResults();
 
   const { data, error, isLoading, isSuccess, refetch } = useQuery<Course>({
@@ -85,6 +86,14 @@ export default function SearchBar() {
     refetch();
   }, [query.length, refetch, state.courses.length]);
 
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
   useEffect(() => {
     if (!query || !search) {
       setAutoComplete([]);
@@ -134,6 +143,8 @@ export default function SearchBar() {
           type="text"
           placeholder="Course Code Eg. CSI 2101"
           disabled={isLoading}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
 
         <button
@@ -149,7 +160,23 @@ export default function SearchBar() {
         </button>
       </div>
 
-      {autoComplete.length > 0 && !isAutoCompleteLoading && dataAllCourses ? (
+      {isFocused && isAutoCompleteLoading && (
+        <div className="text-center">
+          <FontAwesomeIcon
+            size="xl"
+            className="animate-spin"
+            icon={faSpinner}
+          />
+        </div>
+      )}
+
+      {isFocused && autoComplete.length === 0 && (
+        <div className="absolute top-24 w-full text-center text-xs p-4 bg-white border border-gray-300 rounded-sm max-h-70 overflow-y-auto shadow-lg z-10">
+          No Matches.
+        </div>
+      )}
+
+      {dataAllCourses && isFocused && (
         <ul className="absolute top-24 w-full bg-white border border-gray-300 rounded-sm max-h-70 overflow-y-auto shadow-lg z-10">
           {autoComplete.map((result) => (
             <li
@@ -157,7 +184,7 @@ export default function SearchBar() {
               onClick={() => handleSelect(dataAllCourses[result.id])}
               className="px-4 py-2 cursor-pointer hover:bg-gray-200"
             >
-              <div className="text-sm font-medium text-gray-800">
+              <div className="text-sm text-gray-800">
                 {dataAllCourses[result.id].course_code}:&nbsp;
                 {dataAllCourses[result.id].course_title.replaceAll(
                   "(+1 combined)",
@@ -167,14 +194,6 @@ export default function SearchBar() {
             </li>
           ))}
         </ul>
-      ) : (
-        <div className="text-center">
-          <FontAwesomeIcon
-            size="xl"
-            className="animate-spin"
-            icon={faSpinner}
-          />
-        </div>
       )}
     </div>
   );
