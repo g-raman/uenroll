@@ -13,7 +13,7 @@ export const SectionResult: React.FC<SectionResultProps> = ({
   course,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { courseCode, courseTitle, colour } = course;
+  const { courseCode } = course;
 
   const handleSectionToggle = () => {
     setIsOpen((previous) => !previous);
