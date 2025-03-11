@@ -2,7 +2,7 @@ import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 
-export const CopyLinkButton = (props: {}) => {
+export const CopyLinkButton = () => {
   const [isCopied, setIsCopied] = useState(false);
   return (
     <button
