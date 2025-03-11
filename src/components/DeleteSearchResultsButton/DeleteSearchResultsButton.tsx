@@ -9,9 +9,10 @@ export const DeleteSearchResultsButton = () => {
   return (
     <button
       onClick={() => dispatch({ type: "reset_courses" })}
-      className="cursor-pointer text-sm flex gap-2 justify-center items-center w-full border-slate-400 border py-3 px-2 h-full rounded-xs text-black"
+      className="cursor-pointer flex gap-1 justify-center items-center w-full border-slate-400 border py-3 px-2 h-full rounded-xs text-black"
     >
       <FontAwesomeIcon className="size-4" icon={faTrash} />
+      <p className="text-xs ">Delete</p>
     </button>
   );
 };

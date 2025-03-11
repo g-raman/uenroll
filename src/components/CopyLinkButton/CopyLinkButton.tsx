@@ -6,7 +6,7 @@ export const CopyLinkButton = () => {
   const [isCopied, setIsCopied] = useState(false);
   return (
     <button
-      className="text-sm flex gap-2 justify-center items-center py-3 px-2 w-full h-full transition-all cursor-pointer hover:opacity-90 active:opacity-75 bg-[#8f001b] text-white rounded-xs"
+      className="cursor-pointer flex gap-1 justify-center items-center w-full border-slate-400 border py-3 px-2 h-full rounded-xs text-black"
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(window.location.href);
@@ -18,6 +18,7 @@ export const CopyLinkButton = () => {
       }}
     >
       <FontAwesomeIcon className="size-4" icon={isCopied ? faCheck : faLink} />
+      <p>{isCopied ? "Copied" : "Copy Link"}</p>
     </button>
   );
 };
