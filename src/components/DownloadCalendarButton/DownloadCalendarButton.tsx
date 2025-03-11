@@ -26,11 +26,12 @@ export default function DownloadCalendarButton() {
 
   return (
     <button
-      className="text-sm flex gap-2 justify-center items-center py-3 px-2 w-full h-full transition-all cursor-pointer hover:opacity-90 active:opacity-75 bg-[#8f001b] text-white rounded-xs"
+      className="cursor-pointer border-2 border-[#8f001b] text-[#8f001b] hover:bg-[#8f001b] hover:text-white transition-all font-semibold px-4 py-2 active:opacity-75 rounded-sm flex gap-1 items-center"
       onClick={handleDownload}
       disabled={state.selectedSessions.length === 0}
     >
       <FontAwesomeIcon className="size-4" icon={faFileExport} />
+      <p>Export</p>
     </button>
   );
 }
