@@ -60,9 +60,9 @@ export const createNewSelectedSessions = (
     course.sections.flatMap((section) =>
       section.components.flatMap((component) =>
         component.sessions
-          .filter((session) => isSelected(component, course, selected))
-          .map((session) => createSession(session, component, course))
-      )
-    )
+          .filter(() => isSelected(component, course, selected))
+          .map((session) => createSession(session, component, course)),
+      ),
+    ),
   );
 };
