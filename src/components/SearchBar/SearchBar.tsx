@@ -162,7 +162,7 @@ export default function SearchBar() {
         </button>
       </div>
 
-      {isFocused && (
+      {autoCompleteResults.length === 0 && isFocused ? (
         <div className="absolute top-24 w-full text-center text-sm text-gray-500 p-4 bg-white border border-gray-300 rounded-sm max-h-70 overflow-y-auto shadow-lg z-10">
           {query.length === 0 ? (
             "Search for a course..."
@@ -173,31 +173,32 @@ export default function SearchBar() {
               icon={faSpinner}
             />
           ) : (
-            "No results found..."
+            "No Results Found..."
           )}
         </div>
-      )}
-
-      {isFocused && dataAllCourses && (
-        <ul className="absolute top-24 w-full bg-white border border-gray-300 rounded-sm max-h-70 overflow-y-auto shadow-lg z-10">
-          {autoCompleteResults.map((result) => (
-            <li
-              key={result.id}
-              onClick={() =>
-                handleSelectAutoComplete(dataAllCourses[result.id])
-              }
-              className="px-4 py-2 cursor-pointer hover:bg-gray-200"
-            >
-              <div className="text-sm text-gray-800">
-                {dataAllCourses[result.id].course_code}:&nbsp;
-                {dataAllCourses[result.id].course_title.replaceAll(
-                  "(+1 combined)",
-                  "",
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
+      ) : (
+        dataAllCourses &&
+        isFocused && (
+          <ul className="absolute top-24 w-full bg-white border border-gray-300 rounded-sm max-h-70 overflow-y-auto shadow-lg z-10">
+            {autoCompleteResults.map((result) => (
+              <li
+                key={result.id}
+                onClick={() =>
+                  handleSelectAutoComplete(dataAllCourses[result.id])
+                }
+                className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+              >
+                <div className="text-sm text-gray-800">
+                  {dataAllCourses[result.id].course_code}:&nbsp;
+                  {dataAllCourses[result.id].course_title.replaceAll(
+                    "(+1 combined)",
+                    "",
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )
       )}
     </div>
   );
