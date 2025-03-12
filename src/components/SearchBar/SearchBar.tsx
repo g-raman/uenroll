@@ -126,7 +126,7 @@ export default function SearchBar() {
     setQuery(e.target.value.toUpperCase());
   }, []);
 
-  const handleSelect = (selectedCourse: CourseAutocomplete) => {
+  const handleSelectAutoComplete = (selectedCourse: CourseAutocomplete) => {
     setQuery(selectedCourse.course_code);
     setAutoComplete([]);
   };
@@ -160,28 +160,30 @@ export default function SearchBar() {
         </button>
       </div>
 
-      {isFocused && isAutoCompleteLoading && (
-        <div className="text-center">
-          <FontAwesomeIcon
-            size="xl"
-            className="animate-spin"
-            icon={faSpinner}
-          />
+      {isFocused && (
+        <div className="absolute top-24 w-full text-center text-sm text-gray-500 p-4 bg-white border border-gray-300 rounded-sm max-h-70 overflow-y-auto shadow-lg z-10">
+          {query.length === 0 ? (
+            "Search for a course..."
+          ) : isAutoCompleteLoading ? (
+            <FontAwesomeIcon
+              size="xl"
+              className="animate-spin"
+              icon={faSpinner}
+            />
+          ) : (
+            "No results found..."
+          )}
         </div>
       )}
 
-      {isFocused && autoComplete.length === 0 && (
-        <div className="absolute top-24 w-full text-center text-xs p-4 bg-white border border-gray-300 rounded-sm max-h-70 overflow-y-auto shadow-lg z-10">
-          No Matches.
-        </div>
-      )}
-
-      {dataAllCourses && isFocused && (
+      {isFocused && dataAllCourses && (
         <ul className="absolute top-24 w-full bg-white border border-gray-300 rounded-sm max-h-70 overflow-y-auto shadow-lg z-10">
           {autoComplete.map((result) => (
             <li
               key={result.id}
-              onClick={() => handleSelect(dataAllCourses[result.id])}
+              onClick={() =>
+                handleSelectAutoComplete(dataAllCourses[result.id])
+              }
               className="px-4 py-2 cursor-pointer hover:bg-gray-200"
             >
               <div className="text-sm text-gray-800">
