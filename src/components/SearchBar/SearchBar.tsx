@@ -21,7 +21,9 @@ import MiniSearch, { SearchResult } from "minisearch";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
-  const [autoComplete, setAutoComplete] = useState<SearchResult[]>([]);
+  const [autoCompleteResults, setAutoCompleteResults] = useState<
+    SearchResult[]
+  >([]);
   const [isAutoCompleteLoading, setIsAutoCompleteLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const { state, dispatch } = useSearchResults();
@@ -77,7 +79,7 @@ export default function SearchBar() {
 
   useEffect(() => {
     if (!query || !search) {
-      setAutoComplete([]);
+      setAutoCompleteResults([]);
       return;
     }
 
@@ -90,7 +92,7 @@ export default function SearchBar() {
       });
       const topResults = results ? results.slice(0, 5) : [];
 
-      setAutoComplete(topResults);
+      setAutoCompleteResults(topResults);
       setIsAutoCompleteLoading(false);
     }, 300);
 
@@ -128,7 +130,7 @@ export default function SearchBar() {
 
   const handleSelectAutoComplete = (selectedCourse: CourseAutocomplete) => {
     setQuery(selectedCourse.course_code);
-    setAutoComplete([]);
+    setAutoCompleteResults([]);
   };
 
   return (
@@ -178,7 +180,7 @@ export default function SearchBar() {
 
       {isFocused && dataAllCourses && (
         <ul className="absolute top-24 w-full bg-white border border-gray-300 rounded-sm max-h-70 overflow-y-auto shadow-lg z-10">
-          {autoComplete.map((result) => (
+          {autoCompleteResults.map((result) => (
             <li
               key={result.id}
               onClick={() =>
