@@ -75,25 +75,6 @@ export default function SearchBar() {
     } else if (error) toast.error(error.message);
   }, [data, isSuccess, error, dispatch]);
 
-  const handleSearchClick = useCallback(() => {
-    if (query.length === 0) return;
-
-    if (state.courses.length >= MAX_RESULTS_ALLOWED) {
-      toast.error("Max search results reached.");
-      return;
-    }
-
-    refetch();
-  }, [query.length, refetch, state.courses.length]);
-
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
-
-  const handleBlur = () => {
-    setIsFocused(false);
-  };
-
   useEffect(() => {
     if (!query || !search) {
       setAutoComplete([]);
@@ -116,11 +97,30 @@ export default function SearchBar() {
     return () => clearTimeout(timeoutId);
   }, [query, search, dataAllCourses]);
 
-  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+  const handleSearchClick = useCallback(() => {
+    if (query.length === 0) return;
+
+    if (state.courses.length >= MAX_RESULTS_ALLOWED) {
+      toast.error("Max search results reached.");
+      return;
+    }
+
+    refetch();
+  }, [query.length, refetch, state.courses.length]);
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       handleSearchClick();
     }
-  }
+  };
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value.toUpperCase());
