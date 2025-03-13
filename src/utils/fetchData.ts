@@ -38,8 +38,14 @@ export const fetchTerms = async () => {
   return data.data as Term[];
 };
 
-export const fetchAllCourses = async (): Promise<CourseAutocomplete[]> => {
-  const res = await fetch("/api/v1/terms/2251/courses");
+export const fetchAllCourses = async (
+  term: Term | null,
+): Promise<CourseAutocomplete[]> => {
+  if (!term) {
+    throw new Error("No Term Selected");
+  }
+
+  const res = await fetch(`/api/v1/terms/${term.value}/courses`);
 
   if (!res.ok) {
     throw new Error("Something went wrong. Please report this error.");
