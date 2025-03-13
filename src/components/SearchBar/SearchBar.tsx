@@ -47,8 +47,8 @@ export default function SearchBar() {
    */
 
   const { data: dataAllCourses } = useQuery({
-    queryKey: ["courses"],
-    queryFn: fetchAllCourses,
+    queryKey: ["courses", state.term],
+    queryFn: () => fetchAllCourses(state.term),
     staleTime: Infinity,
   });
 
