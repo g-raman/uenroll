@@ -114,8 +114,11 @@ export default function SearchBar() {
     setIsFocused(true);
   };
 
+  /* Add small delay as clicking an autocomplete item
+   * causes this to trigger to fast and completion to not work
+   * */
   const handleBlur = () => {
-    setIsFocused(false);
+    setTimeout(() => setIsFocused(false), 500);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -128,9 +131,12 @@ export default function SearchBar() {
     setQuery(e.target.value.toUpperCase());
   }, []);
 
-  const handleSelectAutoComplete = (selectedCourse: CourseAutocomplete) => {
-    setQuery(selectedCourse.course_code);
+  const handleSelectAutoComplete = async (
+    selectedCourse: CourseAutocomplete,
+  ) => {
+    handleBlur();
     setAutoCompleteResults([]);
+    setQuery(selectedCourse.course_code);
   };
 
   return (
@@ -179,7 +185,7 @@ export default function SearchBar() {
       ) : (
         dataAllCourses &&
         isFocused && (
-          <ul className="absolute top-24 w-full bg-white border border-gray-300 rounded-sm max-h-70 overflow-y-auto shadow-lg z-10">
+          <ul className="absolute top-24 w-full bg-white border border-gray-300 rounded-sm max-h-70 overflow-y-auto shadow-lg z-20">
             {autoCompleteResults.map((result) => (
               <li
                 key={result.id}
