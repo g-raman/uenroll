@@ -47,7 +47,6 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
               </a>
               <FontAwesomeIcon onClick={handleCourseRemoval} icon={faTrash} />
               <FontAwesomeIcon
-                onClick={handleCourseToggle}
                 className={`transition-all ease-in delay-100 ${
                   isOpen ? "rotate-0" : "rotate-180"
                 }`}
