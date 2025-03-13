@@ -28,7 +28,7 @@ export default function SearchBar() {
   const [isFocused, setIsFocused] = useState(false);
   const { state, dispatch } = useSearchResults();
 
-  const { data, error, isLoading, isSuccess, refetch } = useQuery<Course>({
+  const { isLoading, refetch } = useQuery<Course>({
     queryKey: ["courses", query, state.term],
     queryFn: () => fetchCourses(query, state.term),
     enabled: false,
@@ -71,13 +71,6 @@ export default function SearchBar() {
   }, [dataAllCourses]);
 
   useEffect(() => {
-    if (isSuccess) {
-      dispatch({ type: "add_course", payload: data });
-      setQuery("");
-    } else if (error) toast.error(error.message);
-  }, [data, isSuccess, error, dispatch]);
-
-  useEffect(() => {
     if (!query || !search) {
       setAutoCompleteResults([]);
       return;
@@ -99,7 +92,7 @@ export default function SearchBar() {
     return () => clearTimeout(timeoutId);
   }, [query, search, dataAllCourses]);
 
-  const handleSearchClick = useCallback(() => {
+  const handleSearchClick = useCallback(async () => {
     if (query.length === 0) return;
 
     if (state.courses.length >= MAX_RESULTS_ALLOWED) {
@@ -107,8 +100,15 @@ export default function SearchBar() {
       return;
     }
 
-    refetch();
-  }, [query.length, refetch, state.courses.length]);
+    const { data, error, isSuccess } = await refetch();
+    if (isSuccess) {
+      dispatch({ type: "add_course", payload: data });
+      setQuery("");
+      setIsFocused(false);
+    } else if (error) {
+      toast.error(error.message);
+    }
+  }, [dispatch, query.length, refetch, state.courses.length]);
 
   const handleFocus = () => {
     setIsFocused(true);
