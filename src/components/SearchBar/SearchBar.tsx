@@ -118,7 +118,7 @@ export default function SearchBar() {
    * causes this to trigger to fast and completion to not work
    * */
   const handleBlur = () => {
-    setTimeout(() => setIsFocused(false), 500);
+    setTimeout(() => setIsFocused(false), 100);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
