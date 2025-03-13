@@ -80,7 +80,7 @@ export default function SearchBar() {
     const timeoutId = setTimeout(() => {
       const results = search.search(query, {
         boost: { course_code: 2 },
-        fuzzy: 1,
+        fuzzy: 0.3,
         prefix: true,
       });
       const topResults = results ? results.slice(0, 5) : [];
