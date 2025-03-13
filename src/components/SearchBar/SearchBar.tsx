@@ -128,7 +128,7 @@ export default function SearchBar() {
   };
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value.toUpperCase());
+    setQuery(e.target.value);
   }, []);
 
   const handleSelectAutoComplete = async (
@@ -197,7 +197,7 @@ export default function SearchBar() {
                 <div className="text-sm text-gray-800">
                   {dataAllCourses[result.id].course_code}:&nbsp;
                   {dataAllCourses[result.id].course_title.replaceAll(
-                    "(+1 combined)",
+                    /\(\+\d+ combined\)/g,
                     "",
                   )}
                 </div>
