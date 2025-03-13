@@ -9,7 +9,7 @@ import React, {
 import LZString from "lz-string";
 import { INITIAL_COLOURS } from "@/utils/constants";
 import { shuffleArray } from "@/utils/helpers";
-import { fetchCourses, fetchTerms } from "@/utils/fetchData";
+import { fetchCourse, fetchTerms } from "@/utils/fetchData";
 import { ActionType, StateType } from "@/reducers/types";
 import { searchResultsRedcuer } from "@/reducers/searchResultsReducer";
 
@@ -67,7 +67,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
       }
 
       const toFetch = Object.keys(selected).map((courseCode) =>
-        fetchCourses(courseCode, selectedTerm),
+        fetchCourse(courseCode, selectedTerm),
       );
       const results = await Promise.allSettled(toFetch);
 

@@ -16,7 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
-import { fetchAllCourses, fetchCourses } from "@/utils/fetchData";
+import { fetchAllCourses, fetchCourse } from "@/utils/fetchData";
 import MiniSearch, { SearchResult } from "minisearch";
 
 export default function SearchBar() {
@@ -30,7 +30,7 @@ export default function SearchBar() {
 
   const { isLoading, refetch } = useQuery<Course>({
     queryKey: ["courses", query, state.term],
-    queryFn: () => fetchCourses(query, state.term),
+    queryFn: () => fetchCourse(query, state.term),
     enabled: false,
     retry: false,
     gcTime: 0,
