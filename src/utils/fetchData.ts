@@ -1,6 +1,6 @@
 import { CourseAutocomplete, Term } from "@/types/Types";
 
-export const fetchCourses = async (courseCode: string, term: Term | null) => {
+export const fetchCourse = async (courseCode: string, term: Term | null) => {
   if (!term) {
     throw new Error("No Term Selected");
   }
@@ -15,8 +15,11 @@ export const fetchCourses = async (courseCode: string, term: Term | null) => {
   if (!containsNumber(courseCode) || !containsLetters(courseCode)) {
     throw new Error("Not a valid course code");
   }
+  const normalizedCourseCode = courseCode.replaceAll(" ", "").toUpperCase();
 
-  const res = await fetch(`/api/v1/terms/${term.value}/courses/${courseCode}`);
+  const res = await fetch(
+    `/api/v1/terms/${term.value}/courses/${normalizedCourseCode}`,
+  );
 
   const data = await res.json();
   if (data.error) {
