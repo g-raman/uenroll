@@ -189,7 +189,7 @@ export default function SearchBar() {
             {autoCompleteResults.map((result) => (
               <li
                 key={result.id}
-                onClick={() =>
+                onPointerDown={() =>
                   handleSelectAutoComplete(dataAllCourses[result.id])
                 }
                 className="px-4 py-2 cursor-pointer hover:bg-gray-200"
