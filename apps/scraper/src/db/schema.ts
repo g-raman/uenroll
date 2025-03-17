@@ -40,7 +40,7 @@ export const availableSubjectsTable = pgTable(
 export const coursesTable = pgTable(
   "courses",
   {
-    courseCode: text().notNull().unique(),
+    courseCode: text().notNull(),
     term: text()
       .notNull()
       .references(() => availableTermsTable.value, {
