@@ -104,6 +104,15 @@ function Calendar() {
     );
   }, [state.selectedSessions]);
 
+  useEffect(() => {
+    if (!state.term) return;
+    if (state.term.term.includes("Winter")) {
+      calendarControls.setDate("2025-01-06");
+    } else if (state.term.term.includes("Summer")) {
+      calendarControls.setDate("2025-05-05");
+    }
+  }, [calendarControls, state.term]);
+
   return (
     <div className="h-full overflow-scroll">
       <ScheduleXCalendar
