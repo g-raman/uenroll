@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { BASE_URL } from "@/utils/constants";
 
 const font = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -18,8 +19,25 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "uEnroll",
-  description: "A modern course selection tool for uOttawa students",
+  title: {
+    default: "uEnroll",
+    template: "%s | uEnroll",
+  },
+  metadataBase: new URL(BASE_URL),
+  openGraph: {
+    description: "A modern schedule builder for uOttawa students",
+  },
+  keywords: [
+    "uenroll",
+    "uschedule",
+    "uozone",
+    "uottawa",
+    "university of ottawa",
+    "schedule builder",
+    "uottawa schedule builder",
+    "uottawa schedule maker",
+    "uottawa courses",
+  ],
   icons: {
     icon: [
       {
