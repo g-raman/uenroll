@@ -1,19 +1,19 @@
-import { SelectedSession } from '@/types/Types'
-import dayjs from 'dayjs'
-import React from 'react'
+import { SelectedSession } from "@/types/Types"
+import dayjs from "dayjs"
+import React from "react"
 
 type ExtendedCalendarEvent = {
   id: string | number
   title: string
   start: string
   end: string
-} & SelectedSession['courseDetails']
+} & SelectedSession["courseDetails"]
 
 export interface CalendarEventProps {
   calendarEvent: ExtendedCalendarEvent
 }
 
-const TIME_FORMAT = 'hh:mm'
+const TIME_FORMAT = "hh:mm"
 export default function CalendarEvent({ calendarEvent }: CalendarEventProps) {
   const start = dayjs(calendarEvent.start).format(TIME_FORMAT)
   const end = dayjs(calendarEvent.end).format(TIME_FORMAT)

@@ -1,5 +1,5 @@
-import { Component, Course, Selected, SelectedSession, Session } from '@/types/Types'
-import { dayOfWeekToNumberMap } from './constants'
+import { Component, Course, Selected, SelectedSession, Session } from "@/types/Types"
+import { dayOfWeekToNumberMap } from "./constants"
 
 export const shuffleArray = (array: string[]) => {
   for (let i = array.length - 1; i > 0; i--) {

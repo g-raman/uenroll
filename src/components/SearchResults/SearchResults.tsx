@@ -1,5 +1,5 @@
-import { useSearchResults } from '@/contexts/SearchResultsContext'
-import CourseResult from './CourseResult/CourseResult'
+import { useSearchResults } from "@/contexts/SearchResultsContext"
+import CourseResult from "./CourseResult/CourseResult"
 
 export default function SearchResults() {
   const { state } = useSearchResults()

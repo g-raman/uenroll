@@ -1,8 +1,8 @@
-import { Course, Section } from '@/types/Types'
-import { useState } from 'react'
-import { ComponentResult } from '../ComponentResult/ComponentResult'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import { Course, Section } from "@/types/Types"
+import { useState } from "react"
+import { ComponentResult } from "../ComponentResult/ComponentResult"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons"
 
 interface SectionResultProps {
   section: Section
@@ -24,7 +24,7 @@ export const SectionResult: React.FC<SectionResultProps> = ({ section, course })
       >
         <span>Section {section.section}</span>
         <FontAwesomeIcon
-          className={`transition-all delay-100 ease-in ${isOpen ? 'rotate-0' : 'rotate-180'}`}
+          className={`transition-all delay-100 ease-in ${isOpen ? "rotate-0" : "rotate-180"}`}
           icon={faChevronUp}
         />
       </div>
@@ -33,7 +33,7 @@ export const SectionResult: React.FC<SectionResultProps> = ({ section, course })
         return (
           <div
             className={`transition-all delay-100 ease-in md:text-xs ${
-              isOpen ? 'opacity-100' : 'max-h-0 opacity-0'
+              isOpen ? "opacity-100" : "max-h-0 opacity-0"
             }`}
             key={`${courseCode}${section.section}${component.subSection}`}
           >

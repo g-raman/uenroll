@@ -1,21 +1,21 @@
-'use client'
+"use client"
 
-import { ScheduleXCalendar, useNextCalendarApp } from '@schedule-x/react'
-import { createViewMonthAgenda, createViewWeek } from '@schedule-x/calendar'
-import { createEventsServicePlugin } from '@schedule-x/events-service'
+import { ScheduleXCalendar, useNextCalendarApp } from "@schedule-x/react"
+import { createViewMonthAgenda, createViewWeek } from "@schedule-x/calendar"
+import { createEventsServicePlugin } from "@schedule-x/events-service"
 
-import '@schedule-x/theme-shadcn/dist/index.css'
-import { useEffect, useState } from 'react'
-import { useSearchResults } from '@/contexts/SearchResultsContext'
-import dayjs from 'dayjs'
-import { createEventRecurrencePlugin } from '@schedule-x/event-recurrence'
-import { datetime, RRule } from 'rrule'
-import { createCalendarControlsPlugin } from '@schedule-x/calendar-controls'
-import CalendarEvent from './CalendarEvent/CalendarEvent'
-import { createEventModalPlugin } from '@schedule-x/event-modal'
-import CalendarEventModal from './CalendarEventModal/CalendarEventModal'
+import "@schedule-x/theme-shadcn/dist/index.css"
+import { useEffect, useState } from "react"
+import { useSearchResults } from "@/contexts/SearchResultsContext"
+import dayjs from "dayjs"
+import { createEventRecurrencePlugin } from "@schedule-x/event-recurrence"
+import { datetime, RRule } from "rrule"
+import { createCalendarControlsPlugin } from "@schedule-x/calendar-controls"
+import CalendarEvent from "./CalendarEvent/CalendarEvent"
+import { createEventModalPlugin } from "@schedule-x/event-modal"
+import CalendarEventModal from "./CalendarEventModal/CalendarEventModal"
 
-const DATE_FORMAT = 'YYYY-MM-DD'
+const DATE_FORMAT = "YYYY-MM-DD"
 function Calendar() {
   const eventsService = useState(() => createEventsServicePlugin())[0]
   const eventRecurrence = useState(() => createEventRecurrencePlugin())[0]
@@ -27,10 +27,10 @@ function Calendar() {
   const calendar = useNextCalendarApp(
     {
       views: [createViewWeek(), createViewMonthAgenda()],
-      theme: 'shadcn',
+      theme: "shadcn",
       dayBoundaries: {
-        start: '06:00',
-        end: '23:00',
+        start: "06:00",
+        end: "23:00",
       },
       callbacks: {
         beforeRender($app) {
@@ -57,14 +57,14 @@ function Calendar() {
 
     const events = state.selectedSessions.map(session => {
       const baseStartDate = dayjs(session.startRecur)
-      const dayOffset = Math.abs(baseStartDate.get('d') - session.dayOfWeek)
-      const startDate = baseStartDate.add(dayOffset, 'days')
+      const dayOffset = Math.abs(baseStartDate.get("d") - session.dayOfWeek)
+      const startDate = baseStartDate.add(dayOffset, "days")
       const endDate = dayjs(session.endRecur)
 
       const rrule = new RRule({
         freq: RRule.WEEKLY,
-        dtstart: datetime(startDate.get('year'), startDate.get('month') + 1, startDate.get('day')),
-        until: datetime(endDate.get('year'), endDate.get('month') + 1, endDate.get('day')),
+        dtstart: datetime(startDate.get("year"), startDate.get("month") + 1, startDate.get("day")),
+        until: datetime(endDate.get("year"), endDate.get("month") + 1, endDate.get("day")),
       })
 
       return {
@@ -82,17 +82,17 @@ function Calendar() {
     // HACK: This a temporary way to programatically refresh the calendar
     const currentView = calendarControls.getView()
 
-    calendarControls.setView(currentView === 'month-agenda' ? 'week' : 'month-agenda')
+    calendarControls.setView(currentView === "month-agenda" ? "week" : "month-agenda")
 
-    calendarControls.setView(currentView === 'month-agenda' ? 'month-agenda' : 'week')
+    calendarControls.setView(currentView === "month-agenda" ? "month-agenda" : "week")
   }, [state.selectedSessions])
 
   useEffect(() => {
     if (!state.term) return
-    if (state.term.term.includes('Winter')) {
-      calendarControls.setDate('2025-01-06')
-    } else if (state.term.term.includes('Summer')) {
-      calendarControls.setDate('2025-05-05')
+    if (state.term.term.includes("Winter")) {
+      calendarControls.setDate("2025-01-06")
+    } else if (state.term.term.includes("Summer")) {
+      calendarControls.setDate("2025-05-05")
     }
   }, [calendarControls, state.term])
 

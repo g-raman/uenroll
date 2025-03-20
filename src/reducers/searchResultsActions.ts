@@ -1,5 +1,5 @@
-import { Course, Selected, SelectedKey } from '@/types/Types'
-import { createNewSelectedSessions } from '@/utils/helpers'
+import { Course, Selected, SelectedKey } from "@/types/Types"
+import { createNewSelectedSessions } from "@/utils/helpers"
 import {
   AddCoursePayload,
   AddSelectedPayload,
@@ -8,12 +8,12 @@ import {
   RemoveCoursePayload,
   RemoveSelectedPayload,
   StateType,
-} from './types'
-import { INITIAL_COLOURS } from '@/utils/constants'
+} from "./types"
+import { INITIAL_COLOURS } from "@/utils/constants"
 
 export const handleInitializeData = (
   state: StateType,
-  action: { type: 'initialize_data'; payload: InitializeDataPayload },
+  action: { type: "initialize_data"; payload: InitializeDataPayload },
 ) => {
   const { term, availableTerms, courses, selected } = action.payload
   const colours = [...state.colours]
@@ -34,7 +34,7 @@ export const handleInitializeData = (
 
 export const handleChangeTerm = (
   state: StateType,
-  action: { type: 'change_term'; payload: ChangeTermPayload },
+  action: { type: "change_term"; payload: ChangeTermPayload },
 ) => {
   return {
     ...state,
@@ -47,7 +47,7 @@ export const handleChangeTerm = (
 
 export const handleAddCourse = (
   state: StateType,
-  action: { type: 'add_course'; payload: AddCoursePayload },
+  action: { type: "add_course"; payload: AddCoursePayload },
 ) => {
   const courseToAdd = action.payload
   const isAlreadyAdded = state.courses.some(
@@ -66,7 +66,7 @@ export const handleAddCourse = (
 
 export const handleRemoveCourse = (
   state: StateType,
-  action: { type: 'remove_course'; payload: RemoveCoursePayload },
+  action: { type: "remove_course"; payload: RemoveCoursePayload },
 ) => {
   const courseToRemove: Course = action.payload
   const filteredCourses = state.courses.filter(
@@ -116,7 +116,7 @@ export const handleResetCourses = (state: StateType) => {
 
 export const handleAddSelected = (
   state: StateType,
-  action: { type: 'add_selected'; payload: AddSelectedPayload },
+  action: { type: "add_selected"; payload: AddSelectedPayload },
 ) => {
   const { courseCode, subSection }: SelectedKey = action.payload
 
@@ -154,7 +154,7 @@ export const handleAddSelected = (
 
 export const handleRemoveSelected = (
   state: StateType,
-  action: { type: 'remove_selected'; payload: RemoveSelectedPayload },
+  action: { type: "remove_selected"; payload: RemoveSelectedPayload },
 ) => {
   const { courseCode, subSection }: SelectedKey = action.payload
 
