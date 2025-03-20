@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import { useSearchResults } from "@/contexts/SearchResultsContext";
-import { Term } from "@/types/Types";
-import React, { ChangeEvent } from "react";
+import { useSearchResults } from '@/contexts/SearchResultsContext'
+import { Term } from '@/types/Types'
+import React, { ChangeEvent } from 'react'
 
 export default function TermSelector() {
-  const { state, dispatch } = useSearchResults();
+  const { state, dispatch } = useSearchResults()
 
   function handleSelect(event: ChangeEvent<HTMLSelectElement>) {
-    const term = JSON.parse(event.target.value) as Term;
-    dispatch({ type: "change_term", payload: term });
+    const term = JSON.parse(event.target.value) as Term
+    dispatch({ type: 'change_term', payload: term })
   }
 
   return (
     <>
       {state.availableTerms.length === 0 ? (
-        <div className="h-8 animate-pulse p-2 bg-slate-200 border-slate-400 border rounded-xs"></div>
+        <div className="h-8 animate-pulse rounded-xs border border-slate-400 bg-slate-200 p-2"></div>
       ) : (
         <select
-          value={state.term ? JSON.stringify(state.term) : ""}
+          value={state.term ? JSON.stringify(state.term) : ''}
           onChange={handleSelect}
-          className="cursor-pointer w-full bg-slate-100 border-slate-400 border p-2 rounded-xs text-sm"
+          className="w-full cursor-pointer rounded-xs border border-slate-400 bg-slate-100 p-2 text-sm"
         >
-          {state.availableTerms.map((elem) => (
+          {state.availableTerms.map(elem => (
             <option key={elem.value} value={JSON.stringify(elem)}>
               {elem.term}
             </option>
@@ -30,5 +30,5 @@ export default function TermSelector() {
         </select>
       )}
     </>
-  );
+  )
 }
