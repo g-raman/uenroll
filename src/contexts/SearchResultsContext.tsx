@@ -1,11 +1,11 @@
-import { useQueryState } from 'nuqs'
-import React, { createContext, ReactNode, useContext, useEffect, useReducer } from 'react'
-import LZString from 'lz-string'
-import { INITIAL_COLOURS } from '@/utils/constants'
-import { shuffleArray } from '@/utils/helpers'
-import { fetchCourse, fetchTerms } from '@/utils/fetchData'
-import { ActionType, StateType } from '@/reducers/types'
-import { searchResultsRedcuer } from '@/reducers/searchResultsReducer'
+import { useQueryState } from "nuqs"
+import React, { createContext, ReactNode, useContext, useEffect, useReducer } from "react"
+import LZString from "lz-string"
+import { INITIAL_COLOURS } from "@/utils/constants"
+import { shuffleArray } from "@/utils/helpers"
+import { fetchCourse, fetchTerms } from "@/utils/fetchData"
+import { ActionType, StateType } from "@/reducers/types"
+import { searchResultsRedcuer } from "@/reducers/searchResultsReducer"
 
 interface SearchResultsContextType {
   state: StateType
@@ -27,14 +27,14 @@ const SearchResultsContext = createContext<SearchResultsContextType | undefined>
 
 export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(searchResultsRedcuer, initialState)
-  const [selected, setSelected] = useQueryState('data', {
+  const [selected, setSelected] = useQueryState("data", {
     defaultValue: null,
-    history: 'replace',
+    history: "replace",
     parse: value => JSON.parse(LZString.decompressFromBase64(value)),
     serialize: value => LZString.compressToBase64(JSON.stringify(value)),
   })
-  const [term, setTerm] = useQueryState('term', {
-    history: 'replace',
+  const [term, setTerm] = useQueryState("term", {
+    history: "replace",
   })
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({ child
 
       if (!initialTerm || !selected) {
         dispatch({
-          type: 'initialize_data',
+          type: "initialize_data",
           payload: {
             courses: [],
             selected: null,
@@ -59,9 +59,9 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({ child
       const toFetch = Object.keys(selected).map(courseCode => fetchCourse(courseCode, selectedTerm))
       const results = await Promise.allSettled(toFetch)
 
-      if (results.some(result => result.status === 'rejected')) {
+      if (results.some(result => result.status === "rejected")) {
         dispatch({
-          type: 'initialize_data',
+          type: "initialize_data",
           payload: {
             courses: [],
             selected: null,
@@ -73,11 +73,11 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({ child
       }
 
       const courses = results
-        .filter(result => result.status !== 'rejected')
+        .filter(result => result.status !== "rejected")
         .map(result => result.value)
 
       dispatch({
-        type: 'initialize_data',
+        type: "initialize_data",
         payload: {
           courses,
           selected,
@@ -108,7 +108,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({ child
 export const useSearchResults = (): SearchResultsContextType => {
   const context = useContext(SearchResultsContext)
   if (!context) {
-    throw new Error('useCourses must be used within a CoursesProvider')
+    throw new Error("useCourses must be used within a CoursesProvider")
   }
   return context
 }

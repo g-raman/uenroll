@@ -1,29 +1,29 @@
-import { useSearchResults } from '@/contexts/SearchResultsContext'
-import { Course, CourseAutocomplete } from '@/types/Types'
-import { useQuery } from '@tanstack/react-query'
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import TermSelector from '../TermSelector/TermSelector'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons'
-import toast from 'react-hot-toast'
-import { MAX_RESULTS_ALLOWED } from '@/utils/constants'
-import { fetchAllCourses, fetchCourse } from '@/utils/fetchData'
-import MiniSearch, { SearchResult } from 'minisearch'
+import { useSearchResults } from "@/contexts/SearchResultsContext"
+import { Course, CourseAutocomplete } from "@/types/Types"
+import { useQuery } from "@tanstack/react-query"
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react"
+import TermSelector from "../TermSelector/TermSelector"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faMagnifyingGlass, faSpinner } from "@fortawesome/free-solid-svg-icons"
+import toast from "react-hot-toast"
+import { MAX_RESULTS_ALLOWED } from "@/utils/constants"
+import { fetchAllCourses, fetchCourse } from "@/utils/fetchData"
+import MiniSearch, { SearchResult } from "minisearch"
 
 export default function SearchBar() {
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState("")
   const [autoCompleteResults, setAutoCompleteResults] = useState<SearchResult[]>([])
   const [isAutoCompleteLoading, setIsAutoCompleteLoading] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
   const { state, dispatch } = useSearchResults()
 
   const { isLoading, refetch } = useQuery<Course>({
-    queryKey: ['courses', query, state.term],
+    queryKey: ["courses", query, state.term],
     queryFn: () => fetchCourse(query, state.term),
     enabled: false,
     retry: false,
     gcTime: 0,
-    networkMode: 'online',
+    networkMode: "online",
   })
   /*
    * TODO: Fix caching
@@ -36,14 +36,14 @@ export default function SearchBar() {
    */
 
   const { data: dataAllCourses } = useQuery({
-    queryKey: ['courses', state.term],
+    queryKey: ["courses", state.term],
     queryFn: () => fetchAllCourses(state.term),
     staleTime: Infinity,
   })
 
   const search = useMemo(() => {
     const miniSearch = new MiniSearch<CourseAutocomplete>({
-      fields: ['course_code', 'course_title'],
+      fields: ["course_code", "course_title"],
     })
 
     if (!dataAllCourses) return miniSearch
@@ -85,14 +85,14 @@ export default function SearchBar() {
     if (query.length === 0) return
 
     if (state.courses.length >= MAX_RESULTS_ALLOWED) {
-      toast.error('Max search results reached.')
+      toast.error("Max search results reached.")
       return
     }
 
     const { data, error, isSuccess } = await refetch()
     if (isSuccess) {
-      dispatch({ type: 'add_course', payload: data })
-      setQuery('')
+      dispatch({ type: "add_course", payload: data })
+      setQuery("")
       setIsFocused(false)
     } else if (error) {
       toast.error(error.message)
@@ -111,7 +111,7 @@ export default function SearchBar() {
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleSearchClick()
     }
   }
@@ -158,11 +158,11 @@ export default function SearchBar() {
       {autoCompleteResults.length === 0 && isFocused ? (
         <div className="absolute top-24 z-10 max-h-70 w-full overflow-y-auto rounded-sm border border-gray-300 bg-white p-4 text-center text-sm text-gray-500 shadow-lg">
           {query.length === 0 ? (
-            'Search for a course...'
+            "Search for a course..."
           ) : isAutoCompleteLoading ? (
             <FontAwesomeIcon size="xl" className="animate-spin" icon={faSpinner} />
           ) : (
-            'No Results Found...'
+            "No Results Found..."
           )}
         </div>
       ) : (
@@ -177,7 +177,7 @@ export default function SearchBar() {
               >
                 <div className="text-sm text-gray-800">
                   {dataAllCourses[result.id].course_code}:&nbsp;
-                  {dataAllCourses[result.id].course_title.replaceAll(/\(\+\d+ combined\)/g, '')}
+                  {dataAllCourses[result.id].course_title.replaceAll(/\(\+\d+ combined\)/g, "")}
                 </div>
               </li>
             ))}

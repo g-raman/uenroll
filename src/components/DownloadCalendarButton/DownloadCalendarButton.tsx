@@ -1,19 +1,19 @@
-import { useSearchResults } from '@/contexts/SearchResultsContext'
-import { getCalendar } from '@/utils/generateICS'
-import { faFileExport } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import { useSearchResults } from "@/contexts/SearchResultsContext"
+import { getCalendar } from "@/utils/generateICS"
+import { faFileExport } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import React from "react"
 
 export default function DownloadCalendarButton() {
-  const filename = 'schedule.ics'
+  const filename = "schedule.ics"
   const { state } = useSearchResults()
 
   async function handleDownload() {
     const calendar = getCalendar(state.selectedSessions)
-    const blob = new Blob([calendar], { type: 'text/calendar' })
+    const blob = new Blob([calendar], { type: "text/calendar" })
     const url = URL.createObjectURL(blob)
 
-    const anchor = document.createElement('a')
+    const anchor = document.createElement("a")
     anchor.href = url
     anchor.download = filename
 

@@ -1,9 +1,9 @@
-import { Course } from '@/types/Types'
-import { useState } from 'react'
-import { SectionResult } from '../SectionResult/SectionResult'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUpRightFromSquare, faChevronUp, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { useSearchResults } from '@/contexts/SearchResultsContext'
+import { Course } from "@/types/Types"
+import { useState } from "react"
+import { SectionResult } from "../SectionResult/SectionResult"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faArrowUpRightFromSquare, faChevronUp, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { useSearchResults } from "@/contexts/SearchResultsContext"
 
 interface CourseResultProps {
   course: Course
@@ -18,7 +18,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
   }
 
   const handleCourseRemoval = () => {
-    dispatch({ type: 'remove_course', payload: course })
+    dispatch({ type: "remove_course", payload: course })
   }
 
   return (
@@ -38,7 +38,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
               </a>
               <FontAwesomeIcon onClick={handleCourseRemoval} icon={faTrash} />
               <FontAwesomeIcon
-                className={`transition-all delay-100 ease-in ${isOpen ? 'rotate-0' : 'rotate-180'}`}
+                className={`transition-all delay-100 ease-in ${isOpen ? "rotate-0" : "rotate-180"}`}
                 icon={faChevronUp}
               />
             </div>
@@ -49,7 +49,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
           return (
             <div
               className={`overflow-hidden transition-all delay-100 ease-in ${
-                isOpen ? 'opacity-100' : 'max-h-0 opacity-0'
+                isOpen ? "opacity-100" : "max-h-0 opacity-0"
               }`}
               key={`${course.courseCode}${section.section}`}
             >

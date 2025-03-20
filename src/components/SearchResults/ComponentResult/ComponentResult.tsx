@@ -1,7 +1,7 @@
-import { Component, Course } from '@/types/Types'
-import { useEffect, useState } from 'react'
-import { SessionResult } from '../SessionResult/SessionResult'
-import { useSearchResults } from '@/contexts/SearchResultsContext'
+import { Component, Course } from "@/types/Types"
+import { useEffect, useState } from "react"
+import { SessionResult } from "../SessionResult/SessionResult"
+import { useSearchResults } from "@/contexts/SearchResultsContext"
 
 interface ComponentResultProps {
   component: Component
@@ -23,7 +23,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   const [isSelected, setIsSelected] = useState(isSelectedInitially)
 
   useEffect(() => {
-    const actionType = isSelected ? 'add_selected' : 'remove_selected'
+    const actionType = isSelected ? "add_selected" : "remove_selected"
     dispatch({ type: actionType, payload: { courseCode, subSection } })
   }, [isSelected, dispatch, courseCode, subSection])
 
@@ -39,7 +39,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
 
       <div
         className={`ml-4 flex max-h-20 w-full flex-col gap-2 overflow-y-scroll ${
-          component.sessions.length === 1 ? 'no-scrollbar' : ''
+          component.sessions.length === 1 ? "no-scrollbar" : ""
         }`}
       >
         {component.sessions.map(session => (
@@ -52,7 +52,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
 
       <div className="flex h-full w-1/3 flex-col items-center border-l border-l-slate-400 p-6 uppercase">
         <span
-          className={`text-base font-bold ${component.isOpen ? 'text-lime-600' : 'text-red-800'}`}
+          className={`text-base font-bold ${component.isOpen ? "text-lime-600" : "text-red-800"}`}
         >
           {component.subSection}
         </span>

@@ -1,4 +1,4 @@
-import { Course, Selected, SelectedKey, SelectedSession, Term } from '@/types/Types'
+import { Course, Selected, SelectedKey, SelectedSession, Term } from "@/types/Types"
 
 export type InitializeDataPayload = {
   courses: Course[]
@@ -23,11 +23,11 @@ export interface StateType {
 }
 
 export type ActionType =
-  | { type: 'initialize_data'; payload: InitializeDataPayload }
-  | { type: 'change_term'; payload: ChangeTermPayload }
-  | { type: 'add_course'; payload: AddCoursePayload }
-  | { type: 'remove_course'; payload: RemoveCoursePayload }
-  | { type: 'reset_courses' }
-  | { type: 'add_selected'; payload: AddSelectedPayload }
-  | { type: 'remove_selected'; payload: RemoveSelectedPayload }
-  | { type: 'reset_selected' }
+  | { type: "initialize_data"; payload: InitializeDataPayload }
+  | { type: "change_term"; payload: ChangeTermPayload }
+  | { type: "add_course"; payload: AddCoursePayload }
+  | { type: "remove_course"; payload: RemoveCoursePayload }
+  | { type: "reset_courses" }
+  | { type: "add_selected"; payload: AddSelectedPayload }
+  | { type: "remove_selected"; payload: RemoveSelectedPayload }
+  | { type: "reset_selected" }

@@ -1,11 +1,11 @@
-import React from 'react'
-import { CalendarEventProps } from '../CalendarEvent/CalendarEvent'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClock } from '@fortawesome/free-solid-svg-icons/faClock'
-import { faBook, faCheck, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
-import dayjs from 'dayjs'
+import React from "react"
+import { CalendarEventProps } from "../CalendarEvent/CalendarEvent"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faClock } from "@fortawesome/free-solid-svg-icons/faClock"
+import { faBook, faCheck, faUser, faXmark } from "@fortawesome/free-solid-svg-icons"
+import dayjs from "dayjs"
 
-const TIME_FORMAT = 'hh:mm A'
+const TIME_FORMAT = "hh:mm A"
 export default function CalendarEventModal({ calendarEvent }: CalendarEventProps) {
   const start = dayjs(calendarEvent.start).format(TIME_FORMAT)
   const end = dayjs(calendarEvent.end).format(TIME_FORMAT)
@@ -38,10 +38,10 @@ export default function CalendarEventModal({ calendarEvent }: CalendarEventProps
 
       <div className="flex items-center gap-2 text-base font-light">
         <FontAwesomeIcon
-          className={`${calendarEvent.isOpen ? 'text-green-400' : 'text-red-500'}`}
+          className={`${calendarEvent.isOpen ? "text-green-400" : "text-red-500"}`}
           icon={calendarEvent.isOpen ? faCheck : faXmark}
         />
-        <p className="text-nowrap">{calendarEvent.isOpen ? 'Open' : 'Closed'}</p>
+        <p className="text-nowrap">{calendarEvent.isOpen ? "Open" : "Closed"}</p>
       </div>
     </div>
   )
