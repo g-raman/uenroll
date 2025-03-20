@@ -1,22 +1,22 @@
-import type { Metadata, Viewport } from "next"
-import { Poppins } from "next/font/google"
-import "./globals.css"
-import { Toaster } from "react-hot-toast"
-import { NuqsAdapter } from "nuqs/adapters/next"
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { BASE_URL } from "@/utils/constants"
+import type { Metadata, Viewport } from "next";
+import { Poppins } from "next/font/google";
+import "./globals.css";
+import { Toaster } from "react-hot-toast";
+import { NuqsAdapter } from "nuqs/adapters/next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { BASE_URL } from "@/utils/constants";
 
 const font = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
-})
+});
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-}
+};
 
 export const metadata: Metadata = {
   title: {
@@ -52,12 +52,12 @@ export const metadata: Metadata = {
       },
     ],
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -76,5 +76,5 @@ export default function RootLayout({
         <SpeedInsights />
       </body>
     </html>
-  )
+  );
 }

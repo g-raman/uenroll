@@ -7,36 +7,36 @@ import {
   handleRemoveSelected,
   handleResetCourses,
   handleResetSelected,
-} from "./searchResultsActions"
-import { ActionType, StateType } from "./types"
+} from "./searchResultsActions";
+import { ActionType, StateType } from "./types";
 
 export const searchResultsRedcuer = (state: StateType, action: ActionType) => {
   switch (action.type) {
     case "initialize_data":
-      return handleInitializeData(state, action)
+      return handleInitializeData(state, action);
 
     case "change_term":
-      return handleChangeTerm(state, action)
+      return handleChangeTerm(state, action);
 
     case "add_course":
-      return handleAddCourse(state, action)
+      return handleAddCourse(state, action);
 
     case "remove_course":
-      return handleRemoveCourse(state, action)
+      return handleRemoveCourse(state, action);
 
     case "reset_courses":
-      return handleResetCourses(state)
+      return handleResetCourses(state);
 
     case "add_selected":
-      return handleAddSelected(state, action)
+      return handleAddSelected(state, action);
 
     case "remove_selected":
-      return handleRemoveSelected(state, action)
+      return handleRemoveSelected(state, action);
 
     case "reset_selected":
-      return handleResetSelected(state)
+      return handleResetSelected(state);
 
     default:
-      return state
+      return state;
   }
-}
+};

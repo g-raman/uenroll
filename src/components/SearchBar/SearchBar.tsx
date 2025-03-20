@@ -1,21 +1,21 @@
-import { useSearchResults } from "@/contexts/SearchResultsContext"
-import { Course, CourseAutocomplete } from "@/types/Types"
-import { useQuery } from "@tanstack/react-query"
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react"
-import TermSelector from "../TermSelector/TermSelector"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faMagnifyingGlass, faSpinner } from "@fortawesome/free-solid-svg-icons"
-import toast from "react-hot-toast"
-import { MAX_RESULTS_ALLOWED } from "@/utils/constants"
-import { fetchAllCourses, fetchCourse } from "@/utils/fetchData"
-import MiniSearch, { SearchResult } from "minisearch"
+import { useSearchResults } from "@/contexts/SearchResultsContext";
+import { Course, CourseAutocomplete } from "@/types/Types";
+import { useQuery } from "@tanstack/react-query";
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import TermSelector from "../TermSelector/TermSelector";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import toast from "react-hot-toast";
+import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
+import { fetchAllCourses, fetchCourse } from "@/utils/fetchData";
+import MiniSearch, { SearchResult } from "minisearch";
 
 export default function SearchBar() {
-  const [query, setQuery] = useState("")
-  const [autoCompleteResults, setAutoCompleteResults] = useState<SearchResult[]>([])
-  const [isAutoCompleteLoading, setIsAutoCompleteLoading] = useState(false)
-  const [isFocused, setIsFocused] = useState(false)
-  const { state, dispatch } = useSearchResults()
+  const [query, setQuery] = useState("");
+  const [autoCompleteResults, setAutoCompleteResults] = useState<SearchResult[]>([]);
+  const [isAutoCompleteLoading, setIsAutoCompleteLoading] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const { state, dispatch } = useSearchResults();
 
   const { isLoading, refetch } = useQuery<Course>({
     queryKey: ["courses", query, state.term],
@@ -24,7 +24,7 @@ export default function SearchBar() {
     retry: false,
     gcTime: 0,
     networkMode: "online",
-  })
+  });
   /*
    * TODO: Fix caching
    * If caching is enabled. A course is automatically added
@@ -39,92 +39,92 @@ export default function SearchBar() {
     queryKey: ["courses", state.term],
     queryFn: () => fetchAllCourses(state.term),
     staleTime: Infinity,
-  })
+  });
 
   const search = useMemo(() => {
     const miniSearch = new MiniSearch<CourseAutocomplete>({
       fields: ["course_code", "course_title"],
-    })
+    });
 
-    if (!dataAllCourses) return miniSearch
+    if (!dataAllCourses) return miniSearch;
 
     const parsedCourses = dataAllCourses.map((course, i: number) => {
       return {
         ...course,
         id: i,
-      }
-    })
+      };
+    });
 
-    miniSearch.addAll(parsedCourses)
-    return miniSearch
-  }, [dataAllCourses])
+    miniSearch.addAll(parsedCourses);
+    return miniSearch;
+  }, [dataAllCourses]);
 
   useEffect(() => {
     if (!query || !search) {
-      setAutoCompleteResults([])
-      return
+      setAutoCompleteResults([]);
+      return;
     }
 
-    setIsAutoCompleteLoading(true)
+    setIsAutoCompleteLoading(true);
     const timeoutId = setTimeout(() => {
       const results = search.search(query, {
         boost: { course_code: 2 },
         fuzzy: 0.3,
         prefix: true,
-      })
-      const topResults = results ? results.slice(0, 5) : []
+      });
+      const topResults = results ? results.slice(0, 5) : [];
 
-      setAutoCompleteResults(topResults)
-      setIsAutoCompleteLoading(false)
-    }, 300)
+      setAutoCompleteResults(topResults);
+      setIsAutoCompleteLoading(false);
+    }, 300);
 
-    return () => clearTimeout(timeoutId)
-  }, [query, search, dataAllCourses])
+    return () => clearTimeout(timeoutId);
+  }, [query, search, dataAllCourses]);
 
   const handleSearchClick = useCallback(async () => {
-    if (query.length === 0) return
+    if (query.length === 0) return;
 
     if (state.courses.length >= MAX_RESULTS_ALLOWED) {
-      toast.error("Max search results reached.")
-      return
+      toast.error("Max search results reached.");
+      return;
     }
 
-    const { data, error, isSuccess } = await refetch()
+    const { data, error, isSuccess } = await refetch();
     if (isSuccess) {
-      dispatch({ type: "add_course", payload: data })
-      setQuery("")
-      setIsFocused(false)
+      dispatch({ type: "add_course", payload: data });
+      setQuery("");
+      setIsFocused(false);
     } else if (error) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
-  }, [dispatch, query.length, refetch, state.courses.length])
+  }, [dispatch, query.length, refetch, state.courses.length]);
 
   const handleFocus = () => {
-    setIsFocused(true)
-  }
+    setIsFocused(true);
+  };
 
   /* Add small delay as clicking an autocomplete item
    * causes this to trigger to fast and completion to not work
    * */
   const handleBlur = () => {
-    setTimeout(() => setIsFocused(false), 100)
-  }
+    setTimeout(() => setIsFocused(false), 100);
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      handleSearchClick()
+      handleSearchClick();
     }
-  }
+  };
 
   const handleInputChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value)
-  }, [])
+    setQuery(e.target.value);
+  }, []);
 
   const handleSelectAutoComplete = async (selectedCourse: CourseAutocomplete) => {
-    handleBlur()
-    setAutoCompleteResults([])
-    setQuery(selectedCourse.course_code)
-  }
+    handleBlur();
+    setAutoCompleteResults([]);
+    setQuery(selectedCourse.course_code);
+  };
 
   return (
     <div className="sticky top-0 z-10 mt-4 mb-2 flex flex-col gap-2 bg-white">
@@ -185,5 +185,5 @@ export default function SearchBar() {
         )
       )}
     </div>
-  )
+  );
 }

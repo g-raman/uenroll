@@ -1,20 +1,20 @@
-import { Course, Section } from "@/types/Types"
-import { useState } from "react"
-import { ComponentResult } from "../ComponentResult/ComponentResult"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faChevronUp } from "@fortawesome/free-solid-svg-icons"
+import { Course, Section } from "@/types/Types";
+import { useState } from "react";
+import { ComponentResult } from "../ComponentResult/ComponentResult";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 interface SectionResultProps {
-  section: Section
-  course: Course
+  section: Section;
+  course: Course;
 }
 export const SectionResult: React.FC<SectionResultProps> = ({ section, course }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const { courseCode } = course
+  const [isOpen, setIsOpen] = useState(false);
+  const { courseCode } = course;
 
   const handleSectionToggle = () => {
-    setIsOpen(previous => !previous)
-  }
+    setIsOpen(previous => !previous);
+  };
 
   return (
     <div className="md:text-sm">
@@ -44,8 +44,8 @@ export const SectionResult: React.FC<SectionResultProps> = ({ section, course })
               subSection={component.subSection}
             />
           </div>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};

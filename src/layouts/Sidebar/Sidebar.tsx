@@ -1,5 +1,5 @@
-import { Footer } from "../Footer/Footer"
-import Header from "../Header/Header"
+import { Footer } from "../Footer/Footer";
+import Header from "../Header/Header";
 
 export default function Sidebar({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -8,5 +8,5 @@ export default function Sidebar({ children }: Readonly<{ children: React.ReactNo
       {children}
       <Footer />
     </div>
-  )
+  );
 }

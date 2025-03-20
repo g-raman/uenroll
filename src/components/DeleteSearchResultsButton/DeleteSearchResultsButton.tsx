@@ -1,10 +1,10 @@
-import { useSearchResults } from "@/contexts/SearchResultsContext"
-import { faTrash } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React from "react"
+import { useSearchResults } from "@/contexts/SearchResultsContext";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 
 export const DeleteSearchResultsButton = () => {
-  const { state, dispatch } = useSearchResults()
+  const { state, dispatch } = useSearchResults();
 
   return (
     <button
@@ -15,5 +15,5 @@ export const DeleteSearchResultsButton = () => {
       <FontAwesomeIcon className="size-4" icon={faTrash} />
       <p className="text-xs">Delete</p>
     </button>
-  )
-}
+  );
+};
