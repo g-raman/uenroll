@@ -17,7 +17,9 @@ export const fetchCourse = async (courseCode: string, term: Term | null) => {
   }
   const normalizedCourseCode = courseCode.replaceAll(" ", "").toUpperCase();
 
-  const res = await fetch(`/api/v1/terms/${term.value}/courses/${normalizedCourseCode}`);
+  const res = await fetch(
+    `/api/v1/terms/${term.value}/courses/${normalizedCourseCode}`,
+  );
 
   const data = await res.json();
   if (data.error) {
@@ -39,7 +41,9 @@ export const fetchTerms = async () => {
   return data.data as Term[];
 };
 
-export const fetchAllCourses = async (term: Term | null): Promise<CourseAutocomplete[]> => {
+export const fetchAllCourses = async (
+  term: Term | null,
+): Promise<CourseAutocomplete[]> => {
   if (!term) {
     throw new Error("No Term Selected");
   }

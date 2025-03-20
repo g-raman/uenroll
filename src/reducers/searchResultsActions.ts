@@ -19,7 +19,10 @@ export const handleInitializeData = (
   const colours = [...state.colours];
   courses.forEach(course => (course.colour = colours.pop()));
 
-  const selectedSessions = createNewSelectedSessions(courses, action.payload.selected);
+  const selectedSessions = createNewSelectedSessions(
+    courses,
+    action.payload.selected,
+  );
 
   return {
     ...state,
@@ -136,10 +139,15 @@ export const handleAddSelected = (
       selected,
       selectedSessions: createNewSelectedSessions(state.courses, selected),
     };
-  } else if (state.selected[courseCode].some(section => section === subSection)) {
+  } else if (
+    state.selected[courseCode].some(section => section === subSection)
+  ) {
     return {
       ...state,
-      selectedSessions: createNewSelectedSessions(state.courses, state.selected),
+      selectedSessions: createNewSelectedSessions(
+        state.courses,
+        state.selected,
+      ),
     };
   }
 
@@ -162,14 +170,17 @@ export const handleRemoveSelected = (
 
   if (!state.selected[courseCode]) return state;
 
-  const filteredSubsections = state.selected[courseCode].filter(section => section !== subSection);
+  const filteredSubsections = state.selected[courseCode].filter(
+    section => section !== subSection,
+  );
 
   const selected = { ...state.selected };
   selected[courseCode] = filteredSubsections;
 
   if (filteredSubsections.length === 0) delete selected[courseCode];
 
-  if (Object.keys(selected).length === 0) return { ...state, selected: null, selectedSessions: [] };
+  if (Object.keys(selected).length === 0)
+    return { ...state, selected: null, selectedSessions: [] };
 
   const selectedSessions = createNewSelectedSessions(state.courses, selected);
 

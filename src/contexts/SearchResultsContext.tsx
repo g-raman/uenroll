@@ -1,5 +1,11 @@
 import { useQueryState } from "nuqs";
-import React, { createContext, ReactNode, useContext, useEffect, useReducer } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 import LZString from "lz-string";
 import { INITIAL_COLOURS } from "@/utils/constants";
 import { shuffleArray } from "@/utils/helpers";
@@ -23,9 +29,13 @@ const initialState: StateType = {
   availableTerms: [],
 };
 
-const SearchResultsContext = createContext<SearchResultsContextType | undefined>(undefined);
+const SearchResultsContext = createContext<
+  SearchResultsContextType | undefined
+>(undefined);
 
-export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(searchResultsRedcuer, initialState);
   const [selected, setSelected] = useQueryState("data", {
     defaultValue: null,

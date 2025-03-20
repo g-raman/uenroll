@@ -18,7 +18,9 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   const { state, dispatch } = useSearchResults();
   const { courseCode } = course;
   const isSelectedInitially = Boolean(
-    state.selected && state.selected[courseCode] && state.selected[courseCode].includes(subSection),
+    state.selected &&
+      state.selected[courseCode] &&
+      state.selected[courseCode].includes(subSection),
   );
   const [isSelected, setIsSelected] = useState(isSelectedInitially);
 

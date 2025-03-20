@@ -1,4 +1,10 @@
-import { Course, Selected, SelectedKey, SelectedSession, Term } from "@/types/Types";
+import {
+  Course,
+  Selected,
+  SelectedKey,
+  SelectedSession,
+  Term,
+} from "@/types/Types";
 
 export type InitializeDataPayload = {
   courses: Course[];

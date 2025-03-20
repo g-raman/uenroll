@@ -1,10 +1,19 @@
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Course, CourseAutocomplete } from "@/types/Types";
 import { useQuery } from "@tanstack/react-query";
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import TermSelector from "../TermSelector/TermSelector";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 import { fetchAllCourses, fetchCourse } from "@/utils/fetchData";
@@ -12,7 +21,9 @@ import MiniSearch, { SearchResult } from "minisearch";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
-  const [autoCompleteResults, setAutoCompleteResults] = useState<SearchResult[]>([]);
+  const [autoCompleteResults, setAutoCompleteResults] = useState<
+    SearchResult[]
+  >([]);
   const [isAutoCompleteLoading, setIsAutoCompleteLoading] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const { state, dispatch } = useSearchResults();
@@ -120,7 +131,9 @@ export default function SearchBar() {
     setQuery(e.target.value);
   }, []);
 
-  const handleSelectAutoComplete = async (selectedCourse: CourseAutocomplete) => {
+  const handleSelectAutoComplete = async (
+    selectedCourse: CourseAutocomplete,
+  ) => {
     handleBlur();
     setAutoCompleteResults([]);
     setQuery(selectedCourse.course_code);
@@ -160,7 +173,11 @@ export default function SearchBar() {
           {query.length === 0 ? (
             "Search for a course..."
           ) : isAutoCompleteLoading ? (
-            <FontAwesomeIcon size="xl" className="animate-spin" icon={faSpinner} />
+            <FontAwesomeIcon
+              size="xl"
+              className="animate-spin"
+              icon={faSpinner}
+            />
           ) : (
             "No Results Found..."
           )}
@@ -172,12 +189,17 @@ export default function SearchBar() {
             {autoCompleteResults.map(result => (
               <li
                 key={result.id}
-                onPointerDown={() => handleSelectAutoComplete(dataAllCourses[result.id])}
+                onPointerDown={() =>
+                  handleSelectAutoComplete(dataAllCourses[result.id])
+                }
                 className="cursor-pointer px-4 py-2 hover:bg-gray-200"
               >
                 <div className="text-sm text-gray-800">
                   {dataAllCourses[result.id].course_code}:&nbsp;
-                  {dataAllCourses[result.id].course_title.replaceAll(/\(\+\d+ combined\)/g, "")}
+                  {dataAllCourses[result.id].course_title.replaceAll(
+                    /\(\+\d+ combined\)/g,
+                    "",
+                  )}
                 </div>
               </li>
             ))}

@@ -21,7 +21,12 @@ function Calendar() {
   const eventRecurrence = useState(() => createEventRecurrencePlugin())[0];
   const eventModal = useState(() => createEventModalPlugin())[0];
   const calendarControls = useState(() => createCalendarControlsPlugin())[0];
-  const plugins = [eventsService, eventRecurrence, calendarControls, eventModal];
+  const plugins = [
+    eventsService,
+    eventRecurrence,
+    calendarControls,
+    eventModal,
+  ];
   const { state } = useSearchResults();
 
   const calendar = useNextCalendarApp(
@@ -63,8 +68,16 @@ function Calendar() {
 
       const rrule = new RRule({
         freq: RRule.WEEKLY,
-        dtstart: datetime(startDate.get("year"), startDate.get("month") + 1, startDate.get("day")),
-        until: datetime(endDate.get("year"), endDate.get("month") + 1, endDate.get("day")),
+        dtstart: datetime(
+          startDate.get("year"),
+          startDate.get("month") + 1,
+          startDate.get("day"),
+        ),
+        until: datetime(
+          endDate.get("year"),
+          endDate.get("month") + 1,
+          endDate.get("day"),
+        ),
       });
 
       return {
@@ -82,9 +95,13 @@ function Calendar() {
     // HACK: This a temporary way to programatically refresh the calendar
     const currentView = calendarControls.getView();
 
-    calendarControls.setView(currentView === "month-agenda" ? "week" : "month-agenda");
+    calendarControls.setView(
+      currentView === "month-agenda" ? "week" : "month-agenda",
+    );
 
-    calendarControls.setView(currentView === "month-agenda" ? "month-agenda" : "week");
+    calendarControls.setView(
+      currentView === "month-agenda" ? "month-agenda" : "week",
+    );
   }, [state.selectedSessions]);
 
   useEffect(() => {
