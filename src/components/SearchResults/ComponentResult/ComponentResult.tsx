@@ -1,13 +1,13 @@
-import { Component, Course } from "@/types/Types"
-import { useEffect, useState } from "react"
-import { SessionResult } from "../SessionResult/SessionResult"
-import { useSearchResults } from "@/contexts/SearchResultsContext"
+import { Component, Course } from "@/types/Types";
+import { useEffect, useState } from "react";
+import { SessionResult } from "../SessionResult/SessionResult";
+import { useSearchResults } from "@/contexts/SearchResultsContext";
 
 interface ComponentResultProps {
-  component: Component
-  course: Course
-  section: string
-  subSection: string
+  component: Component;
+  course: Course;
+  section: string;
+  subSection: string;
 }
 export const ComponentResult: React.FC<ComponentResultProps> = ({
   component,
@@ -15,20 +15,20 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   section,
   subSection,
 }) => {
-  const { state, dispatch } = useSearchResults()
-  const { courseCode } = course
+  const { state, dispatch } = useSearchResults();
+  const { courseCode } = course;
   const isSelectedInitially = Boolean(
     state.selected && state.selected[courseCode] && state.selected[courseCode].includes(subSection),
-  )
-  const [isSelected, setIsSelected] = useState(isSelectedInitially)
+  );
+  const [isSelected, setIsSelected] = useState(isSelectedInitially);
 
   useEffect(() => {
-    const actionType = isSelected ? "add_selected" : "remove_selected"
-    dispatch({ type: actionType, payload: { courseCode, subSection } })
-  }, [isSelected, dispatch, courseCode, subSection])
+    const actionType = isSelected ? "add_selected" : "remove_selected";
+    dispatch({ type: actionType, payload: { courseCode, subSection } });
+  }, [isSelected, dispatch, courseCode, subSection]);
 
   function handleToggle() {
-    setIsSelected(previous => !previous)
+    setIsSelected(previous => !previous);
   }
 
   return (
@@ -59,5 +59,5 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
         <span>{component.type}</span>
       </div>
     </div>
-  )
-}
+  );
+};

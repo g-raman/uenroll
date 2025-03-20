@@ -1,5 +1,5 @@
 export const Footer = () => {
-  const year = new Date().getFullYear()
+  const year = new Date().getFullYear();
   return (
     <div className="mt-auto hidden text-center text-sm md:block">
       <p className="inline-block">Mantained by</p>
@@ -21,5 +21,5 @@ export const Footer = () => {
       </a>
       &nbsp;&copy;{year}.
     </div>
-  )
-}
+  );
+};

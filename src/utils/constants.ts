@@ -10,9 +10,9 @@ export const INITIAL_COLOURS = [
   "bg-violet-300 text-black border-l-violet-600",
   "bg-orange-300 text-black border-l-orange-500",
   "bg-blue-300 text-black border-l-blue-500",
-]
+];
 
-export const MAX_RESULTS_ALLOWED = INITIAL_COLOURS.length
+export const MAX_RESULTS_ALLOWED = INITIAL_COLOURS.length;
 
 export const dayOfWeekToNumberMap: { [key: string]: number } = {
   Mo: 1,
@@ -22,6 +22,6 @@ export const dayOfWeekToNumberMap: { [key: string]: number } = {
   Fr: 5,
   Sa: 6,
   Su: 7,
-}
+};
 
-export const BASE_URL = "https://uenroll.ca"
+export const BASE_URL = "https://uenroll.ca";

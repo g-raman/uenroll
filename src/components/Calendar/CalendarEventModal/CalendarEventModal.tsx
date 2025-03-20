@@ -1,14 +1,14 @@
-import React from "react"
-import { CalendarEventProps } from "../CalendarEvent/CalendarEvent"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faClock } from "@fortawesome/free-solid-svg-icons/faClock"
-import { faBook, faCheck, faUser, faXmark } from "@fortawesome/free-solid-svg-icons"
-import dayjs from "dayjs"
+import React from "react";
+import { CalendarEventProps } from "../CalendarEvent/CalendarEvent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
+import { faBook, faCheck, faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
+import dayjs from "dayjs";
 
-const TIME_FORMAT = "hh:mm A"
+const TIME_FORMAT = "hh:mm A";
 export default function CalendarEventModal({ calendarEvent }: CalendarEventProps) {
-  const start = dayjs(calendarEvent.start).format(TIME_FORMAT)
-  const end = dayjs(calendarEvent.end).format(TIME_FORMAT)
+  const start = dayjs(calendarEvent.start).format(TIME_FORMAT);
+  const end = dayjs(calendarEvent.end).format(TIME_FORMAT);
 
   return (
     <div className="shadow-sx h-min w-full space-y-2 rounded-md bg-slate-50 p-6">
@@ -44,5 +44,5 @@ export default function CalendarEventModal({ calendarEvent }: CalendarEventProps
         <p className="text-nowrap">{calendarEvent.isOpen ? "Open" : "Closed"}</p>
       </div>
     </div>
-  )
+  );
 }

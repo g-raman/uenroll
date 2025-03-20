@@ -1,5 +1,5 @@
-import { faBuildingColumns } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faBuildingColumns } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Header() {
   return (
@@ -7,5 +7,5 @@ export default function Header() {
       <FontAwesomeIcon className="size-12" color="#8f001b" icon={faBuildingColumns} />
       <p>uEnroll</p>
     </div>
-  )
+  );
 }

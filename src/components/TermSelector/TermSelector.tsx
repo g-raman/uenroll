@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { useSearchResults } from "@/contexts/SearchResultsContext"
-import { Term } from "@/types/Types"
-import React, { ChangeEvent } from "react"
+import { useSearchResults } from "@/contexts/SearchResultsContext";
+import { Term } from "@/types/Types";
+import React, { ChangeEvent } from "react";
 
 export default function TermSelector() {
-  const { state, dispatch } = useSearchResults()
+  const { state, dispatch } = useSearchResults();
 
   function handleSelect(event: ChangeEvent<HTMLSelectElement>) {
-    const term = JSON.parse(event.target.value) as Term
-    dispatch({ type: "change_term", payload: term })
+    const term = JSON.parse(event.target.value) as Term;
+    dispatch({ type: "change_term", payload: term });
   }
 
   return (
@@ -30,5 +30,5 @@ export default function TermSelector() {
         </select>
       )}
     </>
-  )
+  );
 }

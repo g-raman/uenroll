@@ -1,25 +1,25 @@
-import { Course } from "@/types/Types"
-import { useState } from "react"
-import { SectionResult } from "../SectionResult/SectionResult"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowUpRightFromSquare, faChevronUp, faTrash } from "@fortawesome/free-solid-svg-icons"
-import { useSearchResults } from "@/contexts/SearchResultsContext"
+import { Course } from "@/types/Types";
+import { useState } from "react";
+import { SectionResult } from "../SectionResult/SectionResult";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare, faChevronUp, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useSearchResults } from "@/contexts/SearchResultsContext";
 
 interface CourseResultProps {
-  course: Course
+  course: Course;
 }
 
 const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const { dispatch } = useSearchResults()
+  const [isOpen, setIsOpen] = useState(false);
+  const { dispatch } = useSearchResults();
 
   const handleCourseToggle = () => {
-    setIsOpen(previous => !previous)
-  }
+    setIsOpen(previous => !previous);
+  };
 
   const handleCourseRemoval = () => {
-    dispatch({ type: "remove_course", payload: course })
-  }
+    dispatch({ type: "remove_course", payload: course });
+  };
 
   return (
     <div className="pb-4 text-sm">
@@ -55,11 +55,11 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
             >
               <SectionResult section={section} course={course} />
             </div>
-          )
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CourseResult
+export default CourseResult;
