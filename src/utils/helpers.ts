@@ -1,4 +1,10 @@
-import { Component, Course, Selected, SelectedSession, Session } from "@/types/Types";
+import {
+  Component,
+  Course,
+  Selected,
+  SelectedSession,
+  Session,
+} from "@/types/Types";
 import { dayOfWeekToNumberMap } from "./constants";
 
 export const shuffleArray = (array: string[]) => {
@@ -9,7 +15,11 @@ export const shuffleArray = (array: string[]) => {
   return array;
 };
 
-export const createSession = (session: Session, component: Component, course: Course) => ({
+export const createSession = (
+  session: Session,
+  component: Component,
+  course: Course,
+) => ({
   startTime: session.startTime.slice(0, -3),
   endTime: session.endTime.slice(0, -3),
   startRecur: session.startDate,
@@ -27,11 +37,17 @@ export const createSession = (session: Session, component: Component, course: Co
   },
 });
 
-const isSelected = (component: Component, course: Course, selected: Selected) => {
+const isSelected = (
+  component: Component,
+  course: Course,
+  selected: Selected,
+) => {
   if (!selected) return false;
   if (!selected[course.courseCode]) return false;
 
-  return selected[course.courseCode].some((section: string) => component.subSection === section);
+  return selected[course.courseCode].some(
+    (section: string) => component.subSection === section,
+  );
 };
 
 export const createNewSelectedSessions = (

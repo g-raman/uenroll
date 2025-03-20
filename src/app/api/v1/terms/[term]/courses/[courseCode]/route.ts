@@ -16,7 +16,10 @@ export async function GET(req: Request, segmentData: { params: Params }) {
   }
 
   const termParam = params.term.trim() as string;
-  const courseCodeParam = params.courseCode.trim().replaceAll(/ /g, "").toUpperCase() as string;
+  const courseCodeParam = params.courseCode
+    .trim()
+    .replaceAll(/ /g, "")
+    .toUpperCase() as string;
 
   const containsNumber = (str: string): boolean => /\d/.test(str);
   const containsLetters = (str: string): boolean => /[a-zA-Z]/.test(str);

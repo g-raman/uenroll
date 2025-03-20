@@ -2,7 +2,11 @@ import { Course } from "@/types/Types";
 import { useState } from "react";
 import { SectionResult } from "../SectionResult/SectionResult";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpRightFromSquare, faChevronUp, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowUpRightFromSquare,
+  faChevronUp,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 
 interface CourseResultProps {
@@ -25,7 +29,10 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
     <div className="pb-4 text-sm">
       <div className="overflow-hidden rounded-md border">
         <div className={`cursor-pointer p-2 ${course.colour}`}>
-          <div onClick={handleCourseToggle} className="flex items-center justify-between">
+          <div
+            onClick={handleCourseToggle}
+            className="flex items-center justify-between"
+          >
             <div className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</div>
 
             <div className="ml-4 flex items-center gap-6 md:gap-5">

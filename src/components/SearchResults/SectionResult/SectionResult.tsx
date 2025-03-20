@@ -8,7 +8,10 @@ interface SectionResultProps {
   section: Section;
   course: Course;
 }
-export const SectionResult: React.FC<SectionResultProps> = ({ section, course }) => {
+export const SectionResult: React.FC<SectionResultProps> = ({
+  section,
+  course,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const { courseCode } = course;
 
