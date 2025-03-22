@@ -41,7 +41,15 @@ for (const course of courses) {
 
     const results = scrapeSearchResults(parser, term);
     console.log("Results scraped.");
-    await upsertCourseDetails(results);
+    if (
+      results.courses.length === 0 ||
+      results.courseComponents.length === 0 ||
+      results.sessions.length === 0
+    ) {
+      console.log("No results found.");
+    } else {
+      await upsertCourseDetails(results);
+    }
 
     console.log(`Year ${year} processing complete.\n`);
   }
