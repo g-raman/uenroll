@@ -5,7 +5,7 @@ import {
 import { Term } from "../utils/types.ts";
 import { fetchCookie, getICSID } from "../utils/cookies.ts";
 
-export default async function getCourseHTML(
+export default async function getSubjectByYear(
   term: Term,
   year: number,
   subject: string,

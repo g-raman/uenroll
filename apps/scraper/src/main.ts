@@ -7,7 +7,7 @@ import { FIRST_YEAR, LAST_YEAR } from "./utils/constants.ts";
 import "jsr:@std/dotenv/load";
 import * as cheerio from "cheerio";
 import { getError } from "./utils/scrape.ts";
-import getCourseHTML from "./scrape/getCourse.ts";
+import getSubjectByYear from "./scrape/getSubjectByYear.ts";
 
 const terms = await getAvailableTerms();
 
@@ -17,7 +17,7 @@ const courses = await getAvailableSubjects();
 for (const course of courses) {
   for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
     console.log(`Searching for ${course} year ${year} courses:`);
-    const html = await getCourseHTML(term, year, course);
+    const html = await getSubjectByYear(term, year, course);
     if (html.length === 0) continue;
 
     const parser = cheerio.load(html);
