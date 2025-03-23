@@ -10,6 +10,7 @@
     "npm:drizzle-kit@*": "0.30.4_esbuild@0.19.12",
     "npm:drizzle-kit@~0.30.4": "0.30.4_esbuild@0.19.12",
     "npm:drizzle-orm@~0.39.3": "0.39.3",
+    "npm:fetch-cookie@^3.1.0": "3.1.0",
     "npm:postgres@^3.4.5": "3.4.5",
     "npm:puppeteer-core@^24.2.1": "24.2.1_devtools-protocol@0.0.1402036"
   },
@@ -565,6 +566,13 @@
         "pend"
       ]
     },
+    "fetch-cookie@3.1.0": {
+      "integrity": "sha512-s/XhhreJpqH0ftkGVcQt8JE9bqk+zRn4jF5mPJXWZeQMCI5odV9K+wEWYbnzFPHgQZlvPSMjS4n4yawWE8RINw==",
+      "dependencies": [
+        "set-cookie-parser",
+        "tough-cookie"
+      ]
+    },
     "follow-redirects@1.15.9": {
       "integrity": "sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ=="
     },
@@ -815,6 +823,9 @@
     "semver@7.7.1": {
       "integrity": "sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA=="
     },
+    "set-cookie-parser@2.7.1": {
+      "integrity": "sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ=="
+    },
     "smart-buffer@4.2.0": {
       "integrity": "sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg=="
     },
@@ -891,6 +902,21 @@
         "b4a"
       ]
     },
+    "tldts-core@6.1.85": {
+      "integrity": "sha512-DTjUVvxckL1fIoPSb3KE7ISNtkWSawZdpfxGxwiIrZoO6EbHVDXXUIlIuWympPaeS+BLGyggozX/HTMsRAdsoA=="
+    },
+    "tldts@6.1.85": {
+      "integrity": "sha512-gBdZ1RjCSevRPFix/hpaUWeak2/RNUZB4/8frF1r5uYMHjFptkiT0JXIebWvgI/0ZHXvxaUDDJshiA0j6GdL3w==",
+      "dependencies": [
+        "tldts-core"
+      ]
+    },
+    "tough-cookie@5.1.2": {
+      "integrity": "sha512-FVDYdxtnj0G6Qm/DhNPSb8Ju59ULcup3tuJxkFb5K8Bv2pUXILbf0xZWU8PX8Ov19OXljbUyveOFwRMwkXzO+A==",
+      "dependencies": [
+        "tldts"
+      ]
+    },
     "tslib@2.8.1": {
       "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="
     },
@@ -962,6 +988,7 @@
       "npm:cheerio@1",
       "npm:drizzle-kit@~0.30.4",
       "npm:drizzle-orm@~0.39.3",
+      "npm:fetch-cookie@^3.1.0",
       "npm:postgres@^3.4.5",
       "npm:puppeteer-core@^24.2.1"
     ]

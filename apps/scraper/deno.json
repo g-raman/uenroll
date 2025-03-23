@@ -17,6 +17,7 @@
     "cheerio": "npm:cheerio@^1.0.0",
     "drizzle-kit": "npm:drizzle-kit@^0.30.4",
     "drizzle-orm": "npm:drizzle-orm@^0.39.3",
+    "fetch-cookie": "npm:fetch-cookie@^3.1.0",
     "postgres": "npm:postgres@^3.4.5",
     "puppeteer-core": "npm:puppeteer-core@^24.2.1"
   },
