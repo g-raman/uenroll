@@ -1,4 +1,7 @@
-import { COURSE_REGISTRY_URL } from "../utils/constants.ts";
+import {
+  COURSE_REGISTRY_URL,
+  MAX_RETRIES_FOR_ICSID,
+} from "../utils/constants.ts";
 import { Term } from "../utils/types.ts";
 import { fetchCookie, getICSID } from "../utils/cookies.ts";
 
@@ -11,6 +14,10 @@ export default async function getCourseHTML(
   let icsid = undefined;
   let counter = 1;
   while (!icsid) {
+    if (counter > MAX_RETRIES_FOR_ICSID) {
+      console.log("Couldn't find ICSID");
+      return "";
+    }
     icsid = await getICSID();
     console.log(`ICSID attempt ${counter}`);
     counter++;
