@@ -1,16 +1,11 @@
 import * as cheerio from "cheerio/slim";
-import { getBrowser, getBrowserEndpoint } from "../utils/browser.ts";
 import { COURSE_REGISTRY_URL } from "../utils/constants.ts";
 import { Term } from "../utils/types.ts";
 import { db, updateAvailableTerms } from "../supabase.ts";
+import { fetchCookie } from "../utils/cookies.ts";
 
-const browserEndpoint = await getBrowserEndpoint();
-
-const browser = await getBrowser(browserEndpoint);
-const page = await browser.newPage();
-
-await page.goto(COURSE_REGISTRY_URL, { waitUntil: "networkidle0" });
-const html = await page.content();
+const response = await fetchCookie(COURSE_REGISTRY_URL);
+const html = await response.text();
 const $ = cheerio.load(html);
 
 const terms: Term[] = [];
@@ -30,9 +25,6 @@ $("[id='CLASS_SRCH_WRK2_STRM$35$']")
       value,
     });
   });
-
-await page.close();
-await browser.disconnect();
 
 await updateAvailableTerms(terms);
 await db.$client.end();

@@ -3,3 +3,5 @@ export const COURSE_REGISTRY_URL: string =
 
 export const FIRST_YEAR = 1;
 export const LAST_YEAR = 6;
+
+export const MAX_RETRIES_FOR_ICSID = 5;
