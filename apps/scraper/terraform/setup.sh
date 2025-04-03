@@ -36,5 +36,9 @@ deno install
 # Make director to store logs
 mkdir -p /var/logs/scraper/
 
+# Add GITHUB_TOKEN to Environment variables
+echo 'export GITHUB_TOKEN="${GITHUB_TOKEN}"' >> /etc/profile
+source /etc/profile
+
 # chmod +x src/scrape.sh
 # ./src/scrape.sh >> /var/logs/scraper/scraper.log
