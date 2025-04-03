@@ -36,5 +36,5 @@ deno install
 # Make director to store logs
 mkdir -p /var/logs/scraper/
 
-chmod +x src/scrape.sh
-./src/scrape.sh >> /var/logs/scraper/scraper.log
+# chmod +x src/scrape.sh
+# ./src/scrape.sh >> /var/logs/scraper/scraper.log
