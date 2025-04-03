@@ -88,8 +88,17 @@ data "aws_secretsmanager_secret_version" "db_secret_version" {
   secret_id = data.aws_secretsmanager_secret.db_secret.id
 }
 
+data "aws_secretsmanager_secret" "github_secret" {
+  name = "prod/uenroll/github"
+}
+
+data "aws_secretsmanager_secret_version" "github_secret_version" {
+  secret_id = data.aws_secretsmanager_secret.github_secret.id
+}
+
 locals {
   database_url = jsondecode(data.aws_secretsmanager_secret_version.db_secret_version.secret_string)["database_url"]
+  github_token  = jsondecode(data.aws_secretsmanager_secret_version.github_secret_version.secret_string)["github_token"]
 }
 
 resource "aws_instance" "scraper" {
@@ -99,6 +108,7 @@ resource "aws_instance" "scraper" {
   vpc_security_group_ids = [aws_security_group.scraper_sg.id]
   user_data = templatefile("${path.module}/setup.sh", {
     DATABASE_URL = local.database_url
+    GITHUB_TOKEN = local.github_token
   })
 
   tags = {
