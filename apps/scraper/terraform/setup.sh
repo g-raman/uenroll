@@ -40,5 +40,5 @@ mkdir -p /var/logs/scraper/
 echo 'export GITHUB_TOKEN="${GITHUB_TOKEN}"' >> /etc/profile
 source /etc/profile
 
-# chmod +x src/scrape.sh
-# ./src/scrape.sh >> /var/logs/scraper/scraper.log
+chmod +x src/scrape.sh
+./src/scrape.sh >> /var/logs/scraper/scraper.log
