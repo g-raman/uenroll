@@ -14,3 +14,10 @@ end_time=$(date +%s)
 execution_time=$((end_time - start_time))
 echo "Total Scraping Time: $execution_time seconds"
 
+# Take down AWS resources
+curl -L \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  https://api.github.com/repos/g-raman/scraper/actions/workflows/terraform-destroy.yml/dispatches \
+  -d '{"ref":"main"}'
