@@ -16,7 +16,15 @@ import {
   coursesTable,
   sessionsTable,
 } from "./db/schema.ts";
-import { asc, sql } from "drizzle-orm";
+import {
+  asc,
+  exists,
+  inArray,
+  lt,
+  notExists,
+  notInArray,
+  sql,
+} from "drizzle-orm";
 
 const connectionString = Deno.env.get("DATABASE_URL") as string;
 export const client = postgres(connectionString, { prepare: false });
@@ -156,6 +164,40 @@ export const updateAvailableSubjects = async (
   } catch (error) {
     console.error(
       "Error: Something went wrong when updating availabe subjects: ",
+      error,
+    );
+  }
+};
+
+export const removeOldSessions = async (milliseconds: number) => {
+  try {
+    await db
+      .delete(sessionsTable)
+      .where(
+        lt(sessionsTable.last_updated, new Date(Date.now() - milliseconds)),
+      );
+  } catch (error) {
+    console.error(
+      "Error: Something went wrong when deleting old sessions",
+      error,
+    );
+  }
+};
+
+export const removeCoursesWithNoSessions = async () => {
+  try {
+    const coursesWithSessions = db
+      .selectDistinct({ courseCode: sessionsTable.courseCode })
+      .from(sessionsTable);
+
+    const coursesWithoutSessions = await db
+      .delete(coursesTable)
+      .where(notInArray(coursesTable.courseCode, coursesWithSessions));
+
+    return coursesWithoutSessions;
+  } catch (error) {
+    console.error(
+      "Error: Something went wrong when deleting courses with no sessions",
       error,
     );
   }
