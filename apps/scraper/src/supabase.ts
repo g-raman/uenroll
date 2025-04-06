@@ -16,15 +16,7 @@ import {
   coursesTable,
   sessionsTable,
 } from "./db/schema.ts";
-import {
-  asc,
-  exists,
-  inArray,
-  lt,
-  notExists,
-  notInArray,
-  sql,
-} from "drizzle-orm";
+import { asc, lt, notInArray, sql } from "drizzle-orm";
 
 const connectionString = Deno.env.get("DATABASE_URL") as string;
 export const client = postgres(connectionString, { prepare: false });
