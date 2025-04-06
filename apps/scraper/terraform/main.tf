@@ -2,9 +2,6 @@ terraform {
   backend "s3" {
     bucket         = "uenroll-scraper"
     use_lockfile = true
-    endpoints {
-      dynamodb_endpoint = "uenroll-scraper-terraform-state-lock"
-    }
     key            = "scraper"
     region         = "us-east-1"
   }
@@ -21,6 +18,10 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"
+
+  endpoints {
+    dynamodb = "uenroll-scraper-terraform-state-lock"
+  }
 }
 
 data "aws_ami" "latest_amazon_linux" {
