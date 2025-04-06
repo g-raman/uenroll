@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket         = "uenroll-scraper"
+    bucket       = "uenroll-scraper"
     use_lockfile = true
-    key            = "scraper"
-    region         = "us-east-1"
+    key          = "scraper"
+    region       = "us-east-1"
   }
 
   required_providers {
@@ -102,7 +102,7 @@ data "aws_secretsmanager_secret_version" "github_secret_version" {
 
 locals {
   database_url = jsondecode(data.aws_secretsmanager_secret_version.db_secret_version.secret_string)["database_url"]
-  github_token  = jsondecode(data.aws_secretsmanager_secret_version.github_secret_version.secret_string)["github_token"]
+  github_token = jsondecode(data.aws_secretsmanager_secret_version.github_secret_version.secret_string)["github_token"]
 }
 
 resource "aws_instance" "scraper" {
