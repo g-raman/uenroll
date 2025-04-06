@@ -1,7 +1,10 @@
 terraform {
   backend "s3" {
     bucket         = "uenroll-scraper"
-    use_lockfile = "uenroll-scraper-terraform-state-lock"
+    use_lockfile = true
+    endpoints {
+      dynamodb_endpoint = "uenroll-scraper-terraform-state-lock"
+    }
     key            = "scraper"
     region         = "us-east-1"
   }
