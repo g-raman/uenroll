@@ -2,6 +2,8 @@ name: Terraform Deployment
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron '0 8 * * *'
 
 jobs:
   terraform:
@@ -34,4 +36,3 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
-        working-directory: terraform
