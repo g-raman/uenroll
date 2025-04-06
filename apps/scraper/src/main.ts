@@ -1,5 +1,6 @@
 import scrapeSearchResults from "./scrape/scrapeSearchResults.ts";
 import getAvailableTerms, {
+  client,
   getAvailableSubjects,
   upsertCourseDetails,
 } from "./supabase.ts";
@@ -45,4 +46,5 @@ for (const term of terms) {
   }
 }
 
+await client.end();
 Deno.exit(0);
