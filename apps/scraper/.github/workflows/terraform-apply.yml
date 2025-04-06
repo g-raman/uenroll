@@ -31,8 +31,18 @@ jobs:
         working-directory: terraform
 
       - name: Terraform Plan
-        run: terraform plan -out=./tfplan
-        working-directory: terraform
+        run: terraform plan -out=tfplan
+
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v2
+        with:
+          name: tfplan
+          path: tfplan
+
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v2
+        with:
+          name: tfplan
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve "./tfplan"
+        run: terraform apply tfplan
