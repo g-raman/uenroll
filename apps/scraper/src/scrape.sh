@@ -14,6 +14,8 @@ end_time=$(date +%s)
 execution_time=$((end_time - start_time))
 echo "Total Scraping Time: $execution_time seconds"
 
+deno task db:cleanup
+
 # Take down AWS resources
 curl -L \
   -H "Accept: application/vnd.github+json" \
