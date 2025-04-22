@@ -13,8 +13,6 @@
     "db:function": "deno --env -A --node-modules-dir npm:drizzle-kit generate --custom --name=get_course_function"
   },
   "imports": {
-    "@std/assert": "jsr:@std/assert@1",
-    "axios": "npm:axios@^1.7.9",
     "cheerio": "npm:cheerio@^1.0.0",
     "drizzle-kit": "npm:drizzle-kit@^0.30.4",
     "drizzle-orm": "npm:drizzle-orm@^0.39.3",
