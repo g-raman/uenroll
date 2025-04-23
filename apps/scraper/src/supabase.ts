@@ -1,4 +1,5 @@
-import "jsr:@std/dotenv/load";
+import "dotenv/config";
+
 import {
   Course,
   CourseComponent,

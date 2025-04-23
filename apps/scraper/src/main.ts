@@ -5,7 +5,7 @@ import getAvailableTerms, {
   upsertCourseDetails,
 } from "./supabase.ts";
 import { FIRST_YEAR, LAST_YEAR } from "./utils/constants.ts";
-import "jsr:@std/dotenv/load";
+import "dotenv/config";
 import * as cheerio from "cheerio";
 import { getError } from "./utils/scrape.ts";
 import getSubjectByYear from "./scrape/getSubjectByYear.ts";
