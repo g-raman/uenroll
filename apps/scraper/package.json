@@ -3,7 +3,16 @@
   "version": "1.0.0",
   "description": "A modern scraper for the uOttawa public course registry",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "dev": "ts-node src/main.ts",
+    "scrape:courses": "ts-node src/main.ts",
+    "scrape:terms": "ts-node src/scrape/scrapeAvailableTerms.ts",
+    "scrape:subjects": "ts-node src/scrape/scrapeAvailableSubjects.ts",
+    "db:cleanup": "ts-node src/db/cleanup.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:function": "drizzle-kit generate --custom --name=get_course_function"
+  },
   "keywords": [],
   "author": "Raman Gupta",
   "license": "CC BY-NC-SA 4.0",
@@ -15,6 +24,8 @@
     "puppeteer-core": "^24.7.0"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.31.0"
+    "drizzle-kit": "^0.31.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }
