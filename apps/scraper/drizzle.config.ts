@@ -1,4 +1,5 @@
 import { defineConfig } from "drizzle-kit";
+import "dotenv/config";
 
 export default defineConfig({
   dialect: "postgresql",
@@ -6,6 +7,6 @@ export default defineConfig({
   out: "./drizzle",
   casing: "snake_case",
   dbCredentials: {
-    url: Deno.env.get("DATABASE_URL") as string,
+    url: process.env["DATABASE_URL"] as string,
   },
 });
