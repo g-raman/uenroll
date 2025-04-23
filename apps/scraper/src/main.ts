@@ -47,4 +47,4 @@ for (const term of terms) {
 }
 
 await client.end();
-Deno.exit(0);
+process.exit(0);
