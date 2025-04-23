@@ -1,4 +1,4 @@
-import * as cheerio from "cheerio/slim";
+import cheerio from "cheerio";
 import { COURSE_REGISTRY_URL } from "../utils/constants.ts";
 import { Term } from "../utils/types.ts";
 import { db, updateAvailableTerms } from "../supabase.ts";
