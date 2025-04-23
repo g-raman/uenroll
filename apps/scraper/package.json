@@ -1,0 +1,20 @@
+{
+  "name": "uenroll-scraper",
+  "version": "1.0.0",
+  "description": "A modern scraper for the uOttawa public course registry",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "Raman Gupta",
+  "license": "CC BY-NC-SA 4.0",
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "drizzle-orm": "^0.42.0",
+    "fetch-cookie": "^3.1.0",
+    "postgres": "^3.4.5",
+    "puppeteer-core": "^24.7.0"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.0"
+  }
+}
