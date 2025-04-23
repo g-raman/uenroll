@@ -18,7 +18,7 @@ import {
 } from "./db/schema.ts";
 import { asc, lt, notInArray, sql } from "drizzle-orm";
 
-const connectionString = Deno.env.get("DATABASE_URL") as string;
+const connectionString = process.env["DATABASE_URL"] as string;
 export const client = postgres(connectionString, { prepare: false });
 export const db = drizzle(client, { casing: "snake_case" });
 

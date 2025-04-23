@@ -1,4 +1,6 @@
 import puppeteer, { Browser } from "puppeteer-core";
+import "dotenv/config";
+
 export const getBrowserEndpoint = async (): Promise<string> => {
   const res = await fetch("http://localhost:9222/json/version");
   const data = await res.json();
@@ -8,8 +10,8 @@ export const getBrowserEndpoint = async (): Promise<string> => {
 };
 
 export const getBrowser = async (browserEndpoint: string): Promise<Browser> => {
-  const environment = Deno.env.get("ENVIRONMENT");
-  const puppeteerExecutablePath = Deno.env.get("PUPPETEER_EXECUTABLE_PATH");
+  const environment = process.env["ENVIRONMENT"];
+  const puppeteerExecutablePath = process.env["PUPPETEER_EXECUTABLE_PATH"];
 
   if (environment === "DEV") {
     return await puppeteer.launch({
