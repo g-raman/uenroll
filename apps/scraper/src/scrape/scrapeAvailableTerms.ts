@@ -1,6 +1,6 @@
-import cheerio from "cheerio";
+import * as cheerio from "cheerio";
 import { COURSE_REGISTRY_URL } from "../utils/constants.ts";
-import { Term } from "../utils/types.ts";
+import type { Term } from "../utils/types.ts";
 import { db, updateAvailableTerms } from "../supabase.ts";
 import { fetchCookie } from "../utils/cookies.ts";
 

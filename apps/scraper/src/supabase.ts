@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import {
+import type {
   Course,
   CourseComponent,
   CourseDetails,
