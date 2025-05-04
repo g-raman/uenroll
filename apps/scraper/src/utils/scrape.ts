@@ -7,7 +7,7 @@ import cheerio from "cheerio";
  * 1. No classes found
  * 2. Your search will exceed the maximum limit of 300 sections. Specify additional criteria to continue.
  */
-export const getError = ($: cheerio.CheerioAPI) => {
+export const getError = ($: cheerio.Root) => {
   const ERROR_SELECTOR = "[id='win0divDERIVED_CLSMSG_ERROR_TEXT']";
 
   const error = $(ERROR_SELECTOR).text();
@@ -58,7 +58,7 @@ export const getSectionDetail = (
 /*
  * Gets total numer of search results
  */
-export const getTotalSections = ($: cheerio.CheerioAPI) => {
+export const getTotalSections = ($: cheerio.Root) => {
   const TOTAL_SEARCH_RESULTS_FOUND_LABEL_SELECTOR = ".PSGROUPBOXLABEL";
   const totalResultsLabel = $(TOTAL_SEARCH_RESULTS_FOUND_LABEL_SELECTOR).text();
   return parseInt(totalResultsLabel);

@@ -1,4 +1,4 @@
-import * as cheerio from "cheerio";
+import cheerio from "cheerio";
 import { COURSE_REGISTRY_URL } from "../utils/constants";
 import type { Term } from "../utils/types";
 import { db, updateAvailableTerms } from "../supabase";
@@ -11,7 +11,7 @@ const $ = cheerio.load(html);
 const terms: Term[] = [];
 $("[id='CLASS_SRCH_WRK2_STRM$35$']")
   .find("option")
-  .each(function () {
+  .each(function (this: cheerio.Element) {
     const option = $(this);
 
     if (option.attr("value") === "") {

@@ -1,4 +1,3 @@
-import { CheerioAPI } from "cheerio";
 import {
   Course,
   CourseComponent,
@@ -18,12 +17,13 @@ import {
   getTotalSections,
   processSessions,
 } from "../utils/scrape";
+import cheerio from "cheerio";
 
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";
 const COURSE_TITLE_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2GP$";
 const SECTION_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX3$";
 
-export default ($: CheerioAPI, term: Term): CourseDetails => {
+export default ($: cheerio.Root, term: Term): CourseDetails => {
   const totalSections = getTotalSections($);
   let sectionNumber = 0;
 
@@ -40,7 +40,7 @@ export default ($: CheerioAPI, term: Term): CourseDetails => {
 
   const allCourseTitleSelector = getIdStartsWithSelector(COURSE_TITLE_SELECTOR);
   const courses = allCourses.find(allCourseTitleSelector);
-  courses.each(function (courseNumber) {
+  courses.each(function (this: cheerio.Element, courseNumber) {
     const courseContainerSelector = getIdSelector(
       COURSE_CONTAINER_SELECTOR,
       courseNumber,
@@ -52,7 +52,7 @@ export default ($: CheerioAPI, term: Term): CourseDetails => {
     const sectionDetails = courseContainer.find(sectionSelector);
 
     let currentSection = "";
-    sectionDetails.each(function () {
+    sectionDetails.each(function (this: cheerio.Element) {
       const section = $(this);
       const [subSection, type] = getSectionAndType(section, sectionNumber);
       const instructors = getInstructors(section, sectionNumber);
