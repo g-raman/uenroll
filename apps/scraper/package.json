@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A modern scraper for the uOttawa public course registry",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "ts-node src/main.ts",
     "scrape:courses": "ts-node src/main.ts",
