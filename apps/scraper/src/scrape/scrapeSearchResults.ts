@@ -5,7 +5,7 @@ import {
   CourseDetails,
   Session,
   Term,
-} from "../utils/types.ts";
+} from "../utils/types";
 import {
   getCourseCodeAndCourseTitle,
   getDates,
@@ -17,7 +17,7 @@ import {
   getTimings,
   getTotalSections,
   processSessions,
-} from "../utils/scrape.ts";
+} from "../utils/scrape";
 
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";
 const COURSE_TITLE_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2GP$";

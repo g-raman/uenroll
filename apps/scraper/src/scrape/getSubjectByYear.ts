@@ -1,9 +1,6 @@
-import {
-  COURSE_REGISTRY_URL,
-  MAX_RETRIES_FOR_ICSID,
-} from "../utils/constants.ts";
-import { Term } from "../utils/types.ts";
-import { fetchCookie, getICSID } from "../utils/cookies.ts";
+import { COURSE_REGISTRY_URL, MAX_RETRIES_FOR_ICSID } from "../utils/constants";
+import { Term } from "../utils/types";
+import { fetchCookie, getICSID } from "../utils/cookies";
 
 export default async function getSubjectByYear(
   term: Term,

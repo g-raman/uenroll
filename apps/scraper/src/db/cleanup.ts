@@ -2,7 +2,7 @@ import {
   client,
   removeCoursesWithNoSessions,
   removeOldSessions,
-} from "../supabase.ts";
+} from "../supabase";
 
 const REMOVE_BEFORE_TIME = 5 * 60 * 60 * 1000;
 await removeOldSessions(REMOVE_BEFORE_TIME);

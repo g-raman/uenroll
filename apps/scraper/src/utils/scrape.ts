@@ -1,4 +1,4 @@
-import { Session } from "./types.ts";
+import { Session } from "./types";
 import { Cheerio, CheerioAPI } from "cheerio";
 import { Element } from "cheerio/traversing";
 
