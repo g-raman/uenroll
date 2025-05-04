@@ -1,9 +1,13 @@
 import puppeteer, { Browser } from "puppeteer-core";
 import "dotenv/config";
 
+interface DebuggerVersionResponse {
+  webSocketDebuggerUrl: string;
+}
+
 export const getBrowserEndpoint = async (): Promise<string> => {
   const res = await fetch("http://localhost:9222/json/version");
-  const data = await res.json();
+  const data = (await res.json()) as DebuggerVersionResponse;
   const browserEndpoint = data.webSocketDebuggerUrl as string;
 
   return browserEndpoint;
