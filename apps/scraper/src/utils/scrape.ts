@@ -1,6 +1,5 @@
 import { Session } from "./types";
-import { Cheerio, CheerioAPI } from "cheerio";
-import { Element } from "cheerio/traversing";
+import cheerio from "cheerio";
 
 /*
  * Selects the error message.
@@ -8,7 +7,7 @@ import { Element } from "cheerio/traversing";
  * 1. No classes found
  * 2. Your search will exceed the maximum limit of 300 sections. Specify additional criteria to continue.
  */
-export const getError = ($: CheerioAPI) => {
+export const getError = ($: cheerio.CheerioAPI) => {
   const ERROR_SELECTOR = "[id='win0divDERIVED_CLSMSG_ERROR_TEXT']";
 
   const error = $(ERROR_SELECTOR).text();
@@ -21,7 +20,7 @@ export const getError = ($: CheerioAPI) => {
 };
 
 export const getElementChildText = (
-  element: Cheerio<Element>,
+  element: cheerio.Cheerio,
   selector: string,
 ) => {
   return element.find(selector).contents().toString().split("<br>");
@@ -48,7 +47,7 @@ export const getIdStartsWithSelector = (id: string) => {
  * Sub section, type, instructors, etc...
  */
 export const getSectionDetail = (
-  section: Cheerio<Element>,
+  section: cheerio.Cheerio,
   selector: string,
   count: number,
 ) => {
@@ -59,7 +58,7 @@ export const getSectionDetail = (
 /*
  * Gets total numer of search results
  */
-export const getTotalSections = ($: CheerioAPI) => {
+export const getTotalSections = ($: cheerio.CheerioAPI) => {
   const TOTAL_SEARCH_RESULTS_FOUND_LABEL_SELECTOR = ".PSGROUPBOXLABEL";
   const totalResultsLabel = $(TOTAL_SEARCH_RESULTS_FOUND_LABEL_SELECTOR).text();
   return parseInt(totalResultsLabel);
@@ -72,7 +71,7 @@ export const getTotalSections = ($: CheerioAPI) => {
  * Easy split and we want no extra spaces
  * And none between course subject and number
  */
-export const getCourseCodeAndCourseTitle = (course: Cheerio<Element>) => {
+export const getCourseCodeAndCourseTitle = (course: cheerio.Cheerio) => {
   const courseHeader = course.text().trim();
   const [courseCodeString, courseTitle] = courseHeader.split(" - ");
   const courseCode = courseCodeString.replaceAll(" ", "");
@@ -87,7 +86,7 @@ export const getCourseCodeAndCourseTitle = (course: Cheerio<Element>) => {
  * We discard the last part as that's unecessary
  * We return the sub section and the component type
  */
-export const getSectionAndType = (section: Cheerio<Element>, count: number) => {
+export const getSectionAndType = (section: cheerio.Cheerio, count: number) => {
   const SUB_SECTION_SELECTOR = "MTG_CLASSNAME$";
 
   const subSectionDetails = getSectionDetail(
@@ -105,7 +104,7 @@ export const getSectionAndType = (section: Cheerio<Element>, count: number) => {
  *
  * Easy split. Returns an array
  */
-export const getInstructors = (section: Cheerio<Element>, count: number) => {
+export const getInstructors = (section: cheerio.Cheerio, count: number) => {
   const INSTRUCTOR_SELECTOR = "MTG_INSTR$";
   return getSectionDetail(section, INSTRUCTOR_SELECTOR, count);
 };
@@ -116,7 +115,7 @@ export const getInstructors = (section: Cheerio<Element>, count: number) => {
  *
  * Easy split. Returns an array
  */
-export const getDates = (section: Cheerio<Element>, count: number) => {
+export const getDates = (section: cheerio.Cheerio, count: number) => {
   const DATES_SELECTOR = "MTG_TOPIC$";
   return getSectionDetail(section, DATES_SELECTOR, count);
 };
@@ -128,7 +127,7 @@ export const getDates = (section: Cheerio<Element>, count: number) => {
  *
  * Easy split. Returns an array
  */
-export const getTimings = (section: Cheerio<Element>, count: number) => {
+export const getTimings = (section: cheerio.Cheerio, count: number) => {
   const TIMINGS_SELECTOR = "MTG_DAYTIME$";
   return getSectionDetail(section, TIMINGS_SELECTOR, count);
 };
@@ -140,10 +139,12 @@ export const getTimings = (section: Cheerio<Element>, count: number) => {
  *
  * So we return status based on that
  */
-export const getStatus = (section: Cheerio<Element>, count: number) => {
+export const getStatus = (section: cheerio.Cheerio, count: number) => {
   const STATUS_SELECTOR = "win0divDERIVED_CLSRCH_SSR_STATUS_LONG$";
   const statusSelector = getIdSelector(STATUS_SELECTOR, count);
 
+  // The @types/cheerio package is not up to date
+  // @ts-ignore
   const { url } = section.find(statusSelector).extract({
     url: {
       selector: "img",

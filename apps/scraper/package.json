@@ -26,6 +26,7 @@
     "puppeteer-core": "^24.7.0"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.35",
     "@types/node": "^22.14.1",
     "drizzle-kit": "^0.31.0",
     "ts-node": "^10.9.2",
