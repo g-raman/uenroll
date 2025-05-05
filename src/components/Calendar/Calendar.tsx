@@ -104,12 +104,24 @@ function Calendar() {
     );
   }, [state.selectedSessions]);
 
+  // HACK: Gotta figure out a better way to do This
+  // Hardcoding for now
   useEffect(() => {
     if (!state.term) return;
-    if (state.term.term.includes("Winter")) {
-      calendarControls.setDate("2025-01-06");
-    } else if (state.term.term.includes("Summer")) {
-      calendarControls.setDate("2025-05-05");
+
+    switch (state.term.term) {
+      case "2025 Winter Term":
+        calendarControls.setDate("2025-01-06");
+        break;
+      case "2025 Spring/Summer Term":
+        calendarControls.setDate("2025-05-05");
+        break;
+      case "2025 Fall Term":
+        calendarControls.setDate("2025-09-03");
+        break;
+      case "2026 Winter Term":
+        calendarControls.setDate("2026-01-12");
+        break;
     }
   }, [calendarControls, state.term]);
 
