@@ -61,13 +61,15 @@ export default ($: cheerio.Root, term: Term): CourseDetails => {
       const isOpen = getStatus(section, sectionNumber);
 
       const newSectionRegex = /^[A-Z]?[A-Z]00$/;
-      const isNewSection = newSectionRegex.test(subSection);
-      currentSection = isNewSection ? subSection : currentSection;
+      const isNewSection = newSectionRegex.test(subSection as string);
+      currentSection = isNewSection
+        ? (subSection as string)
+        : (currentSection as string);
 
       const sessions = processSessions(
         term.value,
-        courseCode,
-        subSection,
+        courseCode as string,
+        subSection as string,
         currentSection,
         instructors,
         dates,
@@ -78,10 +80,10 @@ export default ($: cheerio.Root, term: Term): CourseDetails => {
 
       details.courseComponents.push({
         term: term.value,
-        courseCode,
+        courseCode: courseCode as string,
         section: currentSection,
-        subSection,
-        type,
+        subSection: subSection as string,
+        type: type as string,
         isOpen,
         isDeleted: false,
       });
@@ -93,8 +95,8 @@ export default ($: cheerio.Root, term: Term): CourseDetails => {
     });
 
     details.courses.push({
-      courseCode,
-      courseTitle,
+      courseCode: courseCode as string,
+      courseTitle: courseTitle as string,
       term: term.value,
       isDeleted: false,
     });
