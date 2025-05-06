@@ -16,7 +16,7 @@ import {
   courseComponentsTable,
   coursesTable,
   sessionsTable,
-} from "./db/schema";
+} from "./db/schema.js";
 import { asc, lt, notInArray, sql } from "drizzle-orm";
 
 const connectionString = process.env["DATABASE_URL"] as string;

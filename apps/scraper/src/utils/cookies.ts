@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { COURSE_REGISTRY_URL } from "./constants";
+import { COURSE_REGISTRY_URL } from "./constants.js";
 import makeFetchCookie from "fetch-cookie";
 
 export const fetchCookie = makeFetchCookie(fetch);

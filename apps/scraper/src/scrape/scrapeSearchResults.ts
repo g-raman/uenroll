@@ -1,10 +1,10 @@
-import {
+import type {
   Course,
   CourseComponent,
   CourseDetails,
   Session,
   Term,
-} from "../utils/types";
+} from "../utils/types.js";
 import {
   getCourseCodeAndCourseTitle,
   getDates,
@@ -16,7 +16,7 @@ import {
   getTimings,
   getTotalSections,
   processSessions,
-} from "../utils/scrape";
+} from "../utils/scrape.js";
 import cheerio from "cheerio";
 
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";

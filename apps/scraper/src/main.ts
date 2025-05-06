@@ -1,14 +1,14 @@
-import scrapeSearchResults from "./scrape/scrapeSearchResults";
+import scrapeSearchResults from "./scrape/scrapeSearchResults.js";
 import getAvailableTerms, {
   client,
   getAvailableSubjects,
   upsertCourseDetails,
-} from "./supabase";
-import { FIRST_YEAR, LAST_YEAR } from "./utils/constants";
+} from "./supabase.js";
+import { FIRST_YEAR, LAST_YEAR } from "./utils/constants.js";
 import "dotenv/config";
 import * as cheerio from "cheerio";
-import { getError } from "./utils/scrape";
-import getSubjectByYear from "./scrape/getSubjectByYear";
+import { getError } from "./utils/scrape.js";
+import getSubjectByYear from "./scrape/getSubjectByYear.js";
 
 const terms = await getAvailableTerms();
 

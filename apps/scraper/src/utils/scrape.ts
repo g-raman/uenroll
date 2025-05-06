@@ -1,4 +1,4 @@
-import { Session } from "./types";
+import type { Session } from "./types.js";
 import cheerio from "cheerio";
 
 /*
@@ -74,7 +74,7 @@ export const getTotalSections = ($: cheerio.Root) => {
 export const getCourseCodeAndCourseTitle = (course: cheerio.Cheerio) => {
   const courseHeader = course.text().trim();
   const [courseCodeString, courseTitle] = courseHeader.split(" - ");
-  const courseCode = courseCodeString.replaceAll(" ", "");
+  const courseCode = courseCodeString?.replaceAll(" ", "");
 
   return [courseCode, courseTitle];
 };
@@ -93,7 +93,7 @@ export const getSectionAndType = (section: cheerio.Cheerio, count: number) => {
     section,
     SUB_SECTION_SELECTOR,
     count,
-  )[0];
+  )[0] as string;
   const [subSection, type] = subSectionDetails.split("-");
   return [subSection, type];
 };
@@ -177,7 +177,7 @@ export const processSessions = (
      * Actual course info still gets added and sub section info is stored.
      * However, since there are no sessions. Nothing is returned to the front end.
      */
-    if (currentTiming.includes("N/A")) {
+    if (currentTiming?.includes("N/A")) {
       continue;
     }
 
@@ -185,7 +185,7 @@ export const processSessions = (
      * Original format:
      * Tu 16:00 - 17:20
      */
-    const timingDetails = currentTiming.split(" ");
+    const timingDetails = currentTiming?.split(" ") as string[];
     const dayOfWeek = timingDetails[0];
     const startTime = timingDetails[1];
     const endTime = timingDetails[3];
@@ -195,19 +195,19 @@ export const processSessions = (
      * 2025-01-06 - 2025-04-05
      */
     const currMeetingDate = dates[sessionCount];
-    const [startDate, endDate] = currMeetingDate.split(" - ");
+    const [startDate, endDate] = currMeetingDate?.split(" - ") as string[];
 
     sessions.push({
       courseCode,
       term,
       section: currentSection,
       subSection,
-      dayOfWeek,
-      startTime,
-      endTime,
-      startDate,
-      endDate,
-      instructor: instructors[sessionCount],
+      dayOfWeek: dayOfWeek as string,
+      startTime: startTime as string,
+      endTime: endTime as string,
+      startDate: startDate as string,
+      endDate: endDate as string,
+      instructor: instructors[sessionCount] as string,
       isDeleted: false,
     });
   }

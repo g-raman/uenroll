@@ -1,9 +1,9 @@
 import * as cheerio from "cheerio";
-import { getBrowser, getBrowserEndpoint } from "../utils/browser";
-import { COURSE_REGISTRY_URL } from "../utils/constants";
-import { getIdSelector, getIdStartsWithSelector } from "../utils/scrape";
-import { db, updateAvailableSubjects } from "../supabase";
-import { Subject } from "../utils/types";
+import { getBrowser, getBrowserEndpoint } from "../utils/browser.js";
+import { COURSE_REGISTRY_URL } from "../utils/constants.js";
+import { getIdSelector, getIdStartsWithSelector } from "../utils/scrape.js";
+import { db, updateAvailableSubjects } from "../supabase.js";
+import type { Subject } from "../utils/types.js";
 
 const characters = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", ..."0123456789"];
 const browserEndpoint = await getBrowserEndpoint();

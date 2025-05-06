@@ -1,8 +1,8 @@
-import cheerio from "cheerio";
-import { COURSE_REGISTRY_URL } from "../utils/constants";
-import type { Term } from "../utils/types";
-import { db, updateAvailableTerms } from "../supabase";
-import { fetchCookie } from "../utils/cookies";
+import * as cheerio from "cheerio";
+import { COURSE_REGISTRY_URL } from "../utils/constants.js";
+import type { Term } from "../utils/types.js";
+import { db, updateAvailableTerms } from "../supabase.js";
+import { fetchCookie } from "../utils/cookies.js";
 
 const response = await fetchCookie(COURSE_REGISTRY_URL);
 const html = await response.text();
