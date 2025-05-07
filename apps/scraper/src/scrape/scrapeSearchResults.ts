@@ -17,7 +17,7 @@ import {
   getTotalSections,
   processSessions,
 } from "../utils/scrape.js";
-import cheerio from "cheerio";
+import * as cheerio from "cheerio";
 
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";
 const COURSE_TITLE_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2GP$";

@@ -1,5 +1,5 @@
 import type { Session } from "./types.js";
-import cheerio from "cheerio";
+import * as cheerio from "cheerio";
 
 /*
  * Selects the error message.
