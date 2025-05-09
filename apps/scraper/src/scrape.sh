@@ -5,13 +5,13 @@ pnpm run build
 
 # Still need to use Puppeteer for Subjects
 docker container run -d -p 9222:9222 zenika/alpine-chrome --no-sandbox --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 https://www.chromestatus.com/
-pnpm prod:scrape:subjects 
+pnpm scrape:subjects 
 docker stop $(docker ps -q)
 docker container prune -f
 
 start_time=$(date +%s)
-pnpm prod:scrape:terms 
-pnpm prod:scrape:courses 
+pnpm scrape:terms 
+pnpm scrape:courses 
 
 end_time=$(date +%s)
 execution_time=$((end_time - start_time))

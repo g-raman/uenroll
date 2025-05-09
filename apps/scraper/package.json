@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "prod:scrape:courses": "node dist/src/main.js",
-    "prod:scrape:terms": "node dist/src/scrape/scrapeAvailableTerms.js",
-    "prod:scrape:subjects": "node dist/src/scrape/scrapeAvailableSubjects.js",
+    "scrape:courses": "node dist/src/main.js",
+    "scrape:terms": "node dist/src/scrape/scrapeAvailableTerms.js",
+    "scrape:subjects": "node dist/src/scrape/scrapeAvailableSubjects.js",
     "db:cleanup": "node dist/src/db/cleanup.js",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
