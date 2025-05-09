@@ -10,9 +10,9 @@
     "dev:scrape:terms": "ts-node src/scrape/scrapeAvailableTerms.ts",
     "dev:scrape:subjects": "ts-node src/scrape/scrapeAvailableSubjects.ts",
     "build": "tsc",
-    "prod:scrape:courses": "node dist/src/main.ts",
-    "prod:scrape:terms": "node dist/src/scrape/scrapeAvailableTerms.ts",
-    "prod:scrape:subjects": "node dist/src/scrape/scrapeAvailableSubjects.ts",
+    "prod:scrape:courses": "node dist/src/main.js",
+    "prod:scrape:terms": "node dist/src/scrape/scrapeAvailableTerms.js",
+    "prod:scrape:subjects": "node dist/src/scrape/scrapeAvailableSubjects.js",
     "db:cleanup": "node dist/src/db/cleanup.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
@@ -30,9 +30,9 @@
     "puppeteer-core": "^24.7.0"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.35",
-    "@types/node": "^22.14.1",
-    "drizzle-kit": "^0.31.0",
+    "@types/node": "^22.15.14",
+    "domhandler": "^5.0.3",
+    "drizzle-kit": "^0.31.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
