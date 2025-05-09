@@ -11,7 +11,7 @@ const $ = cheerio.load(html);
 const terms: Term[] = [];
 $("[id='CLASS_SRCH_WRK2_STRM$35$']")
   .find("option")
-  .each(function (this: cheerio.Element) {
+  .each(function (this) {
     const option = $(this);
 
     if (option.attr("value") === "") {

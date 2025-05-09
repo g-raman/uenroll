@@ -18,12 +18,13 @@ import {
   processSessions,
 } from "../utils/scrape.js";
 import * as cheerio from "cheerio";
+import type { AnyNode } from "domhandler";
 
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";
 const COURSE_TITLE_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2GP$";
 const SECTION_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX3$";
 
-export default ($: cheerio.Root, term: Term): CourseDetails => {
+export default ($: cheerio.CheerioAPI, term: Term): CourseDetails => {
   const totalSections = getTotalSections($);
   let sectionNumber = 0;
 
@@ -40,7 +41,7 @@ export default ($: cheerio.Root, term: Term): CourseDetails => {
 
   const allCourseTitleSelector = getIdStartsWithSelector(COURSE_TITLE_SELECTOR);
   const courses = allCourses.find(allCourseTitleSelector);
-  courses.each(function (this: cheerio.Element, courseNumber) {
+  courses.each(function (this, courseNumber) {
     const courseContainerSelector = getIdSelector(
       COURSE_CONTAINER_SELECTOR,
       courseNumber,
@@ -52,7 +53,7 @@ export default ($: cheerio.Root, term: Term): CourseDetails => {
     const sectionDetails = courseContainer.find(sectionSelector);
 
     let currentSection = "";
-    sectionDetails.each(function (this: cheerio.Element) {
+    sectionDetails.each(function (this) {
       const section = $(this);
       const [subSection, type] = getSectionAndType(section, sectionNumber);
       const instructors = getInstructors(section, sectionNumber);
