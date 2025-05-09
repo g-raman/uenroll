@@ -5,10 +5,6 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "ts-node src/main.ts",
-    "dev:scrape:courses": "ts-node src/main.ts",
-    "dev:scrape:terms": "ts-node src/scrape/scrapeAvailableTerms.ts",
-    "dev:scrape:subjects": "ts-node src/scrape/scrapeAvailableSubjects.ts",
     "build": "tsc",
     "prod:scrape:courses": "node dist/src/main.js",
     "prod:scrape:terms": "node dist/src/scrape/scrapeAvailableTerms.js",
@@ -33,7 +29,6 @@
     "@types/node": "^22.15.14",
     "domhandler": "^5.0.3",
     "drizzle-kit": "^0.31.1",
-    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
 }
