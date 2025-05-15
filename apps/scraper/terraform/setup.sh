@@ -22,6 +22,7 @@ nvm install 24
 
 # Install PNPM
 npm install -g pnpm
+source ~/.bashrc
 
 # Clone repo
 WORK_DIR="/scraper"
