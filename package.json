@@ -12,6 +12,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@schedule-x/calendar": "^2.30.0",
     "@schedule-x/calendar-controls": "^2.19.0",
     "@schedule-x/event-modal": "^2.19.0",
     "@schedule-x/event-recurrence": "^2.19.0",
