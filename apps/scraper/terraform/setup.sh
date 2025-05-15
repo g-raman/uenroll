@@ -16,9 +16,9 @@ sudo dnf install -y git
 sudo dnf install -y curl
 
 # Install NVM
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-source ~/.nvm/nvm.sh
-nvm install --lts
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+source /.nvm/nvm.sh
+nvm install 24
 
 # Install PNPM
 npm install -g pnpm
