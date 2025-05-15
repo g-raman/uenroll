@@ -115,6 +115,13 @@ resource "aws_instance" "scraper" {
     GITHUB_TOKEN = local.github_token
   })
 
+  ebs_block_device {
+    device_name = "/dev/xvda"
+    volume_size = 16
+    volume_type = "gp3"
+    delete_on_termination = true
+  }
+
   tags = {
     Name    = "uenroll-scraper-ec2"
     Project = "uenroll"
