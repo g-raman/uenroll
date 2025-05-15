@@ -1,16 +1,19 @@
 #!/bin/bash
 
 # Update system
-sudo yum update -y
+sudo dnf update -y
 
 # Set up docker
-sudo amazon-linux-extras install docker -y
+sudo dnf install -y docker
 sudo systemctl start docker
 sudo systemctl enable docker
 sudo usermod -aG docker ec2-user
 
 # Install git
-sudo yum install git -y
+sudo dnf install -y git
+
+# Install curl
+sudo dnf install -y curl
 
 # Install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
