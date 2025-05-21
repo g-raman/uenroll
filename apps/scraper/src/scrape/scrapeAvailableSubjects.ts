@@ -35,8 +35,8 @@ for (const character of characters) {
   const subjects: Subject[] = $(subjectSelector)
     .text()
     .split("\n")
-    .filter((subject) => subject !== null && subject !== "")
-    .map((subject) => {
+    .filter(subject => subject !== null && subject !== "")
+    .map(subject => {
       return { subject };
     });
 

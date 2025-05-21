@@ -49,7 +49,7 @@ export const getAvailableSubjects = async () => {
       .from(availableSubjectsTable)
       .orderBy(asc(availableSubjectsTable.subject));
 
-    return results.map((result) => result.subject);
+    return results.map(result => result.subject);
   } catch (error) {
     console.error(
       "Something went wrong when fetching available subjects:\n" + error,

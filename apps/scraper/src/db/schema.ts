@@ -49,7 +49,7 @@ export const coursesTable = pgTable(
     courseTitle: text().notNull(),
     isDeleted: boolean().notNull().default(false),
   },
-  (table) => [
+  table => [
     primaryKey({ columns: [table.courseCode, table.term] }),
     readPolicy,
   ],
@@ -66,7 +66,7 @@ export const courseComponentsTable = pgTable(
     type: text().notNull(),
     isDeleted: boolean().notNull().default(false),
   },
-  (table) => [
+  table => [
     primaryKey({ columns: [table.courseCode, table.term, table.subSection] }),
     foreignKey({
       columns: [table.courseCode, table.term],
@@ -94,7 +94,7 @@ export const sessionsTable = pgTable(
     isDeleted: boolean().default(false),
     last_updated: timestamp().defaultNow(),
   },
-  (table) => [
+  table => [
     foreignKey({
       columns: [table.courseCode, table.term, table.subSection],
       foreignColumns: [
