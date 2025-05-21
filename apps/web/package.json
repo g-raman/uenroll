@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.7",
     "@tanstack/eslint-plugin-query": "^5.74.7",
     "@types/node": "^22.15.18",

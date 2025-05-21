@@ -105,6 +105,9 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@tailwindcss/postcss':
         specifier: ^4.1.7
         version: 4.1.7
@@ -174,6 +177,8 @@ importers:
       typescript-eslint:
         specifier: ^8.32.0
         version: 8.32.1(eslint@9.27.0(jiti@2.4.2))(typescript@5.8.3)
+
+  packages/typescript-config: {}
 
 packages:
 
