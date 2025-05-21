@@ -9,7 +9,7 @@ export const CopyLinkButton = () => {
 
   return (
     <button
-      className="flex h-full w-full cursor-pointer items-center justify-center gap-1 rounded-xs border border-slate-400 px-2 py-3 text-black hover:bg-slate-100 active:bg-slate-200 disabled:cursor-not-allowed disabled:text-gray-300 disabled:hover:bg-transparent"
+      className="rounded-xs flex h-full w-full cursor-pointer items-center justify-center gap-1 border border-slate-400 px-2 py-3 text-black hover:bg-slate-100 active:bg-slate-200 disabled:cursor-not-allowed disabled:text-gray-300 disabled:hover:bg-transparent"
       disabled={state.selectedSessions.length === 0}
       onClick={async () => {
         try {

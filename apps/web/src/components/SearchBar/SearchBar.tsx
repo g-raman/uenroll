@@ -140,14 +140,14 @@ export default function SearchBar() {
   };
 
   return (
-    <div className="sticky top-0 z-10 mt-4 mb-2 flex flex-col gap-2 bg-white">
+    <div className="sticky top-0 z-10 mb-2 mt-4 flex flex-col gap-2 bg-white">
       <TermSelector />
       <div className="flex items-center justify-between gap-2">
         <input
           value={query}
           onKeyDown={handleKeyDown}
           onChange={handleInputChange}
-          className="w-full rounded-xs border border-slate-400 bg-slate-100 px-4 py-2 text-sm disabled:bg-slate-300"
+          className="rounded-xs w-full border border-slate-400 bg-slate-100 px-4 py-2 text-sm disabled:bg-slate-300"
           type="text"
           placeholder="Course Code Eg. CSI 2101"
           disabled={isLoading}
@@ -157,7 +157,7 @@ export default function SearchBar() {
 
         <button
           onClick={handleSearchClick}
-          className="disabled:bg-[#8f001b]-40 h-full w-min cursor-pointer rounded-xs bg-[#8f001b] px-4 text-white"
+          className="disabled:bg-[#8f001b]-40 rounded-xs h-full w-min cursor-pointer bg-[#8f001b] px-4 text-white"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -169,7 +169,7 @@ export default function SearchBar() {
       </div>
 
       {autoCompleteResults.length === 0 && isFocused ? (
-        <div className="absolute top-24 z-10 max-h-70 w-full overflow-y-auto rounded-sm border border-gray-300 bg-white p-4 text-center text-sm text-gray-500 shadow-lg">
+        <div className="max-h-70 absolute top-24 z-10 w-full overflow-y-auto rounded-sm border border-gray-300 bg-white p-4 text-center text-sm text-gray-500 shadow-lg">
           {query.length === 0 ? (
             "Search for a course..."
           ) : isAutoCompleteLoading ? (
@@ -185,7 +185,7 @@ export default function SearchBar() {
       ) : (
         dataAllCourses &&
         isFocused && (
-          <ul className="absolute top-24 z-20 max-h-70 w-full overflow-y-auto rounded-sm border border-gray-300 bg-white shadow-lg">
+          <ul className="max-h-70 absolute top-24 z-20 w-full overflow-y-auto rounded-sm border border-gray-300 bg-white shadow-lg">
             {autoCompleteResults.map(result => (
               <li
                 key={result.id}

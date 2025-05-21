@@ -15,12 +15,12 @@ export default function TermSelector() {
   return (
     <>
       {state.availableTerms.length === 0 ? (
-        <div className="h-8 animate-pulse rounded-xs border border-slate-400 bg-slate-200 p-2"></div>
+        <div className="rounded-xs h-8 animate-pulse border border-slate-400 bg-slate-200 p-2"></div>
       ) : (
         <select
           value={state.term ? JSON.stringify(state.term) : ""}
           onChange={handleSelect}
-          className="w-full cursor-pointer rounded-xs border border-slate-400 bg-slate-100 p-2 text-sm"
+          className="rounded-xs w-full cursor-pointer border border-slate-400 bg-slate-100 p-2 text-sm"
         >
           {state.availableTerms.map(elem => (
             <option key={elem.value} value={JSON.stringify(elem)}>

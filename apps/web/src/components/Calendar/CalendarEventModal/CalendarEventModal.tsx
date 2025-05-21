@@ -21,7 +21,7 @@ export default function CalendarEventModal({
     <div className="shadow-sx h-min w-full space-y-2 rounded-md bg-slate-50 p-6">
       <div className="flex items-center text-lg">
         <div
-          className={`mr-2 size-5 rounded-xs ${calendarEvent.backgroundColour}`}
+          className={`rounded-xs mr-2 size-5 ${calendarEvent.backgroundColour}`}
         ></div>
         <p className="font-bold">{calendarEvent.courseCode}</p>
         &nbsp;-&nbsp;

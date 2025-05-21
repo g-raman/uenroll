@@ -19,9 +19,9 @@ export default function CalendarEvent({ calendarEvent }: CalendarEventProps) {
   const end = dayjs(calendarEvent.end).format(TIME_FORMAT);
   return (
     <div
-      className={`top-0 right-0 left-0 flex h-full cursor-pointer flex-col gap-1 rounded-sm border-l-4 p-2 ${calendarEvent.backgroundColour}`}
+      className={`left-0 right-0 top-0 flex h-full cursor-pointer flex-col gap-1 rounded-sm border-l-4 p-2 ${calendarEvent.backgroundColour}`}
     >
-      <div className="flex text-xs text-nowrap">
+      <div className="flex text-nowrap text-xs">
         <p className="font-bold">{calendarEvent.title}</p>
         &nbsp;-&nbsp;
         <p className="text-xs">{calendarEvent.subSection}</p>
@@ -29,7 +29,7 @@ export default function CalendarEvent({ calendarEvent }: CalendarEventProps) {
         <p className="font-normal">({calendarEvent.type})</p>
       </div>
 
-      <p className="font-light text-nowrap">
+      <p className="text-nowrap font-light">
         {start} - {end}
       </p>
     </div>
