@@ -1,0 +1,34 @@
+{
+  "name": "uenroll-scraper",
+  "version": "1.0.0",
+  "description": "A modern scraper for the uOttawa public course registry",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "scrape:courses": "node dist/src/main.js",
+    "scrape:terms": "node dist/src/scrape/scrapeAvailableTerms.js",
+    "scrape:subjects": "node dist/src/scrape/scrapeAvailableSubjects.js",
+    "db:cleanup": "node dist/src/db/cleanup.js",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:function": "drizzle-kit generate --custom --name=get_course_function"
+  },
+  "keywords": [],
+  "author": "Raman Gupta",
+  "license": "CC BY-NC-SA 4.0",
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.5.0",
+    "drizzle-orm": "^0.42.0",
+    "fetch-cookie": "^3.1.0",
+    "postgres": "^3.4.5",
+    "puppeteer-core": "^24.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.14",
+    "domhandler": "^5.0.3",
+    "drizzle-kit": "^0.31.1",
+    "typescript": "^5.8.3"
+  }
+}
