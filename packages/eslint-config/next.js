@@ -6,6 +6,7 @@ import pluginReact from "eslint-plugin-react";
 import globals from "globals";
 import pluginNext from "@next/eslint-plugin-next";
 import { config as baseConfig } from "./base.js";
+import pluginQuery from "@tanstack/eslint-plugin-query";
 
 /**
  * A custom ESLint configuration for libraries that use Next.js.
@@ -17,6 +18,7 @@ export const nextJsConfig = [
   js.configs.recommended,
   eslintConfigPrettier,
   ...tseslint.configs.recommended,
+  ...pluginQuery.configs["flat/recommended"],
   {
     ...pluginReact.configs.flat.recommended,
     languageOptions: {
