@@ -26,9 +26,9 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: terraform
+        working-directory: apps/scraper/terraform
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
-        working-directory: terraform
+        working-directory: apps/scraper/terraform
 
