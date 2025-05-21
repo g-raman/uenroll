@@ -26,6 +26,7 @@
     "puppeteer-core": "^24.7.0"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.14",
     "domhandler": "^5.0.3",

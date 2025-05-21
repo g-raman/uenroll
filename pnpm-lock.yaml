@@ -42,6 +42,9 @@ importers:
         specifier: ^24.7.0
         version: 24.9.0
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
