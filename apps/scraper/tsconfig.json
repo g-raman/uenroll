@@ -1,26 +1,18 @@
 {
+  "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     // Base Options
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "es2022",
     "allowJs": true,
     "resolveJsonModule": true,
-    "moduleDetection": "force",
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
 
     // Strictness
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
 
     // Transpiling with TypeScript
-    "module": "NodeNext",
     "outDir": "dist",
     "sourceMap": true,
-
-    "lib": ["es2022", "dom", "dom.iterable"],
   },
   "include": ["src", "./drizzle.config.ts", "./drizzle/**/*.ts"]
 }
