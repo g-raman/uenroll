@@ -1,6 +1,7 @@
 {
   "name": "web",
   "version": "0.2.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 3000",
@@ -29,10 +30,10 @@
     "lz-string": "^1.5.0",
     "minisearch": "^7.1.2",
     "moment": "^2.30.1",
-    "next": "15.3.2",
+    "next": "^15.3.2",
     "nuqs": "^2.4.3",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-hot-toast": "^2.5.2",
     "rrule": "^2.8.1",
     "ts-ics": "^1.6.8",
