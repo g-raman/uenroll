@@ -25,11 +25,11 @@ npm install -g pnpm
 source ~/.bashrc
 
 # Clone repo
-WORK_DIR="/scraper"
-git clone https://github.com/g-raman/scraper.git "$WORK_DIR"
+WORK_DIR="/uenroll"
+git clone https://github.com/g-raman/uenroll.git "$WORK_DIR"
 
 # Add API key to .env
-echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$HOME/scraper/.env"
+echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$HOME/uenroll/apps/scraper/.env"
 
 # Install dependencies
 cd "$WORK_DIR"
@@ -42,5 +42,7 @@ mkdir -p /var/logs/scraper/
 echo 'export GITHUB_TOKEN="${GITHUB_TOKEN}"' >> /etc/profile
 source /etc/profile
 
-chmod +x src/scrape.sh
+WORK_DIR="/uenroll/apps/scraper"
+cd "$WORK_DIR"
+chmod +x "$WORK_DIR/src/scrape.sh"
 ./src/scrape.sh >> /var/logs/scraper/scraper.log
