@@ -43,11 +43,9 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.7",
-    "@tanstack/eslint-plugin-query": "^5.74.7",
     "@types/node": "^22.15.18",
     "@types/react": "19.1.4",
     "@types/react-dom": "19.1.5",
-    "tailwindcss": "^4.1.7",
-    "typescript": "^5.8.3"
+    "tailwindcss": "^4.1.7"
   }
 }
