@@ -31,9 +31,9 @@ git clone https://github.com/g-raman/uenroll.git "$WORK_DIR"
 # Add API key to .env
 echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$HOME/uenroll/apps/scraper/.env"
 
-# Install dependencies
+# Install dependencies & ensure EC2 insance CPU & I/O is not exhausted
 cd "$WORK_DIR"
-pnpm install
+pnpm install --filter '!./apps/web' --network-concurrency=1
 
 # Make director to store logs
 mkdir -p /var/logs/scraper/
