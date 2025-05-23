@@ -11,6 +11,7 @@
   "author": "",
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
+    "dotenv": "^16.5.0",
     "drizzle-orm": "^0.42.0",
     "postgres": "^3.4.6"
   },
