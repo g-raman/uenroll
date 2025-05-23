@@ -45,6 +45,9 @@ importers:
         specifier: ^24.7.0
         version: 24.9.0
     devDependencies:
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
