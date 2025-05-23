@@ -158,6 +158,9 @@ importers:
         specifier: ^11.1.0
         version: 11.1.0
     devDependencies:
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
