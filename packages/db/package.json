@@ -17,11 +17,12 @@
   "dependencies": {
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.42.0",
+    "eslint": "^9.27.0",
     "postgres": "^3.4.6"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
     "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.21",
     "drizzle-kit": "^0.31.1"
   }
