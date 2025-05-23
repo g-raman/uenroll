@@ -9,10 +9,7 @@
     "scrape:courses": "node dist/src/main.js",
     "scrape:terms": "node dist/src/scrape/scrapeAvailableTerms.js",
     "scrape:subjects": "node dist/src/scrape/scrapeAvailableSubjects.js",
-    "db:cleanup": "node dist/src/cleanup.js",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:function": "drizzle-kit generate --custom --name=get_course_function"
+    "db:cleanup": "node dist/src/cleanup.js"
   },
   "keywords": [],
   "author": "Raman Gupta",

@@ -7,7 +7,11 @@
     ".": "./src/index.ts",
     "./schema": "./src/schema.ts"
   },
-  "scripts": {},
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:function": "drizzle-kit generate --custom --name=get_course_function"
+  },
   "author": "",
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
