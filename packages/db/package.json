@@ -10,11 +10,12 @@
   "scripts": {},
   "author": "",
   "packageManager": "pnpm@10.11.0",
-  "devDependencies": {
-    "drizzle-kit": "^0.31.1"
-  },
   "dependencies": {
     "drizzle-orm": "^0.42.0",
     "postgres": "^3.4.6"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "drizzle-kit": "^0.31.1"
   }
 }

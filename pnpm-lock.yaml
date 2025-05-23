@@ -179,6 +179,9 @@ importers:
         specifier: ^3.4.6
         version: 3.4.6
     devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       drizzle-kit:
         specifier: ^0.31.1
         version: 0.31.1
