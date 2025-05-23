@@ -5,7 +5,7 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["SUPABASE_KEY", "SUPABASE_URL"]
+      "env": ["SUPABASE_KEY", "SUPABASE_URL", "DATABASE_URL"]
     },
     "lint": {
       "dependsOn": ["^lint"]

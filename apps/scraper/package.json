@@ -1,5 +1,5 @@
 {
-  "name": "uenroll-scraper",
+  "name": "scraper",
   "version": "1.0.0",
   "description": "A modern scraper for the uOttawa public course registry",
   "main": "index.js",
@@ -9,10 +9,7 @@
     "scrape:courses": "node dist/src/main.js",
     "scrape:terms": "node dist/src/scrape/scrapeAvailableTerms.js",
     "scrape:subjects": "node dist/src/scrape/scrapeAvailableSubjects.js",
-    "db:cleanup": "node dist/src/db/cleanup.js",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:function": "drizzle-kit generate --custom --name=get_course_function"
+    "db:cleanup": "node dist/src/cleanup.js"
   },
   "keywords": [],
   "author": "Raman Gupta",
@@ -28,6 +25,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/db": "workspace:*",
     "@types/node": "^22.15.14",
     "domhandler": "^5.0.3",
     "drizzle-kit": "^0.31.1",

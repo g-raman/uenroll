@@ -2,8 +2,9 @@ import * as cheerio from "cheerio";
 import { getBrowser, getBrowserEndpoint } from "../utils/browser.js";
 import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 import { getIdSelector, getIdStartsWithSelector } from "../utils/scrape.js";
-import { db, updateAvailableSubjects } from "../supabase.js";
+import { updateAvailableSubjects } from "../supabase.js";
 import type { Subject } from "../utils/types.js";
+import { client } from "@repo/db";
 
 const characters = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", ..."0123456789"];
 const browserEndpoint = await getBrowserEndpoint();
@@ -51,4 +52,4 @@ for (const character of characters) {
 
 await page.close();
 await browser.disconnect();
-await db.$client.end();
+await client.end();

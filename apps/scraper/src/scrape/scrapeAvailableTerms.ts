@@ -1,8 +1,9 @@
 import * as cheerio from "cheerio";
 import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 import type { Term } from "../utils/types.js";
-import { db, updateAvailableTerms } from "../supabase.js";
+import { updateAvailableTerms } from "../supabase.js";
 import { fetchCookie } from "../utils/cookies.js";
+import { client } from "@repo/db";
 
 const response = await fetchCookie(COURSE_REGISTRY_URL);
 const html = await response.text();
@@ -27,4 +28,4 @@ $("[id='CLASS_SRCH_WRK2_STRM$35$']")
   });
 
 await updateAvailableTerms(terms);
-await db.$client.end();
+await client.end();

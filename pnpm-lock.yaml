@@ -45,6 +45,9 @@ importers:
         specifier: ^24.7.0
         version: 24.9.0
     devDependencies:
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
@@ -169,6 +172,34 @@ importers:
       tailwindcss:
         specifier: ^4.1.7
         version: 4.1.7
+
+  packages/db:
+    dependencies:
+      dotenv:
+        specifier: ^16.5.0
+        version: 16.5.0
+      drizzle-orm:
+        specifier: ^0.42.0
+        version: 0.42.0(postgres@3.4.6)
+      eslint:
+        specifier: ^9.27.0
+        version: 9.27.0(jiti@2.4.2)
+      postgres:
+        specifier: ^3.4.6
+        version: 3.4.6
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.15.21
+        version: 22.15.21
+      drizzle-kit:
+        specifier: ^0.31.1
+        version: 0.31.1
 
   packages/eslint-config:
     devDependencies:

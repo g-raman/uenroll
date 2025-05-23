@@ -1,6 +1,5 @@
 import scrapeSearchResults from "./scrape/scrapeSearchResults.js";
 import getAvailableTerms, {
-  client,
   getAvailableSubjects,
   upsertCourseDetails,
 } from "./supabase.js";
@@ -9,6 +8,7 @@ import "dotenv/config";
 import * as cheerio from "cheerio";
 import { getError } from "./utils/scrape.js";
 import getSubjectByYear from "./scrape/getSubjectByYear.js";
+import { client } from "@repo/db";
 
 const terms = await getAvailableTerms();
 
