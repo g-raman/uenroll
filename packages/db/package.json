@@ -8,6 +8,7 @@
     "./schema": "./src/schema.ts"
   },
   "scripts": {
+    "lint": "eslint .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:function": "drizzle-kit generate --custom --name=get_course_function"
