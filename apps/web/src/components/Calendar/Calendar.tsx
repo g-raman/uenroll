@@ -81,7 +81,6 @@ function Calendar() {
           endDate.get("month") + 1,
           endDate.get("day"),
         ),
-        byweekday: startDate.get("d") + 1,
       });
 
       return {
