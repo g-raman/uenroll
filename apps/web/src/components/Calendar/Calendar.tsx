@@ -62,8 +62,11 @@ function Calendar() {
 
     const events = state.selectedSessions.map(session => {
       const baseStartDate = dayjs(session.startRecur);
-      const dayOffset = Math.abs(baseStartDate.get("d") - session.dayOfWeek);
-      const startDate = baseStartDate.add(dayOffset, "days");
+      const dayOffset = session.dayOfWeek - baseStartDate.day();
+      const startDate = baseStartDate.add(
+        dayOffset < 0 ? 7 + dayOffset : dayOffset,
+        "days",
+      );
       const endDate = dayjs(session.endRecur);
 
       const rrule = new RRule({
@@ -78,6 +81,7 @@ function Calendar() {
           endDate.get("month") + 1,
           endDate.get("day"),
         ),
+        byweekday: startDate.get("d") + 1,
       });
 
       return {
