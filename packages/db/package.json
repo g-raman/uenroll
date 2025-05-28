@@ -4,9 +4,16 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./dist/src/index.js",
-    "./schema": "./dist/src/schema.js"
+    ".": {
+      "require": "./dist/src/index.js",
+      "imports": "./dist/src/index.js"
+    },
+    "./schema": {
+      "require": "./dist/src/schema.js",
+      "imports": "./dist/src/schema.js"
+    }
   },
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "lint": "eslint .",
