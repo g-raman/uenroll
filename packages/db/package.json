@@ -8,7 +8,7 @@
     "./schema": "./dist/src/schema.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "lint": "eslint .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
