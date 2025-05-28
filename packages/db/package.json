@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./schema": "./src/schema.ts"
+    ".": "./dist/src/index.js",
+    "./schema": "./dist/src/schema.js"
   },
   "scripts": {
     "build": "tsc",
