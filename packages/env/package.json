@@ -8,7 +8,8 @@
     "build": "tsup"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "@repo/eslint-config": "workspace:*"
   },
   "packageManager": "pnpm@10.11.0"
 }
