@@ -7,5 +7,8 @@
   "scripts": {
     "build": "tsup"
   },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  },
   "packageManager": "pnpm@10.11.0"
 }
