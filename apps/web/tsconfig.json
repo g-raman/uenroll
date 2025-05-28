@@ -7,7 +7,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@repo/db": ["../../packages/db/dist/"]
     },
   },
   "include": [
