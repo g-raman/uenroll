@@ -5,12 +5,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "require": "./dist/src/index.js",
-      "imports": "./dist/src/index.js"
+      "require": "./dist/index.js",
+      "imports": "./dist/index.cjs"
     },
     "./schema": {
-      "require": "./dist/src/schema.js",
-      "imports": "./dist/src/schema.js"
+      "require": "./dist/schema.js",
+      "imports": "./dist/schema.cjs"
     }
   },
   "types": "dist/index.d.ts",
