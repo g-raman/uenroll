@@ -6432,6 +6432,8 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
+  ts-interface-checker@0.1.13: {}
+
   tslib@2.8.1: {}
 
   tsup@8.5.0(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.3):
