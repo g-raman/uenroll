@@ -35,6 +35,9 @@ echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$HOME/uenroll/apps/scraper/.env"
 cd "$WORK_DIR"
 pnpm install --filter '!./apps/web' --network-concurrency=1
 
+# Build Scraper
+pnpm dlx turbo build --filter scraper
+
 # Make director to store logs
 mkdir -p /var/logs/scraper/
 
