@@ -6,10 +6,10 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "scrape:courses": "node dist/src/main.js",
-    "scrape:terms": "node dist/src/scrape/scrapeAvailableTerms.js",
-    "scrape:subjects": "node dist/src/scrape/scrapeAvailableSubjects.js",
-    "db:cleanup": "node dist/src/cleanup.js"
+    "scrape:courses": "node dist/main.js",
+    "scrape:terms": "node dist/scrape/scrapeAvailableTerms.js",
+    "scrape:subjects": "node dist/scrape/scrapeAvailableSubjects.js",
+    "db:cleanup": "node dist/cleanup.js"
   },
   "keywords": [],
   "author": "Raman Gupta",
