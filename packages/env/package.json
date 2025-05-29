@@ -5,8 +5,12 @@
   "type": "module",
   "main": "./src/server.ts",
   "exports": {
-    "./server": "./src/server.ts"
+    "./server": {
+      "require": "./dist/server.js",
+      "imports": "./dist/server.cjs"
+    }
   },
+  "types": "dist/server.d.ts",
   "scripts": {
     "build": "tsup"
   },
