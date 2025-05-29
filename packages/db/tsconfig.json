@@ -13,9 +13,6 @@
     // Transpiling with TypeScript
     "outDir": "dist",
     "sourceMap": true,
-    "paths": {
-      "@repo/env": ["../env/src/"]
-    },
   },
   "include": ["src", "./drizzle.config.ts", "./drizzle/**/*.ts"]
 }
