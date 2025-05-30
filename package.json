@@ -20,5 +20,8 @@
   "packageManager": "pnpm@10.11.0",
   "engines": {
     "node": ">=24"
+  },
+  "dependencies": {
+    "tsup": "^8.5.0"
   }
 }

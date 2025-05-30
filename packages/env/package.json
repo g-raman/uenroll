@@ -1,0 +1,23 @@
+{
+  "name": "@repo/env",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*"
+  },
+  "packageManager": "pnpm@10.11.0",
+  "dependencies": {
+    "@t3-oss/env-core": "^0.13.6",
+    "@types/node": "^22.15.24",
+    "zod": "^3.25.36"
+  }
+}
