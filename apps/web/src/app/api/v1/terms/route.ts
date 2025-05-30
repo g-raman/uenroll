@@ -1,12 +1,15 @@
-import supabase from "@/supabase/supabase";
+import { db } from "@repo/db";
+import { availableTermsTable } from "@repo/db/schema";
 
 export async function GET() {
-  const { data, error } = await supabase
-    .from("available_terms")
-    .select("term,value");
+  const data = await db
+    .select({
+      term: availableTermsTable.term,
+      value: availableTermsTable.value,
+    })
+    .from(availableTermsTable);
 
-  if (error) {
-    console.log(error.message);
+  if (!data) {
     return Response.json({ error: "Something went wrong", data: null });
   }
 
