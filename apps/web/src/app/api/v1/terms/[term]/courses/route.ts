@@ -1,6 +1,7 @@
 export const dynamic = "force-static";
 
-import supabase from "@/supabase/supabase";
+import { db } from "@repo/db";
+import { coursesTable } from "@repo/db/schema";
 
 type Params = Promise<{ term: string }>;
 export async function GET(req: Request, segmentData: { params: Params }) {
@@ -13,15 +14,17 @@ export async function GET(req: Request, segmentData: { params: Params }) {
     });
   }
 
-  const res = await supabase
-    .from("courses")
-    .select("course_code,course_title")
-    .eq("term", params.term)
+  const res = await db
+    .select({
+      courseCode: coursesTable.courseCode,
+      courseTitle: coursesTable.courseTitle,
+    })
+    .from(coursesTable)
     .limit(3500);
 
-  if (!res.data) {
+  if (!res) {
     return Response.json({ error: "No available courses", data: null });
   }
 
-  return Response.json({ error: null, data: res.data });
+  return Response.json({ error: null, data: res });
 }

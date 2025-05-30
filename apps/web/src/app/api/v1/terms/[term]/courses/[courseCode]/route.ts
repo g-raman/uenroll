@@ -1,4 +1,5 @@
-import supabase from "@/supabase/supabase";
+import { Course } from "@/types/Types";
+import { getCourse } from "@/utils/db/getCourse";
 
 type Params = Promise<{ term: string; courseCode: string }>;
 export async function GET(req: Request, segmentData: { params: Params }) {
@@ -28,14 +29,11 @@ export async function GET(req: Request, segmentData: { params: Params }) {
     return Response.json({ error: "Not a valid course code", data: null });
   }
 
-  const res = await supabase.rpc("get_course", {
-    term_param: termParam,
-    course_code_param: courseCodeParam,
-  });
+  const res = (await getCourse(termParam, courseCodeParam)) as Course[];
 
-  if (!res.data) {
+  if (!res) {
     return Response.json({ error: "No course found", data: null });
   }
 
-  return Response.json({ error: null, data: res.data[0] });
+  return Response.json({ error: null, data: res[0] });
 }

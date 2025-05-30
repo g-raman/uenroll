@@ -22,7 +22,6 @@
     "@schedule-x/react": "^2.30.0",
     "@schedule-x/theme-default": "^2.30.0",
     "@schedule-x/theme-shadcn": "^2.30.0",
-    "@supabase/supabase-js": "^2.49.4",
     "@tanstack/react-query": "^5.76.1",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
@@ -42,6 +41,7 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/db": "workspace:*",
     "@tailwindcss/postcss": "^4.1.7",
     "@types/node": "^22.15.18",
     "@types/react": "19.1.4",

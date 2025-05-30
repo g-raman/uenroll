@@ -4,11 +4,20 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./dist/src/index.js",
-    "./schema": "./dist/src/schema.js"
+    ".": {
+      "require": "./dist/index.js",
+      "module": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./schema": {
+      "require": "./dist/schema.js",
+      "module": "./dist/schema.cjs",
+      "types": "./dist/schema.d.ts"
+    }
   },
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup",
     "lint": "eslint .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
