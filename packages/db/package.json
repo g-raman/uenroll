@@ -19,15 +19,14 @@
   },
   "scripts": {
     "build": "tsup",
-    "lint": "eslint .",
     "check-types": "tsc --noEmit",
-    "db:seed": "tsx ./src/seeds/index.ts",
+    "db:function": "drizzle-kit generate --custom --name=get_course_function",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:function": "drizzle-kit generate --custom --name=get_course_function",
-    "db:studio": "drizzle-kit studio"
+    "db:seed": "tsx ./src/seeds/index.ts",
+    "db:studio": "drizzle-kit studio",
+    "lint": "eslint ."
   },
-  "packageManager": "pnpm@10.11.0",
   "dependencies": {
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.42.0",
@@ -40,8 +39,9 @@
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.21",
     "drizzle-kit": "^0.31.1",
-    "tsx": "^4.19.4",
     "eslint": "catalog:",
+    "tsx": "^4.19.4",
     "typescript": "catalog:"
-  }
+  },
+  "packageManager": "pnpm@10.11.0"
 }

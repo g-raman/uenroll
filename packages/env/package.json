@@ -8,9 +8,14 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
-    "lint": "eslint .",
     "check-types": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "^0.13.6",
+    "@types/node": "^22.15.24",
+    "zod": "^3.25.36"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -18,10 +23,5 @@
     "eslint": "catalog:",
     "typescript": "catalog:"
   },
-  "packageManager": "pnpm@10.11.0",
-  "dependencies": {
-    "@t3-oss/env-core": "^0.13.6",
-    "@types/node": "^22.15.24",
-    "zod": "^3.25.36"
-  }
+  "packageManager": "pnpm@10.11.0"
 }

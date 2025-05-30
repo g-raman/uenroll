@@ -4,10 +4,11 @@
   "license": "CC-BY-NC-SA-4.0",
   "scripts": {
     "build": "turbo run build",
+    "check-types": "turbo run check-types",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "format:packagejson": "sort-package-json ./**/package.json --ignore ./**/node_modules",
+    "lint": "turbo run lint"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",

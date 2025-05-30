@@ -2,20 +2,20 @@
   "name": "scraper",
   "version": "1.1.1",
   "description": "A modern scraper for the uOttawa public course registry",
-  "main": "index.js",
+  "keywords": [],
+  "license": "CC BY-NC-SA 4.0",
+  "author": "Raman Gupta",
   "type": "module",
+  "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint .",
     "check-types": "tsc --noEmit",
+    "db:cleanup": "node dist/cleanup.js",
+    "lint": "eslint .",
     "scrape:courses": "node dist/main.js",
-    "scrape:terms": "node dist/scrape/scrapeAvailableTerms.js",
     "scrape:subjects": "node dist/scrape/scrapeAvailableSubjects.js",
-    "db:cleanup": "node dist/cleanup.js"
+    "scrape:terms": "node dist/scrape/scrapeAvailableTerms.js"
   },
-  "keywords": [],
-  "author": "Raman Gupta",
-  "license": "CC BY-NC-SA 4.0",
   "dependencies": {
     "cheerio": "^1.0.0",
     "dotenv": "^16.5.0",
