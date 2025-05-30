@@ -548,7 +548,7 @@ const courseComponents = [
   },
 ];
 
-export async function seedCourseComponents(db: PostgresJsDatabase) {
+export async function seedCourseComponents(db: Database) {
   await db.insert(courseComponentsTable).values(courseComponents);
   console.log("Seeded database with course components.");
 }

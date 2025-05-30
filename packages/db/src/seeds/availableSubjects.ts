@@ -1,5 +1,6 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { availableSubjectsTable } from "../schema.js";
+import type { Database } from "../index.js";
 
 const availableSubjects = [
   { subject: "ACP" },
@@ -104,7 +105,7 @@ const availableSubjects = [
   { subject: "END" },
 ];
 
-export async function seedAvailableSubjects(db: PostgresJsDatabase) {
+export async function seedAvailableSubjects(db: Database) {
   await db.insert(availableSubjectsTable).values(availableSubjects);
   console.log("Seeded database with available subjects");
 }

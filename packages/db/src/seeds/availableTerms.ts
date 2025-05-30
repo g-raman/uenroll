@@ -16,7 +16,7 @@ const availableTerms = [
   },
 ];
 
-export async function seedAvailableTerms(db: PostgresJsDatabase) {
+export async function seedAvailableTerms(db: Database) {
   await db.insert(availableTermsTable).values(availableTerms);
   console.log("Seeded database with available terms");
 }

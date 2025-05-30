@@ -1,5 +1,6 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { coursesTable } from "../schema.js";
+import type { Database } from "../index.js";
 
 const courses = [
   {
@@ -54,7 +55,7 @@ const courses = [
   },
 ];
 
-export async function seedCourses(db: PostgresJsDatabase) {
+export async function seedCourses(db: Database) {
   await db.insert(coursesTable).values(courses);
   console.log("Seeded database with courses.");
 }

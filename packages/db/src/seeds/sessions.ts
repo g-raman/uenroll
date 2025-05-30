@@ -1,5 +1,6 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { sessionsTable } from "../schema.js";
+import type { Database } from "../index.js";
 
 const sessions = [
   {
@@ -988,7 +989,7 @@ const sessions = [
   },
 ];
 
-export async function seedSessions(db: PostgresJsDatabase) {
+export async function seedSessions(db: Database) {
   await db.insert(sessionsTable).values(sessions);
   console.log("Seeded database with sessions.");
 }
