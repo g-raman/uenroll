@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres:17
+    container_name: uenroll-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+

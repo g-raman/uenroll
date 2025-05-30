@@ -7,23 +7,25 @@
     ".": {
       "require": "./dist/index.js",
       "module": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.cjs"
     },
     "./schema": {
       "require": "./dist/schema.js",
       "module": "./dist/schema.cjs",
-      "types": "./dist/schema.d.ts"
+      "types": "./dist/schema.d.ts",
+      "import": "./dist/schema.cjs"
     }
   },
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "lint": "eslint .",
+    "db:seed": "tsx ./src/seeds/index.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:function": "drizzle-kit generate --custom --name=get_course_function"
+    "db:function": "drizzle-kit generate --custom --name=get_course_function",
+    "db:studio": "drizzle-kit studio"
   },
-  "author": "",
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
     "dotenv": "^16.5.0",
@@ -32,10 +34,11 @@
     "postgres": "^3.4.6"
   },
   "devDependencies": {
+    "@repo/env": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/env": "workspace:*",
     "@types/node": "^22.15.21",
-    "drizzle-kit": "^0.31.1"
+    "drizzle-kit": "^0.31.1",
+    "tsx": "^4.19.4"
   }
 }
