@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsup",
     "lint": "eslint .",
+    "check-types": "tsc --noEmit",
     "clean": "rm -rf dist"
   },
   "devDependencies": {
