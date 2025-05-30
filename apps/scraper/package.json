@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint .",
+    "check-types": "tsc --noEmit",
     "scrape:courses": "node dist/main.js",
     "scrape:terms": "node dist/scrape/scrapeAvailableTerms.js",
     "scrape:subjects": "node dist/scrape/scrapeAvailableSubjects.js",
