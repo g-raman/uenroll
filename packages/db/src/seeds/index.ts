@@ -1,4 +1,4 @@
-import { db } from "../index.js";
+import { client, db } from "../index.js";
 import { seedAvailableSubjects } from "./availableSubjects.js";
 import { seedAvailableTerms } from "./availableTerms.js";
 import { seedCourseComponents } from "./courseComponents.js";
@@ -14,3 +14,6 @@ async function main() {
 }
 
 main();
+
+await client.end();
+process.exit(0);
