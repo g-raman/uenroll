@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@repo/db"],
+  transpilePackages: ["@repo/db", "@repo/env"],
   typescript: {
     ignoreBuildErrors: true,
   },
