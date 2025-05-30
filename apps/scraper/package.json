@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "lint": "eslint .",
     "scrape:courses": "node dist/main.js",
     "scrape:terms": "node dist/scrape/scrapeAvailableTerms.js",
     "scrape:subjects": "node dist/scrape/scrapeAvailableSubjects.js",
@@ -24,6 +25,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/db": "workspace:*",
+    "eslint": "catalog:",
     "@types/node": "^22.15.14",
     "domhandler": "^5.0.3",
     "typescript": "^5.8.3"

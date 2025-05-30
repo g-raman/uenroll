@@ -22,7 +22,7 @@
     "node": ">=22"
   },
   "dependencies": {
-    "eslint": "^9.27.0",
+    "eslint": "catalog:",
     "tsup": "^8.5.0"
   }
 }

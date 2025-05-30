@@ -1,3 +1,5 @@
 packages:
   - "apps/*"
   - "packages/*"
+catalog:
+  eslint: ^9.27.0
