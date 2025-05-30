@@ -20,6 +20,7 @@
   "scripts": {
     "build": "tsup",
     "lint": "eslint .",
+    "db:seed": "tsx ./src/seeds/index.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:function": "drizzle-kit generate --custom --name=get_course_function",
