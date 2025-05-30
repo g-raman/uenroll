@@ -8,6 +8,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
+    "lint": "eslint .",
     "clean": "rm -rf dist"
   },
   "devDependencies": {
