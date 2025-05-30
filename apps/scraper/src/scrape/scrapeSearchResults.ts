@@ -18,7 +18,6 @@ import {
   processSessions,
 } from "../utils/scrape.js";
 import * as cheerio from "cheerio";
-import type { AnyNode } from "domhandler";
 
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";
 const COURSE_TITLE_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2GP$";
