@@ -16,13 +16,6 @@ catalogs:
 importers:
 
   .:
-    dependencies:
-      eslint:
-        specifier: 'catalog:'
-        version: 9.27.0(jiti@2.4.2)
-      tsup:
-        specifier: ^8.5.0
-        version: 8.5.0(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.4)(typescript@5.8.3)
     devDependencies:
       '@changesets/changelog-github':
         specifier: ^0.5.1
@@ -30,12 +23,18 @@ importers:
       '@changesets/cli':
         specifier: ^2.29.4
         version: 2.29.4
+      eslint:
+        specifier: 'catalog:'
+        version: 9.27.0(jiti@2.4.2)
       prettier:
         specifier: ^3.5.3
         version: 3.5.3
       prettier-plugin-tailwindcss:
         specifier: ^0.6.11
         version: 0.6.11(prettier@3.5.3)
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.0(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.4)(typescript@5.8.3)
       turbo:
         specifier: ^2.5.3
         version: 2.5.3

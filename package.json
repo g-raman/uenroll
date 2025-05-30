@@ -15,14 +15,12 @@
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "turbo": "^2.5.3",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "eslint": "catalog:",
+    "tsup": "^8.5.0"
   },
   "packageManager": "pnpm@10.11.0",
   "engines": {
     "node": ">=22"
-  },
-  "dependencies": {
-    "eslint": "catalog:",
-    "tsup": "^8.5.0"
   }
 }
