@@ -190,13 +190,15 @@ export default function SearchBar() {
               <li
                 key={result.id}
                 onPointerDown={() =>
-                  handleSelectAutoComplete(dataAllCourses[result.id])
+                  handleSelectAutoComplete(
+                    dataAllCourses[result.id] as CourseAutocomplete,
+                  )
                 }
                 className="cursor-pointer px-4 py-2 hover:bg-gray-200"
               >
                 <div className="text-sm text-gray-800">
-                  {dataAllCourses[result.id].courseCode}:&nbsp;
-                  {dataAllCourses[result.id].courseTitle.replaceAll(
+                  {dataAllCourses[result.id]?.courseCode}:&nbsp;
+                  {dataAllCourses[result.id]?.courseTitle.replaceAll(
                     /\(\+\d+ combined\)/g,
                     "",
                   )}
