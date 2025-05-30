@@ -1,5 +1,11 @@
 # @repo/db
 
+## 0.2.0
+
+### Minor Changes
+
+- [#58](https://github.com/g-raman/uenroll/pull/58) [`39d630b`](https://github.com/g-raman/uenroll/commit/39d630b002bf5bf1e11b7e32f81468efa72a6b63) Thanks [@g-raman](https://github.com/g-raman)! - Make db package usable in Nextjs app
+
 ## 0.1.1
 
 ### Patch Changes
