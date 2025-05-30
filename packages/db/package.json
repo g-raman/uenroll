@@ -20,6 +20,7 @@
   "scripts": {
     "build": "tsup",
     "lint": "eslint .",
+    "check-types": "tsc --noEmit",
     "db:seed": "tsx ./src/seeds/index.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
