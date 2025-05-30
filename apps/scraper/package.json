@@ -17,9 +17,7 @@
   "dependencies": {
     "cheerio": "^1.0.0",
     "dotenv": "^16.5.0",
-    "drizzle-orm": "^0.42.0",
     "fetch-cookie": "^3.1.0",
-    "postgres": "^3.4.5",
     "puppeteer-core": "^24.7.0"
   },
   "devDependencies": {
@@ -28,7 +26,6 @@
     "@repo/db": "workspace:*",
     "@types/node": "^22.15.14",
     "domhandler": "^5.0.3",
-    "drizzle-kit": "^0.31.1",
     "typescript": "^5.8.3"
   }
 }

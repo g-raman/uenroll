@@ -39,15 +39,9 @@ importers:
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
-      drizzle-orm:
-        specifier: ^0.42.0
-        version: 0.42.0(postgres@3.4.6)
       fetch-cookie:
         specifier: ^3.1.0
         version: 3.1.0
-      postgres:
-        specifier: ^3.4.5
-        version: 3.4.6
       puppeteer-core:
         specifier: ^24.7.0
         version: 24.9.0
@@ -67,9 +61,6 @@ importers:
       domhandler:
         specifier: ^5.0.3
         version: 5.0.3
-      drizzle-kit:
-        specifier: ^0.31.1
-        version: 0.31.1
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
