@@ -1,3 +1,4 @@
+import type { Database } from "../index.js";
 import { courseComponentsTable } from "../schema.js";
 
 const courseComponents = [

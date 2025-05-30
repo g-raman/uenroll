@@ -1,3 +1,4 @@
+import type { Database } from "../index.js";
 import { availableTermsTable } from "../schema.js";
 
 const availableTerms = [
