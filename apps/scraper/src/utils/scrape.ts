@@ -155,8 +155,6 @@ export const getStatus = (section: cheerio.Cheerio<AnyNode>, count: number) => {
   const STATUS_SELECTOR = "win0divDERIVED_CLSRCH_SSR_STATUS_LONG$";
   const statusSelector = getIdSelector(STATUS_SELECTOR, count);
 
-  // The @types/cheerio package is not up to date
-  // @ts-ignore
   const { url } = section.find(statusSelector).extract({
     url: {
       selector: "img",

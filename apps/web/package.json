@@ -1,14 +1,14 @@
 {
   "name": "web",
   "version": "0.3.1",
-  "type": "module",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack --port 3000",
     "build": "next build",
-    "start": "next start",
+    "check-types": "tsc --noEmit",
+    "dev": "next dev --turbopack --port 3000",
     "lint": "next lint --max-warnings 0",
-    "check-types": "tsc --noEmit"
+    "start": "next start"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -39,13 +39,15 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@repo/db": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/db": "workspace:*",
     "@tailwindcss/postcss": "^4.1.7",
     "@types/node": "^22.15.18",
     "@types/react": "19.1.4",
     "@types/react-dom": "19.1.5",
-    "tailwindcss": "^4.1.7"
+    "eslint": "catalog:",
+    "tailwindcss": "^4.1.7",
+    "typescript": "catalog:"
   }
 }

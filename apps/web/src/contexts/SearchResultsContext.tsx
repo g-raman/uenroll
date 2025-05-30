@@ -12,6 +12,7 @@ import { shuffleArray } from "@/utils/helpers";
 import { fetchCourse, fetchTerms } from "@/utils/fetchData";
 import { ActionType, StateType } from "@/reducers/types";
 import { searchResultsRedcuer } from "@/reducers/searchResultsReducer";
+import { Term } from "@/types/Types";
 
 interface SearchResultsContextType {
   state: StateType;
@@ -51,7 +52,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
     const fetchInitialData = async () => {
       const terms = await fetchTerms();
       const initialTerm = terms.find(termData => termData.value === term);
-      const selectedTerm = initialTerm ? initialTerm : terms[0];
+      const selectedTerm = initialTerm ? initialTerm : (terms[0] as Term);
 
       if (!initialTerm || !selected) {
         dispatch({
@@ -99,6 +100,9 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
       });
     };
     fetchInitialData();
+
+    // This only needs to run once on load
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Sync reducer state back to URL whenever data changes

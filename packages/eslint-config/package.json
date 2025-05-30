@@ -1,7 +1,7 @@
 {
   "name": "@repo/eslint-config",
-  "type": "module",
   "private": true,
+  "type": "module",
   "exports": {
     "./base": "./base.js",
     "./next-js": "./next.js",
@@ -11,14 +11,14 @@
     "@eslint/js": "^9.27.0",
     "@next/eslint-plugin-next": "^15.3.0",
     "@tanstack/eslint-plugin-query": "^5.74.7",
-    "eslint": "^9.27.0",
+    "eslint": "catalog:",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-only-warn": "^1.1.0",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-turbo": "^2.5.0",
     "globals": "^16.1.0",
-    "typescript": "^5.8.2",
+    "typescript": "catalog:",
     "typescript-eslint": "^8.32.0"
   }
 }

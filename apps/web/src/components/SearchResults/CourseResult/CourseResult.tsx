@@ -40,6 +40,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
                 className="cursor-pointer underline"
                 href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
                 target="_blank"
+                rel="noreferrer"
               >
                 <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
               </a>

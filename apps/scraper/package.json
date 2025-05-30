@@ -2,33 +2,30 @@
   "name": "scraper",
   "version": "1.1.1",
   "description": "A modern scraper for the uOttawa public course registry",
-  "main": "index.js",
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "check-types": "tsc --noEmit",
+    "db:cleanup": "node dist/cleanup.js",
+    "lint": "eslint .",
     "scrape:courses": "node dist/main.js",
-    "scrape:terms": "node dist/scrape/scrapeAvailableTerms.js",
     "scrape:subjects": "node dist/scrape/scrapeAvailableSubjects.js",
-    "db:cleanup": "node dist/cleanup.js"
+    "scrape:terms": "node dist/scrape/scrapeAvailableTerms.js"
   },
-  "keywords": [],
-  "author": "Raman Gupta",
-  "license": "CC BY-NC-SA 4.0",
   "dependencies": {
     "cheerio": "^1.0.0",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.42.0",
     "fetch-cookie": "^3.1.0",
-    "postgres": "^3.4.5",
     "puppeteer-core": "^24.7.0"
   },
   "devDependencies": {
+    "@repo/db": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/db": "workspace:*",
     "@types/node": "^22.15.14",
     "domhandler": "^5.0.3",
-    "drizzle-kit": "^0.31.1",
-    "typescript": "^5.8.3"
+    "eslint": "catalog:",
+    "typescript": "catalog:"
   }
 }

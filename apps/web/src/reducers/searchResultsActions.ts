@@ -152,7 +152,7 @@ export const handleAddSelected = (
   }
 
   const selected = { ...state.selected };
-  selected[courseCode].push(subSection);
+  selected[courseCode]?.push(subSection);
   return {
     ...state,
     selected,

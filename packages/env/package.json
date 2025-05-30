@@ -7,17 +7,21 @@
   "module": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup",
-    "clean": "rm -rf dist"
+    "build": "pnpm clean && tsup",
+    "check-types": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "lint": "eslint ."
   },
-  "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*"
-  },
-  "packageManager": "pnpm@10.11.0",
   "dependencies": {
     "@t3-oss/env-core": "^0.13.6",
     "@types/node": "^22.15.24",
     "zod": "^3.25.36"
-  }
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  },
+  "packageManager": "pnpm@10.11.0"
 }

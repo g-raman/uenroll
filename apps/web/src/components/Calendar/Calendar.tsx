@@ -105,6 +105,9 @@ function Calendar() {
     calendarControls.setView(
       currentView === "month-agenda" ? "month-agenda" : "week",
     );
+
+    // This doesn't depend on calendar, calendarControls, eventsService, etc.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.selectedSessions]);
 
   // HACK: Gotta figure out a better way to do This

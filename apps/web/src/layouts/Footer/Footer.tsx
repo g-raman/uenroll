@@ -8,6 +8,7 @@ export const Footer = () => {
         className="border-b border-gray-300 text-gray-700 transition-colors hover:border-black hover:text-black"
         href="https://www.linkedin.com/in/gupta-raman/"
         target="_blank"
+        rel="noreferrer"
       >
         Raman Gupta
       </a>
@@ -16,6 +17,7 @@ export const Footer = () => {
         className="border-b border-gray-300 text-gray-700 transition-colors hover:border-black hover:text-black"
         href="https://github.com/g-raman/uenroll"
         target="_blank"
+        rel="noreferrer"
       >
         GitHub
       </a>

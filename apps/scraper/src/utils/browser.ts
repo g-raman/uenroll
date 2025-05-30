@@ -14,7 +14,13 @@ export const getBrowserEndpoint = async (): Promise<string> => {
 };
 
 export const getBrowser = async (browserEndpoint: string): Promise<Browser> => {
+  /*
+   * TODO: Temporary disabling as I need to write documentation for a proper setup
+   */
+
+  // eslint-disable-next-line turbo/no-undeclared-env-vars
   const environment = process.env["ENVIRONMENT"];
+  // eslint-disable-next-line turbo/no-undeclared-env-vars
   const puppeteerExecutablePath = process.env["PUPPETEER_EXECUTABLE_PATH"];
 
   if (environment === "DEV") {

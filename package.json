@@ -2,26 +2,28 @@
   "name": "uenroll",
   "private": true,
   "license": "CC-BY-NC-SA-4.0",
+  "author": "Raman Gupta",
   "scripts": {
     "build": "turbo run build",
+    "check-types": "turbo run check-types",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "format:packagejson": "sort-package-json ./**/package.json --ignore ./**/node_modules",
+    "lint": "turbo run lint"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.4",
+    "eslint": "catalog:",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "sort-package-json": "^3.2.1",
+    "tsup": "^8.5.0",
     "turbo": "^2.5.3",
-    "typescript": "5.8.3"
+    "typescript": "catalog:"
   },
   "packageManager": "pnpm@10.11.0",
   "engines": {
     "node": ">=22"
-  },
-  "dependencies": {
-    "tsup": "^8.5.0"
   }
 }
