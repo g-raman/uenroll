@@ -33,10 +33,11 @@
     "postgres": "^3.4.6"
   },
   "devDependencies": {
+    "@repo/env": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/env": "workspace:*",
     "@types/node": "^22.15.21",
-    "drizzle-kit": "^0.31.1"
+    "drizzle-kit": "^0.31.1",
+    "tsx": "^4.19.4"
   }
 }
