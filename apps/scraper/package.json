@@ -29,6 +29,6 @@
     "@types/node": "^22.15.14",
     "domhandler": "^5.0.3",
     "eslint": "catalog:",
-    "typescript": "^5.8.3"
+    "typescript": "catalog:"
   }
 }
