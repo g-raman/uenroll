@@ -69,6 +69,6 @@ export interface SelectedKey {
 }
 
 export interface CourseAutocomplete {
-  course_code: string;
-  course_title: string;
+  courseCode: string;
+  courseTitle: string;
 }
