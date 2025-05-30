@@ -2,6 +2,7 @@
   "name": "uenroll",
   "private": true,
   "license": "CC-BY-NC-SA-4.0",
+  "author": "Raman Gupta",
   "scripts": {
     "build": "turbo run build",
     "check-types": "turbo run check-types",
