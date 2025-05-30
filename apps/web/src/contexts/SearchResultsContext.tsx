@@ -99,6 +99,9 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
       });
     };
     fetchInitialData();
+
+    // This only needs to run once on load
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Sync reducer state back to URL whenever data changes
