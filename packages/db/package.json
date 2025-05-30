@@ -7,15 +7,16 @@
     ".": {
       "require": "./dist/index.js",
       "module": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.cjs"
     },
     "./schema": {
       "require": "./dist/schema.js",
       "module": "./dist/schema.cjs",
-      "types": "./dist/schema.d.ts"
+      "types": "./dist/schema.d.ts",
+      "import": "./dist/schema.cjs"
     }
   },
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "lint": "eslint .",
