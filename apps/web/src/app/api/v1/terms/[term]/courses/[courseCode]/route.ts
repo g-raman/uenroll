@@ -1,4 +1,3 @@
-import supabase from "@/supabase/supabase";
 import { Course } from "@/types/Types";
 import { getCourse } from "@/utils/db/getCourse";
 
