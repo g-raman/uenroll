@@ -8,8 +8,6 @@ import type {
   Subject,
   Term,
 } from "./utils/types.ts";
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
 import { asc, lt, notInArray, sql } from "drizzle-orm";
 import { db } from "@repo/db";
 import {
