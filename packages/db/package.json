@@ -24,7 +24,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:function": "drizzle-kit generate --custom --name=get_course_function",
-    "db:studio": "drizzle-kit studio --port 5001"
+    "db:studio": "drizzle-kit studio"
   },
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
