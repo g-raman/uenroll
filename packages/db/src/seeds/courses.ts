@@ -1,4 +1,3 @@
-import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { coursesTable } from "../schema.js";
 import type { Database } from "../index.js";
 

@@ -1,4 +1,3 @@
-import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { availableTermsTable } from "../schema.js";
 
 const availableTerms = [
