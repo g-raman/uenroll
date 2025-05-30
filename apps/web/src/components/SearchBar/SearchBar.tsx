@@ -54,7 +54,7 @@ export default function SearchBar() {
 
   const search = useMemo(() => {
     const miniSearch = new MiniSearch<CourseAutocomplete>({
-      fields: ["course_code", "course_title"],
+      fields: ["courseCode", "courseTitle"],
     });
 
     if (!dataAllCourses) return miniSearch;
@@ -79,7 +79,7 @@ export default function SearchBar() {
     setIsAutoCompleteLoading(true);
     const timeoutId = setTimeout(() => {
       const results = search.search(query, {
-        boost: { course_code: 2 },
+        boost: { courseCode: 2 },
         fuzzy: 0.3,
         prefix: true,
       });
@@ -136,7 +136,7 @@ export default function SearchBar() {
   ) => {
     handleBlur();
     setAutoCompleteResults([]);
-    setQuery(selectedCourse.course_code);
+    setQuery(selectedCourse.courseCode);
   };
 
   return (
@@ -195,8 +195,8 @@ export default function SearchBar() {
                 className="cursor-pointer px-4 py-2 hover:bg-gray-200"
               >
                 <div className="text-sm text-gray-800">
-                  {dataAllCourses[result.id].course_code}:&nbsp;
-                  {dataAllCourses[result.id].course_title.replaceAll(
+                  {dataAllCourses[result.id].courseCode}:&nbsp;
+                  {dataAllCourses[result.id].courseTitle.replaceAll(
                     /\(\+\d+ combined\)/g,
                     "",
                   )}
