@@ -18,7 +18,8 @@
     }
   },
   "scripts": {
-    "build": "tsup",
+    "build": "pnpm clean && tsup",
+    "clean": "rm -rf dist",
     "check-types": "tsc --noEmit",
     "db:function": "drizzle-kit generate --custom --name=get_course_function",
     "db:generate": "drizzle-kit generate",
