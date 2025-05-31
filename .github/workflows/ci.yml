@@ -33,6 +33,15 @@ jobs:
           restore-keys: |
             pnpm-cache-
 
+      - name: Debugging logs
+        run: |
+          echo "Node.js Version"
+          node -v
+          echo "PNPM Version"
+          pnpm -v
+          echo "TypeScript Version"
+          pnpm tsc -v
+
       - name: Install Dependencies
         if: steps.pnpm-cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
