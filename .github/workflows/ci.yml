@@ -45,9 +45,12 @@ jobs:
       - name: Install Dependencies
         if: steps.pnpm-cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
-      
+
       - name: Lint
         run: pnpm dlx turbo lint
+
+      - name: Build
+        run: pnpm dlx turbo build
 
       - name: Check Types
         run: pnpm dlx turbo check-types
