@@ -49,7 +49,6 @@ jobs:
           pnpm tsc -v
 
       - name: Install Dependencies
-        if: steps.pnpm-cache.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Save pnpm cache
