@@ -70,6 +70,7 @@ You can now open `http://local.drizzle.studio` in your web browser of choice.
 > [!CAUTION]
 > Safari/Brave/MacOS users, access via a browser to localhost is denied by default.
 > You need to create self signed certificate and drizzle studio should work.
+> For brave you also need to disable shields for the website.
 
 ```bash
 brew install mkcert
