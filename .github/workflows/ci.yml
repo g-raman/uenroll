@@ -52,7 +52,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Save pnpm cache
-        if: steps.pnpm-cache-restore.outputs.cache-hit != 'true'
+        if: steps.pnpm-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: ${{ steps.pnpm-store-path.outputs.PNPM_STORE_PATH }}
