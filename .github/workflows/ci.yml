@@ -1,0 +1,58 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci-tests:
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: "package.json"
+          cache: 'pnpm'
+
+      - name: Debugging logs
+        run: |
+          echo "Node.js Version"
+          node -v
+          echo "PNPM Version"
+          pnpm -v
+          echo "PNPM Store Path"
+          pnpm store path
+          echo "TypeScript Version"
+          pnpm tsc -v
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm dlx turbo lint --affected
+
+      - name: Format
+        run: pnpm ci:format
+
+      - name: Format Package json
+        run: pnpm ci:format:packagejson
+
+      - name: Build
+        run: pnpm dlx turbo build
+
+      - name: Check Types
+        run: pnpm dlx turbo check-types

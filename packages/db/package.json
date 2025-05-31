@@ -5,22 +5,22 @@
   "type": "module",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
-      "module": "./dist/index.cjs",
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.cjs"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./schema": {
-      "require": "./dist/schema.js",
-      "module": "./dist/schema.cjs",
       "types": "./dist/schema.d.ts",
-      "import": "./dist/schema.cjs"
+      "import": "./dist/schema.js",
+      "require": "./dist/schema.cjs"
     }
   },
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "pnpm clean && tsup",
-    "clean": "rm -rf dist",
     "check-types": "tsc --noEmit",
+    "clean": "rm -rf dist",
     "db:function": "drizzle-kit generate --custom --name=get_course_function",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",

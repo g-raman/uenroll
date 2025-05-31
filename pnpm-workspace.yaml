@@ -1,6 +1,11 @@
 packages:
-  - "apps/*"
-  - "packages/*"
+  - apps/*
+  - packages/*
 catalog:
   eslint: ^9.27.0
   typescript: ^5.8.3
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - '@vercel/speed-insights'
+  - esbuild
+  - sharp

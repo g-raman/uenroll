@@ -6,6 +6,8 @@
   "scripts": {
     "build": "turbo run build",
     "check-types": "turbo run check-types",
+    "ci:format": "prettier --check \"**/*.{js,jsx,ts,tsx,md}\"",
+    "ci:format:packagejson": "sort-package-json --check ./**/package.json --ignore ./**/node_modules",
     "dev": "turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "format:packagejson": "sort-package-json ./**/package.json --ignore ./**/node_modules",
