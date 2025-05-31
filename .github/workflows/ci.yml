@@ -49,14 +49,14 @@ jobs:
       - name: Lint
         run: pnpm dlx turbo lint
 
-      - name: Build
-        run: pnpm dlx turbo build
-
-      - name: Check Types
-        run: pnpm dlx turbo check-types
-
       - name: Format
         run: pnpm ci:format
 
       - name: Format Package json
         run: pnpm ci:format:packagejson
+
+      - name: Build
+        run: pnpm dlx turbo build
+
+      - name: Check Types
+        run: pnpm dlx turbo check-types
