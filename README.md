@@ -40,6 +40,8 @@ This step is optional. This commands seeds the database with dummy data.
 
 See the [Populate with real data](#populate-with-real-data) section if you want better data.
 
+Or alternatively see the [Request seed file](#request-seed-file) section.
+
 ```bash
 pnpm --filter @repo/db db:seed
 ```
@@ -132,4 +134,17 @@ Run the scraper script.
 
 ```bash
 ./apps/scraper/src/scrape.sh
+```
+
+## Request seed file
+
+If you don't want to wait for the scraper to run (understandable). You can request the `seed.sql` file from me.
+
+Send me an [e-mail](mailto:gr.gupta.raman@gmail.com).
+
+Install postgresql via your package manager or from the [website](https://www.postgresql.org/).
+Install version 17. We're gonna use the `psql` utility to dump the contents of the file into the local db.
+
+```bash
+psql 'postgresql://postgres:postgres@localhost:5432/postgres' < seed.sql
 ```
