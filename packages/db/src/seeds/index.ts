@@ -25,7 +25,7 @@ async function main() {
   await seedSessions(db);
 }
 
-main();
+await main();
 
 await client.end();
 process.exit(0);
