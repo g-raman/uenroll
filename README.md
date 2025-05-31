@@ -46,15 +46,33 @@ pnpm --filter @repo/db db:seed
 
 ## Setup webapp
 
+Build dependencies
+
+```bash
+pnpm dlx turbo build --filter web
+```
+
+<details>
+    <summary>With turbo cli</summary>
+
+```bash
+turbo build --filter web
+```
+
+</details>
+
 ```bash
 pnpm dlx turbo dev --filter web
 ```
 
-or if you have the `turbo` cli installed
+<details>
+    <summary>With turbo cli</summary>
 
 ```bash
 turbo dev --filter web
 ```
+
+</details>
 
 # Advanced Setup
 
