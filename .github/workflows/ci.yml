@@ -43,7 +43,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: pnpm dlx turbo lint
+        run: pnpm dlx turbo lint --affected
 
       - name: Format
         run: pnpm ci:format
