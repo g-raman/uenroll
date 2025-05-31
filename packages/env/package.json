@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "./dist/index.js",
+  "require": "./dist/index.js",
   "module": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
+  "import": "./dist/index.cjs",
   "scripts": {
     "build": "pnpm clean && tsup",
     "check-types": "tsc --noEmit",
