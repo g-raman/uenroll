@@ -22,6 +22,21 @@ git clone https://github.com/g-raman/uenroll.git
 pnpm install
 ```
 
+Build dependencies
+
+```bash
+pnpm dlx turbo build --filter web
+```
+
+<details>
+    <summary>(Alternative) With turbo cli</summary>
+
+```bash
+turbo build --filter web
+```
+
+</details>
+
 ## Setup Database
 
 Run Postgres instance locally
@@ -47,21 +62,6 @@ pnpm --filter @repo/db db:seed
 ```
 
 ## Setup webapp
-
-Build dependencies
-
-```bash
-pnpm dlx turbo build --filter web
-```
-
-<details>
-    <summary>With turbo cli</summary>
-
-```bash
-turbo build --filter web
-```
-
-</details>
 
 ```bash
 pnpm dlx turbo dev --filter web
