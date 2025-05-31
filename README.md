@@ -90,7 +90,7 @@ You can run the scraper against your local database instance.
 Depending on your hardware and network bottlenecks. This should take anywhere from 1h - 1.5h to scrape all three terms.
 However, you can modify the code to only scrape one or two terms for faster results.
 
-> ![CAUTION]
+> [!CAUTION]
 > The postgres instance running inside docker doesn't persist data to your disk.
 > If you want to populate your local database with real data.
 > Modify the `compose.yml` file to persist data to disk so you don't have to keep running the scraper.
@@ -109,7 +109,7 @@ chmod +x ./apps/scraper/src/scrape.sh
 
 Run the scraper script.
 
-> ![WARNING]
+> [!WARNING]
 > Make sure the docker engine is running.
 
 ```bash
