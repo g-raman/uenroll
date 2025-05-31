@@ -5,7 +5,7 @@ A modern, open-source schedule builder for uOttawa.
 # Local Setup
 
 > [!NOTE]
-> You will need [Node.js](https://nodejs.org/en), [pnpm](https://pnpm.io/), and [docker](https://www.docker.com/) installed.
+> You will need [Node.js](https://nodejs.org/en), [pnpm](https://pnpm.io/), and [Docker](https://www.docker.com/) installed.
 > Optional: install the `turbo` cli globally via pnpm.
 
 ## Initialize
