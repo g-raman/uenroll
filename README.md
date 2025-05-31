@@ -36,7 +36,9 @@ Run migrations
 pnpm --filter @repo/db db:migrate
 ```
 
-Seed database with dummy data
+This step is optional. This commands seeds the database with dummy data.
+
+See the [Populate with real data](#populate-with-real-data) section if you want better data.
 
 ```bash
 pnpm --filter @repo/db db:seed
@@ -79,7 +81,7 @@ mkcert -install
 
 Restart your studio and you should be able to view it now.
 
-## Populate with Real Data
+## Populate with real data
 
 If you'd like to see actual data from the uOttawa public course registry.
 
