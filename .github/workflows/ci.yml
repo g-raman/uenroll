@@ -43,6 +43,8 @@ jobs:
           node -v
           echo "PNPM Version"
           pnpm -v
+          echo "PNPM Store Path"
+          pnpm store path
           echo "TypeScript Version"
           pnpm tsc -v
 
