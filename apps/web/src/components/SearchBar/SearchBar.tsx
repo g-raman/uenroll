@@ -24,18 +24,8 @@ export default function SearchBar() {
     queryFn: () => fetchCourse(selectedValue, state.term),
     enabled: false,
     retry: false,
-    gcTime: 0,
     networkMode: "online",
   });
-  /*
-   * TODO: Fix caching
-   * If caching is enabled. A course is automatically added
-   * to results list without the user hitting enter or the
-   * search button.
-   *
-   * It bypasses the check for whether you're allowed to add
-   * another result
-   */
 
   const { data: dataAllCourses } = useQuery({
     queryKey: ["courses", state.term],
