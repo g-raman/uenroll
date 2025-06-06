@@ -13,6 +13,11 @@
       "types": "./dist/schema.d.ts",
       "import": "./dist/schema.js",
       "require": "./dist/schema.cjs"
+    },
+    "./queries": {
+      "types": "./dist/queries.d.ts",
+      "import": "./dist/queries.js",
+      "require": "./dist/queries.cjs"
     }
   },
   "main": "./dist/index.cjs",
