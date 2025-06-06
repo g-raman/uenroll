@@ -1,6 +1,4 @@
-import { cn } from "@repo/ui/lib/utils";
 import { Command as CommandPrimitive } from "cmdk";
-import { Check } from "lucide-react";
 import { useMemo, useState } from "react";
 import {
   Command,
@@ -124,14 +122,6 @@ export function AutoComplete<T extends string>({
                       onMouseDown={e => e.preventDefault()}
                       onSelect={onSelectItem}
                     >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          selectedValue === option.value
-                            ? "opacity-100"
-                            : "opacity-0",
-                        )}
-                      />
                       {option.label}
                     </CommandItem>
                   ))}
