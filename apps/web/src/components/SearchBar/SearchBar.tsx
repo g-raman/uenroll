@@ -43,6 +43,16 @@ export default function SearchBar() {
     staleTime: Infinity,
   });
 
+  const performSearch = useCallback(async () => {
+    const { data, error, isSuccess } = await refetch();
+    if (isSuccess) {
+      dispatch({ type: "add_course", payload: data });
+      setQuery("");
+    } else if (error) {
+      toast.error(error.message);
+    }
+  }, [dispatch, refetch]);
+
   const handleSearchClick = useCallback(async () => {
     if (query.length === 0) return;
 
@@ -51,14 +61,8 @@ export default function SearchBar() {
       return;
     }
 
-    const { data, error, isSuccess } = await refetch();
-    if (isSuccess) {
-      dispatch({ type: "add_course", payload: data });
-      setQuery("");
-    } else if (error) {
-      toast.error(error.message);
-    }
-  }, [dispatch, query.length, refetch, state.courses.length]);
+    await performSearch();
+  }, [performSearch, query.length, state.courses.length]);
 
   return (
     <div className="sticky top-0 z-10 mb-2 mt-4 flex flex-col gap-2 bg-white">
