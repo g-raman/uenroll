@@ -52,7 +52,7 @@ export default function SearchBar() {
       await performSearch();
     }
     search();
-  }, [performSearch, selectedValue]);
+  }, [performSearch, selectedValue, state.courses.length]);
 
   return (
     <div className="sticky top-0 z-10 mb-2 mt-4 flex flex-col gap-2 bg-white">
