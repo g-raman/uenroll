@@ -19,6 +19,7 @@ import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 import { fetchAllCourses, fetchCourse } from "@/utils/fetchData";
 import MiniSearch, { SearchResult } from "minisearch";
 import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
@@ -144,11 +145,10 @@ export default function SearchBar() {
     <div className="sticky top-0 z-10 mb-2 mt-4 flex flex-col gap-2 bg-white">
       <TermSelector />
       <div className="flex items-center justify-between gap-2">
-        <input
+        <Input
           value={query}
           onKeyDown={handleKeyDown}
           onChange={handleInputChange}
-          className="rounded-xs w-full border border-slate-400 bg-slate-100 px-4 py-2 text-sm disabled:bg-slate-300"
           type="text"
           placeholder="Course Code Eg. CSI 2101"
           disabled={isLoading}
