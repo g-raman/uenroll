@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import "./app.css";
 import "@repo/ui/shadcn.css";
-import { Button } from "@repo/ui/components/button";
 import { Toaster } from "react-hot-toast";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { Analytics } from "@vercel/analytics/next";
