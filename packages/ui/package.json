@@ -1,8 +1,15 @@
 {
   "name": "@repo/ui",
   "version": "0.0.0",
-  "type": "module",
   "private": true,
+  "type": "module",
+  "exports": {
+    "./shadcn.css": "./src/styles/shadcn.css",
+    "./postcss.config": "./postcss.config.mjs",
+    "./lib/*": "./src/lib/*.ts",
+    "./components/*": "./src/components/*.tsx",
+    "./hooks/*": "./src/hooks/*.ts"
+  },
   "scripts": {
     "lint": "eslint . --max-warnings 0"
   },
@@ -29,12 +36,5 @@
     "eslint": "catalog:",
     "tailwindcss": "^4.1.8",
     "typescript": "catalog:"
-  },
-  "exports": {
-    "./shadcn.css": "./src/styles/shadcn.css",
-    "./postcss.config": "./postcss.config.mjs",
-    "./lib/*": "./src/lib/*.ts",
-    "./components/*": "./src/components/*.tsx",
-    "./hooks/*": "./src/hooks/*.ts"
   }
 }
