@@ -2,7 +2,6 @@
 
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Term } from "@/types/Types";
-import React, { ChangeEvent } from "react";
 import {
   Select,
   SelectContent,
