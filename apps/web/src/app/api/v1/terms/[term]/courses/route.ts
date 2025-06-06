@@ -1,7 +1,6 @@
 export const dynamic = "force-static";
 
-import { db } from "@repo/db";
-import { coursesTable } from "@repo/db/schema";
+import { getAvailableCoursesByTerm } from "@repo/db/queries";
 
 type Params = Promise<{ term: string }>;
 export async function GET(req: Request, segmentData: { params: Params }) {
@@ -14,17 +13,11 @@ export async function GET(req: Request, segmentData: { params: Params }) {
     });
   }
 
-  const res = await db
-    .select({
-      courseCode: coursesTable.courseCode,
-      courseTitle: coursesTable.courseTitle,
-    })
-    .from(coursesTable)
-    .limit(3500);
+  const courses = await getAvailableCoursesByTerm(params.term);
 
-  if (!res) {
+  if (!courses) {
     return Response.json({ error: "No available courses", data: null });
   }
 
-  return Response.json({ error: null, data: res });
+  return Response.json({ error: null, data: courses });
 }
