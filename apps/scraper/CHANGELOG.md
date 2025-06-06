@@ -1,5 +1,11 @@
 # scraper
 
+## 1.2.1
+
+### Patch Changes
+
+- [#73](https://github.com/g-raman/uenroll/pull/73) [`08b9d82`](https://github.com/g-raman/uenroll/commit/08b9d828dd817e2b6675f5c5f8e8d4e850e430e2) Thanks [@g-raman](https://github.com/g-raman)! - Remove outdated terms from db after scraping new terms
+
 ## 1.2.0
 
 ### Minor Changes
