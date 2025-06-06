@@ -7,5 +7,6 @@ catalog:
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - '@vercel/speed-insights'
+  - core-js-pure
   - esbuild
   - sharp
