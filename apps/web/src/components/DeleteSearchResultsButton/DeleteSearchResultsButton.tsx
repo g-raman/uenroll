@@ -9,6 +9,7 @@ export const DeleteSearchResultsButton = () => {
 
   return (
     <Button
+      className="flex-1"
       variant="outline"
       size="lg"
       onClick={() => dispatch({ type: "reset_courses" })}

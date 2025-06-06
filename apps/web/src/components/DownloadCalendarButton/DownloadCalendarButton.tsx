@@ -27,6 +27,7 @@ export default function DownloadCalendarButton() {
 
   return (
     <Button
+      className="flex-1"
       variant="default"
       size="lg"
       onClick={handleDownload}

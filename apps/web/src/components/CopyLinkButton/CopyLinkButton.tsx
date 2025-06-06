@@ -10,6 +10,7 @@ export const CopyLinkButton = () => {
 
   return (
     <Button
+      className="flex-1"
       variant="outline"
       size="lg"
       disabled={state.selectedSessions.length === 0}
