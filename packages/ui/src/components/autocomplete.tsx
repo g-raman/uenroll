@@ -88,7 +88,7 @@ export function AutoComplete<T extends string>({
               onFocus={() => setOpen(true)}
               onBlur={onInputBlur}
             >
-              <Input placeholder={placeholder} />
+              <Input className="py-2" placeholder={placeholder} />
             </CommandPrimitive.Input>
           </PopoverAnchor>
           {!open && <CommandList aria-hidden="true" className="hidden" />}
