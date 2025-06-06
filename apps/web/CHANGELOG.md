@@ -1,5 +1,11 @@
 # web
 
+## 0.5.0
+
+### Minor Changes
+
+- [#71](https://github.com/g-raman/uenroll/pull/71) [`2a288c0`](https://github.com/g-raman/uenroll/commit/2a288c042dc2e8b22fdbafa2014c8c37ea9ce10f) Thanks [@g-raman](https://github.com/g-raman)! - Added shadcn
+
 ## 0.4.0
 
 ### Minor Changes
