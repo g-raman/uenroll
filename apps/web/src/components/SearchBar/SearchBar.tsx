@@ -3,15 +3,9 @@ import { Course } from "@/types/Types";
 import { useQuery } from "@tanstack/react-query";
 import React, { useCallback, useEffect, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMagnifyingGlass,
-  faSpinner,
-} from "@fortawesome/free-solid-svg-icons";
 import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 import { fetchAllCourses, fetchCourse } from "@/utils/fetchData";
-import { Button } from "@repo/ui/components/button";
 import { AutoComplete } from "@repo/ui/components/autocomplete";
 
 export default function SearchBar() {
@@ -19,7 +13,7 @@ export default function SearchBar() {
   const { state, dispatch } = useSearchResults();
   const [selectedValue, setSelectedValue] = useState("");
 
-  const { isLoading, refetch } = useQuery<Course>({
+  const { refetch } = useQuery<Course>({
     queryKey: ["courses", selectedValue, state.term],
     queryFn: () => fetchCourse(selectedValue, state.term),
     enabled: false,
@@ -83,19 +77,6 @@ export default function SearchBar() {
               : []
           }
         />
-
-        <Button
-          variant="default"
-          size="icon"
-          onClick={performSearch}
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <FontAwesomeIcon className="size-4 animate-spin" icon={faSpinner} />
-          ) : (
-            <FontAwesomeIcon className="size-4" icon={faMagnifyingGlass} />
-          )}
-        </Button>
       </div>
     </div>
   );
