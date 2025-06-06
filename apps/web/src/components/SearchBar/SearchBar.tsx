@@ -146,6 +146,7 @@ export default function SearchBar() {
       <TermSelector />
       <div className="flex items-center justify-between gap-2">
         <Input
+          className="text-sm"
           value={query}
           onKeyDown={handleKeyDown}
           onChange={handleInputChange}
