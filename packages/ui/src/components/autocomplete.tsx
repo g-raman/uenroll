@@ -128,7 +128,9 @@ export function AutoComplete<T extends string>({
                 </CommandGroup>
               ) : null}
               {!isLoading ? (
-                <CommandEmpty>{emptyMessage ?? "No items."}</CommandEmpty>
+                <CommandEmpty className="py-2 text-center text-sm">
+                  {emptyMessage ?? "No items."}
+                </CommandEmpty>
               ) : null}
             </CommandList>
           </PopoverContent>
