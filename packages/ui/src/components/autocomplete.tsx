@@ -22,7 +22,7 @@ type Props<T extends string> = {
   onSelectedValueChange: (value: T) => void;
   searchValue: string;
   onSearchValueChange: (value: string) => void;
-  items: { value: T; label: string }[];
+  items: { value: T; label: string; id: string }[];
   isLoading?: boolean;
   emptyMessage?: string;
   placeholder?: string;
@@ -119,7 +119,7 @@ export function AutoComplete<T extends string>({
                 <CommandGroup>
                   {items.map(option => (
                     <CommandItem
-                      key={option.value}
+                      key={option.id}
                       value={option.value}
                       onMouseDown={e => e.preventDefault()}
                       onSelect={onSelectItem}
