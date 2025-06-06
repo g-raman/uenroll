@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 import { fetchAllCourses, fetchCourse } from "@/utils/fetchData";
 import MiniSearch, { SearchResult } from "minisearch";
+import { Button } from "@repo/ui/components/button";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
@@ -155,9 +156,10 @@ export default function SearchBar() {
           onBlur={handleBlur}
         />
 
-        <button
+        <Button
+          variant="default"
+          size="lg"
           onClick={handleSearchClick}
-          className="disabled:bg-[#8f001b]-40 rounded-xs h-full w-min cursor-pointer bg-[#8f001b] px-4 text-white"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -165,7 +167,7 @@ export default function SearchBar() {
           ) : (
             <FontAwesomeIcon className="size-4" icon={faMagnifyingGlass} />
           )}
-        </button>
+        </Button>
       </div>
 
       {autoCompleteResults.length === 0 && isFocused ? (
