@@ -1,5 +1,11 @@
 # @repo/db
 
+## 0.4.0
+
+### Minor Changes
+
+- [#75](https://github.com/g-raman/uenroll/pull/75) [`cc83570`](https://github.com/g-raman/uenroll/commit/cc83570636d131e45b4466871f67a3b924a60ba7) Thanks [@g-raman](https://github.com/g-raman)! - Create file to store queries for db
+
 ## 0.3.0
 
 ### Minor Changes

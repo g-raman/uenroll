@@ -1,5 +1,11 @@
 # web
 
+## 0.5.1
+
+### Patch Changes
+
+- [#75](https://github.com/g-raman/uenroll/pull/75) [`cc83570`](https://github.com/g-raman/uenroll/commit/cc83570636d131e45b4466871f67a3b924a60ba7) Thanks [@g-raman](https://github.com/g-raman)! - Filter courses by term for autocomplete population
+
 ## 0.5.0
 
 ### Minor Changes
