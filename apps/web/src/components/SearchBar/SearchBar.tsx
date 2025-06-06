@@ -47,25 +47,22 @@ export default function SearchBar() {
     const { data, error, isSuccess } = await refetch();
     if (isSuccess) {
       dispatch({ type: "add_course", payload: data });
-      setQuery("");
     } else if (error) {
       toast.error(error.message);
     }
+    setQuery("");
+    setSelectedValue("");
   }, [dispatch, refetch]);
-
-  const handleSearchClick = useCallback(async () => {
-    if (query.length === 0) return;
-
-    if (state.courses.length >= MAX_RESULTS_ALLOWED) {
-      toast.error("Max search results reached.");
-      return;
-    }
-
-    await performSearch();
-  }, [performSearch, query.length, state.courses.length]);
 
   useEffect(() => {
     if (selectedValue === "") return;
+
+    if (state.courses.length >= MAX_RESULTS_ALLOWED) {
+      setQuery("");
+      setSelectedValue("");
+      toast.error("Max search results reached.");
+      return;
+    }
 
     async function search() {
       await performSearch();
@@ -100,7 +97,7 @@ export default function SearchBar() {
         <Button
           variant="default"
           size="icon"
-          onClick={handleSearchClick}
+          onClick={performSearch}
           disabled={isLoading}
         >
           {isLoading ? (
