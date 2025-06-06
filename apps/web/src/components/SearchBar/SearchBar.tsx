@@ -1,7 +1,7 @@
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Course } from "@/types/Types";
 import { useQuery } from "@tanstack/react-query";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -63,6 +63,15 @@ export default function SearchBar() {
 
     await performSearch();
   }, [performSearch, query.length, state.courses.length]);
+
+  useEffect(() => {
+    if (selectedValue === "") return;
+
+    async function search() {
+      await performSearch();
+    }
+    search();
+  }, [performSearch, selectedValue]);
 
   return (
     <div className="sticky top-0 z-10 mb-2 mt-4 flex flex-col gap-2 bg-white">
