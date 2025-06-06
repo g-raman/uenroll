@@ -70,6 +70,7 @@ export default function SearchBar() {
           onSelectedValueChange={setSelectedValue}
           onSearchValueChange={setQuery}
           placeholder="Course Code or Course Name..."
+          emptyMessage="No Courses Found..."
           items={
             dataAllCourses
               ? dataAllCourses.map((course, index) => {
