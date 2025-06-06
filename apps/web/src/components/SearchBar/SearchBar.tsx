@@ -158,7 +158,7 @@ export default function SearchBar() {
 
         <Button
           variant="default"
-          size="lg"
+          size="icon"
           onClick={handleSearchClick}
           disabled={isLoading}
         >
