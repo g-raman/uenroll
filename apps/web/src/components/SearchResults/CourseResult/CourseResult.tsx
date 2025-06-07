@@ -8,6 +8,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
+import { Button } from "@repo/ui/components/button";
 
 interface CourseResultProps {
   course: Course;
@@ -27,6 +28,16 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
 
   return (
     <div className="pb-4 text-sm">
+      <Button variant="link" className="h-min px-2 py-1">
+        <a
+          href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Best Professors for {course.courseCode}&nbsp;
+          <FontAwesomeIcon size={"sm"} icon={faArrowUpRightFromSquare} />
+        </a>
+      </Button>
       <div className="overflow-hidden rounded-md border">
         <div className={`cursor-pointer p-2 ${course.colour}`}>
           <div
@@ -36,14 +47,6 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
             <div className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</div>
 
             <div className="ml-4 flex items-center gap-6 md:gap-5">
-              <a
-                className="cursor-pointer underline"
-                href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-              </a>
               <FontAwesomeIcon onClick={handleCourseRemoval} icon={faTrash} />
               <FontAwesomeIcon
                 className={`transition-all delay-100 ease-in ${isOpen ? "rotate-0" : "rotate-180"}`}
