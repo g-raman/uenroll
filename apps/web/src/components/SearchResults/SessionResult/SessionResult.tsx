@@ -6,6 +6,7 @@ interface SessionResultProps {
   session: Session;
 }
 export const SessionResult: React.FC<SessionResultProps> = ({ session }) => {
+  const isVirtual = session.dayOfWeek === "N/A";
   const startTime = moment(`${session.startDate}T${session.startTime}`).format(
     "LT",
   );
@@ -18,10 +19,16 @@ export const SessionResult: React.FC<SessionResultProps> = ({ session }) => {
         <div>
           <span className="truncate font-medium">{session.instructor}</span>
           <br />
-          <span className="font-semibold">{session.dayOfWeek}</span>
-          &nbsp;
-          <span className="truncate font-normal text-slate-600">{`${startTime} - ${endTime}`}</span>
-          <br />
+          {isVirtual ? (
+            <p className="font-semibold">Virtual</p>
+          ) : (
+            <>
+              <span className="font-semibold">{session.dayOfWeek}</span>
+              &nbsp;
+              <span className="truncate font-normal text-slate-600">{`${startTime} - ${endTime}`}</span>
+              <br />
+            </>
+          )}
           <span className="truncate text-gray-400">{`${startDate} to ${endDate}`}</span>
         </div>
       </li>
