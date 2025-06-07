@@ -1,5 +1,11 @@
 # web
 
+## 0.6.2
+
+### Patch Changes
+
+- [#84](https://github.com/g-raman/uenroll/pull/84) [`78d030a`](https://github.com/g-raman/uenroll/commit/78d030a1497c44d9642584c0fdd5badfb05a997f) Thanks [@g-raman](https://github.com/g-raman)! - Add more clear link to uo grades website
+
 ## 0.6.1
 
 ### Patch Changes
