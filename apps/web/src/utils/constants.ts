@@ -15,6 +15,7 @@ export const INITIAL_COLOURS = [
 export const MAX_RESULTS_ALLOWED = INITIAL_COLOURS.length;
 
 export const dayOfWeekToNumberMap: { [key: string]: number } = {
+  "N/A": -1,
   Mo: 1,
   Tu: 2,
   We: 3,
