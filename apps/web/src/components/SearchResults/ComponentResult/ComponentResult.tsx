@@ -35,15 +35,11 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
 
   return (
     <div className="flex h-full w-full items-center justify-between border-b">
-      <div className="flex h-full items-stretch px-2">
+      <div className="px-4">
         <input onChange={handleToggle} checked={isSelected} type="checkbox" />
       </div>
 
-      <div
-        className={`ml-4 flex max-h-20 w-full flex-col gap-2 overflow-y-scroll ${
-          component.sessions.length === 1 ? "no-scrollbar" : ""
-        }`}
-      >
+      <div className="flex h-full w-full flex-col gap-2 overflow-y-scroll border-r border-r-slate-400 py-2">
         {component.sessions.map(session => (
           <SessionResult
             key={`${courseCode}${section}${subSection}${session.startDate}${session.dayOfWeek}${session.startTime}`}
@@ -52,7 +48,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
         ))}
       </div>
 
-      <div className="flex h-full w-1/3 flex-col items-center border-l border-l-slate-400 p-6 uppercase">
+      <div className="flex w-1/3 flex-col items-center px-4 uppercase">
         <span
           className={`text-base font-bold ${component.isOpen ? "text-lime-600" : "text-red-800"}`}
         >
