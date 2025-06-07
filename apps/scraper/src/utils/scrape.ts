@@ -184,14 +184,6 @@ export const processSessions = (
     const currentTiming = timings[sessionCount];
 
     /*
-     * Actual course info still gets added and sub section info is stored.
-     * However, since there are no sessions. Nothing is returned to the front end.
-     */
-    if (currentTiming?.includes("N/A")) {
-      continue;
-    }
-
-    /*
      * Original format:
      * Tu 16:00 - 17:20
      */

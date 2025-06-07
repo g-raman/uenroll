@@ -60,38 +60,40 @@ function Calendar() {
       return;
     }
 
-    const events = state.selectedSessions.map(session => {
-      const baseStartDate = dayjs(session.startRecur);
-      const dayOffset = session.dayOfWeek - baseStartDate.day();
-      const startDate = baseStartDate.add(
-        dayOffset < 0 ? 7 + dayOffset : dayOffset,
-        "days",
-      );
-      const endDate = dayjs(session.endRecur);
+    const events = state.selectedSessions
+      .filter(session => session.dayOfWeek > -1)
+      .map(session => {
+        const baseStartDate = dayjs(session.startRecur);
+        const dayOffset = session.dayOfWeek - baseStartDate.day();
+        const startDate = baseStartDate.add(
+          dayOffset < 0 ? 7 + dayOffset : dayOffset,
+          "days",
+        );
+        const endDate = dayjs(session.endRecur);
 
-      const rrule = new RRule({
-        freq: RRule.WEEKLY,
-        dtstart: datetime(
-          startDate.get("year"),
-          startDate.get("month") + 1,
-          startDate.get("day"),
-        ),
-        until: datetime(
-          endDate.get("year"),
-          endDate.get("month") + 1,
-          endDate.get("day"),
-        ),
+        const rrule = new RRule({
+          freq: RRule.WEEKLY,
+          dtstart: datetime(
+            startDate.get("year"),
+            startDate.get("month") + 1,
+            startDate.get("day"),
+          ),
+          until: datetime(
+            endDate.get("year"),
+            endDate.get("month") + 1,
+            endDate.get("day"),
+          ),
+        });
+
+        return {
+          id: `${session.courseDetails.courseCode}${session.courseDetails.subSection}`,
+          title: `${session.courseDetails.courseCode}`,
+          start: `${startDate.format(DATE_FORMAT)} ${session.startTime}`,
+          end: `${startDate.format(DATE_FORMAT)} ${session.endTime}`,
+          rrule: rrule.toString(),
+          ...session.courseDetails,
+        };
       });
-
-      return {
-        id: `${session.courseDetails.courseCode}${session.courseDetails.subSection}`,
-        title: `${session.courseDetails.courseCode}`,
-        start: `${startDate.format(DATE_FORMAT)} ${session.startTime}`,
-        end: `${startDate.format(DATE_FORMAT)} ${session.endTime}`,
-        rrule: rrule.toString(),
-        ...session.courseDetails,
-      };
-    });
 
     eventsService.set(events);
 
