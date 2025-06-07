@@ -1,5 +1,13 @@
 # web
 
+## 0.6.1
+
+### Patch Changes
+
+- [#83](https://github.com/g-raman/uenroll/pull/83) [`24858c7`](https://github.com/g-raman/uenroll/commit/24858c7f4f42f7dfddf5bf6c04542dffa3604999) Thanks [@g-raman](https://github.com/g-raman)! - Use shadcn checkbox
+
+- [#81](https://github.com/g-raman/uenroll/pull/81) [`3071568`](https://github.com/g-raman/uenroll/commit/307156854674abb842fa04c58f25fff99b2491e7) Thanks [@g-raman](https://github.com/g-raman)! - Remove scrollable information in course result
+
 ## 0.6.0
 
 ### Minor Changes
