@@ -1,5 +1,11 @@
 # scraper
 
+## 1.2.2
+
+### Patch Changes
+
+- [#80](https://github.com/g-raman/uenroll/pull/80) [`56f1ef9`](https://github.com/g-raman/uenroll/commit/56f1ef9843a5e55484b39fddb7b81651eec76759) Thanks [@g-raman](https://github.com/g-raman)! - Show virtual classes
+
 ## 1.2.1
 
 ### Patch Changes
