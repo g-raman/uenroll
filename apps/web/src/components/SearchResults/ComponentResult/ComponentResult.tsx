@@ -2,6 +2,7 @@ import { Component, Course } from "@/types/Types";
 import { useEffect, useState } from "react";
 import { SessionResult } from "../SessionResult/SessionResult";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
+import { Checkbox } from "@repo/ui/components/checkbox";
 
 interface ComponentResultProps {
   component: Component;
@@ -36,7 +37,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   return (
     <div className="flex h-full w-full items-center justify-between border-b">
       <div className="px-4">
-        <input onChange={handleToggle} checked={isSelected} type="checkbox" />
+        <Checkbox onCheckedChange={handleToggle} checked={isSelected} />
       </div>
 
       <div className="flex h-full w-full flex-col gap-2 overflow-y-scroll border-r border-r-slate-400 py-2">
