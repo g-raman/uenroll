@@ -96,21 +96,7 @@ function Calendar() {
       });
 
     eventsService.set(events);
-
-    // HACK: This a temporary way to programatically refresh the calendar
-    const currentView = calendarControls.getView();
-
-    calendarControls.setView(
-      currentView === "month-agenda" ? "week" : "month-agenda",
-    );
-
-    calendarControls.setView(
-      currentView === "month-agenda" ? "month-agenda" : "week",
-    );
-
-    // This doesn't depend on calendar, calendarControls, eventsService, etc.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.selectedSessions]);
+  }, [calendar, calendarControls, eventsService, state.selectedSessions]);
 
   // HACK: Gotta figure out a better way to do This
   // Hardcoding for now
@@ -118,9 +104,6 @@ function Calendar() {
     if (!state.term) return;
 
     switch (state.term.term) {
-      case "2025 Winter Term":
-        calendarControls.setDate("2025-01-06");
-        break;
       case "2025 Spring/Summer Term":
         calendarControls.setDate("2025-05-05");
         break;
