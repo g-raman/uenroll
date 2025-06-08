@@ -22,17 +22,16 @@ export const SectionResult: React.FC<SectionResultProps> = ({
 
   return (
     <Accordion type="single" collapsible className="md:text-sm">
-      <AccordionItem value="item-1">
-        <AccordionTrigger className="cursor-pointer rounded-none bg-slate-200 p-2 font-normal">
-          <span>Section {section.section}</span>
-        </AccordionTrigger>
-
-        {section.components.map(component => {
-          return (
-            <AccordionContent
-              className="p-0"
-              key={`${courseCode}${section.section}${component.subSection}`}
-            >
+      {section.components.map(component => {
+        return (
+          <AccordionItem
+            value={`${courseCode}${section.section}${component.subSection}`}
+            key={`${courseCode}${section.section}${component.subSection}`}
+          >
+            <AccordionTrigger className="cursor-pointer rounded-none bg-slate-200 p-2 font-normal">
+              <span>Section {section.section}</span>
+            </AccordionTrigger>
+            <AccordionContent className="p-0">
               <ComponentResult
                 component={component}
                 course={course}
@@ -40,9 +39,9 @@ export const SectionResult: React.FC<SectionResultProps> = ({
                 subSection={component.subSection}
               />
             </AccordionContent>
-          );
-        })}
-      </AccordionItem>
+          </AccordionItem>
+        );
+      })}
     </Accordion>
   );
 };
