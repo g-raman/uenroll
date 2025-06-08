@@ -1,26 +1,25 @@
 import { Course } from "@/types/Types";
-import { useState } from "react";
 import { SectionResult } from "../SectionResult/SectionResult";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpRightFromSquare,
-  faChevronUp,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Button } from "@repo/ui/components/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@repo/ui/components/accordion";
 
 interface CourseResultProps {
   course: Course;
 }
 
 const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const { dispatch } = useSearchResults();
-
-  const handleCourseToggle = () => {
-    setIsOpen(previous => !previous);
-  };
 
   const handleCourseRemoval = () => {
     dispatch({ type: "remove_course", payload: course });
@@ -38,37 +37,33 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
           <FontAwesomeIcon size={"sm"} icon={faArrowUpRightFromSquare} />
         </a>
       </Button>
-      <div className="overflow-hidden rounded-md border">
-        <div className={`cursor-pointer p-2 ${course.colour}`}>
-          <div
-            onClick={handleCourseToggle}
-            className="flex items-center justify-between"
+
+      <Accordion type="single" collapsible>
+        <AccordionItem value="course-1">
+          <AccordionTrigger
+            className={`${course.colour} items-center p-2 font-normal`}
           >
-            <div className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</div>
+            <p className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
 
-            <div className="ml-4 flex items-center gap-6 md:gap-5">
-              <FontAwesomeIcon onClick={handleCourseRemoval} icon={faTrash} />
-              <FontAwesomeIcon
-                className={`transition-all delay-100 ease-in ${isOpen ? "rotate-0" : "rotate-180"}`}
-                icon={faChevronUp}
-              />
-            </div>
-          </div>
-        </div>
+            <FontAwesomeIcon
+              className="ml-auto !rotate-0"
+              onClick={handleCourseRemoval}
+              icon={faTrash}
+            />
+          </AccordionTrigger>
 
-        {course.sections.map(section => {
-          return (
-            <div
-              className={`overflow-hidden transition-all delay-100 ease-in ${
-                isOpen ? "opacity-100" : "max-h-0 opacity-0"
-              }`}
-              key={`${course.courseCode}${section.section}`}
-            >
-              <SectionResult section={section} course={course} />
-            </div>
-          );
-        })}
-      </div>
+          {course.sections.map(section => {
+            return (
+              <AccordionContent
+                key={`${course.courseCode}${section.section}`}
+                className="p-0"
+              >
+                <SectionResult section={section} course={course} />
+              </AccordionContent>
+            );
+          })}
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 };
