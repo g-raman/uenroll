@@ -9,6 +9,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@repo/ui/components/accordion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 
 interface CourseResultProps {
   course: Course;
@@ -29,11 +34,18 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
       >
         <p className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
 
-        <FontAwesomeIcon
-          className="ml-auto !rotate-0"
-          onClick={handleCourseRemoval}
-          icon={faTrash}
-        />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <FontAwesomeIcon
+              className="ml-auto !rotate-0"
+              onClick={handleCourseRemoval}
+              icon={faTrash}
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Remove this course</p>
+          </TooltipContent>
+        </Tooltip>
       </AccordionTrigger>
 
       <AccordionContent className="p-0">
