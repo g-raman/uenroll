@@ -16,7 +16,11 @@ export default function SearchResults() {
         {state.courses.map(course => {
           return (
             <div className="pb-4 text-sm" key={course.courseCode}>
-              <Button variant="link" className="h-min px-2 py-1">
+              <Button
+                asChild
+                variant="link"
+                className="h-min items-baseline gap-0 !px-2 py-1"
+              >
                 <a
                   href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
                   target="_blank"
