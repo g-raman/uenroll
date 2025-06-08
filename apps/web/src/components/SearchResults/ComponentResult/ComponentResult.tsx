@@ -1,5 +1,4 @@
 import { Component, Course } from "@/types/Types";
-import { useEffect, useState } from "react";
 import { SessionResult } from "../SessionResult/SessionResult";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Checkbox } from "@repo/ui/components/checkbox";
@@ -18,20 +17,15 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
 }) => {
   const { state, dispatch } = useSearchResults();
   const { courseCode } = course;
-  const isSelectedInitially = Boolean(
+  const isSelected = Boolean(
     state.selected &&
       state.selected[courseCode] &&
       state.selected[courseCode].includes(subSection),
   );
-  const [isSelected, setIsSelected] = useState(isSelectedInitially);
-
-  useEffect(() => {
-    const actionType = isSelected ? "add_selected" : "remove_selected";
-    dispatch({ type: actionType, payload: { courseCode, subSection } });
-  }, [isSelected, dispatch, courseCode, subSection]);
 
   function handleToggle() {
-    setIsSelected(previous => !previous);
+    const actionType = isSelected ? "remove_selected" : "add_selected";
+    dispatch({ type: actionType, payload: { courseCode, subSection } });
   }
 
   return (
