@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@repo/ui/components/accordion";
+import { useState } from "react";
 
 interface CourseResultProps {
   course: Course;
@@ -20,6 +21,7 @@ interface CourseResultProps {
 
 const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
   const { dispatch } = useSearchResults();
+  const [isBottomRounded, setIsBottomRounded] = useState(true);
 
   const handleCourseRemoval = () => {
     dispatch({ type: "remove_course", payload: course });
@@ -38,10 +40,15 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
         </a>
       </Button>
 
-      <Accordion type="single" collapsible>
+      <Accordion
+        type="single"
+        collapsible
+        // HACK: Custom logic to round out corners when accordion is collapsed
+        onValueChange={() => setIsBottomRounded(previous => !previous)}
+      >
         <AccordionItem value="course-1">
           <AccordionTrigger
-            className={`${course.colour} items-center p-2 font-normal`}
+            className={`${course.colour} items-center p-2 font-normal ${isBottomRounded ? "" : "rounded-b-none"}`}
           >
             <p className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
 
