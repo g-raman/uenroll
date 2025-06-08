@@ -1,8 +1,9 @@
 import { Course, Section } from "@/types/Types";
-import { useState } from "react";
 import { ComponentResult } from "../ComponentResult/ComponentResult";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  AccordionContent,
+  AccordionTrigger,
+} from "@repo/ui/components/accordion";
 
 interface SectionResultProps {
   section: Section;
@@ -12,43 +13,27 @@ export const SectionResult: React.FC<SectionResultProps> = ({
   section,
   course,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const { courseCode } = course;
 
-  const handleSectionToggle = () => {
-    setIsOpen(previous => !previous);
-  };
-
   return (
-    <div className="md:text-sm">
-      <div
-        onClick={handleSectionToggle}
-        className="z-20 flex w-full items-center justify-between bg-slate-200 p-2 hover:cursor-pointer"
-      >
+    <>
+      <AccordionTrigger className="cursor-pointer rounded-none bg-slate-200 p-2 font-normal">
         <span>Section {section.section}</span>
-        <FontAwesomeIcon
-          className={`transition-all delay-100 ease-in ${isOpen ? "rotate-0" : "rotate-180"}`}
-          icon={faChevronUp}
-        />
-      </div>
+      </AccordionTrigger>
 
-      {section.components.map(component => {
-        return (
-          <div
-            className={`transition-all delay-100 ease-in md:text-xs ${
-              isOpen ? "opacity-100" : "max-h-0 opacity-0"
-            }`}
-            key={`${courseCode}${section.section}${component.subSection}`}
-          >
+      <AccordionContent className="p-0">
+        {section.components.map(component => {
+          return (
             <ComponentResult
+              key={`${courseCode}${section.section}${component.subSection}`}
               component={component}
               course={course}
               section={section.section}
               subSection={component.subSection}
             />
-          </div>
-        );
-      })}
-    </div>
+          );
+        })}
+      </AccordionContent>
+    </>
   );
 };

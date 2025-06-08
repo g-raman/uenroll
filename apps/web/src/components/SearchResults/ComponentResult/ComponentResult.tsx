@@ -1,8 +1,8 @@
 import { Component, Course } from "@/types/Types";
-import { useEffect, useState } from "react";
 import { SessionResult } from "../SessionResult/SessionResult";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Checkbox } from "@repo/ui/components/checkbox";
+import { useMemo } from "react";
 
 interface ComponentResultProps {
   component: Component;
@@ -18,24 +18,23 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
 }) => {
   const { state, dispatch } = useSearchResults();
   const { courseCode } = course;
-  const isSelectedInitially = Boolean(
-    state.selected &&
-      state.selected[courseCode] &&
-      state.selected[courseCode].includes(subSection),
+  const isSelected = useMemo(
+    () =>
+      Boolean(
+        state.selected &&
+          state.selected[courseCode] &&
+          state.selected[courseCode].includes(subSection),
+      ),
+    [courseCode, state.selected, subSection],
   );
-  const [isSelected, setIsSelected] = useState(isSelectedInitially);
-
-  useEffect(() => {
-    const actionType = isSelected ? "add_selected" : "remove_selected";
-    dispatch({ type: actionType, payload: { courseCode, subSection } });
-  }, [isSelected, dispatch, courseCode, subSection]);
 
   function handleToggle() {
-    setIsSelected(previous => !previous);
+    const actionType = isSelected ? "remove_selected" : "add_selected";
+    dispatch({ type: actionType, payload: { courseCode, subSection } });
   }
 
   return (
-    <div className="flex h-full w-full items-center justify-between border-b">
+    <div className="flex h-full w-full items-center justify-between border-b md:text-xs">
       <div className="px-4">
         <Checkbox onCheckedChange={handleToggle} checked={isSelected} />
       </div>

@@ -1,75 +1,59 @@
 import { Course } from "@/types/Types";
-import { useState } from "react";
 import { SectionResult } from "../SectionResult/SectionResult";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowUpRightFromSquare,
-  faChevronUp,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
-import { Button } from "@repo/ui/components/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@repo/ui/components/accordion";
 
 interface CourseResultProps {
   course: Course;
+  openResults: string[];
 }
 
-const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
   const { dispatch } = useSearchResults();
-
-  const handleCourseToggle = () => {
-    setIsOpen(previous => !previous);
-  };
 
   const handleCourseRemoval = () => {
     dispatch({ type: "remove_course", payload: course });
   };
 
   return (
-    <div className="pb-4 text-sm">
-      <Button variant="link" className="h-min px-2 py-1">
-        <a
-          href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
-          target="_blank"
-          rel="noreferrer"
+    <>
+      <AccordionTrigger
+        className={`cursor-pointer items-center p-2 font-normal ${course.colour} ${openResults.includes(course.courseCode) ? "rounded-b-none" : "rounded-b-sm"}`}
+      >
+        <p className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
+
+        <FontAwesomeIcon
+          className="ml-auto !rotate-0"
+          onClick={handleCourseRemoval}
+          icon={faTrash}
+        />
+      </AccordionTrigger>
+
+      <AccordionContent className="p-0">
+        <Accordion
+          type="multiple"
+          className="overflow-hidden rounded-b-sm border-x border-slate-200"
         >
-          Best Professors for {course.courseCode}&nbsp;
-          <FontAwesomeIcon size={"sm"} icon={faArrowUpRightFromSquare} />
-        </a>
-      </Button>
-      <div className="overflow-hidden rounded-md border">
-        <div className={`cursor-pointer p-2 ${course.colour}`}>
-          <div
-            onClick={handleCourseToggle}
-            className="flex items-center justify-between"
-          >
-            <div className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</div>
-
-            <div className="ml-4 flex items-center gap-6 md:gap-5">
-              <FontAwesomeIcon onClick={handleCourseRemoval} icon={faTrash} />
-              <FontAwesomeIcon
-                className={`transition-all delay-100 ease-in ${isOpen ? "rotate-0" : "rotate-180"}`}
-                icon={faChevronUp}
-              />
-            </div>
-          </div>
-        </div>
-
-        {course.sections.map(section => {
-          return (
-            <div
-              className={`overflow-hidden transition-all delay-100 ease-in ${
-                isOpen ? "opacity-100" : "max-h-0 opacity-0"
-              }`}
-              key={`${course.courseCode}${section.section}`}
-            >
-              <SectionResult section={section} course={course} />
-            </div>
-          );
-        })}
-      </div>
-    </div>
+          {course.sections.map(section => {
+            return (
+              <AccordionItem
+                value={`${course.courseCode}${section.section}`}
+                key={`${course.courseCode}${section.section}`}
+              >
+                <SectionResult section={section} course={course} />
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
+      </AccordionContent>
+    </>
   );
 };
 
