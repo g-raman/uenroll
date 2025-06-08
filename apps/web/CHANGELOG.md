@@ -1,5 +1,15 @@
 # web
 
+## 0.7.1
+
+### Patch Changes
+
+- [#89](https://github.com/g-raman/uenroll/pull/89) [`ae9a784`](https://github.com/g-raman/uenroll/commit/ae9a78425425f264daab44611eda92f8ad6ed3f7) Thanks [@g-raman](https://github.com/g-raman)! - Removed memoization of is selected state for components
+
+- [#92](https://github.com/g-raman/uenroll/pull/92) [`da7a426`](https://github.com/g-raman/uenroll/commit/da7a426e3a454d69908db8ffe27fafbfcfb29fb5) Thanks [@g-raman](https://github.com/g-raman)! - Added tooltips for buttons
+
+- [#91](https://github.com/g-raman/uenroll/pull/91) [`b12328b`](https://github.com/g-raman/uenroll/commit/b12328bdde2760db738df15650d20520b840f362) Thanks [@g-raman](https://github.com/g-raman)! - Made calendar events slightly translucent
+
 ## 0.7.0
 
 ### Minor Changes
