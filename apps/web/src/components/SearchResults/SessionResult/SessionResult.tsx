@@ -25,7 +25,7 @@ export const SessionResult: React.FC<SessionResultProps> = ({ session }) => {
             <>
               <span className="font-semibold">{session.dayOfWeek}</span>
               &nbsp;
-              <span className="truncate font-normal text-slate-600">{`${startTime} - ${endTime}`}</span>
+              <span className="truncate font-normal text-slate-600 dark:text-slate-400">{`${startTime} - ${endTime}`}</span>
               <br />
             </>
           )}
