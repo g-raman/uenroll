@@ -2,7 +2,6 @@ import { Component, Course } from "@/types/Types";
 import { SessionResult } from "../SessionResult/SessionResult";
 import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Checkbox } from "@repo/ui/components/checkbox";
-import { useMemo } from "react";
 
 interface ComponentResultProps {
   component: Component;
@@ -18,14 +17,10 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
 }) => {
   const { state, dispatch } = useSearchResults();
   const { courseCode } = course;
-  const isSelected = useMemo(
-    () =>
-      Boolean(
-        state.selected &&
-          state.selected[courseCode] &&
-          state.selected[courseCode].includes(subSection),
-      ),
-    [courseCode, state.selected, subSection],
+  const isSelected = Boolean(
+    state.selected &&
+      state.selected[courseCode] &&
+      state.selected[courseCode].includes(subSection),
   );
 
   function handleToggle() {
