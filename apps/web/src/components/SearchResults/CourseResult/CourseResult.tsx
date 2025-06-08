@@ -25,7 +25,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
   return (
     <>
       <AccordionTrigger
-        className={`cursor-pointer items-center p-2 font-normal ${course.colour} ${openResults.includes(course.courseCode) ? "rounded-b-none" : "rounded-b-sm"}`}
+        className={`cursor-pointer items-center truncate p-2 font-normal ${course.colour} ${openResults.includes(course.courseCode) ? "rounded-b-none" : "rounded-b-sm"}`}
       >
         <p className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
 
