@@ -19,7 +19,7 @@ export default function SearchResults() {
               <Button
                 asChild
                 variant="link"
-                className="h-min items-baseline gap-0 !px-2 py-1"
+                className="h-min items-baseline gap-0 !px-2 py-1 dark:text-white"
               >
                 <a
                   href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
