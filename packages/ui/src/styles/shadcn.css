@@ -68,7 +68,7 @@
   --popover: oklch(0.269 0 0);
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.4232 0.1617 21.29);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.4232 0.1617 21.29);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
