@@ -12,9 +12,10 @@ import {
 
 interface CourseResultProps {
   course: Course;
+  openResults: string[];
 }
 
-const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
+const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
   const { dispatch } = useSearchResults();
 
   const handleCourseRemoval = () => {
@@ -24,7 +25,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
   return (
     <>
       <AccordionTrigger
-        className={`cursor-pointer items-center p-2 font-normal ${course.colour}`}
+        className={`cursor-pointer items-center p-2 font-normal ${course.colour} ${openResults.includes(course.courseCode) ? "rounded-b-none" : "rounded-b-sm"}`}
       >
         <p className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
 
