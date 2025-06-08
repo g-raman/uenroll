@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 0.2.1
+
+### Patch Changes
+
+- [#92](https://github.com/g-raman/uenroll/pull/92) [`da7a426`](https://github.com/g-raman/uenroll/commit/da7a426e3a454d69908db8ffe27fafbfcfb29fb5) Thanks [@g-raman](https://github.com/g-raman)! - Added tooltip component
+
 ## 0.2.0
 
 ### Minor Changes
