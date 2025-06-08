@@ -48,7 +48,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
       >
         <AccordionItem value="course-1">
           <AccordionTrigger
-            className={`${course.colour} items-center p-2 font-normal ${isBottomRounded ? "" : "rounded-b-none"}`}
+            className={`cursor-pointer items-center p-2 font-normal ${course.colour} ${isBottomRounded ? "" : "rounded-b-none"}`}
           >
             <p className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
 
