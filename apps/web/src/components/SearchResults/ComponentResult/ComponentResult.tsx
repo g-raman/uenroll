@@ -35,7 +35,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   }
 
   return (
-    <div className="flex h-full w-full items-center justify-between border-b">
+    <div className="flex h-full w-full items-center justify-between border-b md:text-xs">
       <div className="px-4">
         <Checkbox onCheckedChange={handleToggle} checked={isSelected} />
       </div>

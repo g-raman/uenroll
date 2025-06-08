@@ -21,7 +21,7 @@ export const SectionResult: React.FC<SectionResultProps> = ({
   const { courseCode } = course;
 
   return (
-    <Accordion type="single" collapsible className="md:text-sm">
+    <Accordion type="single" collapsible>
       {section.components.map(component => {
         return (
           <AccordionItem
