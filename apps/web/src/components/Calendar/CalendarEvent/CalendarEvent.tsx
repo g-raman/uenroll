@@ -19,7 +19,7 @@ export default function CalendarEvent({ calendarEvent }: CalendarEventProps) {
   const end = dayjs(calendarEvent.end).format(TIME_FORMAT);
   return (
     <div
-      className={`left-0 right-0 top-0 flex h-full cursor-pointer flex-col gap-1 rounded-sm border-l-4 p-2 ${calendarEvent.backgroundColour}`}
+      className={`left-0 right-0 top-0 flex h-full cursor-pointer flex-col gap-1 rounded-sm border-l-4 p-2 ${calendarEvent.backgroundColour}/50`}
     >
       <div className="flex text-nowrap text-xs">
         <p className="font-bold">{calendarEvent.title}</p>
