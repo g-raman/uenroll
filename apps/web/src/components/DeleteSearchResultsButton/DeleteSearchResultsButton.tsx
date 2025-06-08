@@ -2,21 +2,33 @@ import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 import React from "react";
 
 export const DeleteSearchResultsButton = () => {
   const { state, dispatch } = useSearchResults();
 
   return (
-    <Button
-      className="flex-1"
-      variant="outline"
-      size="lg"
-      onClick={() => dispatch({ type: "reset_courses" })}
-      disabled={state.courses.length === 0}
-    >
-      <FontAwesomeIcon className="size-4" icon={faTrash} />
-      <p className="text-xs">Delete</p>
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          className="flex-1"
+          variant="outline"
+          size="lg"
+          onClick={() => dispatch({ type: "reset_courses" })}
+          disabled={state.courses.length === 0}
+        >
+          <FontAwesomeIcon className="size-4" icon={faTrash} />
+          <p className="text-xs">Clear</p>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Clear all search results</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
