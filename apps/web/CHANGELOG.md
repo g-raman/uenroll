@@ -1,5 +1,15 @@
 # web
 
+## 0.7.0
+
+### Minor Changes
+
+- [#86](https://github.com/g-raman/uenroll/pull/86) [`306b36a`](https://github.com/g-raman/uenroll/commit/306b36adecfb97cf252bff4f2e484db41dfa4dde) Thanks [@g-raman](https://github.com/g-raman)! - Use shadcn accordion component to render search results
+
+### Patch Changes
+
+- [#88](https://github.com/g-raman/uenroll/pull/88) [`a352100`](https://github.com/g-raman/uenroll/commit/a352100295c5ef5dac975b72bf6c8b4759591d66) Thanks [@g-raman](https://github.com/g-raman)! - Fix course title truncation in course results
+
 ## 0.6.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 0.2.0
+
+### Minor Changes
+
+- [#86](https://github.com/g-raman/uenroll/pull/86) [`306b36a`](https://github.com/g-raman/uenroll/commit/306b36adecfb97cf252bff4f2e484db41dfa4dde) Thanks [@g-raman](https://github.com/g-raman)! - Add accordion component
+
 ## 0.1.1
 
 ### Patch Changes
