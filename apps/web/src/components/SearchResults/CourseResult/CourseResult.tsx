@@ -52,16 +52,20 @@ const CourseResult: React.FC<CourseResultProps> = ({ course }) => {
             />
           </AccordionTrigger>
 
-          {course.sections.map(section => {
-            return (
-              <AccordionContent
-                key={`${course.courseCode}${section.section}`}
-                className="p-0"
-              >
-                <SectionResult section={section} course={course} />
-              </AccordionContent>
-            );
-          })}
+          <AccordionContent className="p-0">
+            <Accordion type="multiple">
+              {course.sections.map(section => {
+                return (
+                  <AccordionItem
+                    value={`${course.courseCode}${section.section}`}
+                    key={`${course.courseCode}${section.section}`}
+                  >
+                    <SectionResult section={section} course={course} />
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+          </AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>
