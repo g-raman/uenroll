@@ -14,6 +14,7 @@ import { createCalendarControlsPlugin } from "@schedule-x/calendar-controls";
 import CalendarEvent from "./CalendarEvent/CalendarEvent";
 import { createEventModalPlugin } from "@schedule-x/event-modal";
 import CalendarEventModal from "./CalendarEventModal/CalendarEventModal";
+import { useTheme } from "next-themes";
 
 const DATE_FORMAT = "YYYY-MM-DD";
 function Calendar() {
@@ -28,11 +29,13 @@ function Calendar() {
     eventModal,
   ];
   const { state } = useSearchResults();
+  const { theme, systemTheme } = useTheme();
 
   const calendar = useNextCalendarApp(
     {
       views: [createViewWeek(), createViewMonthAgenda()],
       theme: "shadcn",
+      isDark: theme === "dark" || systemTheme === "dark",
       dayBoundaries: {
         start: "06:00",
         end: "23:00",
