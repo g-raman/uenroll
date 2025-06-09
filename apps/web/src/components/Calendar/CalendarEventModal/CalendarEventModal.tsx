@@ -18,7 +18,7 @@ export default function CalendarEventModal({
   const end = dayjs(calendarEvent.end).format(TIME_FORMAT);
 
   return (
-    <div className="shadow-sx h-min w-full space-y-2 rounded-md bg-slate-50 p-6 dark:bg-[#141218]">
+    <div className="shadow-sx bg-background h-min w-full space-y-2 rounded-md p-6">
       <div className="flex items-center text-lg">
         <div
           className={`rounded-xs mr-2 size-5 ${calendarEvent.backgroundColour}`}
