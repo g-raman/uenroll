@@ -21,10 +21,6 @@ export default function Page() {
       <QueryClientProvider client={queryClient}>
         <SearchResultsProvider>
           <App>
-            <Main>
-              <Calendar />
-            </Main>
-
             <Sidebar>
               <SearchBar />
               <div className="mb-4 flex gap-2">
@@ -34,6 +30,10 @@ export default function Page() {
               </div>
               <SearchResults />
             </Sidebar>
+
+            <Main>
+              <Calendar />
+            </Main>
           </App>
         </SearchResultsProvider>
       </QueryClientProvider>
