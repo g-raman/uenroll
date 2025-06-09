@@ -7,7 +7,7 @@ export default function Sidebar({
   return (
     <div className="order-first flex h-[53%] w-full flex-col overflow-y-scroll rounded-b-md md:order-last md:h-full md:w-2/5 md:rounded-md xl:w-1/4">
       <Header />
-      <div className="bg-background flex h-full flex-col justify-between p-4 md:rounded-md">
+      <div className="bg-background flex h-full flex-col p-4 md:rounded-md">
         {children}
         <Footer />
       </div>
