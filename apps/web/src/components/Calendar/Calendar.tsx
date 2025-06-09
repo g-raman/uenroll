@@ -119,6 +119,13 @@ function Calendar() {
     }
   }, [calendarControls, state.term]);
 
+  useEffect(() => {
+    if (!calendar) return;
+
+    const newTheme = theme === "system" ? systemTheme : theme;
+    calendar.setTheme(newTheme as "dark" | "light");
+  }, [theme, systemTheme]);
+
   return (
     <div className="h-full overflow-scroll">
       <ScheduleXCalendar
