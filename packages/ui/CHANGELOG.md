@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 0.3.0
+
+### Minor Changes
+
+- [#95](https://github.com/g-raman/uenroll/pull/95) [`7361eed`](https://github.com/g-raman/uenroll/commit/7361eed9636c8877f7c5d0d88ec5d92e114b56ae) Thanks [@g-raman](https://github.com/g-raman)! - Added dark mode
+
 ## 0.2.1
 
 ### Patch Changes

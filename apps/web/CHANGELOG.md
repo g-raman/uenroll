@@ -1,5 +1,15 @@
 # web
 
+## 0.8.0
+
+### Minor Changes
+
+- [#95](https://github.com/g-raman/uenroll/pull/95) [`7361eed`](https://github.com/g-raman/uenroll/commit/7361eed9636c8877f7c5d0d88ec5d92e114b56ae) Thanks [@g-raman](https://github.com/g-raman)! - Added dark mode
+
+### Patch Changes
+
+- [#93](https://github.com/g-raman/uenroll/pull/93) [`7897786`](https://github.com/g-raman/uenroll/commit/7897786f447c6657514c8be31d0597bfd77a6850) Thanks [@g-raman](https://github.com/g-raman)! - Fixed calendar event sourcing hack
+
 ## 0.7.1
 
 ### Patch Changes
