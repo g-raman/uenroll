@@ -55,7 +55,7 @@ export default function SearchBar() {
   }, [performSearch, selectedValue, state.courses.length]);
 
   return (
-    <div className="sticky top-0 z-10 mb-2 mt-4 flex flex-col gap-2 bg-white">
+    <div className="sticky top-0 z-10 mb-2 flex flex-col gap-2">
       <TermSelector />
       <div className="flex items-center justify-between gap-2">
         <AutoComplete

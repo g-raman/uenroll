@@ -17,7 +17,7 @@ export const SectionResult: React.FC<SectionResultProps> = ({
 
   return (
     <>
-      <AccordionTrigger className="cursor-pointer rounded-none bg-slate-200 p-2 font-normal">
+      <AccordionTrigger className="cursor-pointer rounded-none bg-slate-200 p-2 font-normal dark:bg-neutral-200 dark:text-black">
         <span>Section {section.section}</span>
       </AccordionTrigger>
 

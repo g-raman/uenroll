@@ -17,7 +17,7 @@ export const CopyLinkButton = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="flex-1"
+          className="grow"
           variant="outline"
           size="lg"
           disabled={state.selectedSessions.length === 0}
@@ -35,7 +35,9 @@ export const CopyLinkButton = () => {
             className="size-4"
             icon={isCopied ? faCheck : faLink}
           />
-          <p className="text-xs">{isCopied ? "Copied" : "Copy Link"}</p>
+          <p className="hidden text-xs min-[375px]:inline sm:inline md:hidden min-[1440px]:inline">
+            {isCopied ? "Copied" : "Copy Link"}
+          </p>
         </Button>
       </TooltipTrigger>
       <TooltipContent>

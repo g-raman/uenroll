@@ -7,6 +7,7 @@ import { NuqsAdapter } from "nuqs/adapters/next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { BASE_URL } from "@/utils/constants";
+import { ThemeProvider } from "next-themes";
 
 const font = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -61,18 +62,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={font.className}>
-        <NuqsAdapter>
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 3000,
-              className: "w-[90%]",
-            }}
-          />
-          {children}
-        </NuqsAdapter>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NuqsAdapter>
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                duration: 3000,
+                className: "w-[90%]",
+              }}
+            />
+            {children}
+          </NuqsAdapter>
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>

@@ -34,14 +34,16 @@ export default function DownloadCalendarButton() {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="flex-1"
+          className="grow"
           variant="default"
           size="lg"
           onClick={handleDownload}
           disabled={state.selectedSessions.length === 0}
         >
           <FontAwesomeIcon className="size-4" icon={faFileExport} />
-          <p className="text-xs">Export</p>
+          <p className="hidden text-xs min-[375px]:inline sm:inline md:hidden min-[1440px]:inline">
+            Export
+          </p>
         </Button>
       </TooltipTrigger>
       <TooltipContent>

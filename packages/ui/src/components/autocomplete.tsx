@@ -80,6 +80,7 @@ export function AutoComplete<T extends string>({
         <Command shouldFilter={true}>
           <PopoverAnchor asChild>
             <CommandPrimitive.Input
+              className="text-sm"
               asChild
               value={searchValue}
               onValueChange={onSearchValueChange}

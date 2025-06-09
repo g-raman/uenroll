@@ -1,15 +1,18 @@
+import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton/ThemeSwitchingButton";
 import { faBuildingColumns } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Header() {
   return (
-    <div className="flex items-baseline gap-4 text-5xl font-medium">
-      <FontAwesomeIcon
-        className="size-12"
-        color="#8f001b"
-        icon={faBuildingColumns}
-      />
-      <p>uEnroll</p>
+    <div className="bg-background mb-2 flex hidden items-center rounded-b-md p-4 sm:flex md:mb-4 md:rounded-md">
+      <div className="flex w-full items-baseline justify-start text-4xl">
+        <FontAwesomeIcon
+          className="text-primary size-12"
+          icon={faBuildingColumns}
+        />
+        <p>uEnroll</p>
+      </div>
+      <ThemeSwitchingButton />
     </div>
   );
 }
