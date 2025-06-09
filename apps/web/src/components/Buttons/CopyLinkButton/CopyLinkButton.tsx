@@ -35,7 +35,9 @@ export const CopyLinkButton = () => {
             className="size-4"
             icon={isCopied ? faCheck : faLink}
           />
-          <p className="text-xs">{isCopied ? "Copied" : "Copy Link"}</p>
+          <p className="hidden text-xs xl:inline">
+            {isCopied ? "Copied" : "Copy Link"}
+          </p>
         </Button>
       </TooltipTrigger>
       <TooltipContent>

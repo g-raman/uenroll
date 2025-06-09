@@ -41,7 +41,7 @@ export default function DownloadCalendarButton() {
           disabled={state.selectedSessions.length === 0}
         >
           <FontAwesomeIcon className="size-4" icon={faFileExport} />
-          <p className="text-xs">Export</p>
+          <p className="hidden text-xs xl:inline">Export</p>
         </Button>
       </TooltipTrigger>
       <TooltipContent>

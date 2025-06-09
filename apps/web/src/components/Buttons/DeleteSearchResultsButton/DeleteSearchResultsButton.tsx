@@ -23,7 +23,7 @@ export const DeleteSearchResultsButton = () => {
           disabled={state.courses.length === 0}
         >
           <FontAwesomeIcon className="size-4" icon={faTrash} />
-          <p className="text-xs">Clear</p>
+          <p className="hidden text-xs xl:inline">Clear</p>
         </Button>
       </TooltipTrigger>
       <TooltipContent>
