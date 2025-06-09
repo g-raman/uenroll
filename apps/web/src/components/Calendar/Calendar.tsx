@@ -124,7 +124,7 @@ function Calendar() {
 
     const newTheme = theme === "system" ? systemTheme : theme;
     calendar.setTheme(newTheme as "dark" | "light");
-  }, [theme, systemTheme]);
+  }, [theme, systemTheme, calendar]);
 
   return (
     <div className="h-full overflow-scroll">
