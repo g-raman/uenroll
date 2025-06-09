@@ -17,7 +17,7 @@ export const CopyLinkButton = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="flex-1"
+          className="grow"
           variant="outline"
           size="lg"
           disabled={state.selectedSessions.length === 0}

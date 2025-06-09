@@ -16,7 +16,7 @@ export const DeleteSearchResultsButton = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="flex-1"
+          className="grow"
           variant="outline"
           size="lg"
           onClick={() => dispatch({ type: "reset_courses" })}

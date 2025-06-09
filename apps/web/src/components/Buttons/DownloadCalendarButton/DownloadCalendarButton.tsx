@@ -34,7 +34,7 @@ export default function DownloadCalendarButton() {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="flex-1"
+          className="grow"
           variant="default"
           size="lg"
           onClick={handleDownload}
