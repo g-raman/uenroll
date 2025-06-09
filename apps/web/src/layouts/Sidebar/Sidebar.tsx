@@ -5,10 +5,12 @@ export default function Sidebar({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="order-first flex h-[53%] w-full flex-col overflow-y-scroll rounded-b-md bg-white p-4 md:order-last md:h-full md:w-1/4 md:justify-between md:rounded-md dark:bg-[#141218]">
+    <div className="order-first flex h-[53%] w-full flex-col overflow-y-scroll rounded-b-md md:order-last md:h-full md:w-2/5 md:rounded-md xl:w-1/4">
       <Header />
-      {children}
-      <Footer />
+      <div className="bg-background flex h-full flex-col justify-between p-4 md:rounded-md">
+        {children}
+        <Footer />
+      </div>
     </div>
   );
 }
