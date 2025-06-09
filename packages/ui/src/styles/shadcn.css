@@ -61,11 +61,11 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: oklch(0.1874 0.0124 300.422);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: oklch(0.1874 0.0124 300.422);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.269 0 0);
+  --popover: oklch(0.1874 0.0124 300.422);
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.4232 0.1617 21.29);
   --primary-foreground: oklch(1 0 0);
@@ -78,7 +78,7 @@
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.275 0 0);
-  --input: oklch(0.325 0 0);
+  --input: oklch(0.3205 0.0125 300.42);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.81 0.1 252);
   --chart-2: oklch(0.62 0.19 260);
@@ -172,23 +172,5 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-}
-
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
   }
 }
