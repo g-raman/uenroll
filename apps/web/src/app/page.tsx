@@ -8,10 +8,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SearchResultsProvider } from "@/contexts/SearchResultsContext";
 import SearchResults from "@/components/SearchResults/SearchResults";
 import { Suspense, useState } from "react";
-import { CopyLinkButton } from "@/components/CopyLinkButton/CopyLinkButton";
-import { DeleteSearchResultsButton } from "@/components/DeleteSearchResultsButton/DeleteSearchResultsButton";
+import { CopyLinkButton } from "@/components/Buttons/CopyLinkButton/CopyLinkButton";
+import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
 import Calendar from "@/components/Calendar/Calendar";
-import DownloadCalendarButton from "@/components/DownloadCalendarButton/DownloadCalendarButton";
+import DownloadCalendarButton from "@/components/Buttons/DownloadCalendarButton/DownloadCalendarButton";
 
 export default function Page() {
   const queryClient = useState(new QueryClient())[0];
