@@ -49,10 +49,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
       </AccordionTrigger>
 
       <AccordionContent className="p-0">
-        <Accordion
-          type="multiple"
-          className="overflow-hidden rounded-b-sm border-x border-slate-200"
-        >
+        <Accordion type="multiple" className="overflow-hidden rounded-b-sm">
           {course.sections.map(section => {
             return (
               <AccordionItem
