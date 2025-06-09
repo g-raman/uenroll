@@ -19,7 +19,7 @@ export function ThemeSwitchingButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="h-full flex-1" variant="outline" size="lg">
+        <Button className="size-10" variant="outline" size="icon">
           <FontAwesomeIcon
             className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
             icon={faMoon}
