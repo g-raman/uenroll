@@ -53,54 +53,6 @@ function Calendar() {
     plugins,
   );
 
-  useEffect(() => {
-    if (!calendar || !eventsService || !calendarControls) {
-      return;
-    }
-
-    if (state.selectedSessions.length === 0) {
-      eventsService.set([]);
-      return;
-    }
-
-    const events = state.selectedSessions
-      .filter(session => session.dayOfWeek > -1)
-      .map(session => {
-        const baseStartDate = dayjs(session.startRecur);
-        const dayOffset = session.dayOfWeek - baseStartDate.day();
-        const startDate = baseStartDate.add(
-          dayOffset < 0 ? 7 + dayOffset : dayOffset,
-          "days",
-        );
-        const endDate = dayjs(session.endRecur);
-
-        const rrule = new RRule({
-          freq: RRule.WEEKLY,
-          dtstart: datetime(
-            startDate.get("year"),
-            startDate.get("month") + 1,
-            startDate.get("day"),
-          ),
-          until: datetime(
-            endDate.get("year"),
-            endDate.get("month") + 1,
-            endDate.get("day"),
-          ),
-        });
-
-        return {
-          id: `${session.courseDetails.courseCode}${session.courseDetails.subSection}`,
-          title: `${session.courseDetails.courseCode}`,
-          start: `${startDate.format(DATE_FORMAT)} ${session.startTime}`,
-          end: `${startDate.format(DATE_FORMAT)} ${session.endTime}`,
-          rrule: rrule.toString(),
-          ...session.courseDetails,
-        };
-      });
-
-    eventsService.set(events);
-  }, [calendar, calendarControls, eventsService, state.selectedSessions]);
-
   // HACK: Gotta figure out a better way to do This
   // Hardcoding for now
   useEffect(() => {
@@ -119,12 +71,47 @@ function Calendar() {
     }
   }, [calendarControls, state.term]);
 
-  useEffect(() => {
-    if (!calendar) return;
+  if (!state.term || !calendar || !eventsService) return null;
 
-    const newTheme = theme === "system" ? systemTheme : theme;
-    calendar.setTheme(newTheme as "dark" | "light");
-  }, [theme, systemTheme, calendar]);
+  const newTheme = theme === "system" ? systemTheme : theme;
+  calendar.setTheme(newTheme as "dark" | "light");
+
+  const events = state.selectedSessions
+    .filter(session => session.dayOfWeek > -1)
+    .map(session => {
+      const baseStartDate = dayjs(session.startRecur);
+      const dayOffset = session.dayOfWeek - baseStartDate.day();
+      const startDate = baseStartDate.add(
+        dayOffset < 0 ? 7 + dayOffset : dayOffset,
+        "days",
+      );
+      const endDate = dayjs(session.endRecur);
+
+      const rrule = new RRule({
+        freq: RRule.WEEKLY,
+        dtstart: datetime(
+          startDate.get("year"),
+          startDate.get("month") + 1,
+          startDate.get("day"),
+        ),
+        until: datetime(
+          endDate.get("year"),
+          endDate.get("month") + 1,
+          endDate.get("day"),
+        ),
+      });
+
+      return {
+        id: `${session.courseDetails.courseCode}${session.courseDetails.subSection}`,
+        title: `${session.courseDetails.courseCode}`,
+        start: `${startDate.format(DATE_FORMAT)} ${session.startTime}`,
+        end: `${startDate.format(DATE_FORMAT)} ${session.endTime}`,
+        rrule: rrule.toString(),
+        ...session.courseDetails,
+      };
+    });
+
+  eventsService.set(events);
 
   return (
     <div className="h-full overflow-scroll">
