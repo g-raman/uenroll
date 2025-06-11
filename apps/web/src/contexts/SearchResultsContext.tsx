@@ -2,7 +2,7 @@ import { useQueryState } from "nuqs";
 import React, {
   createContext,
   ReactNode,
-  useContext,
+  use,
   useEffect,
   useReducer,
 } from "react";
@@ -122,7 +122,7 @@ export const SearchResultsProvider: React.FC<{ children: ReactNode }> = ({
 };
 
 export const useSearchResults = (): SearchResultsContextType => {
-  const context = useContext(SearchResultsContext);
+  const context = use(SearchResultsContext);
   if (!context) {
     throw new Error("useCourses must be used within a CoursesProvider");
   }
