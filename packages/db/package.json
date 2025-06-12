@@ -31,6 +31,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx ./src/seeds/index.ts",
     "db:studio": "drizzle-kit studio",
+    "db:init": "pnpm db:migrate && pnpm db:seed",
     "lint": "eslint ."
   },
   "dependencies": {
