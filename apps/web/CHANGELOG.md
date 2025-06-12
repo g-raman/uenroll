@@ -1,5 +1,11 @@
 # web
 
+## 0.8.1
+
+### Patch Changes
+
+- [#96](https://github.com/g-raman/uenroll/pull/96) [`b77c772`](https://github.com/g-raman/uenroll/commit/b77c7722d4a7e5d99a549114d832180a3f19a67f) Thanks [@g-raman](https://github.com/g-raman)! - Removed unnecessary useEffect for adding events to calendar
+
 ## 0.8.0
 
 ### Minor Changes
