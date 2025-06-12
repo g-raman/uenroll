@@ -1,4 +1,4 @@
-# uEnroll 🏛️
+# 🏛️ uEnroll
 
 A modern, open-source schedule builder for uOttawa.
 
