@@ -28,10 +28,10 @@
     "clean": "rm -rf dist",
     "db:function": "drizzle-kit generate --custom --name=get_course_function",
     "db:generate": "drizzle-kit generate",
+    "db:init": "pnpm db:migrate && pnpm db:seed",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx ./src/seeds/index.ts",
     "db:studio": "drizzle-kit studio",
-    "db:init": "pnpm db:migrate && pnpm db:seed",
     "lint": "eslint ."
   },
   "dependencies": {
