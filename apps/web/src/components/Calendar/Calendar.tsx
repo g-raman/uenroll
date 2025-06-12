@@ -71,10 +71,14 @@ function Calendar() {
     }
   }, [calendarControls, state.term]);
 
-  if (!state.term || !calendar || !eventsService) return null;
+  useEffect(() => {
+    if (!calendar) return;
 
-  const newTheme = theme === "system" ? systemTheme : theme;
-  calendar.setTheme(newTheme as "dark" | "light");
+    const newTheme = theme === "system" ? systemTheme : theme;
+    calendar.setTheme(newTheme as "dark" | "light");
+  }, [theme, systemTheme, calendar]);
+
+  if (!state.term || !calendar || !eventsService) return null;
 
   const events = state.selectedSessions
     .filter(session => session.dayOfWeek > -1)
