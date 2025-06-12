@@ -52,7 +52,7 @@ docker compose up -d
 Run migrations
 
 ```bash
-pnpm --filter @repo/db db:migrate
+pnpm --filter @repo/db db:init
 ```
 
 This step is optional. This commands seeds the database with dummy data.
