@@ -19,6 +19,10 @@ git clone https://github.com/g-raman/uenroll.git
 ### Install dependencies
 
 ```bash
+cd uenroll
+```
+
+```bash
 pnpm install
 ```
 
