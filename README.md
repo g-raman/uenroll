@@ -1,4 +1,4 @@
-# uEnroll 🏛️
+# 🏛️ uEnroll
 
 A modern, open-source schedule builder for uOttawa.
 
@@ -17,6 +17,10 @@ git clone https://github.com/g-raman/uenroll.git
 ```
 
 ### Install dependencies
+
+```bash
+cd uenroll
+```
 
 ```bash
 pnpm install
@@ -45,33 +49,29 @@ Run Postgres instance locally
 docker compose up -d
 ```
 
-Run migrations
+Setup database
 
 ```bash
-pnpm --filter @repo/db db:migrate
+pnpm --filter @repo/db db:init
 ```
 
-This step is optional. This commands seeds the database with dummy data.
+Running this command populates the database with seed data.
 
-See the [Populate with real data](#populate-with-real-data) section if you want better data.
+See the [Populate with real data](#populate-with-real-data) section if you want more/better data.
 
 Or alternatively see the [Request seed file](#request-seed-file) section.
-
-```bash
-pnpm --filter @repo/db db:seed
-```
 
 ## Setup webapp
 
 ```bash
-pnpm dlx turbo dev --filter web
+pnpm dev
 ```
 
 <details>
     <summary>With turbo cli</summary>
 
 ```bash
-turbo dev --filter web
+turbo dev
 ```
 
 </details>
