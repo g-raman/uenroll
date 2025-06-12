@@ -68,14 +68,14 @@ pnpm --filter @repo/db db:seed
 ## Setup webapp
 
 ```bash
-pnpm dlx turbo dev --filter web
+pnpm dev
 ```
 
 <details>
     <summary>With turbo cli</summary>
 
 ```bash
-turbo dev --filter web
+turbo dev
 ```
 
 </details>
