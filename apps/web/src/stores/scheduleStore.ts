@@ -13,6 +13,7 @@ export interface InitializeDataPayload {
 interface ScheduleActions {
   setInitialData: (initialData: InitializeDataPayload) => void;
   changeTerm: (newTerm: Term) => void;
+  addCourse: (course: Course) => void;
 }
 
 interface ScheduleState {
@@ -68,5 +69,20 @@ const useScheduleStore = create<ScheduleState>(set => ({
         courseSearchResults: [],
         colours: shuffleArray(INITIAL_COLOURS),
       })),
+    addCourse: course =>
+      set(old => {
+        const isAlreadyAdded = old.courseSearchResults.some(
+          result => result.courseCode === course.courseCode,
+        );
+        const [colour, ...restColours] = old.colours;
+
+        return isAlreadyAdded
+          ? old
+          : {
+              ...old,
+              colours: restColours,
+              courses: [{ ...course, colour }, ...old.courseSearchResults],
+            };
+      }),
   },
 }));
