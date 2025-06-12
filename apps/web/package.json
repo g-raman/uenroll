@@ -37,7 +37,8 @@
     "react-hot-toast": "^2.5.2",
     "rrule": "^2.8.1",
     "ts-ics": "^1.6.8",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@repo/db": "workspace:*",
