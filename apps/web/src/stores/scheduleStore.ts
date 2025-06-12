@@ -14,6 +14,7 @@ interface ScheduleActions {
   setInitialData: (initialData: InitializeDataPayload) => void;
   changeTerm: (newTerm: Term) => void;
   addCourse: (course: Course) => void;
+  removeCourse: (course: Course) => void;
 }
 
 interface ScheduleState {
@@ -83,6 +84,48 @@ const useScheduleStore = create<ScheduleState>(set => ({
               colours: restColours,
               courses: [{ ...course, colour }, ...old.courseSearchResults],
             };
+      }),
+    removeCourse: course =>
+      set(old => {
+        const filteredCourses = old.courseSearchResults.filter(
+          result => result.courseCode !== course.courseCode,
+        );
+
+        if (
+          old.selectedSessionsURL === null ||
+          !old.selectedSessionsURL[course.courseCode]
+        ) {
+          return {
+            ...old,
+            courses: filteredCourses,
+            colours: [...old.colours, course.colour as string],
+          };
+        }
+        const selectedSessionsURL = { ...old.selectedSessionsURL };
+        delete selectedSessionsURL[course.courseCode];
+
+        if (Object.keys(selectedSessionsURL).length === 0) {
+          return {
+            ...old,
+            courses: filteredCourses,
+            selectedSessionsURL: null,
+            selectedSessions: [],
+            colours: [...old.colours, course.colour as string],
+          };
+        }
+
+        const selectedSessions = createNewSelectedSessions(
+          filteredCourses,
+          selectedSessionsURL,
+        );
+
+        return {
+          ...old,
+          courses: filteredCourses,
+          selectedSessionsURL,
+          selectedSessions,
+          colours: [...old.colours, course.colour as string],
+        };
       }),
   },
 }));
