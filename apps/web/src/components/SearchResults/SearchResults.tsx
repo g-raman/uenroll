@@ -11,7 +11,7 @@ export default function SearchResults() {
   const [openResults, setOpenResults] = useState<string[]>([]);
 
   return (
-    <>
+    <div className="overflow-y-scroll">
       <Accordion type="multiple" onValueChange={value => setOpenResults(value)}>
         {state.courses.map(course => {
           return (
@@ -38,6 +38,6 @@ export default function SearchResults() {
           );
         })}
       </Accordion>
-    </>
+    </div>
   );
 }
