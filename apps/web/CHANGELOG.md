@@ -1,5 +1,13 @@
 # web
 
+## 0.8.1
+
+### Patch Changes
+
+- [#100](https://github.com/g-raman/uenroll/pull/100) [`0a821b4`](https://github.com/g-raman/uenroll/commit/0a821b4efe4050ee72b4aff3c332f5132a5c9d3d) Thanks [@g-raman](https://github.com/g-raman)! - Fixed search results overflowing
+
+- [#96](https://github.com/g-raman/uenroll/pull/96) [`b77c772`](https://github.com/g-raman/uenroll/commit/b77c7722d4a7e5d99a549114d832180a3f19a67f) Thanks [@g-raman](https://github.com/g-raman)! - Removed unnecessary useEffect for adding events to calendar
+
 ## 0.8.0
 
 ### Minor Changes

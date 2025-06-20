@@ -1,5 +1,11 @@
 # @repo/db
 
+## 0.4.1
+
+### Patch Changes
+
+- [#98](https://github.com/g-raman/uenroll/pull/98) [`8ac29bc`](https://github.com/g-raman/uenroll/commit/8ac29bc49e2ad20b8b652992081a46f7cdccde17) Thanks [@g-raman](https://github.com/g-raman)! - Added simpler db:init command
+
 ## 0.4.0
 
 ### Minor Changes
