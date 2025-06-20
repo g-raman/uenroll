@@ -30,7 +30,7 @@ data "aws_ami" "latest_amazon_linux" {
 
   filter {
     name   = "name"
-    values = ["al2023-ami-*-x86_64"]
+    values = ["al2023-ami-*-arm64"]
   }
 
   filter {
@@ -41,6 +41,11 @@ data "aws_ami" "latest_amazon_linux" {
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["arm64"]
   }
 }
 
@@ -107,7 +112,7 @@ locals {
 
 resource "aws_instance" "scraper" {
   ami                    = data.aws_ami.latest_amazon_linux.id
-  instance_type          = "t2.micro"
+  instance_type          = "t4g.medium"
   key_name               = aws_key_pair.scraper_key_pair.key_name
   vpc_security_group_ids = [aws_security_group.scraper_sg.id]
   user_data = templatefile("${path.module}/setup.sh", {
@@ -116,9 +121,9 @@ resource "aws_instance" "scraper" {
   })
 
   ebs_block_device {
-    device_name = "/dev/xvda"
-    volume_size = 30
-    volume_type = "gp3"
+    device_name           = "/dev/xvda"
+    volume_size           = 30
+    volume_type           = "gp3"
     delete_on_termination = true
   }
 
