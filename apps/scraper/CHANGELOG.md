@@ -1,5 +1,11 @@
 # scraper
 
+## 1.3.0
+
+### Minor Changes
+
+- [#101](https://github.com/g-raman/uenroll/pull/101) [`94d56e2`](https://github.com/g-raman/uenroll/commit/94d56e20d02619ba7c58526cd682ac593b9c4a83) Thanks [@g-raman](https://github.com/g-raman)! - Switched to arm architecture and used medium ec2 instance for scraper
+
 ## 1.2.2
 
 ### Patch Changes
