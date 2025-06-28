@@ -127,5 +127,13 @@ const useScheduleStore = create<ScheduleState>(set => ({
           colours: [...old.colours, course.colour as string],
         };
       }),
+    resetData: () =>
+      set(old => ({
+        ...old,
+        courses: [],
+        selected: null,
+        selectedSessions: [],
+        colours: shuffleArray(INITIAL_COLOURS),
+      })),
   },
 }));
