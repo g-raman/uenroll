@@ -155,25 +155,25 @@ const useScheduleStore = create<ScheduleState>(set => ({
         const { courseCode, subSection } = session;
 
         if (old.selectedSessionsURL === null) {
-          const selected: Selected = {};
-          selected[courseCode] = [subSection];
+          const selectedSessionsURL: Selected = {};
+          selectedSessionsURL[courseCode] = [subSection];
           return {
             ...old,
-            selected,
+            selectedSessionsURL,
             selectedSessions: createNewSelectedSessions(
               old.courseSearchResults,
-              selected,
+              selectedSessionsURL,
             ),
           };
         } else if (!old.selectedSessionsURL[courseCode]) {
-          const selected = { ...old.selectedSessionsURL };
-          selected[courseCode] = [subSection];
+          const selectedSessionsURL = { ...old.selectedSessionsURL };
+          selectedSessionsURL[courseCode] = [subSection];
           return {
             ...old,
-            selected,
+            selectedSessionsURL,
             selectedSessions: createNewSelectedSessions(
               old.courseSearchResults,
-              selected,
+              selectedSessionsURL,
             ),
           };
         } else if (
@@ -190,14 +190,14 @@ const useScheduleStore = create<ScheduleState>(set => ({
           };
         }
 
-        const selected = { ...old.selectedSessionsURL };
-        selected[courseCode]?.push(subSection);
+        const selectedSessionsURL = { ...old.selectedSessionsURL };
+        selectedSessionsURL[courseCode]?.push(subSection);
         return {
           ...old,
-          selected,
+          selectedSessionsURL,
           selectedSessions: createNewSelectedSessions(
             old.courseSearchResults,
-            selected,
+            selectedSessionsURL,
           ),
         };
       }),
