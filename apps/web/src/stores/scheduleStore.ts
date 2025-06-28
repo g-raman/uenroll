@@ -111,7 +111,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
         ) {
           return {
             ...old,
-            courses: filteredCourses,
+            courseSearchResults: filteredCourses,
             colours: [...old.colours, course.colour as string],
           };
         }
