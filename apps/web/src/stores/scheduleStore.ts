@@ -121,7 +121,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
         if (Object.keys(selectedSessionsURL).length === 0) {
           return {
             ...old,
-            courses: filteredCourses,
+            courseSearchResults: filteredCourses,
             selectedSessionsURL: null,
             selectedSessions: [],
             colours: [...old.colours, course.colour as string],
@@ -135,7 +135,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
 
         return {
           ...old,
-          courses: filteredCourses,
+          courseSearchResults: filteredCourses,
           selectedSessionsURL,
           selectedSessions,
           colours: [...old.colours, course.colour as string],
@@ -144,8 +144,8 @@ const useScheduleStore = create<ScheduleState>(set => ({
     resetData: () =>
       set(old => ({
         ...old,
-        courses: [],
-        selected: null,
+        courseSearchResults: [],
+        selectedSessionsURL: null,
         selectedSessions: [],
         colours: shuffleArray(INITIAL_COLOURS),
       })),
@@ -180,13 +180,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
             section => section === subSection,
           )
         ) {
-          return {
-            ...old,
-            selectedSessions: createNewSelectedSessions(
-              old.courseSearchResults,
-              old.selectedSessionsURL,
-            ),
-          };
+          return old;
         }
 
         const selectedSessionsURL = { ...old.selectedSessionsURL };
