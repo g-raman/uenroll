@@ -6,7 +6,7 @@ import SearchBar from "@/components/SearchBar/SearchBar";
 import Sidebar from "@/layouts/Sidebar/Sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SearchResults from "@/components/SearchResults/SearchResults";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CopyLinkButton } from "@/components/Buttons/CopyLinkButton/CopyLinkButton";
 import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
 import Calendar from "@/components/Calendar/Calendar";
@@ -96,24 +96,22 @@ export default function Page() {
   }, [selectedTerm, setTerm]);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <QueryClientProvider client={queryClient}>
-        <App>
-          <Sidebar>
-            <SearchBar />
-            <div className="mb-4 flex gap-2">
-              <DeleteSearchResultsButton />
-              <CopyLinkButton />
-              <DownloadCalendarButton />
-            </div>
-            <SearchResults />
-          </Sidebar>
+    <QueryClientProvider client={queryClient}>
+      <App>
+        <Sidebar>
+          <SearchBar />
+          <div className="mb-4 flex gap-2">
+            <DeleteSearchResultsButton />
+            <CopyLinkButton />
+            <DownloadCalendarButton />
+          </div>
+          <SearchResults />
+        </Sidebar>
 
-          <Main>
-            <Calendar />
-          </Main>
-        </App>
-      </QueryClientProvider>
-    </Suspense>
+        <Main>
+          <Calendar />
+        </Main>
+      </App>
+    </QueryClientProvider>
   );
 }

@@ -8,6 +8,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { BASE_URL } from "@/utils/constants";
 import { ThemeProvider } from "next-themes";
+import { Suspense } from "react";
 
 const font = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -78,7 +79,7 @@ export default function RootLayout({
                 className: "w-[90%]",
               }}
             />
-            {children}
+            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
           </NuqsAdapter>
         </ThemeProvider>
         <Analytics />
