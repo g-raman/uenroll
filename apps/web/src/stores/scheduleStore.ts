@@ -213,22 +213,23 @@ const useScheduleStore = create<ScheduleState>(set => ({
           section => section !== subSection,
         );
 
-        const selected = { ...old.selectedSessionsURL };
-        selected[courseCode] = filteredSubsections;
+        const selectedSessionsURL = { ...old.selectedSessionsURL };
+        selectedSessionsURL[courseCode] = filteredSubsections;
 
-        if (filteredSubsections.length === 0) delete selected[courseCode];
+        if (filteredSubsections.length === 0)
+          delete selectedSessionsURL[courseCode];
 
-        if (Object.keys(selected).length === 0)
-          return { ...old, selected: null, selectedSessions: [] };
+        if (Object.keys(selectedSessionsURL).length === 0)
+          return { ...old, selectedSessionsURL: null, selectedSessions: [] };
 
         const selectedSessions = createNewSelectedSessions(
           old.courseSearchResults,
-          selected,
+          selectedSessionsURL,
         );
 
         return {
           ...old,
-          selected,
+          selectedSessionsURL,
           selectedSessions,
         };
       }),
