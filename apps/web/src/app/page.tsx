@@ -6,7 +6,7 @@ import SearchBar from "@/components/SearchBar/SearchBar";
 import Sidebar from "@/layouts/Sidebar/Sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SearchResults from "@/components/SearchResults/SearchResults";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CopyLinkButton } from "@/components/Buttons/CopyLinkButton/CopyLinkButton";
 import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
 import Calendar from "@/components/Calendar/Calendar";
@@ -38,7 +38,12 @@ export default function Page() {
     history: "replace",
   });
 
+  const hasInitialized = useRef(false);
+
   useEffect(() => {
+    if (hasInitialized.current) return;
+    hasInitialized.current = true;
+
     const fetchInitialData = async () => {
       const terms = await fetchTerms();
       const initialTerm = terms.find(termData => termData.value === term);
@@ -81,10 +86,7 @@ export default function Page() {
       });
     };
     fetchInitialData();
-
-    // This only needs to run once on load
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [selected, setInitialData, term]);
 
   // Sync reducer state back to URL whenever data changes
   useEffect(() => {
