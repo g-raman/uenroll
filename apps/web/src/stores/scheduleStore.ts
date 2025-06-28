@@ -58,7 +58,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
         const colours = [...old.colours];
         const colouredCourses = courseSearchResults.map(course => ({
           ...course,
-          color: colours.pop(),
+          colour: colours.pop(),
         }));
 
         const selectedSessions = createNewSelectedSessions(
@@ -69,7 +69,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
         return {
           selectedTerm,
           availableTerms,
-          courseSearchResults,
+          courseSearchResults: colouredCourses,
           selectedSessionsURL,
           selectedSessions,
           colours,
