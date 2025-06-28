@@ -237,3 +237,21 @@ const useScheduleStore = create<ScheduleState>(set => ({
       })),
   },
 }));
+
+export const useSelectedSessionsURL = () =>
+  useScheduleStore(state => state.selectedSessionsURL);
+
+export const useSelectedSessions = () =>
+  useScheduleStore(state => state.selectedSessions);
+
+export const useSelectedTerm = () =>
+  useScheduleStore(state => state.selectedTerm);
+
+export const useScheduleActions = () =>
+  useScheduleStore(state => state.actions);
+
+export const useAvailableTerms = () =>
+  useScheduleStore(state => state.availableTerms);
+
+export const useCourseSearchResults = () =>
+  useScheduleStore(state => state.courseSearchResults);
