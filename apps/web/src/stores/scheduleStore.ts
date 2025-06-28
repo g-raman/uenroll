@@ -94,7 +94,10 @@ const useScheduleStore = create<ScheduleState>(set => ({
           : {
               ...old,
               colours: restColours,
-              courses: [{ ...course, colour }, ...old.courseSearchResults],
+              courseSearchResults: [
+                { ...course, colour },
+                ...old.courseSearchResults,
+              ],
             };
       }),
     removeCourse: course =>
