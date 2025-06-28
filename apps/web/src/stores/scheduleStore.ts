@@ -26,6 +26,7 @@ interface ScheduleActions {
   resetData: () => void;
   addSession: (session: AddSessionPayload) => void;
   removeSession: (session: RemoveSessionPayload) => void;
+  resetSelectedSessions: () => void;
 }
 
 interface ScheduleState {
@@ -228,5 +229,11 @@ const useScheduleStore = create<ScheduleState>(set => ({
           selectedSessions,
         };
       }),
+    resetSelectedSessions: () =>
+      set(old => ({
+        ...old,
+        selectedSessions: [],
+        selectedSessionsURL: null,
+      })),
   },
 }));
