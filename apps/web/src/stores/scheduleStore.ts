@@ -64,7 +64,6 @@ const useScheduleStore = create<ScheduleState>(set => ({
         );
 
         return {
-          ...old,
           selectedTerm,
           availableTerms,
           courseSearchResults,
