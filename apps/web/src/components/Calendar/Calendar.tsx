@@ -119,6 +119,16 @@ function Calendar() {
 
   eventsService.set(events);
 
+  // HACK: Calendar UI doesn't affect latest changes unless I do this
+  const currentView = calendarControls.getView();
+  if (currentView === "week") {
+    calendarControls.setView("month-agenda");
+    calendarControls.setView("week");
+  } else {
+    calendarControls.setView("week");
+    calendarControls.setView("month-agenda");
+  }
+
   return (
     <div className="h-full overflow-scroll">
       <ScheduleXCalendar
