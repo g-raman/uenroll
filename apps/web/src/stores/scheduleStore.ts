@@ -10,11 +10,18 @@ export interface InitializeDataPayload {
   availableTerms: Term[];
 }
 
+export interface AddSessionPayload {
+  courseCode: string;
+  subSection: string;
+}
+
 interface ScheduleActions {
   setInitialData: (initialData: InitializeDataPayload) => void;
   changeTerm: (newTerm: Term) => void;
   addCourse: (course: Course) => void;
   removeCourse: (course: Course) => void;
+  resetData: () => void;
+  addSession: (session: AddSessionPayload) => void;
 }
 
 interface ScheduleState {
@@ -135,5 +142,56 @@ const useScheduleStore = create<ScheduleState>(set => ({
         selectedSessions: [],
         colours: shuffleArray(INITIAL_COLOURS),
       })),
+    addSession: session =>
+      set(old => {
+        const { courseCode, subSection } = session;
+
+        if (old.selectedSessionsURL === null) {
+          const selected: Selected = {};
+          selected[courseCode] = [subSection];
+          return {
+            ...old,
+            selected,
+            selectedSessions: createNewSelectedSessions(
+              old.courseSearchResults,
+              selected,
+            ),
+          };
+        } else if (!old.selectedSessionsURL[courseCode]) {
+          const selected = { ...old.selectedSessionsURL };
+          selected[courseCode] = [subSection];
+          return {
+            ...old,
+            selected,
+            selectedSessions: createNewSelectedSessions(
+              old.courseSearchResults,
+              selected,
+            ),
+          };
+        } else if (
+          old.selectedSessionsURL[courseCode].some(
+            section => section === subSection,
+          )
+        ) {
+          return {
+            ...old,
+            selectedSessions: createNewSelectedSessions(
+              old.courseSearchResults,
+              old.selectedSessionsURL,
+            ),
+          };
+        }
+
+        const selected = { ...old.selectedSessionsURL };
+        selected[courseCode]?.push(subSection);
+        return {
+          ...old,
+          selected,
+          selectedSessions: createNewSelectedSessions(
+            old.courseSearchResults,
+            selected,
+          ),
+        };
+      }),
   },
 }));
