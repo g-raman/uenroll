@@ -1,4 +1,4 @@
-import { useSearchResults } from "@/contexts/SearchResultsContext";
+import { useSelectedSessions } from "@/stores/scheduleStore";
 import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
@@ -11,7 +11,7 @@ import React, { useState } from "react";
 
 export const CopyLinkButton = () => {
   const [isCopied, setIsCopied] = useState(false);
-  const { state } = useSearchResults();
+  const selectedSessions = useSelectedSessions();
 
   return (
     <Tooltip>
@@ -20,7 +20,7 @@ export const CopyLinkButton = () => {
           className="grow"
           variant="outline"
           size="lg"
-          disabled={state.selectedSessions.length === 0}
+          disabled={selectedSessions.length === 0}
           onClick={async () => {
             try {
               await navigator.clipboard.writeText(window.location.href);

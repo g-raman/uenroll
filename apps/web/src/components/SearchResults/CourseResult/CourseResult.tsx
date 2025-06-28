@@ -2,7 +2,6 @@ import { Course } from "@/types/Types";
 import { SectionResult } from "../SectionResult/SectionResult";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useSearchResults } from "@/contexts/SearchResultsContext";
 import {
   Accordion,
   AccordionContent,
@@ -14,6 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+import { useScheduleActions } from "@/stores/scheduleStore";
 
 interface CourseResultProps {
   course: Course;
@@ -21,10 +21,10 @@ interface CourseResultProps {
 }
 
 const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
-  const { dispatch } = useSearchResults();
+  const { removeCourse } = useScheduleActions();
 
   const handleCourseRemoval = () => {
-    dispatch({ type: "remove_course", payload: course });
+    removeCourse(course);
   };
 
   return (

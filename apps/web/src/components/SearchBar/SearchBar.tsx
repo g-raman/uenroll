@@ -1,4 +1,3 @@
-import { useSearchResults } from "@/contexts/SearchResultsContext";
 import { Course } from "@/types/Types";
 import { useQuery } from "@tanstack/react-query";
 import React, { useCallback, useEffect, useState } from "react";
@@ -7,41 +6,49 @@ import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 import { fetchAllCourses, fetchCourse } from "@/utils/fetchData";
 import { AutoComplete } from "@repo/ui/components/autocomplete";
+import {
+  useCourseSearchResults,
+  useScheduleActions,
+  useSelectedTerm,
+} from "@/stores/scheduleStore";
 
 export default function SearchBar() {
+  const selectedTerm = useSelectedTerm();
+  const courseSearchResults = useCourseSearchResults();
+  const { addCourse } = useScheduleActions();
+
   const [query, setQuery] = useState("");
-  const { state, dispatch } = useSearchResults();
   const [selectedValue, setSelectedValue] = useState("");
 
   const { refetch } = useQuery<Course>({
-    queryKey: ["courses", selectedValue, state.term],
-    queryFn: () => fetchCourse(selectedValue, state.term),
+    queryKey: ["courses", selectedValue, selectedTerm],
+    queryFn: () => fetchCourse(selectedValue, selectedTerm),
     enabled: false,
     retry: false,
     networkMode: "online",
   });
 
   const { data: dataAllCourses } = useQuery({
-    queryKey: ["courses", state.term],
-    queryFn: () => fetchAllCourses(state.term),
+    queryKey: ["courses", selectedTerm],
+    queryFn: () => fetchAllCourses(selectedTerm),
     staleTime: Infinity,
   });
 
   const performSearch = useCallback(async () => {
     const { data, error, isSuccess } = await refetch();
     if (isSuccess) {
-      dispatch({ type: "add_course", payload: data });
+      addCourse(data);
     } else if (error) {
       toast.error(error.message);
     }
     setQuery("");
     setSelectedValue("");
-  }, [dispatch, refetch]);
+  }, [addCourse, refetch]);
 
   useEffect(() => {
     if (selectedValue === "") return;
 
-    if (state.courses.length >= MAX_RESULTS_ALLOWED) {
+    if (courseSearchResults.length >= MAX_RESULTS_ALLOWED) {
       setQuery("");
       setSelectedValue("");
       toast.error("Max search results reached.");
@@ -52,7 +59,7 @@ export default function SearchBar() {
       await performSearch();
     }
     search();
-  }, [performSearch, selectedValue, state.courses.length]);
+  }, [performSearch, selectedValue, courseSearchResults.length]);
 
   return (
     <div className="sticky top-0 z-10 mb-2 flex flex-col gap-2">

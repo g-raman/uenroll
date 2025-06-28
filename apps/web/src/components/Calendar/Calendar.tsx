@@ -6,7 +6,6 @@ import { createEventsServicePlugin } from "@schedule-x/events-service";
 
 import "@schedule-x/theme-shadcn/dist/index.css";
 import { useEffect, useState } from "react";
-import { useSearchResults } from "@/contexts/SearchResultsContext";
 import dayjs from "dayjs";
 import { createEventRecurrencePlugin } from "@schedule-x/event-recurrence";
 import { datetime, RRule } from "rrule";
@@ -15,9 +14,13 @@ import CalendarEvent from "./CalendarEvent/CalendarEvent";
 import { createEventModalPlugin } from "@schedule-x/event-modal";
 import CalendarEventModal from "./CalendarEventModal/CalendarEventModal";
 import { useTheme } from "next-themes";
+import { useSelectedSessions, useSelectedTerm } from "@/stores/scheduleStore";
 
 const DATE_FORMAT = "YYYY-MM-DD";
 function Calendar() {
+  const selectedTerm = useSelectedTerm();
+  const selectedSessions = useSelectedSessions();
+
   const eventsService = useState(() => createEventsServicePlugin())[0];
   const eventRecurrence = useState(() => createEventRecurrencePlugin())[0];
   const eventModal = useState(() => createEventModalPlugin())[0];
@@ -28,7 +31,6 @@ function Calendar() {
     calendarControls,
     eventModal,
   ];
-  const { state } = useSearchResults();
   const { theme, systemTheme } = useTheme();
 
   const calendar = useNextCalendarApp(
@@ -56,9 +58,9 @@ function Calendar() {
   // HACK: Gotta figure out a better way to do This
   // Hardcoding for now
   useEffect(() => {
-    if (!state.term) return;
+    if (!selectedTerm) return;
 
-    switch (state.term.term) {
+    switch (selectedTerm.term) {
       case "2025 Spring/Summer Term":
         calendarControls.setDate("2025-05-05");
         break;
@@ -69,7 +71,7 @@ function Calendar() {
         calendarControls.setDate("2026-01-12");
         break;
     }
-  }, [calendarControls, state.term]);
+  }, [calendarControls, selectedTerm]);
 
   useEffect(() => {
     if (!calendar) return;
@@ -78,9 +80,9 @@ function Calendar() {
     calendar.setTheme(newTheme as "dark" | "light");
   }, [theme, systemTheme, calendar]);
 
-  if (!state.term || !calendar || !eventsService) return null;
+  if (!selectedTerm || !calendar || !eventsService) return null;
 
-  const events = state.selectedSessions
+  const events = selectedSessions
     .filter(session => session.dayOfWeek > -1)
     .map(session => {
       const baseStartDate = dayjs(session.startRecur);
@@ -116,6 +118,16 @@ function Calendar() {
     });
 
   eventsService.set(events);
+
+  // HACK: Calendar UI doesn't affect latest changes unless I do this
+  const currentView = calendarControls.getView();
+  if (currentView === "week") {
+    calendarControls.setView("month-agenda");
+    calendarControls.setView("week");
+  } else {
+    calendarControls.setView("week");
+    calendarControls.setView("month-agenda");
+  }
 
   return (
     <div className="h-full overflow-scroll">

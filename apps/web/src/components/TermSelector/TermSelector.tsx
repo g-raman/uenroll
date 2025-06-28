@@ -1,6 +1,10 @@
 "use client";
 
-import { useSearchResults } from "@/contexts/SearchResultsContext";
+import {
+  useAvailableTerms,
+  useScheduleActions,
+  useSelectedTerm,
+} from "@/stores/scheduleStore";
 import { Term } from "@/types/Types";
 import {
   Select,
@@ -11,20 +15,22 @@ import {
 } from "@repo/ui/components/select";
 
 export default function TermSelector() {
-  const { state, dispatch } = useSearchResults();
+  const availableTerms = useAvailableTerms();
+  const selectedTerm = useSelectedTerm();
+  const { changeTerm } = useScheduleActions();
 
   function handleSelect(event: string) {
     const term = JSON.parse(event) as Term;
-    dispatch({ type: "change_term", payload: term });
+    changeTerm(term);
   }
 
   return (
     <>
-      {state.availableTerms.length === 0 ? (
+      {availableTerms.length === 0 ? (
         <div className="rounded-xs h-8 animate-pulse border border-slate-400 bg-slate-200 p-2"></div>
       ) : (
         <Select
-          defaultValue={state.term ? JSON.stringify(state.term) : ""}
+          defaultValue={selectedTerm ? JSON.stringify(selectedTerm) : ""}
           onValueChange={handleSelect}
         >
           <SelectTrigger className="w-full">
@@ -32,7 +38,7 @@ export default function TermSelector() {
           </SelectTrigger>
 
           <SelectContent>
-            {state.availableTerms.map(elem => (
+            {availableTerms.map(elem => (
               <SelectItem key={elem.value} value={JSON.stringify(elem)}>
                 {elem.term}
               </SelectItem>

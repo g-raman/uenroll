@@ -1,19 +1,19 @@
-import { useSearchResults } from "@/contexts/SearchResultsContext";
 import CourseResult from "./CourseResult/CourseResult";
 import { Button } from "@repo/ui/components/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, AccordionItem } from "@repo/ui/components/accordion";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { useCourseSearchResults } from "@/stores/scheduleStore";
 
 export default function SearchResults() {
-  const { state } = useSearchResults();
   const [openResults, setOpenResults] = useState<string[]>([]);
+  const courseSearchResults = useCourseSearchResults();
 
   return (
     <div className="overflow-y-scroll">
       <Accordion type="multiple" onValueChange={value => setOpenResults(value)}>
-        {state.courses.map(course => {
+        {courseSearchResults.map(course => {
           return (
             <div className="pb-4 text-sm" key={course.courseCode}>
               <Button
