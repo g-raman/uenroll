@@ -10,10 +10,13 @@ export interface InitializeDataPayload {
   availableTerms: Term[];
 }
 
-export interface AddSessionPayload {
+export interface SelectedSessionKey {
   courseCode: string;
   subSection: string;
 }
+
+export type AddSessionPayload = SelectedSessionKey;
+export type RemoveSessionPayload = SelectedSessionKey;
 
 interface ScheduleActions {
   setInitialData: (initialData: InitializeDataPayload) => void;
@@ -22,6 +25,7 @@ interface ScheduleActions {
   removeCourse: (course: Course) => void;
   resetData: () => void;
   addSession: (session: AddSessionPayload) => void;
+  removeSession: (session: RemoveSessionPayload) => void;
 }
 
 interface ScheduleState {
@@ -191,6 +195,37 @@ const useScheduleStore = create<ScheduleState>(set => ({
             old.courseSearchResults,
             selected,
           ),
+        };
+      }),
+    removeSession: session =>
+      set(old => {
+        const { courseCode, subSection } = session;
+
+        if (old.selectedSessionsURL === null) return old;
+
+        if (!old.selectedSessionsURL[courseCode]) return old;
+
+        const filteredSubsections = old.selectedSessionsURL[courseCode].filter(
+          section => section !== subSection,
+        );
+
+        const selected = { ...old.selectedSessionsURL };
+        selected[courseCode] = filteredSubsections;
+
+        if (filteredSubsections.length === 0) delete selected[courseCode];
+
+        if (Object.keys(selected).length === 0)
+          return { ...old, selected: null, selectedSessions: [] };
+
+        const selectedSessions = createNewSelectedSessions(
+          old.courseSearchResults,
+          selected,
+        );
+
+        return {
+          ...old,
+          selected,
+          selectedSessions,
         };
       }),
   },
