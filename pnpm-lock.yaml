@@ -37,7 +37,7 @@ importers:
         version: 3.3.1
       tsup:
         specifier: ^8.5.0
-        version: 8.5.0(jiti@2.4.2)(postcss@8.5.4)(tsx@4.20.3)(typescript@5.8.3)
+        version: 8.5.0(jiti@2.4.2)(postcss@8.5.6)(tsx@4.20.3)(typescript@5.8.3)
       turbo:
         specifier: ^2.5.4
         version: 2.5.4
@@ -97,31 +97,31 @@ importers:
         specifier: ^0.2.2
         version: 0.2.2(@fortawesome/fontawesome-svg-core@6.7.2)(react@19.1.0)
       '@schedule-x/calendar':
-        specifier: ^2.30.0
+        specifier: ^2.35.0
         version: 2.35.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)
       '@schedule-x/calendar-controls':
-        specifier: ^2.30.0
+        specifier: ^2.35.0
         version: 2.35.0
       '@schedule-x/event-modal':
-        specifier: ^2.30.0
+        specifier: ^2.35.0
         version: 2.35.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)
       '@schedule-x/event-recurrence':
-        specifier: ^2.30.0
+        specifier: ^2.35.0
         version: 2.35.0
       '@schedule-x/events-service':
-        specifier: ^2.30.0
+        specifier: ^2.35.0
         version: 2.35.0
       '@schedule-x/react':
-        specifier: ^2.30.0
+        specifier: ^2.35.0
         version: 2.35.0(@schedule-x/calendar@2.35.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@schedule-x/theme-default':
-        specifier: ^2.30.0
+        specifier: ^2.35.0
         version: 2.35.0
       '@schedule-x/theme-shadcn':
-        specifier: ^2.30.0
+        specifier: ^2.35.0
         version: 2.35.0
       '@tanstack/react-query':
-        specifier: ^5.76.1
+        specifier: ^5.81.5
         version: 5.81.5(react@19.1.0)
       '@vercel/analytics':
         specifier: ^1.5.0
@@ -142,7 +142,7 @@ importers:
         specifier: ^2.30.1
         version: 2.30.1
       next:
-        specifier: ^15.3.2
+        specifier: ^15.3.4
         version: 15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-themes:
         specifier: ^0.4.6
@@ -169,8 +169,8 @@ importers:
         specifier: ^11.1.0
         version: 11.1.0
       zustand:
-        specifier: ^5.0.5
-        version: 5.0.6(@types/react@19.1.4)(react@19.1.0)
+        specifier: ^5.0.6
+        version: 5.0.6(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@repo/db':
         specifier: workspace:*
@@ -185,22 +185,22 @@ importers:
         specifier: workspace:*
         version: link:../../packages/ui
       '@tailwindcss/postcss':
-        specifier: ^4.1.8
+        specifier: ^4.1.11
         version: 4.1.11
       '@types/node':
-        specifier: ^22.15.18
-        version: 22.15.34
+        specifier: ^24.0.7
+        version: 24.0.7
       '@types/react':
-        specifier: 19.1.4
-        version: 19.1.4
+        specifier: 19.1.8
+        version: 19.1.8
       '@types/react-dom':
         specifier: 19.1.5
-        version: 19.1.5(@types/react@19.1.4)
+        version: 19.1.5(@types/react@19.1.8)
       eslint:
         specifier: 'catalog:'
         version: 9.30.0(jiti@2.4.2)
       tailwindcss:
-        specifier: ^4.1.8
+        specifier: ^4.1.11
         version: 4.1.11
       typescript:
         specifier: 'catalog:'
@@ -1792,6 +1792,9 @@ packages:
   '@types/node@22.15.34':
     resolution: {integrity: sha512-8Y6E5WUupYy1Dd0II32BsWAx5MWdcnRd8L84Oys3veg1YrYtNtzgO4CFhiBg6MDSjk7Ay36HYOnU7/tuOzIzcw==}
 
+  '@types/node@24.0.7':
+    resolution: {integrity: sha512-YIEUUr4yf8q8oQoXPpSlnvKNVKDQlPMWrmOcgzoduo7kvA2UF0/BwJ/eMKFTiTtkNL17I0M6Xe2tvwFU7be6iw==}
+
   '@types/react-dom@19.1.5':
     resolution: {integrity: sha512-CMCjrWucUBZvohgZxkjd6S9h0nZxXjzus6yDfUb+xLxYM7VvjKNH1tQrE9GWLql1XoOP4/Ds3bwFqShHUYraGg==}
     peerDependencies:
@@ -1801,9 +1804,6 @@ packages:
     resolution: {integrity: sha512-4hOiT/dwO8Ko0gV1m/TJZYk3y0KBnY9vzDh7W+DH17b2HFSOGgdj33dhihPeuy3l0q23+4e+hoXHV6hCC4dCXw==}
     peerDependencies:
       '@types/react': ^19.0.0
-
-  '@types/react@19.1.4':
-    resolution: {integrity: sha512-EB1yiiYdvySuIITtD5lhW4yPyJ31RkJkkDw794LaQYrxCSaQV/47y5o1FMC4zF9ZyjUjzJMZwbovEnT5yHTW6g==}
 
   '@types/react@19.1.8':
     resolution: {integrity: sha512-AwAfQ2Wa5bCx9WP8nZL2uMZWod7J7/JSplxbTmBQ5ms6QpqNYm672H0Vu9ZVKVngQ+ii4R/byguVEUZQyeg44g==}
@@ -2187,8 +2187,8 @@ packages:
   camel-case@3.0.0:
     resolution: {integrity: sha512-+MbKztAYHXPr1jNTSKQF52VpcFjwY5RkR7fxksV8Doo4KAYc5Fl4UJRgthBbTmEx8C54DqahhbLJkDwjI3PI/w==}
 
-  caniuse-lite@1.0.30001720:
-    resolution: {integrity: sha512-Ec/2yV2nNPwb4DnTANEV99ZWwm3ZWfdlfkQbWSDDt+PsXEVYwlhPH8tdMaPunYTKKmz7AnHi2oNEi1GcmKCD8g==}
+  caniuse-lite@1.0.30001726:
+    resolution: {integrity: sha512-VQAUIUzBiZ/UnlM28fSp2CRF3ivUn1BWEvxMcVTNwpw91Py1pGbPIyIKtd+tzct9C3ouceCVdGAXxZOpZAsgdw==}
 
   chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -3764,8 +3764,8 @@ packages:
     resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
     engines: {node: ^10 || ^12 || >=14}
 
-  postcss@8.5.4:
-    resolution: {integrity: sha512-QSa9EBe+uwlGTFmHsPKokv3B/oEMQZxfqW0QqNCyhpa6mB1afzulwn8hihglqAb2pOw+BJgNlmXQ8la2VeHB7w==}
+  postcss@8.5.6:
+    resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
   postgres@3.4.7:
@@ -4486,6 +4486,9 @@ packages:
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
+  undici-types@7.8.0:
+    resolution: {integrity: sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==}
 
   undici@7.11.0:
     resolution: {integrity: sha512-heTSIac3iLhsmZhUCjyS3JQEkZELateufzZuBaVM5RHXdSBMb1LPMQf5x+FH7qjsZYDP0ttAc3nnVpUB+wYbOg==}
@@ -5862,7 +5865,7 @@ snapshots:
       '@alloc/quick-lru': 5.2.0
       '@tailwindcss/node': 4.1.11
       '@tailwindcss/oxide': 4.1.11
-      postcss: 8.5.4
+      postcss: 8.5.6
       tailwindcss: 4.1.11
 
   '@tanstack/eslint-plugin-query@5.81.2(eslint@9.30.0(jiti@2.4.2))(typescript@5.8.3)':
@@ -5950,17 +5953,17 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/react-dom@19.1.5(@types/react@19.1.4)':
+  '@types/node@24.0.7':
     dependencies:
-      '@types/react': 19.1.4
+      undici-types: 7.8.0
+
+  '@types/react-dom@19.1.5(@types/react@19.1.8)':
+    dependencies:
+      '@types/react': 19.1.8
 
   '@types/react-dom@19.1.6(@types/react@19.1.8)':
     dependencies:
       '@types/react': 19.1.8
-
-  '@types/react@19.1.4':
-    dependencies:
-      csstype: 3.1.3
 
   '@types/react@19.1.8':
     dependencies:
@@ -6362,7 +6365,7 @@ snapshots:
       no-case: 2.3.2
       upper-case: 1.1.3
 
-  caniuse-lite@1.0.30001720: {}
+  caniuse-lite@1.0.30001726: {}
 
   chalk@2.4.2:
     dependencies:
@@ -7790,7 +7793,7 @@ snapshots:
       '@swc/counter': 0.1.3
       '@swc/helpers': 0.5.15
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001720
+      caniuse-lite: 1.0.30001726
       postcss: 8.4.31
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
@@ -8053,12 +8056,12 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  postcss-load-config@6.0.1(jiti@2.4.2)(postcss@8.5.4)(tsx@4.20.3):
+  postcss-load-config@6.0.1(jiti@2.4.2)(postcss@8.5.6)(tsx@4.20.3):
     dependencies:
       lilconfig: 3.1.3
     optionalDependencies:
       jiti: 2.4.2
-      postcss: 8.5.4
+      postcss: 8.5.6
       tsx: 4.20.3
 
   postcss@8.4.31:
@@ -8067,7 +8070,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  postcss@8.5.4:
+  postcss@8.5.6:
     dependencies:
       nanoid: 3.3.11
       picocolors: 1.1.1
@@ -8737,7 +8740,7 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  tsup@8.5.0(jiti@2.4.2)(postcss@8.5.4)(tsx@4.20.3)(typescript@5.8.3):
+  tsup@8.5.0(jiti@2.4.2)(postcss@8.5.6)(tsx@4.20.3)(typescript@5.8.3):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.25.5)
       cac: 6.7.14
@@ -8748,7 +8751,7 @@ snapshots:
       fix-dts-default-cjs-exports: 1.0.1
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.4)(tsx@4.20.3)
+      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.6)(tsx@4.20.3)
       resolve-from: 5.0.0
       rollup: 4.44.1
       source-map: 0.8.0-beta.0
@@ -8757,7 +8760,7 @@ snapshots:
       tinyglobby: 0.2.14
       tree-kill: 1.2.2
     optionalDependencies:
-      postcss: 8.5.4
+      postcss: 8.5.6
       typescript: 5.8.3
     transitivePeerDependencies:
       - jiti
@@ -8867,6 +8870,8 @@ snapshots:
       which-boxed-primitive: 1.1.1
 
   undici-types@6.21.0: {}
+
+  undici-types@7.8.0: {}
 
   undici@7.11.0: {}
 
@@ -9035,7 +9040,7 @@ snapshots:
 
   zod@3.25.67: {}
 
-  zustand@5.0.6(@types/react@19.1.4)(react@19.1.0):
+  zustand@5.0.6(@types/react@19.1.8)(react@19.1.0):
     optionalDependencies:
-      '@types/react': 19.1.4
+      '@types/react': 19.1.8
       react: 19.1.0
