@@ -19,10 +19,7 @@ import type {
 
 export async function getAvailableTerms() {
   return await db
-    .select({
-      term: availableTermsTable.term,
-      value: availableTermsTable.value,
-    })
+    .select()
     .from(availableTermsTable)
     .orderBy(asc(availableTermsTable.value));
 }
