@@ -1,6 +1,16 @@
-import { eq } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 import { db } from "./index.js";
-import { coursesTable } from "./schema.js";
+import { availableTermsTable, coursesTable } from "./schema.js";
+
+export async function getAvailableTerms() {
+  return await db
+    .select({
+      term: availableTermsTable.term,
+      value: availableTermsTable.value,
+    })
+    .from(availableTermsTable)
+    .orderBy(asc(availableTermsTable.value));
+}
 
 export async function getAvailableCoursesByTerm(term: string) {
   return await db
