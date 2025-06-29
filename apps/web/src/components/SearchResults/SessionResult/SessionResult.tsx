@@ -13,6 +13,9 @@ export const SessionResult: React.FC<SessionResultProps> = ({ session }) => {
   const endTime = moment(`${session.endDate}T${session.endTime}`).format("LT");
   const startDate = moment(session.startDate).format("ll");
   const endDate = moment(session.endDate).format("ll");
+
+  // HACK: Ignore dates that have this as their timing
+  const isUnknownDate = session.startDate === "1901-12-14";
   return (
     <ul>
       <li>
@@ -29,7 +32,9 @@ export const SessionResult: React.FC<SessionResultProps> = ({ session }) => {
               <br />
             </>
           )}
-          <span className="truncate text-gray-400">{`${startDate} to ${endDate}`}</span>
+          <span className="truncate text-gray-400">
+            {isUnknownDate ? "Unknown" : `${startDate} to ${endDate}`}
+          </span>
         </div>
       </li>
     </ul>

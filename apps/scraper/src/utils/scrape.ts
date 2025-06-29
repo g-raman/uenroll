@@ -197,7 +197,15 @@ export const processSessions = (
      * 2025-01-06 - 2025-04-05
      */
     const currMeetingDate = dates[sessionCount];
-    const [startDate, endDate] = currMeetingDate?.split(" - ") as string[];
+    let startDate, endDate;
+    if (currMeetingDate === "-") {
+      // HACK: If no dates are provided use this as a placeholder to indicate
+      // that the date is unknown
+      startDate = "1901-12-14";
+      endDate = "1901-12-14";
+    } else {
+      [startDate, endDate] = currMeetingDate?.split(" - ") as string[];
+    }
 
     sessions.push({
       courseCode,
