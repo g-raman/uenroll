@@ -1,4 +1,4 @@
-import { eq, asc, sql, lt, notInArray } from "drizzle-orm";
+import { eq, asc, sql, lt, notInArray, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import {
   availableSubjectsTable,
@@ -13,6 +13,7 @@ import type {
   CourseInsert,
   SessionInsert,
   SubjectInsert,
+  Term,
   TermInsert,
 } from "./types.js";
 
@@ -44,6 +45,24 @@ export async function getAvailableCoursesByTerm(term: string) {
     .from(coursesTable)
     .where(eq(coursesTable.term, term))
     .limit(3500);
+}
+
+export async function deleteTerms(terms: Term[]) {
+  if (terms.length === 0) {
+    console.log("No terms to delete. Skipping.");
+    return;
+  }
+
+  const termsToDelete = terms.map(term => term.value);
+  try {
+    await db
+      .delete(availableTermsTable)
+      .where(inArray(availableTermsTable.value, termsToDelete));
+  } catch (error) {
+    throw new Error(
+      "Something went wrong when deleting outdated terms:\n" + error,
+    );
+  }
 }
 
 export const updateCourses = async (courses: CourseInsert[]) => {
