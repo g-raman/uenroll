@@ -1,17 +1,10 @@
-import { db } from "@repo/db";
-import { availableTermsTable } from "@repo/db/schema";
+import { getAvailableTerms } from "@repo/db/queries";
 
 export async function GET() {
-  const data = await db
-    .select({
-      term: availableTermsTable.term,
-      value: availableTermsTable.value,
-    })
-    .from(availableTermsTable);
-
-  if (!data) {
+  try {
+    const data = await getAvailableTerms();
+    return Response.json({ error: null, data });
+  } catch (error) {
     return Response.json({ error: "Something went wrong", data: null });
   }
-
-  return Response.json({ error: null, data });
 }
