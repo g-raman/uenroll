@@ -1,6 +1,10 @@
 import { eq, asc } from "drizzle-orm";
 import { db } from "./index.js";
-import { availableTermsTable, coursesTable } from "./schema.js";
+import {
+  availableSubjectsTable,
+  availableTermsTable,
+  coursesTable,
+} from "./schema.js";
 
 export async function getAvailableTerms() {
   return await db
@@ -11,6 +15,15 @@ export async function getAvailableTerms() {
     .from(availableTermsTable)
     .orderBy(asc(availableTermsTable.value));
 }
+
+export const getAvailableSubjects = async () => {
+  const results = await await db
+    .select({ subject: availableSubjectsTable.subject })
+    .from(availableSubjectsTable)
+    .orderBy(asc(availableSubjectsTable.subject));
+
+  return results.map(subject => subject.subject);
+};
 
 export async function getAvailableCoursesByTerm(term: string) {
   return await db
