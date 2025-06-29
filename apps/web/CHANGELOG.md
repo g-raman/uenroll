@@ -1,5 +1,17 @@
 # web
 
+## 0.9.0
+
+### Minor Changes
+
+- [#102](https://github.com/g-raman/uenroll/pull/102) [`465173c`](https://github.com/g-raman/uenroll/commit/465173c731d39bb32b6c6a8a2940971003803ca8) Thanks [@g-raman](https://github.com/g-raman)! - Migrated react context to zustand
+
+- [#104](https://github.com/g-raman/uenroll/pull/104) [`f67b5b3`](https://github.com/g-raman/uenroll/commit/f67b5b346b87670b189cf9151b1531538b59e534) Thanks [@g-raman](https://github.com/g-raman)! - Migrated all db queries to db package
+
+### Patch Changes
+
+- [#105](https://github.com/g-raman/uenroll/pull/105) [`d28b0f8`](https://github.com/g-raman/uenroll/commit/d28b0f8ddfb75d70cf82b311201f8f01095c13ee) Thanks [@g-raman](https://github.com/g-raman)! - Fixed error with courses with unknown dates
+
 ## 0.8.1
 
 ### Patch Changes
