@@ -53,3 +53,4 @@ for (const character of characters) {
 await page.close();
 await browser.disconnect();
 await client.end();
+process.exit(0);
