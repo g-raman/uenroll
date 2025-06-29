@@ -7,6 +7,13 @@ import {
   coursesTable,
   sessionsTable,
 } from "./schema.js";
+import type {
+  CourseComponentInsert,
+  CourseInsert,
+  SessionInsert,
+  SubjectInsert,
+  TermInsert,
+} from "./types.js";
 
 export async function getAvailableTerms() {
   return await db
@@ -38,9 +45,7 @@ export async function getAvailableCoursesByTerm(term: string) {
     .limit(3500);
 }
 
-export const updateCourses = async (
-  courses: typeof coursesTable.$inferInsert,
-) => {
+export const updateCourses = async (courses: CourseInsert[]) => {
   try {
     await db
       .insert(coursesTable)
@@ -57,7 +62,7 @@ export const updateCourses = async (
 };
 
 export const updateCourseComponents = async (
-  courseComponents: typeof courseComponentsTable.$inferInsert,
+  courseComponents: CourseComponentInsert[],
 ) => {
   try {
     await db
@@ -81,9 +86,7 @@ export const updateCourseComponents = async (
   }
 };
 
-export const updateSessions = async (
-  sessions: typeof sessionsTable.$inferInsert,
-) => {
+export const updateSessions = async (sessions: SessionInsert[]) => {
   try {
     await db.insert(sessionsTable).values(sessions);
   } catch (error) {
@@ -92,7 +95,7 @@ export const updateSessions = async (
 };
 
 export const updateAvailableTerms = async (
-  terms: typeof availableTermsTable.$inferInsert,
+  terms: TermInsert[],
 ): Promise<void> => {
   try {
     await db
@@ -115,7 +118,7 @@ export const updateAvailableTerms = async (
 };
 
 export const updateAvailableSubjects = async (
-  subjects: typeof availableSubjectsTable.$inferInsert,
+  subjects: SubjectInsert[],
 ): Promise<void> => {
   try {
     await db
