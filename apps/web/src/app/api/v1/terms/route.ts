@@ -5,6 +5,7 @@ export async function GET() {
     const data = await getAvailableTerms();
     return Response.json({ error: null, data });
   } catch (error) {
+    console.error(error);
     return Response.json({ error: "Something went wrong", data: null });
   }
 }
