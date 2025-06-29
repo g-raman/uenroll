@@ -1,17 +1,17 @@
 import * as cheerio from "cheerio";
 import { COURSE_REGISTRY_URL } from "../utils/constants.js";
-import type { Term } from "../utils/types.js";
 import { fetchCookie } from "../utils/cookies.js";
 import { client, db } from "@repo/db";
 import { availableTermsTable } from "@repo/db/schema";
 import { eq } from "drizzle-orm";
 import { updateAvailableTerms } from "@repo/db/queries";
+import type { Term, TermInsert } from "@repo/db/types";
 
 const response = await fetchCookie(COURSE_REGISTRY_URL);
 const html = await response.text();
 const $ = cheerio.load(html);
 
-const newlyAvailableTerms: Term[] = [];
+const newlyAvailableTerms: TermInsert[] = [];
 $("[id='CLASS_SRCH_WRK2_STRM$35$']")
   .find("option")
   .each(function (this) {

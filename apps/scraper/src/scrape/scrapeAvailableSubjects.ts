@@ -2,9 +2,9 @@ import * as cheerio from "cheerio";
 import { getBrowser, getBrowserEndpoint } from "../utils/browser.js";
 import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 import { getIdSelector, getIdStartsWithSelector } from "../utils/scrape.js";
-import type { Subject } from "../utils/types.js";
 import { client } from "@repo/db";
 import { updateAvailableSubjects } from "@repo/db/queries";
+import type { Subject } from "@repo/db/types";
 
 const characters = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", ..."0123456789"];
 const browserEndpoint = await getBrowserEndpoint();
@@ -33,7 +33,7 @@ for (const character of characters) {
 
   const SUBJECT_SELECTOR = "win0divSSR_CLSRCH_SUBJ_SUBJECT$";
   const subjectSelector = getIdStartsWithSelector(SUBJECT_SELECTOR);
-  const subjects: Subject[] = $(subjectSelector)
+  const subjects: Omit<Subject, "isDeleted">[] = $(subjectSelector)
     .text()
     .split("\n")
     .filter(subject => subject !== null && subject !== "")

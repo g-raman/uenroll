@@ -1,10 +1,4 @@
-import type {
-  Course,
-  CourseComponent,
-  CourseDetails,
-  Session,
-  Term,
-} from "../utils/types.js";
+import type { CourseDetailsInsert, Term } from "@repo/db/types";
 import {
   getCourseCodeAndCourseTitle,
   getDates,
@@ -23,14 +17,17 @@ const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";
 const COURSE_TITLE_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2GP$";
 const SECTION_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX3$";
 
-export default ($: cheerio.CheerioAPI, term: Term): CourseDetails => {
+export default (
+  $: cheerio.CheerioAPI,
+  term: Omit<Term, "isDeleted">,
+): CourseDetailsInsert => {
   const totalSections = getTotalSections($);
   let sectionNumber = 0;
 
-  const details: CourseDetails = {
-    courses: [] as Course[],
-    courseComponents: [] as CourseComponent[],
-    sessions: [] as Session[],
+  const details: CourseDetailsInsert = {
+    courses: [],
+    courseComponents: [],
+    sessions: [],
   };
 
   const allCourseContainersSelector = getIdStartsWithSelector(
