@@ -1,9 +1,13 @@
 import * as cheerio from "cheerio";
 import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 import { fetchCookie } from "../utils/cookies.js";
-import { client, db } from "@repo/db";
+import { client } from "@repo/db";
 import { availableTermsTable } from "@repo/db/schema";
-import { deleteTerms, updateAvailableTerms } from "@repo/db/queries";
+import {
+  deleteTerms,
+  getAvailableTerms,
+  updateAvailableTerms,
+} from "@repo/db/queries";
 import type { TermInsert } from "@repo/db/types";
 
 const response = await fetchCookie(COURSE_REGISTRY_URL);
@@ -28,7 +32,7 @@ $("[id='CLASS_SRCH_WRK2_STRM$35$']")
     });
   });
 
-const currentAvailableTerms = await db.select().from(availableTermsTable);
+const currentAvailableTerms = await getAvailableTerms();
 await updateAvailableTerms(newlyAvailableTerms);
 
 const termsToDelete = currentAvailableTerms.filter(
