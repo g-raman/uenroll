@@ -3,9 +3,8 @@ import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 import { fetchCookie } from "../utils/cookies.js";
 import { client, db } from "@repo/db";
 import { availableTermsTable } from "@repo/db/schema";
-import { eq } from "drizzle-orm";
-import { updateAvailableTerms } from "@repo/db/queries";
-import type { Term, TermInsert } from "@repo/db/types";
+import { deleteTerms, updateAvailableTerms } from "@repo/db/queries";
+import type { TermInsert } from "@repo/db/types";
 
 const response = await fetchCookie(COURSE_REGISTRY_URL);
 const html = await response.text();
@@ -39,23 +38,6 @@ const termsToDelete = currentAvailableTerms.filter(
         newlyAvailableTerm.term === currentAvailableTerm.term,
     ),
 );
-const termsToDeletePromise = termsToDelete.map(termToDelete =>
-  db
-    .delete(availableTermsTable)
-    .where(eq(availableTermsTable.term, termToDelete.term)),
-);
-
-const deletionResults = await Promise.allSettled(termsToDeletePromise);
-deletionResults.forEach((result, index) => {
-  const originalTerm = termsToDelete[index] as Term;
-
-  if (result.status === "fulfilled") {
-    console.log(`Successfully deleted outdated term ${originalTerm.term}`);
-  } else {
-    console.error(
-      `Something went wrong when trying to delete outdated term ${originalTerm.term}: ${result.reason.message}`,
-    );
-  }
-});
+await deleteTerms(termsToDelete);
 
 await client.end();
