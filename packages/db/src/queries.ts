@@ -9,6 +9,7 @@ import {
 } from "./schema.js";
 import type {
   CourseComponentInsert,
+  CourseDetailsInsert,
   CourseInsert,
   SessionInsert,
   SubjectInsert,
@@ -91,6 +92,22 @@ export const updateSessions = async (sessions: SessionInsert[]) => {
     await db.insert(sessionsTable).values(sessions);
   } catch (error) {
     throw new Error("Something went wrong when inserting sessions:\n" + error);
+  }
+};
+
+export const upsertCourseDetails = async (
+  details: CourseDetailsInsert,
+): Promise<void> => {
+  try {
+    await updateCourses(details.courses);
+    await updateCourseComponents(details.courseComponents);
+    await updateSessions(details.sessions);
+
+    for (const course of details.courses) {
+      console.log(`Updated details for ${course.courseCode}`);
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
 
