@@ -1,4 +1,4 @@
-import type { Session } from "./types.js";
+import type { SessionInsert } from "@repo/db/types";
 import * as cheerio from "cheerio";
 import type { AnyNode } from "domhandler";
 
@@ -178,7 +178,7 @@ export const processSessions = (
   dates: string[],
   timings: string[],
 ) => {
-  const sessions: Session[] = [];
+  const sessions: SessionInsert[] = [];
   for (let sessionCount = 0; sessionCount < timings.length; sessionCount++) {
     // Extract day of week and time
     const currentTiming = timings[sessionCount];

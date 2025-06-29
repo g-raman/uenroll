@@ -1,14 +1,14 @@
 import scrapeSearchResults from "./scrape/scrapeSearchResults.js";
-import getAvailableTerms, {
-  getAvailableSubjects,
-  upsertCourseDetails,
-} from "./supabase.js";
 import { FIRST_YEAR, LAST_YEAR } from "./utils/constants.js";
 import "dotenv/config";
 import * as cheerio from "cheerio";
 import { getError } from "./utils/scrape.js";
 import getSubjectByYear from "./scrape/getSubjectByYear.js";
-import { client } from "@repo/db";
+import {
+  upsertCourseDetails,
+  getAvailableTerms,
+  getAvailableSubjects,
+} from "@repo/db/queries";
 
 const terms = await getAvailableTerms();
 
@@ -46,5 +46,4 @@ for (const term of terms) {
   }
 }
 
-await client.end();
 process.exit(0);

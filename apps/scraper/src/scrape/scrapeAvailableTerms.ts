@@ -1,17 +1,18 @@
 import * as cheerio from "cheerio";
 import { COURSE_REGISTRY_URL } from "../utils/constants.js";
-import type { Term } from "../utils/types.js";
-import { updateAvailableTerms } from "../supabase.js";
 import { fetchCookie } from "../utils/cookies.js";
-import { client, db } from "@repo/db";
-import { availableTermsTable } from "@repo/db/schema";
-import { eq } from "drizzle-orm";
+import {
+  deleteTerms,
+  getAvailableTerms,
+  updateAvailableTerms,
+} from "@repo/db/queries";
+import type { TermInsert } from "@repo/db/types";
 
 const response = await fetchCookie(COURSE_REGISTRY_URL);
 const html = await response.text();
 const $ = cheerio.load(html);
 
-const newlyAvailableTerms: Term[] = [];
+const newlyAvailableTerms: TermInsert[] = [];
 $("[id='CLASS_SRCH_WRK2_STRM$35$']")
   .find("option")
   .each(function (this) {
@@ -29,7 +30,7 @@ $("[id='CLASS_SRCH_WRK2_STRM$35$']")
     });
   });
 
-const currentAvailableTerms = await db.select().from(availableTermsTable);
+const currentAvailableTerms = await getAvailableTerms();
 await updateAvailableTerms(newlyAvailableTerms);
 
 const termsToDelete = currentAvailableTerms.filter(
@@ -39,23 +40,6 @@ const termsToDelete = currentAvailableTerms.filter(
         newlyAvailableTerm.term === currentAvailableTerm.term,
     ),
 );
-const termsToDeletePromise = termsToDelete.map(termToDelete =>
-  db
-    .delete(availableTermsTable)
-    .where(eq(availableTermsTable.term, termToDelete.term)),
-);
+await deleteTerms(termsToDelete);
 
-const deletionResults = await Promise.allSettled(termsToDeletePromise);
-deletionResults.forEach((result, index) => {
-  const originalTerm = termsToDelete[index] as Term;
-
-  if (result.status === "fulfilled") {
-    console.log(`Successfully deleted outdated term ${originalTerm.term}`);
-  } else {
-    console.error(
-      `Something went wrong when trying to delete outdated term ${originalTerm.term}: ${result.reason.message}`,
-    );
-  }
-});
-
-await client.end();
+process.exit(0);
