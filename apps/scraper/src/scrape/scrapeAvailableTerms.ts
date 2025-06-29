@@ -1,11 +1,11 @@
 import * as cheerio from "cheerio";
 import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 import type { Term } from "../utils/types.js";
-import { updateAvailableTerms } from "../supabase.js";
 import { fetchCookie } from "../utils/cookies.js";
 import { client, db } from "@repo/db";
 import { availableTermsTable } from "@repo/db/schema";
 import { eq } from "drizzle-orm";
+import { updateAvailableTerms } from "@repo/db/queries";
 
 const response = await fetchCookie(COURSE_REGISTRY_URL);
 const html = await response.text();
