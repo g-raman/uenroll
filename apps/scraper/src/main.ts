@@ -4,7 +4,6 @@ import "dotenv/config";
 import * as cheerio from "cheerio";
 import { getError } from "./utils/scrape.js";
 import getSubjectByYear from "./scrape/getSubjectByYear.js";
-import { client } from "@repo/db";
 import {
   upsertCourseDetails,
   getAvailableTerms,
@@ -47,5 +46,4 @@ for (const term of terms) {
   }
 }
 
-await client.end();
 process.exit(0);

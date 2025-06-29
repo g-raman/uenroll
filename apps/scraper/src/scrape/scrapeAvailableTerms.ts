@@ -1,7 +1,6 @@
 import * as cheerio from "cheerio";
 import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 import { fetchCookie } from "../utils/cookies.js";
-import { client } from "@repo/db";
 import {
   deleteTerms,
   getAvailableTerms,
@@ -43,5 +42,4 @@ const termsToDelete = currentAvailableTerms.filter(
 );
 await deleteTerms(termsToDelete);
 
-await client.end();
 process.exit(0);

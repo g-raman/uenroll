@@ -2,7 +2,6 @@ import * as cheerio from "cheerio";
 import { getBrowser, getBrowserEndpoint } from "../utils/browser.js";
 import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 import { getIdSelector, getIdStartsWithSelector } from "../utils/scrape.js";
-import { client } from "@repo/db";
 import { updateAvailableSubjects } from "@repo/db/queries";
 import type { Subject } from "@repo/db/types";
 
@@ -52,5 +51,4 @@ for (const character of characters) {
 
 await page.close();
 await browser.disconnect();
-await client.end();
 process.exit(0);
