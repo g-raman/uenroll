@@ -2,7 +2,6 @@ import * as cheerio from "cheerio";
 import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 import { fetchCookie } from "../utils/cookies.js";
 import { client } from "@repo/db";
-import { availableTermsTable } from "@repo/db/schema";
 import {
   deleteTerms,
   getAvailableTerms,
