@@ -1,5 +1,15 @@
 # scraper
 
+## 1.4.0
+
+### Minor Changes
+
+- [#104](https://github.com/g-raman/uenroll/pull/104) [`f67b5b3`](https://github.com/g-raman/uenroll/commit/f67b5b346b87670b189cf9151b1531538b59e534) Thanks [@g-raman](https://github.com/g-raman)! - Migrated all db queries to db package
+
+### Patch Changes
+
+- [#105](https://github.com/g-raman/uenroll/pull/105) [`d28b0f8`](https://github.com/g-raman/uenroll/commit/d28b0f8ddfb75d70cf82b311201f8f01095c13ee) Thanks [@g-raman](https://github.com/g-raman)! - Fixed error with courses with unknown dates
+
 ## 1.3.0
 
 ### Minor Changes

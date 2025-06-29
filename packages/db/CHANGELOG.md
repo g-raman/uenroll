@@ -1,5 +1,11 @@
 # @repo/db
 
+## 0.5.0
+
+### Minor Changes
+
+- [#104](https://github.com/g-raman/uenroll/pull/104) [`f67b5b3`](https://github.com/g-raman/uenroll/commit/f67b5b346b87670b189cf9151b1531538b59e534) Thanks [@g-raman](https://github.com/g-raman)! - Migrated all db queries to db package
+
 ## 0.4.1
 
 ### Patch Changes
