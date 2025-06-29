@@ -45,3 +45,4 @@ const termsToDelete = currentAvailableTerms.filter(
 await deleteTerms(termsToDelete);
 
 await client.end();
+process.exit(0);
