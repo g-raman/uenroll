@@ -11,11 +11,19 @@ import {
 } from "@repo/db/queries";
 
 const terms = await getAvailableTerms();
+if (terms.isErr()) {
+  console.error(terms.error);
+  process.exit(1);
+}
 
 const courses = await getAvailableSubjects();
+if (courses.isErr()) {
+  console.error(courses.error);
+  process.exit(1);
+}
 
-for (const term of terms) {
-  for (const course of courses) {
+for (const term of terms.value) {
+  for (const course of courses.value) {
     for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
       console.log(`Searching for ${course} year ${year} courses:`);
       const html = await getSubjectByYear(term, year, course);
