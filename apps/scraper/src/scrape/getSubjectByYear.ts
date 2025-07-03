@@ -4,21 +4,21 @@ import {
   MAX_RETRIES_FOR_ICSID,
 } from "../utils/constants.js";
 import { fetchCookie, getICSID } from "../utils/cookies.js";
+import { err, ResultAsync } from "neverthrow";
 
 export default async function getSubjectByYear(
   term: Omit<Term, "isDeleted">,
   year: number,
   subject: string,
-): Promise<string> {
-  // Somtimes ICSID isn't found and it takes ~2-3 attempts to get one
+) {
+  // HACK: Somtimes ICSID isn't found and it takes ~2-3 attempts to get one
   let icsid = undefined;
   let counter = 1;
   while (!icsid) {
     if (counter > MAX_RETRIES_FOR_ICSID) {
-      console.log("Couldn't find ICSID");
-      return "";
+      return err(new Error("Failed to get ICSID"));
     }
-    icsid = await getICSID();
+    icsid = (await getICSID()).unwrapOr(undefined);
     console.log(`ICSID attempt ${counter}`);
     counter++;
   }
@@ -44,11 +44,23 @@ export default async function getSubjectByYear(
   };
 
   const body = new URLSearchParams(params);
-  const response = await fetchCookie(COURSE_REGISTRY_URL, {
-    method: "POST",
-    body,
-  });
+  const response = await ResultAsync.fromPromise(
+    fetchCookie(COURSE_REGISTRY_URL, {
+      method: "POST",
+      body,
+    }),
+    error =>
+      new Error(
+        `Failed to get search results for ${subject} in ${term}: ${error}`,
+      ),
+  );
 
-  const courseHtml = await response.text();
-  return courseHtml;
+  if (response.isErr()) {
+    return err(response.error);
+  }
+
+  return await ResultAsync.fromPromise(
+    response.value.text(),
+    error => new Error(`Failed to get HTML text: ${error}`),
+  );
 }

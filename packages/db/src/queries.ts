@@ -16,55 +16,63 @@ import type {
   Term,
   TermInsert,
 } from "./types.js";
+import { err, ok, Result, ResultAsync } from "neverthrow";
 
 export async function getAvailableTerms() {
-  return await db
-    .select()
-    .from(availableTermsTable)
-    .orderBy(asc(availableTermsTable.value));
+  return ResultAsync.fromPromise(
+    db
+      .select()
+      .from(availableTermsTable)
+      .orderBy(asc(availableTermsTable.value)),
+    error => new Error(`Failed to fetch available terms: ${error}`),
+  );
 }
 
 export const getAvailableSubjects = async () => {
-  const results = await await db
-    .select({ subject: availableSubjectsTable.subject })
-    .from(availableSubjectsTable)
-    .orderBy(asc(availableSubjectsTable.subject));
-
-  return results.map(subject => subject.subject);
+  return ResultAsync.fromPromise(
+    db
+      .select({ subject: availableSubjectsTable.subject })
+      .from(availableSubjectsTable)
+      .orderBy(asc(availableSubjectsTable.subject)),
+    error => new Error(`Failed to fetch available subjects: ${error}`),
+  ).map(result => result.map(subject => subject.subject));
 };
 
 export async function getAvailableCoursesByTerm(term: string) {
-  return await db
-    .select({
-      courseCode: coursesTable.courseCode,
-      courseTitle: coursesTable.courseTitle,
-    })
-    .from(coursesTable)
-    .where(eq(coursesTable.term, term))
-    .limit(3500);
+  return ResultAsync.fromPromise(
+    db
+      .select({
+        courseCode: coursesTable.courseCode,
+        courseTitle: coursesTable.courseTitle,
+      })
+      .from(coursesTable)
+      .where(eq(coursesTable.term, term))
+      .limit(3500),
+    error =>
+      new Error(`Failed to fetch available courses for the ${term}: ${error}`),
+  );
 }
 
 export async function deleteTerms(terms: Term[]) {
   if (terms.length === 0) {
-    console.log("No terms to delete. Skipping.");
-    return;
+    ResultAsync.fromPromise(
+      Promise.reject(),
+      () => new Error("No terms to delete. Skipping."),
+    );
   }
 
   const termsToDelete = terms.map(term => term.value);
-  try {
-    await db
+  return ResultAsync.fromPromise(
+    db
       .delete(availableTermsTable)
-      .where(inArray(availableTermsTable.value, termsToDelete));
-  } catch (error) {
-    throw new Error(
-      "Something went wrong when deleting outdated terms:\n" + error,
-    );
-  }
+      .where(inArray(availableTermsTable.value, termsToDelete)),
+    error => new Error(`Failed to delete outdated terms: ${error}`),
+  );
 }
 
 export const updateCourses = async (courses: CourseInsert[]) => {
-  try {
-    await db
+  return ResultAsync.fromPromise(
+    db
       .insert(coursesTable)
       .values(courses)
       .onConflictDoUpdate({
@@ -72,17 +80,16 @@ export const updateCourses = async (courses: CourseInsert[]) => {
         set: {
           courseTitle: sql`excluded.course_title`,
         },
-      });
-  } catch (error) {
-    throw new Error("Something went wrong when inserting courses:\n" + error);
-  }
+      }),
+    error => new Error(`Failed to update courses: ${error}`),
+  );
 };
 
 export const updateCourseComponents = async (
   courseComponents: CourseComponentInsert[],
 ) => {
-  try {
-    await db
+  return ResultAsync.fromPromise(
+    db
       .insert(courseComponentsTable)
       .values(courseComponents)
       .onConflictDoUpdate({
@@ -95,43 +102,52 @@ export const updateCourseComponents = async (
           section: sql`excluded.section`,
           type: sql`excluded.type`,
         },
-      });
-  } catch (error) {
-    throw new Error(
-      "Something went wrong when inserting course components:\n" + error,
-    );
-  }
+      }),
+    error => new Error(`Failed to update course components: ${error}`),
+  );
 };
 
 export const updateSessions = async (sessions: SessionInsert[]) => {
-  try {
-    await db.insert(sessionsTable).values(sessions);
-  } catch (error) {
-    throw new Error("Something went wrong when inserting sessions:\n" + error);
-  }
+  return ResultAsync.fromPromise(
+    db.insert(sessionsTable).values(sessions),
+    error => new Error(`Failed to update sessions: ${error}`),
+  );
 };
 
 export const upsertCourseDetails = async (
   details: CourseDetailsInsert,
-): Promise<void> => {
-  try {
-    await updateCourses(details.courses);
-    await updateCourseComponents(details.courseComponents);
-    await updateSessions(details.sessions);
-
-    for (const course of details.courses) {
-      console.log(`Updated details for ${course.courseCode}`);
-    }
-  } catch (error) {
-    console.error(error);
+): Promise<Result<undefined, Error[]>> => {
+  const coursesUpdated = await updateCourses(details.courses);
+  const errors = [];
+  if (coursesUpdated.isErr()) {
+    console.error(coursesUpdated.error);
+    errors.push(coursesUpdated.error);
   }
+
+  const courseComponentsUpdated = await updateCourseComponents(
+    details.courseComponents,
+  );
+  if (courseComponentsUpdated.isErr()) {
+    console.error(courseComponentsUpdated.error);
+    errors.push(courseComponentsUpdated.error);
+  }
+
+  const sessionsUpdated = await updateSessions(details.sessions);
+  if (sessionsUpdated.isErr()) {
+    console.error(sessionsUpdated.error);
+    errors.push(sessionsUpdated.error);
+  }
+
+  for (const course of details.courses) {
+    console.log(`Updated details for ${course.courseCode}`);
+  }
+
+  return errors.length > 0 ? err(errors) : ok(undefined);
 };
 
-export const updateAvailableTerms = async (
-  terms: TermInsert[],
-): Promise<void> => {
-  try {
-    await db
+export const updateAvailableTerms = async (terms: TermInsert[]) => {
+  return ResultAsync.fromPromise(
+    db
       .insert(availableTermsTable)
       .values(terms)
       .onConflictDoUpdate({
@@ -139,65 +155,38 @@ export const updateAvailableTerms = async (
         set: {
           value: sql`excluded.value`,
         },
-      });
-
-    console.log("Success: Updated available terms");
-  } catch (error) {
-    console.error(
-      "Error: Something went wrong when updating availabe terms: ",
-      error,
-    );
-  }
+      }),
+    error => new Error(`Failed to update available terms: ${error}`),
+  );
 };
 
-export const updateAvailableSubjects = async (
-  subjects: SubjectInsert[],
-): Promise<void> => {
-  try {
-    await db
-      .insert(availableSubjectsTable)
-      .values(subjects)
-      .onConflictDoNothing();
-
-    console.log("Success: Updated available subjects");
-  } catch (error) {
-    console.error(
-      "Error: Something went wrong when updating availabe subjects: ",
-      error,
-    );
-  }
+export const updateAvailableSubjects = async (subjects: SubjectInsert[]) => {
+  return ResultAsync.fromPromise(
+    db.insert(availableSubjectsTable).values(subjects).onConflictDoNothing(),
+    error => new Error(`Failed to update available subjects: ${error}`),
+  );
 };
 
 export const removeOldSessions = async (milliseconds: number) => {
-  try {
-    await db
+  return ResultAsync.fromPromise(
+    db
       .delete(sessionsTable)
       .where(
         lt(sessionsTable.last_updated, new Date(Date.now() - milliseconds)),
-      );
-  } catch (error) {
-    console.error(
-      "Error: Something went wrong when deleting old sessions",
-      error,
-    );
-  }
+      ),
+    error => new Error(`Failed to remove outdated sessions: ${error}`),
+  );
 };
 
 export const removeCoursesWithNoSessions = async () => {
-  try {
-    const coursesWithSessions = db
-      .selectDistinct({ courseCode: sessionsTable.courseCode })
-      .from(sessionsTable);
+  const coursesWithSessions = db
+    .selectDistinct({ courseCode: sessionsTable.courseCode })
+    .from(sessionsTable);
 
-    const coursesWithoutSessions = await db
+  return ResultAsync.fromPromise(
+    db
       .delete(coursesTable)
-      .where(notInArray(coursesTable.courseCode, coursesWithSessions));
-
-    return coursesWithoutSessions;
-  } catch (error) {
-    console.error(
-      "Error: Something went wrong when deleting courses with no sessions",
-      error,
-    );
-  }
+      .where(notInArray(coursesTable.courseCode, coursesWithSessions)),
+    error => new Error(`Failed to remove courses with no sessions: ${error}`),
+  );
 };

@@ -7,8 +7,12 @@ import type { Subject } from "@repo/db/types";
 
 const characters = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", ..."0123456789"];
 const browserEndpoint = await getBrowserEndpoint();
+if (browserEndpoint.isErr()) {
+  console.error("Failed to get browser endpoint");
+  process.exit(1);
+}
 
-const browser = await getBrowser(browserEndpoint);
+const browser = await getBrowser(browserEndpoint.value);
 const page = await browser.newPage();
 
 console.log("Going to subjects page...");

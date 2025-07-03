@@ -1,6 +1,7 @@
 import type { SessionInsert } from "@repo/db/types";
 import * as cheerio from "cheerio";
 import type { AnyNode } from "domhandler";
+import { err, ok, Result } from "neverthrow";
 
 /*
  * Selects the error message.
@@ -74,12 +75,20 @@ export const getTotalSections = ($: cheerio.CheerioAPI) => {
  */
 export const getCourseCodeAndCourseTitle = (
   course: cheerio.Cheerio<AnyNode>,
-) => {
+): Result<[string, string], Error> => {
   const courseHeader = course.text().trim();
   const [courseCodeString, courseTitle] = courseHeader.split(" - ");
-  const courseCode = courseCodeString?.replaceAll(" ", "");
 
-  return [courseCode, courseTitle];
+  if (!courseCodeString) {
+    return err(new Error(`Failed to parse course code for ${courseHeader}`));
+  }
+  if (!courseTitle) {
+    return err(new Error(`Failed to parse course title for ${courseHeader}`));
+  }
+
+  const courseCode = courseCodeString.replaceAll(" ", "");
+
+  return ok([courseCode, courseTitle]);
 };
 
 /*
@@ -92,16 +101,26 @@ export const getCourseCodeAndCourseTitle = (
 export const getSectionAndType = (
   section: cheerio.Cheerio<AnyNode>,
   count: number,
-) => {
+): Result<[string, string], Error> => {
   const SUB_SECTION_SELECTOR = "MTG_CLASSNAME$";
 
   const subSectionDetails = getSectionDetail(
     section,
     SUB_SECTION_SELECTOR,
     count,
-  )[0] as string;
-  const [subSection, type] = subSectionDetails.split("-");
-  return [subSection, type];
+  )[0];
+
+  if (!subSectionDetails) {
+    return err(new Error(`Failed to get sub section details`));
+  }
+
+  const processedSubsectionDetails = subSectionDetails.split("-");
+  if (!processedSubsectionDetails[0] || !processedSubsectionDetails[1]) {
+    return err(new Error(`Failed to process subsection details`));
+  }
+
+  const [subSection, type] = processedSubsectionDetails;
+  return ok([subSection, type]);
 };
 
 /*
@@ -113,9 +132,13 @@ export const getSectionAndType = (
 export const getInstructors = (
   section: cheerio.Cheerio<AnyNode>,
   count: number,
-) => {
+): Result<string[], Error> => {
   const INSTRUCTOR_SELECTOR = "MTG_INSTR$";
-  return getSectionDetail(section, INSTRUCTOR_SELECTOR, count);
+  const details = getSectionDetail(section, INSTRUCTOR_SELECTOR, count);
+  if (details.length === 0) {
+    return err(new Error(`Failed to get instructors`));
+  }
+  return ok(details);
 };
 
 /*
@@ -124,9 +147,16 @@ export const getInstructors = (
  *
  * Easy split. Returns an array
  */
-export const getDates = (section: cheerio.Cheerio<AnyNode>, count: number) => {
+export const getDates = (
+  section: cheerio.Cheerio<AnyNode>,
+  count: number,
+): Result<string[], Error> => {
   const DATES_SELECTOR = "MTG_TOPIC$";
-  return getSectionDetail(section, DATES_SELECTOR, count);
+  const details = getSectionDetail(section, DATES_SELECTOR, count);
+  if (details.length === 0) {
+    return err(new Error(`Failed to get dates`));
+  }
+  return ok(details);
 };
 
 /*
@@ -139,9 +169,13 @@ export const getDates = (section: cheerio.Cheerio<AnyNode>, count: number) => {
 export const getTimings = (
   section: cheerio.Cheerio<AnyNode>,
   count: number,
-) => {
+): Result<string[], Error> => {
   const TIMINGS_SELECTOR = "MTG_DAYTIME$";
-  return getSectionDetail(section, TIMINGS_SELECTOR, count);
+  const details = getSectionDetail(section, TIMINGS_SELECTOR, count);
+  if (details.length === 0) {
+    return err(new Error(`Failed to get timings`));
+  }
+  return ok(details);
 };
 
 /*
@@ -151,7 +185,10 @@ export const getTimings = (
  *
  * So we return status based on that
  */
-export const getStatus = (section: cheerio.Cheerio<AnyNode>, count: number) => {
+export const getStatus = (
+  section: cheerio.Cheerio<AnyNode>,
+  count: number,
+): Result<boolean, Error> => {
   const STATUS_SELECTOR = "win0divDERIVED_CLSRCH_SSR_STATUS_LONG$";
   const statusSelector = getIdSelector(STATUS_SELECTOR, count);
 
@@ -161,7 +198,11 @@ export const getStatus = (section: cheerio.Cheerio<AnyNode>, count: number) => {
       value: "src",
     },
   });
-  return url?.includes("OPEN") ? true : false;
+
+  if (!url) {
+    return err(new Error(`Failed to extract image`));
+  }
+  return url.includes("OPEN") ? ok(true) : ok(false);
 };
 
 /*

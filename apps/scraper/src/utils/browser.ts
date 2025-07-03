@@ -1,26 +1,34 @@
 import puppeteer, { Browser } from "puppeteer-core";
 import "dotenv/config";
+import { errAsync, okAsync, Result, ResultAsync } from "neverthrow";
 
 interface DebuggerVersionResponse {
   webSocketDebuggerUrl: string;
 }
 
-export const getBrowserEndpoint = async (): Promise<string> => {
-  const res = await fetch("http://localhost:9222/json/version");
-  const data = (await res.json()) as DebuggerVersionResponse;
-  const browserEndpoint = data.webSocketDebuggerUrl as string;
-
-  return browserEndpoint;
+export const getBrowserEndpoint = async (): Promise<Result<string, Error>> => {
+  return ResultAsync.fromPromise(
+    fetch("http://localhost:9222/json/version"),
+    error => new Error(`Fetch for browser endpoint failed: ${error}`),
+  )
+    .andThen(res =>
+      res.ok
+        ? ResultAsync.fromPromise(
+            res.json() as Promise<DebuggerVersionResponse>,
+            error =>
+              new Error(`JSON parse for browser endpoint failed: ${error}`),
+          )
+        : errAsync(new Error(`HTTP error ${res.status}: ${res.statusText}`)),
+    )
+    .andThen(data =>
+      data.webSocketDebuggerUrl
+        ? okAsync(data.webSocketDebuggerUrl)
+        : errAsync(new Error(`Couldn't find browser endpoint`)),
+    );
 };
 
 export const getBrowser = async (browserEndpoint: string): Promise<Browser> => {
-  /*
-   * TODO: Temporary disabling as I need to write documentation for a proper setup
-   */
-
-  // eslint-disable-next-line turbo/no-undeclared-env-vars
   const environment = process.env["ENVIRONMENT"];
-  // eslint-disable-next-line turbo/no-undeclared-env-vars
   const puppeteerExecutablePath = process.env["PUPPETEER_EXECUTABLE_PATH"];
 
   if (environment === "DEV") {
