@@ -18,7 +18,7 @@ export default async function getSubjectByYear(
       console.log("Couldn't find ICSID");
       return "";
     }
-    icsid = await getICSID();
+    icsid = (await getICSID()).unwrapOr(undefined);
     console.log(`ICSID attempt ${counter}`);
     counter++;
   }
