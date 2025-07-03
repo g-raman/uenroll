@@ -16,7 +16,7 @@ import type {
   Term,
   TermInsert,
 } from "./types.js";
-import { err, ResultAsync } from "neverthrow";
+import { err, ok, Result, ResultAsync } from "neverthrow";
 
 export async function getAvailableTerms() {
   return ResultAsync.fromPromise(
@@ -113,10 +113,12 @@ export const updateSessions = async (sessions: SessionInsert[]) => {
 
 export const upsertCourseDetails = async (
   details: CourseDetailsInsert,
-): Promise<void> => {
+): Promise<Result<undefined, Error[]>> => {
   const coursesUpdated = await updateCourses(details.courses);
+  const errors = [];
   if (coursesUpdated.isErr()) {
     console.error(coursesUpdated.error);
+    errors.push(coursesUpdated.error);
   }
 
   const courseComponentsUpdated = await updateCourseComponents(
@@ -124,16 +126,20 @@ export const upsertCourseDetails = async (
   );
   if (courseComponentsUpdated.isErr()) {
     console.error(courseComponentsUpdated.error);
+    errors.push(courseComponentsUpdated.error);
   }
 
   const sessionsUpdated = await updateSessions(details.sessions);
   if (sessionsUpdated.isErr()) {
     console.error(sessionsUpdated.error);
+    errors.push(sessionsUpdated.error);
   }
 
   for (const course of details.courses) {
     console.log(`Updated details for ${course.courseCode}`);
   }
+
+  return errors.length > 0 ? err(errors) : ok(undefined);
 };
 
 export const updateAvailableTerms = async (terms: TermInsert[]) => {
