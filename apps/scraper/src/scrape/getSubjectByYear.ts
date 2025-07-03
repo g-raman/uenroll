@@ -11,7 +11,7 @@ export default async function getSubjectByYear(
   year: number,
   subject: string,
 ) {
-  // Somtimes ICSID isn't found and it takes ~2-3 attempts to get one
+  // HACK: Somtimes ICSID isn't found and it takes ~2-3 attempts to get one
   let icsid = undefined;
   let counter = 1;
   while (!icsid) {
