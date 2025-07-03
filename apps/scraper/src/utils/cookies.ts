@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import { COURSE_REGISTRY_URL } from "./constants.js";
 import makeFetchCookie from "fetch-cookie";
-import { err, ok, Result, ResultAsync } from "neverthrow";
+import { err, Result, ResultAsync } from "neverthrow";
 
 export const fetchCookie = makeFetchCookie(fetch);
 

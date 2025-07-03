@@ -4,7 +4,7 @@ import {
   MAX_RETRIES_FOR_ICSID,
 } from "../utils/constants.js";
 import { fetchCookie, getICSID } from "../utils/cookies.js";
-import { err, ok, ResultAsync } from "neverthrow";
+import { err, ResultAsync } from "neverthrow";
 
 export default async function getSubjectByYear(
   term: Omit<Term, "isDeleted">,
