@@ -43,7 +43,12 @@ export default (
       courseNumber,
     );
     const courseContainer = $(courseContainerSelector);
-    const [courseCode, courseTitle] = getCourseCodeAndCourseTitle($(this));
+    const parsedCourseHeader = getCourseCodeAndCourseTitle($(this));
+    if (parsedCourseHeader.isErr()) {
+      console.error(parsedCourseHeader.error);
+      return false;
+    }
+    const [courseCode, courseTitle] = parsedCourseHeader.value;
 
     const sectionSelector = getIdStartsWithSelector(SECTION_SELECTOR);
     const sectionDetails = courseContainer.find(sectionSelector);
@@ -51,37 +56,60 @@ export default (
     let currentSection = "";
     sectionDetails.each(function (this) {
       const section = $(this);
-      const [subSection, type] = getSectionAndType(section, sectionNumber);
+      const parsedSubsectionDetails = getSectionAndType(section, sectionNumber);
+      if (parsedSubsectionDetails.isErr()) {
+        console.error(parsedSubsectionDetails.error);
+        return false;
+      }
+      const [subSection, type] = parsedSubsectionDetails.value;
+
       const instructors = getInstructors(section, sectionNumber);
+      if (instructors.isErr()) {
+        console.error(instructors.error);
+        return false;
+      }
+
       const dates = getDates(section, sectionNumber);
+      if (dates.isErr()) {
+        console.error(dates.error);
+        return false;
+      }
+
       const timings = getTimings(section, sectionNumber);
-      const isOpen = getStatus(section, sectionNumber);
+      if (timings.isErr()) {
+        console.error(timings.error);
+        return false;
+      }
+
+      const status = getStatus(section, sectionNumber);
+      if (status.isErr()) {
+        console.error(status.error);
+        return false;
+      }
 
       const newSectionRegex = /^[A-Z]?[A-Z]00$/;
-      const isNewSection = newSectionRegex.test(subSection as string);
-      currentSection = isNewSection
-        ? (subSection as string)
-        : (currentSection as string);
+      const isNewSection = newSectionRegex.test(subSection);
+      currentSection = isNewSection ? subSection : currentSection;
 
       const sessions = processSessions(
         term.value,
-        courseCode as string,
-        subSection as string,
+        courseCode,
+        subSection,
         currentSection,
-        instructors,
-        dates,
-        timings,
+        instructors.value,
+        dates.value,
+        timings.value,
       );
 
       details.sessions.push(...sessions);
 
       details.courseComponents.push({
         term: term.value,
-        courseCode: courseCode as string,
+        courseCode,
         section: currentSection,
-        subSection: subSection as string,
-        type: type as string,
-        isOpen,
+        subSection,
+        type,
+        isOpen: status.value,
         isDeleted: false,
       });
       sectionNumber++;
@@ -92,8 +120,8 @@ export default (
     });
 
     details.courses.push({
-      courseCode: courseCode as string,
-      courseTitle: courseTitle as string,
+      courseCode,
+      courseTitle,
       term: term.value,
       isDeleted: false,
     });
