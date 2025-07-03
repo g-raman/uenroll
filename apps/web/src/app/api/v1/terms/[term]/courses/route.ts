@@ -15,9 +15,10 @@ export async function GET(req: Request, segmentData: { params: Params }) {
 
   const courses = await getAvailableCoursesByTerm(params.term);
 
-  if (!courses) {
+  if (courses.isErr()) {
+    console.error(courses.error);
     return Response.json({ error: "No available courses", data: null });
   }
 
-  return Response.json({ error: null, data: courses });
+  return Response.json({ error: null, data: courses.value });
 }
