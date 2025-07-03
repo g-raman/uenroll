@@ -27,9 +27,13 @@ for (const term of terms.value) {
     for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
       console.log(`Searching for ${course} year ${year} courses:`);
       const html = await getSubjectByYear(term, year, course);
-      if (html.length === 0) continue;
+      if (html.isErr()) {
+        console.error(html.error);
+        continue;
+      }
+      if (html.value.length === 0) continue;
 
-      const parser = cheerio.load(html);
+      const parser = cheerio.load(html.value);
 
       const error = getError(parser);
       if (error != null) {
