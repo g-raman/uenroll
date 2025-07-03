@@ -59,9 +59,8 @@ export default async function getSubjectByYear(
     return err(response.error);
   }
 
-  const courseHtml = await ResultAsync.fromPromise(
+  return await ResultAsync.fromPromise(
     response.value.text(),
     error => new Error(`Failed to get HTML text: ${error}`),
   );
-  return courseHtml;
 }
