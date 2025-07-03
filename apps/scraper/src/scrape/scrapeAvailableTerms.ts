@@ -31,15 +31,26 @@ $("[id='CLASS_SRCH_WRK2_STRM$35$']")
   });
 
 const currentAvailableTerms = await getAvailableTerms();
-await updateAvailableTerms(newlyAvailableTerms);
+if (currentAvailableTerms.isErr()) {
+  console.error(currentAvailableTerms.error);
+  process.exit(1);
+}
+const updateAvailableTermsResult =
+  await updateAvailableTerms(newlyAvailableTerms);
+if (updateAvailableTermsResult.isErr()) {
+  console.error(updateAvailableTermsResult.error);
+}
 
-const termsToDelete = currentAvailableTerms.filter(
+const termsToDelete = currentAvailableTerms.value.filter(
   currentAvailableTerm =>
     !newlyAvailableTerms.some(
       newlyAvailableTerm =>
         newlyAvailableTerm.term === currentAvailableTerm.term,
     ),
 );
-await deleteTerms(termsToDelete);
+const deleteTermsResult = await deleteTerms(termsToDelete);
+if (deleteTermsResult.isErr()) {
+  console.error(deleteTermsResult.error);
+}
 
 process.exit(0);
