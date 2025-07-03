@@ -55,7 +55,10 @@ export async function getAvailableCoursesByTerm(term: string) {
 
 export async function deleteTerms(terms: Term[]) {
   if (terms.length === 0) {
-    return err("No terms to delete. Skipping.");
+    ResultAsync.fromPromise(
+      Promise.reject(),
+      () => new Error("No terms to delete. Skipping."),
+    );
   }
 
   const termsToDelete = terms.map(term => term.value);
