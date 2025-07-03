@@ -16,7 +16,7 @@ import type {
   Term,
   TermInsert,
 } from "./types.js";
-import { ResultAsync } from "neverthrow";
+import { err, ResultAsync } from "neverthrow";
 
 export async function getAvailableTerms() {
   return ResultAsync.fromPromise(
@@ -55,7 +55,7 @@ export async function getAvailableCoursesByTerm(term: string) {
 
 export async function deleteTerms(terms: Term[]) {
   if (terms.length === 0) {
-    return console.log("No terms to delete. Skipping.");
+    return err("No terms to delete. Skipping.");
   }
 
   const termsToDelete = terms.map(term => term.value);
