@@ -10,7 +10,7 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 
 const readPolicy = pgPolicy("read access for all users policy", {
   for: "select",
@@ -107,3 +107,33 @@ export const sessionsTable = pgTable(
     readPolicy,
   ],
 ).enableRLS();
+
+export const courseRelations = relations(coursesTable, ({ many }) => ({
+  courseComponents: many(courseComponentsTable),
+}));
+
+export const courseComponentsRelations = relations(
+  courseComponentsTable,
+  ({ one, many }) => ({
+    course: one(coursesTable, {
+      fields: [courseComponentsTable.courseCode, courseComponentsTable.term],
+      references: [coursesTable.courseCode, coursesTable.term],
+    }),
+    sessions: many(sessionsTable),
+  }),
+);
+
+export const sessionsRelations = relations(sessionsTable, ({ one }) => ({
+  courseComponent: one(courseComponentsTable, {
+    fields: [
+      sessionsTable.term,
+      sessionsTable.courseCode,
+      sessionsTable.subSection,
+    ],
+    references: [
+      courseComponentsTable.term,
+      courseComponentsTable.courseCode,
+      courseComponentsTable.subSection,
+    ],
+  }),
+}));

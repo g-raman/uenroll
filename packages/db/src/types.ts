@@ -1,3 +1,5 @@
+import type { Result } from "neverthrow";
+import type { getCourse, processCourse } from "./queries.js";
 import {
   courseComponentsTable,
   coursesTable,
@@ -23,3 +25,7 @@ export type CourseDetailsInsert = {
   courseComponents: CourseComponentInsert[];
   sessions: SessionInsert[];
 };
+
+export type GetCourseResult = Awaited<ReturnType<typeof getCourse>>;
+export type CourseSearchResult =
+  ReturnType<typeof processCourse> extends Result<infer T, unknown> ? T : never;
