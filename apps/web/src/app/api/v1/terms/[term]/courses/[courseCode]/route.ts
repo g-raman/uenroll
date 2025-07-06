@@ -1,5 +1,4 @@
-import { Course } from "@/types/Types";
-import { getCourse } from "@/utils/db/getCourse";
+import { getCourse, processCourse } from "@repo/db/queries";
 
 type Params = Promise<{ term: string; courseCode: string }>;
 export async function GET(req: Request, segmentData: { params: Params }) {
@@ -29,11 +28,12 @@ export async function GET(req: Request, segmentData: { params: Params }) {
     return Response.json({ error: "Not a valid course code", data: null });
   }
 
-  const res = (await getCourse(termParam, courseCodeParam)) as Course[];
+  const course = await getCourse(termParam, courseCodeParam);
+  const result = processCourse(course);
 
-  if (!res) {
-    return Response.json({ error: "No course found", data: null });
+  if (result.isErr()) {
+    return Response.json({ error: result.error.message, data: null });
   }
 
-  return Response.json({ error: null, data: res[0] });
+  return Response.json({ error: null, data: result.value });
 }
