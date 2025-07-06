@@ -57,9 +57,10 @@ const useScheduleStore = create<ScheduleState>(set => ({
           selectedSessionsURL,
         } = initialData;
         const colours = [...old.colours];
+        const newColour = colours.pop() || "";
         const colouredCourses = courseSearchResults.map(course => ({
           ...course,
-          colour: colours.pop() as string,
+          colour: newColour,
         }));
 
         const selectedSessions = createNewSelectedSessions(
@@ -91,6 +92,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
           result => result.courseCode === course.courseCode,
         );
         const [colour, ...restColours] = old.colours;
+        const newColour = colour || "";
 
         return isAlreadyAdded
           ? old
@@ -98,7 +100,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
               ...old,
               colours: restColours,
               courseSearchResults: [
-                { ...course, colour: colour as string },
+                { ...course, colour: newColour },
                 ...old.courseSearchResults,
               ],
             };
@@ -116,7 +118,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
           return {
             ...old,
             courseSearchResults: filteredCourses,
-            colours: [...old.colours, course.colour as string],
+            colours: [...old.colours, course.colour],
           };
         }
         const selectedSessionsURL = { ...old.selectedSessionsURL };
@@ -128,7 +130,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
             courseSearchResults: filteredCourses,
             selectedSessionsURL: null,
             selectedSessions: [],
-            colours: [...old.colours, course.colour as string],
+            colours: [...old.colours, course.colour],
           };
         }
 
@@ -142,7 +144,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
           courseSearchResults: filteredCourses,
           selectedSessionsURL,
           selectedSessions,
-          colours: [...old.colours, course.colour as string],
+          colours: [...old.colours, course.colour],
         };
       }),
     resetData: () =>
