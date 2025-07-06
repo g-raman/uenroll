@@ -4,7 +4,6 @@ import App from "@/layouts/App/App";
 import Main from "@/layouts/Main/Main";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import Sidebar from "@/layouts/Sidebar/Sidebar";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SearchResults from "@/components/SearchResults/SearchResults";
 import { useEffect, useRef, useState } from "react";
 import { CopyLinkButton } from "@/components/Buttons/CopyLinkButton/CopyLinkButton";
@@ -20,9 +19,14 @@ import { useQueryState } from "nuqs";
 import { fetchCourse, fetchTerms } from "@/utils/fetchData";
 import { Term } from "@/types/Types";
 import LZString from "lz-string";
+import { trpc } from "./_trpc/client";
 
 export default function Page() {
-  const queryClient = useState(new QueryClient())[0];
+  const {
+    data: terms,
+    isLoading: termsLoading,
+    error: termsError,
+  } = trpc.getTerms.useQuery();
 
   const selectedSessionsURL = useSelectedSessionsURL();
   const selectedTerm = useSelectedTerm();
@@ -38,27 +42,29 @@ export default function Page() {
     history: "replace",
   });
 
+  if (terms) {
+    const initialTerm = terms.find(termData => termData.value === term);
+    const selectedTerm = initialTerm ? initialTerm : (terms[0] as Term);
+
+    if (!initialTerm || !selected) {
+      setInitialData({
+        courseSearchResults: [],
+        selectedSessionsURL: null,
+        selectedTerm,
+        availableTerms: terms,
+      });
+    }
+  }
+
   const hasInitialized = useRef(false);
 
   useEffect(() => {
     if (hasInitialized.current) return;
     hasInitialized.current = true;
 
+    if (!terms) return;
+
     const fetchInitialData = async () => {
-      const terms = await fetchTerms();
-      const initialTerm = terms.find(termData => termData.value === term);
-      const selectedTerm = initialTerm ? initialTerm : (terms[0] as Term);
-
-      if (!initialTerm || !selected) {
-        setInitialData({
-          courseSearchResults: [],
-          selectedSessionsURL: null,
-          selectedTerm,
-          availableTerms: terms,
-        });
-        return;
-      }
-
       const toFetch = Object.keys(selected).map(courseCode =>
         fetchCourse(courseCode, selectedTerm),
       );
@@ -98,22 +104,20 @@ export default function Page() {
   }, [selectedTerm, setTerm]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <App>
-        <Sidebar>
-          <SearchBar />
-          <div className="mb-4 flex gap-2">
-            <DeleteSearchResultsButton />
-            <CopyLinkButton />
-            <DownloadCalendarButton />
-          </div>
-          <SearchResults />
-        </Sidebar>
+    <App>
+      <Sidebar>
+        <SearchBar />
+        <div className="mb-4 flex gap-2">
+          <DeleteSearchResultsButton />
+          <CopyLinkButton />
+          <DownloadCalendarButton />
+        </div>
+        <SearchResults />
+      </Sidebar>
 
-        <Main>
-          <Calendar />
-        </Main>
-      </App>
-    </QueryClientProvider>
+      <Main>
+        <Calendar />
+      </Main>
+    </App>
   );
 }
