@@ -1,6 +1,7 @@
 import { ColouredCourse, Selected, SelectedSession, Term } from "@/types/Types";
 import { INITIAL_COLOURS } from "@/utils/constants";
 import { createNewSelectedSessions, shuffleArray } from "@/utils/helpers";
+import { CourseSearchResult } from "@repo/db/types";
 import { create } from "zustand";
 
 export interface InitializeDataPayload {
@@ -21,7 +22,7 @@ export type RemoveSessionPayload = SelectedSessionKey;
 interface ScheduleActions {
   setInitialData: (initialData: InitializeDataPayload) => void;
   changeTerm: (newTerm: Term) => void;
-  addCourse: (course: ColouredCourse) => void;
+  addCourse: (course: CourseSearchResult) => void;
   removeCourse: (course: ColouredCourse) => void;
   resetData: () => void;
   addSession: (session: AddSessionPayload) => void;
