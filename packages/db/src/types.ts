@@ -36,6 +36,13 @@ export type CourseDetailsInsert = {
 };
 
 export type GetCourseResult = Awaited<ReturnType<typeof getCourse>>;
+export type GetCourseResultOkValue = Exclude<
+  Awaited<ReturnType<typeof getCourse>> extends Result<infer T, unknown>
+    ? T
+    : never,
+  undefined
+>;
+
 export type CourseSearchResult =
   ReturnType<typeof processCourse> extends Result<infer T, unknown> ? T : never;
 export type Section = CourseSearchResult["sections"][string][number];
