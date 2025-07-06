@@ -22,7 +22,10 @@ import { err, ok, Result, ResultAsync } from "neverthrow";
 export async function getAvailableTerms() {
   return ResultAsync.fromPromise(
     db
-      .select()
+      .select({
+        term: availableTermsTable.term,
+        value: availableTermsTable.value,
+      })
       .from(availableTermsTable)
       .orderBy(asc(availableTermsTable.value)),
     error => new Error(`Failed to fetch available terms: ${error}`),
