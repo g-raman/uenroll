@@ -173,10 +173,13 @@ importers:
         version: 2.8.1
       ts-ics:
         specifier: ^1.6.8
-        version: 1.6.8(date-fns@4.1.0)(lodash@4.17.21)(zod@3.25.67)
+        version: 1.6.8(date-fns@4.1.0)(lodash@4.17.21)(zod@3.25.74)
       uuid:
         specifier: ^11.1.0
         version: 11.1.0
+      zod:
+        specifier: ^3.25.74
+        version: 3.25.74
       zustand:
         specifier: ^5.0.6
         version: 5.0.6(@types/react@19.1.8)(react@19.1.0)
@@ -4688,6 +4691,9 @@ packages:
   zod@3.25.67:
     resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
 
+  zod@3.25.74:
+    resolution: {integrity: sha512-J8poo92VuhKjNknViHRAIuuN6li/EwFbAC8OedzI8uxpEPGiXHGQu9wemIAioIpqgfB4SySaJhdk0mH5Y4ICBg==}
+
   zustand@5.0.6:
     resolution: {integrity: sha512-ihAqNeUVhe0MAD+X8M5UzqyZ9k3FFZLBTtqo6JLPwV53cbRB/mJwBI0PxcIgqhBBHlEs8G45OTDTMq3gNcLq3A==}
     engines: {node: '>=12.20.0'}
@@ -8760,11 +8766,11 @@ snapshots:
     dependencies:
       typescript: 5.8.3
 
-  ts-ics@1.6.8(date-fns@4.1.0)(lodash@4.17.21)(zod@3.25.67):
+  ts-ics@1.6.8(date-fns@4.1.0)(lodash@4.17.21)(zod@3.25.74):
     dependencies:
       date-fns: 4.1.0
       lodash: 4.17.21
-      zod: 3.25.67
+      zod: 3.25.74
 
   ts-interface-checker@0.1.13: {}
 
@@ -9089,6 +9095,8 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   zod@3.25.67: {}
+
+  zod@3.25.74: {}
 
   zustand@5.0.6(@types/react@19.1.8)(react@19.1.0):
     optionalDependencies:

@@ -41,6 +41,7 @@
     "rrule": "^2.8.1",
     "ts-ics": "^1.6.8",
     "uuid": "^11.1.0",
+    "zod": "^3.25.74",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
