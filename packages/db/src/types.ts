@@ -8,7 +8,7 @@ import {
   type availableTermsTable,
 } from "./schema.js";
 
-export type Term = typeof availableTermsTable.$inferSelect;
+export type Term = Omit<typeof availableTermsTable.$inferSelect, "isDeleted">;
 export type Subject = typeof availableSubjectsTable.$inferSelect;
 export type Course = typeof coursesTable.$inferSelect;
 export type CourseComponent = typeof courseComponentsTable.$inferSelect;
