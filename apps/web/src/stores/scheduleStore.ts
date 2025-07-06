@@ -1,10 +1,10 @@
-import { Course, Selected, SelectedSession, Term } from "@/types/Types";
+import { ColouredCourse, Selected, SelectedSession, Term } from "@/types/Types";
 import { INITIAL_COLOURS } from "@/utils/constants";
 import { createNewSelectedSessions, shuffleArray } from "@/utils/helpers";
 import { create } from "zustand";
 
 export interface InitializeDataPayload {
-  courseSearchResults: Course[];
+  courseSearchResults: ColouredCourse[];
   selectedSessionsURL: Selected | null;
   selectedTerm: Term | null;
   availableTerms: Term[];
@@ -21,8 +21,8 @@ export type RemoveSessionPayload = SelectedSessionKey;
 interface ScheduleActions {
   setInitialData: (initialData: InitializeDataPayload) => void;
   changeTerm: (newTerm: Term) => void;
-  addCourse: (course: Course) => void;
-  removeCourse: (course: Course) => void;
+  addCourse: (course: ColouredCourse) => void;
+  removeCourse: (course: ColouredCourse) => void;
   resetData: () => void;
   addSession: (session: AddSessionPayload) => void;
   removeSession: (session: RemoveSessionPayload) => void;
@@ -30,7 +30,7 @@ interface ScheduleActions {
 }
 
 interface ScheduleState {
-  courseSearchResults: Course[];
+  courseSearchResults: ColouredCourse[];
   selectedSessionsURL: Selected | null;
   selectedSessions: SelectedSession[];
   colours: string[];
@@ -58,7 +58,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
         const colours = [...old.colours];
         const colouredCourses = courseSearchResults.map(course => ({
           ...course,
-          colour: colours.pop(),
+          colour: colours.pop() as string,
         }));
 
         const selectedSessions = createNewSelectedSessions(
@@ -97,7 +97,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
               ...old,
               colours: restColours,
               courseSearchResults: [
-                { ...course, colour },
+                { ...course, colour: colour as string },
                 ...old.courseSearchResults,
               ],
             };

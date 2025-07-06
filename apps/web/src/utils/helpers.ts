@@ -1,11 +1,7 @@
-import {
-  Component,
-  Course,
-  Selected,
-  SelectedSession,
-  Session,
-} from "@/types/Types";
+import { ColouredCourse, Selected } from "@/types/Types";
 import { dayOfWeekToNumberMap } from "./constants";
+import { Session, Section } from "@repo/db/types";
+import { getCourse, processCourse } from "@repo/db/queries";
 
 export const shuffleArray = (array: string[]) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -17,8 +13,8 @@ export const shuffleArray = (array: string[]) => {
 
 export const createSession = (
   session: Session,
-  component: Component,
-  course: Course,
+  component: Section,
+  course: ColouredCourse,
 ) => ({
   startTime: session.startTime.slice(0, -3),
   endTime: session.endTime.slice(0, -3),
@@ -30,7 +26,7 @@ export const createSession = (
     courseCode: course.courseCode,
     courseTitle: course.courseTitle,
     term: course.term,
-    subSection: component.subSection,
+    subSection: component.subSection as string,
     instructor: session.instructor,
     type: component.type,
     isOpen: component.isOpen,
@@ -38,31 +34,33 @@ export const createSession = (
 });
 
 const isSelected = (
-  component: Component,
-  course: Course,
+  subSection: Section,
+  course: ColouredCourse,
   selected: Selected,
 ) => {
   if (!selected) return false;
   if (!selected[course.courseCode]) return false;
 
   return selected[course.courseCode]?.some(
-    (section: string) => component.subSection === section,
+    (section: string) => subSection.subSection === section,
   );
 };
 
 export const createNewSelectedSessions = (
-  courses: Course[],
+  courses: ColouredCourse[],
   selected: Selected | null,
-): SelectedSession[] => {
+) => {
   if (selected === null) return [];
 
   return courses.flatMap(course =>
-    course.sections.flatMap(section =>
-      section.components.flatMap(component =>
-        component.sessions
-          .filter(() => isSelected(component, course, selected))
-          .map(session => createSession(session, component, course)),
-      ),
+    Object.values(course.sections).flatMap(section =>
+      section
+        .filter(subSection => isSelected(subSection, course, selected))
+        .flatMap(subSection =>
+          subSection.sessions.map(session =>
+            createSession(session, subSection, course),
+          ),
+        ),
     ),
   );
 };
