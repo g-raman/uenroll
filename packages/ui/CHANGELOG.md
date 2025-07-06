@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 0.3.1
+
+### Patch Changes
+
+- [#108](https://github.com/g-raman/uenroll/pull/108) [`023f3e6`](https://github.com/g-raman/uenroll/commit/023f3e639543f460af67434d69575341e2bdc04d) Thanks [@g-raman](https://github.com/g-raman)! - Used shadcn skeleton for term selector and adjusted accent colour
+
 ## 0.3.0
 
 ### Minor Changes
