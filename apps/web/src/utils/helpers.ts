@@ -1,7 +1,6 @@
 import { ColouredCourse, Selected } from "@/types/Types";
 import { dayOfWeekToNumberMap } from "./constants";
 import { Session, Section } from "@repo/db/types";
-import { getCourse, processCourse } from "@repo/db/queries";
 
 export const shuffleArray = (array: string[]) => {
   for (let i = array.length - 1; i > 0; i--) {
