@@ -16,6 +16,9 @@ export default function SearchBar() {
   const courseSearchResults = useCourseSearchResults();
   const { addCourse } = useScheduleActions();
 
+  const [query, setQuery] = useState("");
+  const [selectedValue, setSelectedValue] = useState("");
+
   const { refetch } = trpc.getCourse.useQuery(
     { term: selectedTerm?.value, courseCode: selectedValue },
     { enabled: false },
@@ -26,8 +29,15 @@ export default function SearchBar() {
     { staleTime: Infinity },
   );
 
-  const [query, setQuery] = useState("");
-  const [selectedValue, setSelectedValue] = useState("");
+  const autocompleteItems = dataAllCourses
+    ? dataAllCourses.map((course, index) => {
+        return {
+          label: `${course.courseCode} ${course.courseTitle}`,
+          value: course.courseCode,
+          id: `${index}`,
+        };
+      })
+    : [];
 
   const performSearch = useCallback(async () => {
     const { data, error, isSuccess } = await refetch();
@@ -67,17 +77,7 @@ export default function SearchBar() {
           onSearchValueChange={setQuery}
           placeholder="Course Code or Course Name..."
           emptyMessage="No Courses Found..."
-          items={
-            dataAllCourses
-              ? dataAllCourses.map((course, index) => {
-                  return {
-                    label: `${course.courseCode} ${course.courseTitle}`,
-                    value: course.courseCode,
-                    id: `${index}`,
-                  };
-                })
-              : []
-          }
+          items={autocompleteItems}
         />
       </div>
     </div>
