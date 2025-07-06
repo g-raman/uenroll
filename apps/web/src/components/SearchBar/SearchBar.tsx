@@ -1,39 +1,33 @@
-import { useQuery } from "@tanstack/react-query";
 import React, { useCallback, useEffect, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
 import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
-import { fetchAllCourses, fetchCourse } from "@/utils/fetchData";
 import { AutoComplete } from "@repo/ui/components/autocomplete";
 import {
   useCourseSearchResults,
   useScheduleActions,
   useSelectedTerm,
 } from "@/stores/scheduleStore";
-import { CourseSearchResult } from "@repo/db/types";
+import { Term } from "@repo/db/types";
+import { trpc } from "@/app/_trpc/client";
 
 export default function SearchBar() {
-  const selectedTerm = useSelectedTerm();
+  const selectedTerm = useSelectedTerm() as Term;
   const courseSearchResults = useCourseSearchResults();
   const { addCourse } = useScheduleActions();
 
+  const { refetch } = trpc.getCourse.useQuery(
+    { term: selectedTerm?.value, courseCode: selectedValue },
+    { enabled: false },
+  );
+
+  const { data: dataAllCourses } = trpc.getAvailableCoursesByTerm.useQuery(
+    { term: selectedTerm?.value },
+    { staleTime: Infinity },
+  );
+
   const [query, setQuery] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
-
-  const { refetch } = useQuery<CourseSearchResult>({
-    queryKey: ["courses", selectedValue, selectedTerm],
-    queryFn: () => fetchCourse(selectedValue, selectedTerm),
-    enabled: false,
-    retry: false,
-    networkMode: "online",
-    gcTime: 1_800_000, // 30 minutes
-  });
-
-  const { data: dataAllCourses } = useQuery({
-    queryKey: ["courses", selectedTerm],
-    queryFn: () => fetchAllCourses(selectedTerm),
-    staleTime: Infinity,
-  });
 
   const performSearch = useCallback(async () => {
     const { data, error, isSuccess } = await refetch();
