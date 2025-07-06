@@ -12,7 +12,16 @@ export type Term = typeof availableTermsTable.$inferSelect;
 export type Subject = typeof availableSubjectsTable.$inferSelect;
 export type Course = typeof coursesTable.$inferSelect;
 export type CourseComponent = typeof courseComponentsTable.$inferSelect;
-export type Session = typeof sessionsTable.$inferSelect;
+export type Session = Omit<
+  typeof sessionsTable.$inferSelect,
+  | "term"
+  | "courseCode"
+  | "section"
+  | "subSection"
+  | "id"
+  | "isDeleted"
+  | "last_updated"
+>;
 
 export type TermInsert = typeof availableTermsTable.$inferInsert;
 export type SubjectInsert = typeof availableSubjectsTable.$inferInsert;
