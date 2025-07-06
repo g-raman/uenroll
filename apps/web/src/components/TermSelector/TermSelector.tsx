@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@repo/ui/components/select";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 export default function TermSelector() {
   const availableTerms = useAvailableTerms();
@@ -27,7 +28,7 @@ export default function TermSelector() {
   return (
     <>
       {availableTerms.length === 0 ? (
-        <div className="rounded-xs h-8 animate-pulse border border-slate-400 bg-slate-200 p-2"></div>
+        <Skeleton className="h-8 w-full" />
       ) : (
         <Select
           defaultValue={selectedTerm ? JSON.stringify(selectedTerm) : ""}
