@@ -1,5 +1,23 @@
 # web
 
+## 0.9.0
+
+### Minor Changes
+
+- [#107](https://github.com/g-raman/uenroll/pull/107) [`dbf5bcc`](https://github.com/g-raman/uenroll/commit/dbf5bccb615212c76c4ce09713c18c792d6dbfe6) Thanks [@g-raman](https://github.com/g-raman)! - Used drizzle for get course query instead of raw sql. Migrated get course query to db package
+
+- [#102](https://github.com/g-raman/uenroll/pull/102) [`465173c`](https://github.com/g-raman/uenroll/commit/465173c731d39bb32b6c6a8a2940971003803ca8) Thanks [@g-raman](https://github.com/g-raman)! - Migrated react context to zustand
+
+- [#106](https://github.com/g-raman/uenroll/pull/106) [`0306479`](https://github.com/g-raman/uenroll/commit/03064794f717c007f20d39291968c157174d4020) Thanks [@g-raman](https://github.com/g-raman)! - Added neverthrow for better error handling
+
+- [#104](https://github.com/g-raman/uenroll/pull/104) [`f67b5b3`](https://github.com/g-raman/uenroll/commit/f67b5b346b87670b189cf9151b1531538b59e534) Thanks [@g-raman](https://github.com/g-raman)! - Migrated all db queries to db package
+
+### Patch Changes
+
+- [#105](https://github.com/g-raman/uenroll/pull/105) [`d28b0f8`](https://github.com/g-raman/uenroll/commit/d28b0f8ddfb75d70cf82b311201f8f01095c13ee) Thanks [@g-raman](https://github.com/g-raman)! - Fixed error with courses with unknown dates
+
+- [#108](https://github.com/g-raman/uenroll/pull/108) [`023f3e6`](https://github.com/g-raman/uenroll/commit/023f3e639543f460af67434d69575341e2bdc04d) Thanks [@g-raman](https://github.com/g-raman)! - Used shadcn skeleton for term selector and adjusted accent colour
+
 ## 0.8.1
 
 ### Patch Changes
