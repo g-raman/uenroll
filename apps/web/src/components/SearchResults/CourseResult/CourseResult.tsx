@@ -1,4 +1,4 @@
-import { Course } from "@/types/Types";
+import { ColouredCourse } from "@/types/Types";
 import { SectionResult } from "../SectionResult/SectionResult";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -16,7 +16,7 @@ import {
 import { useScheduleActions } from "@/stores/scheduleStore";
 
 interface CourseResultProps {
-  course: Course;
+  course: ColouredCourse;
   openResults: string[];
 }
 
@@ -50,13 +50,18 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
 
       <AccordionContent className="p-0">
         <Accordion type="multiple" className="overflow-hidden rounded-b-sm">
-          {course.sections.map(section => {
+          {Object.entries(course.sections).map(section => {
+            const [sectionKey, sectionInfo] = section;
             return (
               <AccordionItem
-                value={`${course.courseCode}${section.section}`}
-                key={`${course.courseCode}${section.section}`}
+                value={`${course.courseCode}${sectionKey}`}
+                key={`${course.courseCode}${sectionKey}`}
               >
-                <SectionResult section={section} course={course} />
+                <SectionResult
+                  section={sectionKey}
+                  sectionInfo={sectionInfo}
+                  course={course}
+                />
               </AccordionItem>
             );
           })}

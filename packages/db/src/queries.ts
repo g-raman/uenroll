@@ -1,4 +1,4 @@
-import { eq, asc, sql, lt, notInArray, inArray } from "drizzle-orm";
+import { eq, and, asc, sql, lt, notInArray, inArray } from "drizzle-orm";
 import { db } from "./index.js";
 import {
   availableSubjectsTable,
@@ -11,6 +11,7 @@ import type {
   CourseComponentInsert,
   CourseDetailsInsert,
   CourseInsert,
+  GetCourseResult,
   SessionInsert,
   SubjectInsert,
   Term,
@@ -189,4 +190,100 @@ export const removeCoursesWithNoSessions = async () => {
       .where(notInArray(coursesTable.courseCode, coursesWithSessions)),
     error => new Error(`Failed to remove courses with no sessions: ${error}`),
   );
+};
+
+export const getCourse = async (term: string, courseCode: string) => {
+  return await ResultAsync.fromPromise(
+    db.query.coursesTable.findFirst({
+      where: and(
+        eq(coursesTable.term, term),
+        eq(coursesTable.courseCode, courseCode),
+      ),
+      columns: {
+        isDeleted: false,
+      },
+      with: {
+        courseComponents: {
+          where: eq(courseComponentsTable.term, term),
+          orderBy: courseComponentsTable.subSection,
+          columns: {
+            courseCode: false,
+            term: false,
+            isDeleted: false,
+          },
+          with: {
+            sessions: {
+              where: (sessions, { and, eq }) =>
+                and(
+                  eq(sessions.term, term),
+                  eq(sessions.courseCode, courseComponentsTable.courseCode),
+                  eq(sessions.subSection, courseComponentsTable.subSection),
+                  eq(
+                    sessions.last_updated,
+                    sql`(
+                    SELECT MAX(last_updated)
+                    FROM sessions
+                    WHERE term = ${term}
+                      AND course_code = ${courseComponentsTable.courseCode}
+                      AND sub_section = ${courseComponentsTable.subSection}
+                  )`,
+                  ),
+                ),
+              columns: {
+                id: false,
+                section: false,
+                subSection: false,
+                courseCode: false,
+                term: false,
+                isDeleted: false,
+                last_updated: false,
+              },
+              orderBy: sql`CASE
+                WHEN ${sessionsTable.dayOfWeek} = 'Mo' THEN 1
+                WHEN ${sessionsTable.dayOfWeek} = 'Tu' THEN 2
+                WHEN ${sessionsTable.dayOfWeek} = 'We' THEN 3
+                WHEN ${sessionsTable.dayOfWeek} = 'Th' THEN 4
+                WHEN ${sessionsTable.dayOfWeek} = 'Fr' THEN 5
+                WHEN ${sessionsTable.dayOfWeek} = 'Sa' THEN 6
+                WHEN ${sessionsTable.dayOfWeek} = 'Su' THEN 7
+                ELSE 8
+              END
+            `,
+            },
+          },
+        },
+      },
+    }),
+    error =>
+      new Error(`Failed to fetch course ${courseCode} in ${term}: ${error}`),
+  );
+};
+
+export const processCourse = (course: GetCourseResult) => {
+  return course.andThen(result => {
+    if (!result) {
+      return err(new Error(`Course not found`));
+    }
+
+    const parsedSections = result.courseComponents.reduce(
+      (acc, curr) => {
+        if (!acc[curr.section]) {
+          acc[curr.section] = [curr];
+        } else {
+          acc[curr.section]?.push(curr);
+        }
+        return acc;
+      },
+      {} as Record<string, typeof result.courseComponents>,
+    );
+
+    const parsed = {
+      courseCode: result.courseCode,
+      courseTitle: result.courseTitle,
+      term: result.term,
+      sections: parsedSections,
+    };
+
+    return ok(parsed);
+  });
 };

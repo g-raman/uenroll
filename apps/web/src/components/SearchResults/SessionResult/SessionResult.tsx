@@ -1,4 +1,4 @@
-import { Session } from "@/types/Types";
+import { Session } from "@repo/db/types";
 import moment from "moment";
 import React from "react";
 

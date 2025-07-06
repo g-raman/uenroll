@@ -1,44 +1,12 @@
-export interface Course {
-  courseCode: string;
-  courseTitle: string;
-  term: string;
-  sections: Section[];
-  colour?: string;
-}
+import { CourseSearchResult } from "@repo/db/types";
 
-export interface Section {
-  section: string;
-  components: Component[];
-}
-
-export interface Component {
-  type: string;
-  isOpen: boolean;
-  subSection: string;
-  isSelected: boolean;
-  sessions: Session[];
-}
-
-export interface Session {
-  endDate: string;
-  endTime: string;
-  dayOfWeek: string;
-  startDate: string;
-  startTime: string;
-  instructor: string;
+export interface ColouredCourse extends CourseSearchResult {
+  colour: string;
 }
 
 export interface Term {
   term: string;
   value: string;
-}
-
-export interface SelectedCourse extends Component {
-  courseCode: string;
-  courseTitle: string;
-  term: string;
-  subSection: string;
-  colour: string;
 }
 
 export interface SelectedSession {

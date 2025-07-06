@@ -1,4 +1,3 @@
-import { Course } from "@/types/Types";
 import { useQuery } from "@tanstack/react-query";
 import React, { useCallback, useEffect, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
@@ -11,6 +10,7 @@ import {
   useScheduleActions,
   useSelectedTerm,
 } from "@/stores/scheduleStore";
+import { CourseSearchResult } from "@repo/db/types";
 
 export default function SearchBar() {
   const selectedTerm = useSelectedTerm();
@@ -20,7 +20,7 @@ export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
 
-  const { refetch } = useQuery<Course>({
+  const { refetch } = useQuery<CourseSearchResult>({
     queryKey: ["courses", selectedValue, selectedTerm],
     queryFn: () => fetchCourse(selectedValue, selectedTerm),
     enabled: false,

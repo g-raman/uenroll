@@ -1,10 +1,11 @@
-import { Course, Selected, SelectedSession, Term } from "@/types/Types";
+import { ColouredCourse, Selected, SelectedSession, Term } from "@/types/Types";
 import { INITIAL_COLOURS } from "@/utils/constants";
 import { createNewSelectedSessions, shuffleArray } from "@/utils/helpers";
+import { CourseSearchResult } from "@repo/db/types";
 import { create } from "zustand";
 
 export interface InitializeDataPayload {
-  courseSearchResults: Course[];
+  courseSearchResults: ColouredCourse[];
   selectedSessionsURL: Selected | null;
   selectedTerm: Term | null;
   availableTerms: Term[];
@@ -21,8 +22,8 @@ export type RemoveSessionPayload = SelectedSessionKey;
 interface ScheduleActions {
   setInitialData: (initialData: InitializeDataPayload) => void;
   changeTerm: (newTerm: Term) => void;
-  addCourse: (course: Course) => void;
-  removeCourse: (course: Course) => void;
+  addCourse: (course: CourseSearchResult) => void;
+  removeCourse: (course: ColouredCourse) => void;
   resetData: () => void;
   addSession: (session: AddSessionPayload) => void;
   removeSession: (session: RemoveSessionPayload) => void;
@@ -30,7 +31,7 @@ interface ScheduleActions {
 }
 
 interface ScheduleState {
-  courseSearchResults: Course[];
+  courseSearchResults: ColouredCourse[];
   selectedSessionsURL: Selected | null;
   selectedSessions: SelectedSession[];
   colours: string[];
@@ -56,9 +57,10 @@ const useScheduleStore = create<ScheduleState>(set => ({
           selectedSessionsURL,
         } = initialData;
         const colours = [...old.colours];
+        const newColour = colours.pop() || "";
         const colouredCourses = courseSearchResults.map(course => ({
           ...course,
-          colour: colours.pop(),
+          colour: newColour,
         }));
 
         const selectedSessions = createNewSelectedSessions(
@@ -90,6 +92,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
           result => result.courseCode === course.courseCode,
         );
         const [colour, ...restColours] = old.colours;
+        const newColour = colour || "";
 
         return isAlreadyAdded
           ? old
@@ -97,7 +100,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
               ...old,
               colours: restColours,
               courseSearchResults: [
-                { ...course, colour },
+                { ...course, colour: newColour },
                 ...old.courseSearchResults,
               ],
             };
@@ -115,7 +118,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
           return {
             ...old,
             courseSearchResults: filteredCourses,
-            colours: [...old.colours, course.colour as string],
+            colours: [...old.colours, course.colour],
           };
         }
         const selectedSessionsURL = { ...old.selectedSessionsURL };
@@ -127,7 +130,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
             courseSearchResults: filteredCourses,
             selectedSessionsURL: null,
             selectedSessions: [],
-            colours: [...old.colours, course.colour as string],
+            colours: [...old.colours, course.colour],
           };
         }
 
@@ -141,7 +144,7 @@ const useScheduleStore = create<ScheduleState>(set => ({
           courseSearchResults: filteredCourses,
           selectedSessionsURL,
           selectedSessions,
-          colours: [...old.colours, course.colour as string],
+          colours: [...old.colours, course.colour],
         };
       }),
     resetData: () =>

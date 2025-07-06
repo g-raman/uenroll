@@ -1,14 +1,15 @@
-import { Component, Course } from "@/types/Types";
+import { ColouredCourse } from "@/types/Types";
 import { SessionResult } from "../SessionResult/SessionResult";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import {
   useScheduleActions,
   useSelectedSessionsURL,
 } from "@/stores/scheduleStore";
+import { Section } from "@repo/db/types";
 
 interface ComponentResultProps {
-  component: Component;
-  course: Course;
+  component: Section;
+  course: ColouredCourse;
   section: string;
   subSection: string;
 }
