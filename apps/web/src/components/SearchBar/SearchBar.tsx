@@ -26,6 +26,7 @@ export default function SearchBar() {
     enabled: false,
     retry: false,
     networkMode: "online",
+    gcTime: 1_800_000, // 30 minutes
   });
 
   const { data: dataAllCourses } = useQuery({
