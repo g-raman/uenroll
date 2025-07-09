@@ -9,7 +9,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 export const appRouter = router({
-  getCourse: publicProcedure
+  getCourseByTermAndCourseCode: publicProcedure
     .input(
       z.object({
         term: z.string(),
@@ -29,7 +29,7 @@ export const appRouter = router({
 
       return processedCourse.value;
     }),
-  getTerms: publicProcedure.query(async () => {
+  getAvailableTerms: publicProcedure.query(async () => {
     const terms = await getAvailableTerms();
 
     if (terms.isErr()) {

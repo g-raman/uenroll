@@ -16,7 +16,9 @@ import { useQuery } from "@tanstack/react-query";
 export default function TermSelector() {
   const [selectedTerm, setSelectedTerm] = useTermParam();
   const [, setData] = useDataParam();
-  const { data: availableTerms } = useQuery(trpc.getTerms.queryOptions());
+  const { data: availableTerms } = useQuery(
+    trpc.getAvailableTerms.queryOptions(),
+  );
 
   function handleChangeTerm(term: string) {
     setSelectedTerm(term);

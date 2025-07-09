@@ -14,7 +14,9 @@ export default function SearchResults() {
   const [data, setData] = useDataParam();
   const [selectedTerm, setSelectedTerm] = useTermParam();
 
-  const { data: availableTerms } = useQuery(trpc.getTerms.queryOptions());
+  const { data: availableTerms } = useQuery(
+    trpc.getAvailableTerms.queryOptions(),
+  );
   const [openResults, setOpenResults] = useState<string[]>([]);
 
   const courseCodes = Object.keys(data ? data : {});

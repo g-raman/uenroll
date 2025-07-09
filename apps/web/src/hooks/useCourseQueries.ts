@@ -11,7 +11,7 @@ export const useCourseQueries = (
   const { getColour } = useColoursActions();
   const courseQueries = useQueries({
     queries: courseCodes.map(courseCode =>
-      trpc.getCourse.queryOptions(
+      trpc.getCourseByTermAndCourseCode.queryOptions(
         { term, courseCode },
         {
           staleTime: COURSE_STALE_TIME,

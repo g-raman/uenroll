@@ -34,7 +34,7 @@ export default function SearchBar() {
     isSuccess,
     isError,
   } = useQuery(
-    trpc.getCourse.queryOptions(
+    trpc.getCourseByTermAndCourseCode.queryOptions(
       { term: selectedTerm, courseCode: selectedValue },
       {
         enabled: !!selectedValue && !maxResultsReached,
