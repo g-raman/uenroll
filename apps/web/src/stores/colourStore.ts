@@ -4,28 +4,52 @@ import { create } from "zustand";
 
 interface ColoursState {
   colours: string[];
+  colourMap: Record<string, string>;
   actions: ColoursActions;
 }
 
 interface ColoursActions {
-  removeColour: () => string;
-  addColour: (colour: string) => void;
+  getColour: (course: string) => string;
+  addColour: (course: string, colour: string) => void;
 }
 
 const useColoursStore = create<ColoursState>(set => ({
   colours: shuffleArray(INITIAL_COLOURS),
+  colourMap: {},
   actions: {
-    removeColour: () => {
+    getColour: course => {
       let removedColour = "";
       set(old => {
+        const isMapped = Object.keys(old.colourMap).some(
+          mappedCourse => mappedCourse === course,
+        );
+
+        if (isMapped) {
+          removedColour = old.colourMap[course] as string;
+          return old;
+        }
+
         const [removed, ...restColours] = old.colours;
         removedColour = removed || "";
-        return { ...old, restColours };
+        const newColourMap = { ...old.colourMap };
+        newColourMap[course] = removedColour;
+
+        return {
+          ...old,
+          colours: restColours,
+          colourMap: newColourMap,
+        };
       });
       return removedColour;
     },
-    addColour: colour =>
-      set(old => ({ ...old, colours: [...old.colours, colour] })),
+    addColour: (course, colour) =>
+      set(old => {
+        const newColours = [...old.colours, colour];
+        const newColourMap = { ...old.colourMap };
+        delete newColourMap[course];
+
+        return { ...old, colours: newColours, colourMap: newColourMap };
+      }),
   },
 }));
 
