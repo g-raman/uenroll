@@ -3,6 +3,14 @@ import { dayOfWeekToNumberMap } from "./constants";
 import { Session, Section } from "@repo/db/types";
 import dayjs from "dayjs";
 import { datetime, RRule } from "rrule";
+import { VEvent } from "ts-ics";
+import { v4 } from "uuid";
+
+type EventCreationFunction<T> = (
+  session: Session,
+  component: Section,
+  course: ColouredCourse,
+) => T;
 
 const DATE_FORMAT = "YYYY-MM-DD";
 const createCalendarEvent = (
@@ -53,6 +61,41 @@ const createCalendarEvent = (
   };
 };
 
+export const createDownloadableCalendarEvent = (
+  session: Session,
+  component: Section,
+  course: ColouredCourse,
+) => {
+  const parsedStartTime = session.startTime.slice(0, -3);
+  const parsedEndTime = session.endTime.slice(0, -3);
+
+  const baseStartTime = dayjs(`${session.startDate} ${parsedStartTime}`);
+  const baseEndTime = dayjs(`${session.startDate} ${parsedEndTime}`);
+  const dayOfWeek = dayOfWeekToNumberMap[session.dayOfWeek] as number;
+  const dayOffset = Math.abs(baseStartTime.get("d") - dayOfWeek);
+
+  const startTime = baseStartTime.add(dayOffset, "days");
+  const endTime = baseEndTime.add(dayOffset, "days");
+
+  const recurrenceUntil = dayjs(
+    `${session.endDate} ${session.endTime.slice(0, -3)}`,
+  );
+
+  const event: VEvent = {
+    uid: v4(),
+    stamp: { date: new Date() },
+    start: { date: startTime.toDate() },
+    end: { date: endTime.toDate() },
+    recurrenceRule: {
+      frequency: "WEEKLY",
+      until: { date: recurrenceUntil.toDate() },
+    },
+    summary: `${course.courseCode} ${course.courseTitle} - ${component.type}`,
+  };
+
+  return event;
+};
+
 const isSelected = (
   subSection: Section,
   course: ColouredCourse,
@@ -66,10 +109,11 @@ const isSelected = (
   );
 };
 
-export const createCalendarEvents = (
+const createCalendarEvents = <T>(
   courses: ColouredCourse[],
   selected: Selected | null,
-) => {
+  mappingFunction: EventCreationFunction<T>,
+): T[] => {
   if (selected === null) return [];
 
   return courses.flatMap(course =>
@@ -79,8 +123,26 @@ export const createCalendarEvents = (
         .flatMap(subSection =>
           subSection.sessions
             .filter(session => session.dayOfWeek !== "N/A")
-            .map(session => createCalendarEvent(session, subSection, course)),
+            .map(session => mappingFunction(session, subSection, course)),
         ),
     ),
+  );
+};
+
+export const createCalendarAppEvents = (
+  courses: ColouredCourse[],
+  selected: Selected | null,
+) => {
+  return createCalendarEvents(courses, selected, createCalendarEvent);
+};
+
+export const createDownloadableCalendarEvents = (
+  courses: ColouredCourse[],
+  selected: Selected | null,
+) => {
+  return createCalendarEvents(
+    courses,
+    selected,
+    createDownloadableCalendarEvent,
   );
 };
