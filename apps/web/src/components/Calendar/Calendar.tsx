@@ -24,7 +24,7 @@ function Calendar() {
   const courseQueries = useCourseQueries(
     selectedTerm,
     courseCodes,
-    courseCodes.length >= 0,
+    courseCodes.length > 0,
   );
 
   const courseSearchResults = courseQueries

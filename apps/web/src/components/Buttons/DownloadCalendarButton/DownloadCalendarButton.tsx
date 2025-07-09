@@ -21,7 +21,7 @@ export default function DownloadCalendarButton() {
   const courseQueries = useCourseQueries(
     selectedTerm,
     courseCodes,
-    courseCodes.length >= 0,
+    courseCodes.length > 0,
   );
 
   const hasAnySelectedSessions = Object.values(data ? data : {}).some(

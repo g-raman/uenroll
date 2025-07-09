@@ -24,7 +24,7 @@ export default function SearchResults() {
   const courseQueries = useCourseQueries(
     selectedTerm,
     courseCodes,
-    courseCodes.length >= 0,
+    courseCodes.length > 0,
   );
 
   if (
