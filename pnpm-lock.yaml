@@ -190,6 +190,9 @@ importers:
       '@repo/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@repo/env':
+        specifier: workspace:*
+        version: link:../../packages/env
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config

@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "@repo/db": "workspace:*",
+    "@repo/env": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/ui": "workspace:*",
