@@ -7,15 +7,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
-import React from "react";
+import React, { useCallback } from "react";
 
 export const DeleteSearchResultsButton = () => {
   const [data, setData] = useDataParam();
   const courseCodes = Object.keys(data ? data : {});
 
-  function handleClick() {
+  const handleClick = useCallback(() => {
     setData(null);
-  }
+  }, [setData]);
 
   return (
     <Tooltip>

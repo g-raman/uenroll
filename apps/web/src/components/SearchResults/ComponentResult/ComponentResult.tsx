@@ -3,6 +3,7 @@ import { SessionResult } from "../SessionResult/SessionResult";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { Section } from "@repo/db/types";
 import { useDataParam } from "@/hooks/useDataParam";
+import { useCallback } from "react";
 
 interface ComponentResultProps {
   component: Section;
@@ -20,7 +21,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   const { courseCode } = course;
   const isSelected = Boolean(data[courseCode]?.includes(subSection));
 
-  function addSession() {
+  const addSession = useCallback(() => {
     const { courseCode } = course;
     if (
       data &&
@@ -39,9 +40,9 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
     }
 
     setData(newSelected);
-  }
+  }, [course, data, setData, subSection]);
 
-  function removeSession() {
+  const removeSession = useCallback(() => {
     const { courseCode } = course;
 
     if (data === null) return;
@@ -60,15 +61,15 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
     }
 
     setData(data);
-  }
+  }, [course, data, setData, subSection]);
 
-  function handleToggle() {
+  const handleToggle = useCallback(() => {
     if (isSelected) {
       removeSession();
       return;
     }
     addSession();
-  }
+  }, [addSession, isSelected, removeSession]);
 
   return (
     <div className="flex h-full w-full items-center justify-between border-x border-b md:text-xs">

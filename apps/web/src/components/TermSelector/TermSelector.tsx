@@ -12,6 +12,7 @@ import {
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 export default function TermSelector() {
   const [selectedTerm, setSelectedTerm] = useTermParam();
@@ -20,10 +21,13 @@ export default function TermSelector() {
     trpc.getAvailableTerms.queryOptions(),
   );
 
-  function handleChangeTerm(term: string) {
-    setSelectedTerm(term);
-    setData(null);
-  }
+  const handleChangeTerm = useCallback(
+    (term: string) => {
+      setSelectedTerm(term);
+      setData(null);
+    },
+    [setData, setSelectedTerm],
+  );
 
   return (
     <>

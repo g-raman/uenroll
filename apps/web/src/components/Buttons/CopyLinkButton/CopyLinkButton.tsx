@@ -13,7 +13,7 @@ import {
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import { ResultAsync } from "neverthrow";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
 export const CopyLinkButton = () => {
@@ -33,7 +33,7 @@ export const CopyLinkButton = () => {
     value => value.length > 0,
   );
 
-  async function handleClick() {
+  const handleClick = useCallback(async () => {
     const clipboardAppendResult = await ResultAsync.fromPromise(
       navigator.clipboard.writeText(
         `${envClient.NEXT_PUBLIC_BASE_URL}/?term=${selectedTerm}&data=${serialized}`,
@@ -47,7 +47,7 @@ export const CopyLinkButton = () => {
     }
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
-  }
+  }, [selectedTerm, serialized]);
 
   return (
     <Tooltip>

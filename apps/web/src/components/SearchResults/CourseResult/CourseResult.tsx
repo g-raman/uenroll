@@ -15,6 +15,7 @@ import {
 } from "@repo/ui/components/tooltip";
 import { useColoursActions } from "@/stores/colourStore";
 import { useDataParam } from "@/hooks/useDataParam";
+import { useCallback } from "react";
 
 interface CourseResultProps {
   course: ColouredCourse;
@@ -25,7 +26,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
   const { addColour } = useColoursActions();
   const [data, setData] = useDataParam();
 
-  function removeCourse() {
+  const removeCourse = useCallback(() => {
     if (data === null || !data[course.courseCode]) {
       return;
     }
@@ -34,7 +35,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
 
     setData(Object.keys(newData).length === 0 ? null : newData);
     addColour(course.courseCode, course.colour);
-  }
+  }, [addColour, course.colour, course.courseCode, data, setData]);
 
   return (
     <>

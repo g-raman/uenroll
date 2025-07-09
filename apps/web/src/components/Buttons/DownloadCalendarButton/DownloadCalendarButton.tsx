@@ -10,7 +10,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
-import React from "react";
+import React, { useCallback } from "react";
 import { generateIcsCalendar } from "ts-ics";
 
 export default function DownloadCalendarButton() {
@@ -32,7 +32,7 @@ export default function DownloadCalendarButton() {
     .filter(query => query.isSuccess)
     .map(query => query.data);
 
-  async function handleDownload() {
+  const handleDownload = useCallback(async () => {
     const events = createDownloadableCalendarEvents(courseSearchResults, data);
     const calendar = generateIcsCalendar({
       version: "2.0",
@@ -52,7 +52,7 @@ export default function DownloadCalendarButton() {
     document.body.removeChild(anchor);
 
     URL.revokeObjectURL(url);
-  }
+  }, [courseSearchResults, data]);
 
   return (
     <Tooltip>
