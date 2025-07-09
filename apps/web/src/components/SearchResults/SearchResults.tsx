@@ -4,11 +4,51 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, AccordionItem } from "@repo/ui/components/accordion";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useCourseSearchResults } from "@/stores/scheduleStore";
+import { useQuery } from "@tanstack/react-query";
+import { trpc } from "@/app/_trpc/client";
+import { useColoursActions } from "@/stores/colourStore";
+import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
+import { useCourseQueries } from "@/hooks/useCourseQueries";
+import { useTermParam } from "@/hooks/useTermParam";
 
 export default function SearchResults() {
+  const [selected, setSelected] = useSelectedSessionsURL();
+  const [selectedTerm, setSelectedTerm] = useTermParam();
+
+  const { data: availableTerms } = useQuery(trpc.getTerms.queryOptions());
   const [openResults, setOpenResults] = useState<string[]>([]);
-  const courseSearchResults = useCourseSearchResults();
+  const { getColour } = useColoursActions();
+
+  const courseCodes = Object.keys(selected ? selected : {});
+
+  const courseQueries = useCourseQueries(
+    selectedTerm,
+    courseCodes,
+    courseCodes.length >= 0,
+  );
+
+  if (!availableTerms || availableTerms.length === 0) {
+    return <div>Loading...</div>;
+  }
+  const termInUrl = availableTerms.find(
+    availableTerm => availableTerm.value === selectedTerm,
+  );
+
+  if (!termInUrl) {
+    setSelectedTerm(availableTerms[0]?.value as string);
+    setSelected({});
+  }
+
+  const courseSearchResults = courseQueries
+    .filter(query => query.isSuccess)
+    .map(query => ({
+      ...query.data,
+      colour: getColour(query.data.courseCode),
+    }));
+
+  if (courseQueries.some(query => query.isLoading)) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="overflow-y-scroll">
