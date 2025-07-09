@@ -6,25 +6,37 @@ import { createEventsServicePlugin } from "@schedule-x/events-service";
 
 import "@schedule-x/theme-shadcn/dist/index.css";
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
 import { createEventRecurrencePlugin } from "@schedule-x/event-recurrence";
-import { datetime, RRule } from "rrule";
 import { createCalendarControlsPlugin } from "@schedule-x/calendar-controls";
 import CalendarEvent from "./CalendarEvent/CalendarEvent";
 import { createEventModalPlugin } from "@schedule-x/event-modal";
 import CalendarEventModal from "./CalendarEventModal/CalendarEventModal";
 import { useTheme } from "next-themes";
-import { useSelectedSessions, useSelectedTerm } from "@/stores/scheduleStore";
+import { useTermParam } from "@/hooks/useTermParam";
+import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
+import { useCourseQueries } from "@/hooks/useCourseQueries";
+import { createCalendarEvents } from "@/utils/calendarEvents";
 
-const DATE_FORMAT = "YYYY-MM-DD";
 function Calendar() {
-  const selectedTerm = useSelectedTerm();
-  const selectedSessions = useSelectedSessions();
+  const [selectedTerm] = useTermParam();
+  const [selected] = useSelectedSessionsURL();
+  const courseCodes = Object.keys(selected ? selected : {});
+  const courseQueries = useCourseQueries(
+    selectedTerm,
+    courseCodes,
+    courseCodes.length >= 0,
+  );
 
-  const eventsService = useState(() => createEventsServicePlugin())[0];
-  const eventRecurrence = useState(() => createEventRecurrencePlugin())[0];
-  const eventModal = useState(() => createEventModalPlugin())[0];
-  const calendarControls = useState(() => createCalendarControlsPlugin())[0];
+  const courseSearchResults = courseQueries
+    .filter(query => query.isSuccess)
+    .map(query => query.data);
+
+  const events = createCalendarEvents(courseSearchResults, selected);
+
+  const [eventsService] = useState(() => createEventsServicePlugin());
+  const [eventRecurrence] = useState(() => createEventRecurrencePlugin());
+  const [eventModal] = useState(() => createEventModalPlugin());
+  const [calendarControls] = useState(() => createCalendarControlsPlugin());
   const plugins = [
     eventsService,
     eventRecurrence,
@@ -43,6 +55,17 @@ function Calendar() {
         end: "23:00",
       },
       callbacks: {
+        onRender: () => {
+          // HACK: Calendar UI doesn't affect latest changes unless I do this
+          const currentView = calendarControls.getView();
+          if (currentView === "week") {
+            calendarControls.setView("month-agenda");
+            calendarControls.setView("week");
+          } else {
+            calendarControls.setView("week");
+            calendarControls.setView("month-agenda");
+          }
+        },
         beforeRender($app) {
           // Need a multiplier to reduce grid height as some space
           // is taken up by the calendar navigation
@@ -58,16 +81,14 @@ function Calendar() {
   // HACK: Gotta figure out a better way to do This
   // Hardcoding for now
   useEffect(() => {
-    if (!selectedTerm) return;
-
-    switch (selectedTerm.term) {
-      case "2025 Spring/Summer Term":
+    switch (selectedTerm) {
+      case "2255":
         calendarControls.setDate("2025-05-05");
         break;
-      case "2025 Fall Term":
+      case "2259":
         calendarControls.setDate("2025-09-03");
         break;
-      case "2026 Winter Term":
+      case "2261":
         calendarControls.setDate("2026-01-12");
         break;
     }
@@ -81,53 +102,7 @@ function Calendar() {
   }, [theme, systemTheme, calendar]);
 
   if (!selectedTerm || !calendar || !eventsService) return null;
-
-  const events = selectedSessions
-    .filter(session => session.dayOfWeek > -1)
-    .map(session => {
-      const baseStartDate = dayjs(session.startRecur);
-      const dayOffset = session.dayOfWeek - baseStartDate.day();
-      const startDate = baseStartDate.add(
-        dayOffset < 0 ? 7 + dayOffset : dayOffset,
-        "days",
-      );
-      const endDate = dayjs(session.endRecur);
-
-      const rrule = new RRule({
-        freq: RRule.WEEKLY,
-        dtstart: datetime(
-          startDate.get("year"),
-          startDate.get("month") + 1,
-          startDate.get("day"),
-        ),
-        until: datetime(
-          endDate.get("year"),
-          endDate.get("month") + 1,
-          endDate.get("day"),
-        ),
-      });
-
-      return {
-        id: `${session.courseDetails.courseCode}${session.courseDetails.subSection}`,
-        title: `${session.courseDetails.courseCode}`,
-        start: `${startDate.format(DATE_FORMAT)} ${session.startTime}`,
-        end: `${startDate.format(DATE_FORMAT)} ${session.endTime}`,
-        rrule: rrule.toString(),
-        ...session.courseDetails,
-      };
-    });
-
   eventsService.set(events);
-
-  // HACK: Calendar UI doesn't affect latest changes unless I do this
-  const currentView = calendarControls.getView();
-  if (currentView === "week") {
-    calendarControls.setView("month-agenda");
-    calendarControls.setView("week");
-  } else {
-    calendarControls.setView("week");
-    calendarControls.setView("month-agenda");
-  }
 
   return (
     <div className="h-full overflow-scroll">
