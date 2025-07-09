@@ -45,25 +45,21 @@ export default function SearchBar() {
   );
 
   useEffect(() => {
-    if (isError) {
+    if (isError && error) {
       toast.error(error.message);
     }
 
-    if (isSuccess) {
+    if (isSuccess && courseData) {
       const newSelected = data ? { ...data } : {};
       newSelected[courseData.courseCode] = [];
       setData(newSelected);
     }
-    setQuery("");
-    setSelectedValue("");
-  }, [
-    data,
-    courseData?.courseCode,
-    error?.message,
-    isError,
-    isSuccess,
-    setData,
-  ]);
+
+    if (isError || isSuccess) {
+      setQuery("");
+      setSelectedValue("");
+    }
+  }, [isError, error, isSuccess, courseData, data, setData]);
 
   const autocompleteItems = dataAllCourses
     ? dataAllCourses.map((course, index) => {
