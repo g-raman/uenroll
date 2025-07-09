@@ -30,7 +30,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
       return;
     }
 
-    const newSelected = data === null ? {} : { ...data };
+    const newSelected = data ? { ...data } : {};
 
     if (!newSelected[courseCode]) {
       newSelected[courseCode] = [subSection];
