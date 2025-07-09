@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
 import toast from "react-hot-toast";
-import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
+import {
+  COURSE_GC_TIME,
+  COURSE_STALE_TIME,
+  MAX_RESULTS_ALLOWED,
+} from "@/utils/constants";
 import { AutoComplete } from "@repo/ui/components/autocomplete";
 import { useQuery } from "@tanstack/react-query";
 import { trpc } from "@/app/_trpc/client";
@@ -32,7 +36,11 @@ export default function SearchBar() {
   } = useQuery(
     trpc.getCourse.queryOptions(
       { term: selectedTerm, courseCode: selectedValue },
-      { enabled: !!selectedValue && !maxResultsReached },
+      {
+        enabled: !!selectedValue && !maxResultsReached,
+        staleTime: COURSE_STALE_TIME,
+        gcTime: COURSE_GC_TIME,
+      },
     ),
   );
 
