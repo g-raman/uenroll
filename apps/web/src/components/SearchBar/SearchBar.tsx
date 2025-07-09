@@ -3,14 +3,14 @@ import TermSelector from "../TermSelector/TermSelector";
 import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 import { AutoComplete } from "@repo/ui/components/autocomplete";
-import { useQueryState } from "nuqs";
 import { useQuery } from "@tanstack/react-query";
 import { trpc } from "@/app/_trpc/client";
 import { Selected } from "@/types/Types";
 import { useDataParam } from "@/hooks/useDataParam";
+import { useTermParam } from "@/hooks/useTermParam";
 
 export default function SearchBar() {
-  const [selectedTerm] = useQueryState("term", { defaultValue: "" });
+  const [selectedTerm] = useTermParam();
   const [data, setData] = useDataParam();
 
   const [query, setQuery] = useState("");
