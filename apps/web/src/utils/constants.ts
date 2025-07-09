@@ -29,6 +29,9 @@ export const BG_COLOURS = [
 
 export const MAX_RESULTS_ALLOWED = INITIAL_COLOURS.length;
 
+export const COURSE_STALE_TIME = 1000 * 60 * 5; // 5 minutes
+export const COURSE_GC_TIME = 1000 * 60 * 10; // 10 minutes
+
 export const dayOfWeekToNumberMap: { [key: string]: number } = {
   "N/A": -1,
   Mo: 1,
