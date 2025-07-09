@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
 import toast from "react-hot-toast";
 import {
@@ -61,15 +61,19 @@ export default function SearchBar() {
     }
   }, [isError, error, isSuccess, courseData, data, setData]);
 
-  const autocompleteItems = dataAllCourses
-    ? dataAllCourses.map((course, index) => {
-        return {
-          label: `${course.courseCode} ${course.courseTitle}`,
-          value: course.courseCode,
-          id: `${index}`,
-        };
-      })
-    : [];
+  const autocompleteItems = useMemo(
+    () =>
+      dataAllCourses
+        ? dataAllCourses.map((course, index) => {
+            return {
+              label: `${course.courseCode} ${course.courseTitle}`,
+              value: course.courseCode,
+              id: `${index}`,
+            };
+          })
+        : [],
+    [dataAllCourses],
+  );
 
   return (
     <div className="sticky top-0 z-10 mb-2 flex flex-col gap-2">
