@@ -53,14 +53,10 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
       section => section !== subSection,
     );
 
-    data[courseCode] = filteredSubsections;
+    const newData = { ...data };
+    newData[courseCode] = filteredSubsections;
 
-    if (Object.keys(data).length === 0) {
-      setData(null);
-      return;
-    }
-
-    setData(data);
+    setData(Object.keys(newData).length === 0 ? null : newData);
   }, [course, data, setData, subSection]);
 
   const handleToggle = useCallback(() => {
