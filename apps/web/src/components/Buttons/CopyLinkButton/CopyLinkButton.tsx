@@ -5,6 +5,7 @@ import { useTermParam } from "@/hooks/useTermParam";
 import { parseAsSelectedSessions } from "@/hooks/utils";
 import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { envClient } from "@repo/env";
 import { Button } from "@repo/ui/components/button";
 import {
   Tooltip,
@@ -35,7 +36,7 @@ export const CopyLinkButton = () => {
   async function handleClick() {
     const clipboardAppendResult = await ResultAsync.fromPromise(
       navigator.clipboard.writeText(
-        `https://uenroll.ca/?term=${selectedTerm}&data=${serialized}`,
+        `${envClient.NEXT_PUBLIC_BASE_URL}/?term=${selectedTerm}&data=${serialized}`,
       ),
       error => new Error(`Failed to copy url: ${error}`),
     );

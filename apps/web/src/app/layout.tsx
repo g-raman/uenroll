@@ -6,10 +6,10 @@ import { Toaster } from "react-hot-toast";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { BASE_URL } from "@/utils/constants";
 import { ThemeProvider } from "next-themes";
 import { Suspense } from "react";
 import Provider from "./_trpc/Provider";
+import { envClient } from "@repo/env";
 
 const font = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     default: "uEnroll",
     template: "%s | uEnroll",
   },
-  metadataBase: new URL(BASE_URL),
+  metadataBase: new URL(envClient.NEXT_PUBLIC_BASE_URL),
   openGraph: {
     description: "A modern schedule builder for uOttawa students",
   },

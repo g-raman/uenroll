@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/utils/constants";
+import { envClient } from "@repo/env";
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: `${BASE_URL}/sitemap.xml`,
+    sitemap: `${envClient.NEXT_PUBLIC_BASE_URL}/sitemap.xml`,
   };
 }
