@@ -2,7 +2,7 @@ import { ColouredCourse } from "@/types/Types";
 import { SessionResult } from "../SessionResult/SessionResult";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { Section } from "@repo/db/types";
-import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
+import { useDataParam } from "@/hooks/useDataParam";
 
 interface ComponentResultProps {
   component: Section;
@@ -16,21 +16,21 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   section,
   subSection,
 }) => {
-  const [selected, setSelected] = useSelectedSessionsURL();
+  const [data, setData] = useDataParam();
   const { courseCode } = course;
-  const isSelected = Boolean(selected[courseCode]?.includes(subSection));
+  const isSelected = Boolean(data[courseCode]?.includes(subSection));
 
   function addSession() {
     const { courseCode } = course;
     if (
-      selected &&
-      selected[courseCode] &&
-      selected[courseCode].some(section => section === subSection)
+      data &&
+      data[courseCode] &&
+      data[courseCode].some(section => section === subSection)
     ) {
       return;
     }
 
-    const newSelected = selected === null ? {} : { ...selected };
+    const newSelected = data === null ? {} : { ...data };
 
     if (!newSelected[courseCode]) {
       newSelected[courseCode] = [subSection];
@@ -38,28 +38,28 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
       newSelected[courseCode].push(subSection);
     }
 
-    setSelected(newSelected);
+    setData(newSelected);
   }
 
   function removeSession() {
     const { courseCode } = course;
 
-    if (selected === null) return;
+    if (data === null) return;
 
-    if (!selected[courseCode]) return;
+    if (!data[courseCode]) return;
 
-    const filteredSubsections = selected[courseCode].filter(
+    const filteredSubsections = data[courseCode].filter(
       section => section !== subSection,
     );
 
-    selected[courseCode] = filteredSubsections;
+    data[courseCode] = filteredSubsections;
 
-    if (Object.keys(selected).length === 0) {
-      setSelected(null);
+    if (Object.keys(data).length === 0) {
+      setData(null);
       return;
     }
 
-    setSelected(selected);
+    setData(data);
   }
 
   function handleToggle() {

@@ -1,5 +1,5 @@
 import { useCourseQueries } from "@/hooks/useCourseQueries";
-import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
+import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import { createDownloadableCalendarEvents } from "@/utils/calendarEvents";
 import { faFileExport } from "@fortawesome/free-solid-svg-icons";
@@ -16,15 +16,15 @@ import { generateIcsCalendar } from "ts-ics";
 export default function DownloadCalendarButton() {
   const filename = "schedule.ics";
   const [selectedTerm] = useTermParam();
-  const [selected] = useSelectedSessionsURL();
-  const courseCodes = Object.keys(selected ? selected : {});
+  const [data] = useDataParam();
+  const courseCodes = Object.keys(data ? data : {});
   const courseQueries = useCourseQueries(
     selectedTerm,
     courseCodes,
     courseCodes.length >= 0,
   );
 
-  const hasAnySelectedSessions = Object.values(selected ? selected : {}).some(
+  const hasAnySelectedSessions = Object.values(data ? data : {}).some(
     value => value.length > 0,
   );
 
@@ -33,10 +33,7 @@ export default function DownloadCalendarButton() {
     .map(query => query.data);
 
   async function handleDownload() {
-    const events = createDownloadableCalendarEvents(
-      courseSearchResults,
-      selected,
-    );
+    const events = createDownloadableCalendarEvents(courseSearchResults, data);
     const calendar = generateIcsCalendar({
       version: "2.0",
       prodId: "//uEnroll//Calendar Export 1.0//EN",

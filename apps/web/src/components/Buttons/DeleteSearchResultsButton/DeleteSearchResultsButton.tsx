@@ -1,4 +1,4 @@
-import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
+import { useDataParam } from "@/hooks/useDataParam";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
@@ -10,11 +10,11 @@ import {
 import React from "react";
 
 export const DeleteSearchResultsButton = () => {
-  const [selectedSessions, setSelectedSessions] = useSelectedSessionsURL();
-  const courseCodes = Object.keys(selectedSessions ? selectedSessions : {});
+  const [data, setData] = useDataParam();
+  const courseCodes = Object.keys(data ? data : {});
 
   function handleClick() {
-    setSelectedSessions(null);
+    setData(null);
   }
 
   return (

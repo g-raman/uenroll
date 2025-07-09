@@ -1,6 +1,6 @@
 "use client";
 
-import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
+import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import { parseAsSelectedSessions } from "@/hooks/utils";
 import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
@@ -18,8 +18,8 @@ import toast from "react-hot-toast";
 export const CopyLinkButton = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [selectedTerm] = useTermParam();
-  const [selectedSessions] = useSelectedSessionsURL();
-  const newSelected = selectedSessions ? { ...selectedSessions } : {};
+  const [data] = useDataParam();
+  const newSelected = data ? { ...data } : {};
 
   Object.keys(newSelected).forEach(key => {
     if (newSelected[key] && newSelected[key].length === 0) {
@@ -28,9 +28,9 @@ export const CopyLinkButton = () => {
   });
   const serialized = parseAsSelectedSessions.serialize(newSelected);
 
-  const hasAnySelectedSessions = Object.values(
-    selectedSessions ? selectedSessions : {},
-  ).some(value => value.length > 0);
+  const hasAnySelectedSessions = Object.values(data ? data : {}).some(
+    value => value.length > 0,
+  );
 
   async function handleClick() {
     const clipboardAppendResult = await ResultAsync.fromPromise(

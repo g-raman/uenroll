@@ -14,7 +14,7 @@ import {
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import { useColoursActions } from "@/stores/colourStore";
-import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
+import { useDataParam } from "@/hooks/useDataParam";
 
 interface CourseResultProps {
   course: ColouredCourse;
@@ -23,22 +23,22 @@ interface CourseResultProps {
 
 const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
   const { addColour } = useColoursActions();
-  const [selected, setSelected] = useSelectedSessionsURL();
+  const [data, setData] = useDataParam();
 
   function removeCourse() {
-    if (selected === null || !selected[course.courseCode]) {
+    if (data === null || !data[course.courseCode]) {
       return;
     }
-    delete selected[course.courseCode];
+    delete data[course.courseCode];
 
-    if (Object.keys(selected).length === 0) {
-      setSelected(null);
+    if (Object.keys(data).length === 0) {
+      setData(null);
       addColour(course.courseCode, course.colour);
       return;
     }
 
     addColour(course.courseCode, course.colour);
-    setSelected(selected);
+    setData(data);
   }
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { trpc } from "@/app/_trpc/client";
-import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
+import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import {
   Select,
@@ -15,12 +15,12 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function TermSelector() {
   const [selectedTerm, setSelectedTerm] = useTermParam();
-  const [, setSelectedSessions] = useSelectedSessionsURL();
+  const [, setData] = useDataParam();
   const { data: availableTerms } = useQuery(trpc.getTerms.queryOptions());
 
   function handleChangeTerm(term: string) {
     setSelectedTerm(term);
-    setSelectedSessions(null);
+    setData(null);
   }
 
   return (

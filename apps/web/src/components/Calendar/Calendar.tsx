@@ -13,14 +13,14 @@ import { createEventModalPlugin } from "@schedule-x/event-modal";
 import CalendarEventModal from "./CalendarEventModal/CalendarEventModal";
 import { useTheme } from "next-themes";
 import { useTermParam } from "@/hooks/useTermParam";
-import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { createCalendarAppEvents } from "@/utils/calendarEvents";
+import { useDataParam } from "@/hooks/useDataParam";
 
 function Calendar() {
   const [selectedTerm] = useTermParam();
-  const [selected] = useSelectedSessionsURL();
-  const courseCodes = Object.keys(selected ? selected : {});
+  const [data] = useDataParam();
+  const courseCodes = Object.keys(data ? data : {});
   const courseQueries = useCourseQueries(
     selectedTerm,
     courseCodes,
@@ -31,7 +31,7 @@ function Calendar() {
     .filter(query => query.isSuccess)
     .map(query => query.data);
 
-  const events = createCalendarAppEvents(courseSearchResults, selected);
+  const events = createCalendarAppEvents(courseSearchResults, data);
 
   const [eventsService] = useState(() => createEventsServicePlugin());
   const [eventRecurrence] = useState(() => createEventRecurrencePlugin());

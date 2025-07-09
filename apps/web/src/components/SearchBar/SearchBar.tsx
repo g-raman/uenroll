@@ -3,30 +3,31 @@ import TermSelector from "../TermSelector/TermSelector";
 import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 import { AutoComplete } from "@repo/ui/components/autocomplete";
-import {
-  useCourseSearchResults,
-  useScheduleActions,
-  useSelectedTerm,
-} from "@/stores/scheduleStore";
-import { Term } from "@repo/db/types";
+import { useQueryState } from "nuqs";
+import { useQuery } from "@tanstack/react-query";
 import { trpc } from "@/app/_trpc/client";
+import { Selected } from "@/types/Types";
+import { useDataParam } from "@/hooks/useDataParam";
 
 export default function SearchBar() {
-  const selectedTerm = useSelectedTerm() as Term;
-  const courseSearchResults = useCourseSearchResults();
-  const { addCourse } = useScheduleActions();
+  const [selectedTerm] = useQueryState("term", { defaultValue: "" });
+  const [data, setData] = useDataParam();
 
   const [query, setQuery] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
 
-  const { refetch } = trpc.getCourse.useQuery(
-    { term: selectedTerm?.value, courseCode: selectedValue },
-    { enabled: false },
+  const { refetch } = useQuery(
+    trpc.getCourse.queryOptions(
+      { term: selectedTerm, courseCode: selectedValue },
+      { enabled: false },
+    ),
   );
 
-  const { data: dataAllCourses } = trpc.getAvailableCoursesByTerm.useQuery(
-    { term: selectedTerm?.value },
-    { staleTime: Infinity },
+  const { data: dataAllCourses } = useQuery(
+    trpc.getAvailableCoursesByTerm.queryOptions(
+      { term: selectedTerm },
+      { staleTime: Infinity },
+    ),
   );
 
   const autocompleteItems = dataAllCourses
@@ -40,20 +41,35 @@ export default function SearchBar() {
     : [];
 
   const performSearch = useCallback(async () => {
-    const { data, error, isSuccess } = await refetch();
-    if (isSuccess) {
-      addCourse(data);
-    } else if (error) {
+    const { data: course, error, isSuccess } = await refetch();
+    console.log(
+      trpc.getCourse.queryOptions(
+        { term: selectedTerm, courseCode: selectedValue },
+        { enabled: false, staleTime: 100_000 },
+      ).queryKey,
+    );
+
+    if (error) {
       toast.error(error.message);
+    } else if (isSuccess) {
+      if (!data) {
+        const newSelected: Selected = {};
+        newSelected[course.courseCode] = [];
+        setData(newSelected);
+      } else {
+        const newSelected = { ...data };
+        newSelected[course.courseCode] = [];
+        setData(newSelected);
+      }
     }
     setQuery("");
     setSelectedValue("");
-  }, [addCourse, refetch]);
+  }, [refetch, data, selectedTerm, selectedValue, setData]);
 
   useEffect(() => {
     if (selectedValue === "") return;
 
-    if (courseSearchResults.length >= MAX_RESULTS_ALLOWED) {
+    if (Object.keys(data ? data : {}).length >= MAX_RESULTS_ALLOWED) {
       setQuery("");
       setSelectedValue("");
       toast.error("Max search results reached.");
@@ -64,7 +80,7 @@ export default function SearchBar() {
       await performSearch();
     }
     search();
-  }, [performSearch, selectedValue, courseSearchResults.length]);
+  }, [performSearch, data, selectedValue]);
 
   return (
     <div className="sticky top-0 z-10 mb-2 flex flex-col gap-2">

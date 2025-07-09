@@ -6,18 +6,18 @@ import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { trpc } from "@/app/_trpc/client";
-import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useTermParam } from "@/hooks/useTermParam";
+import { useDataParam } from "@/hooks/useDataParam";
 
 export default function SearchResults() {
-  const [selected, setSelected] = useSelectedSessionsURL();
+  const [data, setData] = useDataParam();
   const [selectedTerm, setSelectedTerm] = useTermParam();
 
   const { data: availableTerms } = useQuery(trpc.getTerms.queryOptions());
   const [openResults, setOpenResults] = useState<string[]>([]);
 
-  const courseCodes = Object.keys(selected ? selected : {});
+  const courseCodes = Object.keys(data ? data : {});
 
   const courseQueries = useCourseQueries(
     selectedTerm,
@@ -34,7 +34,7 @@ export default function SearchResults() {
 
   if (!termInUrl) {
     setSelectedTerm(availableTerms[0]?.value as string);
-    setSelected({});
+    setData({});
   }
 
   const courseSearchResults = courseQueries
