@@ -27,12 +27,8 @@ const useColoursStore = create<ColoursState>(set => ({
     getColour: course => {
       let removedColour = "";
       set(old => {
-        const isMapped = Object.keys(old.colourMap).some(
-          mappedCourse => mappedCourse === course,
-        );
-
-        if (isMapped) {
-          removedColour = old.colourMap[course] as string;
+        if (old.colourMap[course]) {
+          removedColour = old.colourMap[course];
           return old;
         }
 
