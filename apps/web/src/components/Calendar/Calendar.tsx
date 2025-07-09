@@ -15,7 +15,7 @@ import { useTheme } from "next-themes";
 import { useTermParam } from "@/hooks/useTermParam";
 import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
 import { useCourseQueries } from "@/hooks/useCourseQueries";
-import { createCalendarEvents } from "@/utils/calendarEvents";
+import { createCalendarAppEvents } from "@/utils/calendarEvents";
 
 function Calendar() {
   const [selectedTerm] = useTermParam();
@@ -31,7 +31,7 @@ function Calendar() {
     .filter(query => query.isSuccess)
     .map(query => query.data);
 
-  const events = createCalendarEvents(courseSearchResults, selected);
+  const events = createCalendarAppEvents(courseSearchResults, selected);
 
   const [eventsService] = useState(() => createEventsServicePlugin());
   const [eventRecurrence] = useState(() => createEventRecurrencePlugin());
