@@ -4,14 +4,6 @@ import { Session, Section } from "@repo/db/types";
 import dayjs from "dayjs";
 import { datetime, RRule } from "rrule";
 
-export const shuffleArray = (array: string[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j] as string, array[i] as string];
-  }
-  return array;
-};
-
 const DATE_FORMAT = "YYYY-MM-DD";
 const createCalendarEvent = (
   session: Session,
