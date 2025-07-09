@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
 import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 import { AutoComplete } from "@repo/ui/components/autocomplete";
 import { useQuery } from "@tanstack/react-query";
 import { trpc } from "@/app/_trpc/client";
-import { Selected } from "@/types/Types";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 
@@ -16,19 +15,49 @@ export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
 
-  const { refetch } = useQuery(
-    trpc.getCourse.queryOptions(
-      { term: selectedTerm, courseCode: selectedValue },
-      { enabled: false },
-    ),
-  );
-
   const { data: dataAllCourses } = useQuery(
     trpc.getAvailableCoursesByTerm.queryOptions(
       { term: selectedTerm },
       { staleTime: Infinity },
     ),
   );
+  const maxResultsReached =
+    Object.keys(data ? data : {}).length > MAX_RESULTS_ALLOWED;
+
+  const {
+    data: courseData,
+    error,
+    isSuccess,
+    isError,
+  } = useQuery(
+    trpc.getCourse.queryOptions(
+      { term: selectedTerm, courseCode: selectedValue },
+      {
+        enabled: !!selectedValue && !maxResultsReached,
+      },
+    ),
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error.message);
+    }
+
+    if (isSuccess) {
+      const newSelected = data ? { ...data } : {};
+      newSelected[courseData.courseCode] = [];
+      setData(newSelected);
+    }
+    setQuery("");
+    setSelectedValue("");
+  }, [
+    data,
+    courseData?.courseCode,
+    error?.message,
+    isError,
+    isSuccess,
+    setData,
+  ]);
 
   const autocompleteItems = dataAllCourses
     ? dataAllCourses.map((course, index) => {
@@ -39,48 +68,6 @@ export default function SearchBar() {
         };
       })
     : [];
-
-  const performSearch = useCallback(async () => {
-    const { data: course, error, isSuccess } = await refetch();
-    console.log(
-      trpc.getCourse.queryOptions(
-        { term: selectedTerm, courseCode: selectedValue },
-        { enabled: false, staleTime: 100_000 },
-      ).queryKey,
-    );
-
-    if (error) {
-      toast.error(error.message);
-    } else if (isSuccess) {
-      if (!data) {
-        const newSelected: Selected = {};
-        newSelected[course.courseCode] = [];
-        setData(newSelected);
-      } else {
-        const newSelected = { ...data };
-        newSelected[course.courseCode] = [];
-        setData(newSelected);
-      }
-    }
-    setQuery("");
-    setSelectedValue("");
-  }, [refetch, data, selectedTerm, selectedValue, setData]);
-
-  useEffect(() => {
-    if (selectedValue === "") return;
-
-    if (Object.keys(data ? data : {}).length >= MAX_RESULTS_ALLOWED) {
-      setQuery("");
-      setSelectedValue("");
-      toast.error("Max search results reached.");
-      return;
-    }
-
-    async function search() {
-      await performSearch();
-    }
-    search();
-  }, [performSearch, data, selectedValue]);
 
   return (
     <div className="sticky top-0 z-10 mb-2 flex flex-col gap-2">
