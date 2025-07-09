@@ -1,11 +1,8 @@
 import { ColouredCourse } from "@/types/Types";
 import { SessionResult } from "../SessionResult/SessionResult";
 import { Checkbox } from "@repo/ui/components/checkbox";
-import {
-  useScheduleActions,
-  useSelectedSessionsURL,
-} from "@/stores/scheduleStore";
 import { Section } from "@repo/db/types";
+import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
 
 interface ComponentResultProps {
   component: Section;
@@ -19,21 +16,58 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   section,
   subSection,
 }) => {
-  const selectedSessionsURL = useSelectedSessionsURL();
-  const { addSession, removeSession } = useScheduleActions();
+  const [selected, setSelected] = useSelectedSessionsURL();
   const { courseCode } = course;
-  const isSelected = Boolean(
-    selectedSessionsURL &&
-      selectedSessionsURL[courseCode] &&
-      selectedSessionsURL[courseCode].includes(subSection),
-  );
+  const isSelected = Boolean(selected[courseCode]?.includes(subSection));
+
+  function addSession() {
+    const { courseCode } = course;
+    if (
+      selected &&
+      selected[courseCode] &&
+      selected[courseCode].some(section => section === subSection)
+    ) {
+      return;
+    }
+
+    const newSelected = selected === null ? {} : { ...selected };
+
+    if (!newSelected[courseCode]) {
+      newSelected[courseCode] = [subSection];
+    } else {
+      newSelected[courseCode].push(subSection);
+    }
+
+    setSelected(newSelected);
+  }
+
+  function removeSession() {
+    const { courseCode } = course;
+
+    if (selected === null) return;
+
+    if (!selected[courseCode]) return;
+
+    const filteredSubsections = selected[courseCode].filter(
+      section => section !== subSection,
+    );
+
+    selected[courseCode] = filteredSubsections;
+
+    if (Object.keys(selected).length === 0) {
+      setSelected(null);
+      return;
+    }
+
+    setSelected(selected);
+  }
 
   function handleToggle() {
     if (isSelected) {
-      removeSession({ courseCode, subSection });
+      removeSession();
       return;
     }
-    addSession({ courseCode, subSection });
+    addSession();
   }
 
   return (
