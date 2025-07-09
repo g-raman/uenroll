@@ -13,7 +13,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
-import { useScheduleActions } from "@/stores/scheduleStore";
+import { useColoursActions } from "@/stores/colourStore";
+import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
 
 interface CourseResultProps {
   course: ColouredCourse;
@@ -21,11 +22,24 @@ interface CourseResultProps {
 }
 
 const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
-  const { removeCourse } = useScheduleActions();
+  const { addColour } = useColoursActions();
+  const [selected, setSelected] = useSelectedSessionsURL();
 
-  const handleCourseRemoval = () => {
-    removeCourse(course);
-  };
+  function removeCourse() {
+    if (selected === null || !selected[course.courseCode]) {
+      return;
+    }
+    delete selected[course.courseCode];
+
+    if (Object.keys(selected).length === 0) {
+      setSelected(null);
+      addColour(course.courseCode, course.colour);
+      return;
+    }
+
+    addColour(course.courseCode, course.colour);
+    setSelected(selected);
+  }
 
   return (
     <>
@@ -38,7 +52,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
           <TooltipTrigger asChild>
             <FontAwesomeIcon
               className="ml-auto !rotate-0"
-              onClick={handleCourseRemoval}
+              onClick={removeCourse}
               icon={faTrash}
             />
           </TooltipTrigger>
