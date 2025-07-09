@@ -25,9 +25,14 @@ export default function SearchResults() {
     courseCodes.length >= 0,
   );
 
-  if (!availableTerms || availableTerms.length === 0) {
+  if (
+    courseQueries.some(query => query.isLoading) ||
+    !availableTerms ||
+    availableTerms.length === 0
+  ) {
     return <div>Loading...</div>;
   }
+
   const termInUrl = availableTerms.find(
     availableTerm => availableTerm.value === selectedTerm,
   );
@@ -39,11 +44,8 @@ export default function SearchResults() {
 
   const courseSearchResults = courseQueries
     .filter(query => query.isSuccess)
+    .sort((a, b) => b.dataUpdatedAt - a.dataUpdatedAt)
     .map(query => query.data);
-
-  if (courseQueries.some(query => query.isLoading)) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="overflow-y-scroll">
