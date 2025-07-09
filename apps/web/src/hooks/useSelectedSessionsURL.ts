@@ -1,12 +1,12 @@
-import LZString from "lz-string";
+import { Selected } from "@/types/Types";
 import { useQueryState } from "nuqs";
+import { parseAsSelectedSessions } from "./utils";
 
 export const useSelectedSessionsURL = () => {
-  const selectedSessionsURL = useQueryState("data", {
-    defaultValue: {},
+  const selectedSessionsURL = useQueryState<Selected | null>("data", {
+    defaultValue: null,
     history: "replace",
-    parse: value => JSON.parse(LZString.decompressFromBase64(value)),
-    serialize: value => LZString.compressToBase64(JSON.stringify(value)),
+    ...parseAsSelectedSessions,
   });
 
   return selectedSessionsURL;
