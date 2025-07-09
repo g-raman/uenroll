@@ -6,7 +6,6 @@ import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { trpc } from "@/app/_trpc/client";
-import { useColoursActions } from "@/stores/colourStore";
 import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useTermParam } from "@/hooks/useTermParam";
@@ -17,7 +16,6 @@ export default function SearchResults() {
 
   const { data: availableTerms } = useQuery(trpc.getTerms.queryOptions());
   const [openResults, setOpenResults] = useState<string[]>([]);
-  const { getColour } = useColoursActions();
 
   const courseCodes = Object.keys(selected ? selected : {});
 
@@ -41,10 +39,7 @@ export default function SearchResults() {
 
   const courseSearchResults = courseQueries
     .filter(query => query.isSuccess)
-    .map(query => ({
-      ...query.data,
-      colour: getColour(query.data.courseCode),
-    }));
+    .map(query => query.data);
 
   if (courseQueries.some(query => query.isLoading)) {
     return <div>Loading...</div>;
