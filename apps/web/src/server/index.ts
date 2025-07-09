@@ -2,9 +2,7 @@ import {
   getAvailableCoursesByTerm,
   getAvailableTerms,
   getCourse,
-  getCourses,
   processCourse,
-  processCourses,
 } from "@repo/db/queries";
 import { publicProcedure, router } from "./trpc";
 import { z } from "zod";
@@ -30,26 +28,6 @@ export const appRouter = router({
       }
 
       return processedCourse.value;
-    }),
-  getCourses: publicProcedure
-    .input(
-      z.object({
-        term: z.string(),
-        courseCodes: z.array(z.string()),
-      }),
-    )
-    .query(async ({ input }) => {
-      const courses = await getCourses(input.term, input.courseCodes);
-      const processedCourses = await processCourses(courses);
-
-      if (processedCourses.isErr()) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: processedCourses.error.message,
-        });
-      }
-
-      return processedCourses.value;
     }),
   getTerms: publicProcedure.query(async () => {
     const terms = await getAvailableTerms();
