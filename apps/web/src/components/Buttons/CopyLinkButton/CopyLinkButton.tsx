@@ -1,4 +1,8 @@
-import { useSelectedSessions } from "@/stores/scheduleStore";
+"use client";
+
+import { useSelectedSessionsURL } from "@/hooks/useSelectedSessionsURL";
+import { useTermParam } from "@/hooks/useTermParam";
+import { parseAsSelectedSessions } from "@/hooks/utils";
 import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
@@ -7,11 +11,42 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+import { ResultAsync } from "neverthrow";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 export const CopyLinkButton = () => {
   const [isCopied, setIsCopied] = useState(false);
-  const selectedSessions = useSelectedSessions();
+  const [selectedTerm] = useTermParam();
+  const [selectedSessions] = useSelectedSessionsURL();
+  const newSelected = selectedSessions ? { ...selectedSessions } : {};
+
+  Object.keys(newSelected).forEach(key => {
+    if (newSelected[key] && newSelected[key].length === 0) {
+      delete newSelected[key];
+    }
+  });
+  const serialized = parseAsSelectedSessions.serialize(newSelected);
+
+  const hasAnySelectedSessions = Object.values(
+    selectedSessions ? selectedSessions : {},
+  ).some(value => value.length > 0);
+
+  async function handleClick() {
+    const clipboardAppendResult = await ResultAsync.fromPromise(
+      navigator.clipboard.writeText(
+        `https://uenroll.ca/?term=${selectedTerm}&data=${serialized}`,
+      ),
+      error => new Error(`Failed to copy url: ${error}`),
+    );
+    if (clipboardAppendResult.isErr()) {
+      console.error(clipboardAppendResult.error);
+      toast.error("Failed to copy URL. Please report this error.");
+      return;
+    }
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  }
 
   return (
     <Tooltip>
@@ -20,16 +55,8 @@ export const CopyLinkButton = () => {
           className="grow"
           variant="outline"
           size="lg"
-          disabled={selectedSessions.length === 0}
-          onClick={async () => {
-            try {
-              await navigator.clipboard.writeText(window.location.href);
-              setIsCopied(true);
-              setTimeout(() => setIsCopied(false), 2000);
-            } catch (error) {
-              console.log("Failed to copy url: ", error);
-            }
-          }}
+          disabled={!hasAnySelectedSessions}
+          onClick={handleClick}
         >
           <FontAwesomeIcon
             className="size-4"
