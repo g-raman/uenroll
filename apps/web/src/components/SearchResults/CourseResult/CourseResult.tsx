@@ -32,14 +32,8 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
     const newData = { ...data };
     delete newData[course.courseCode];
 
-    if (Object.keys(data).length === 0) {
-      setData(null);
-      addColour(course.courseCode, course.colour);
-      return;
-    }
-
+    setData(Object.keys(newData).length === 0 ? null : newData);
     addColour(course.courseCode, course.colour);
-    setData(newData);
   }
 
   return (
