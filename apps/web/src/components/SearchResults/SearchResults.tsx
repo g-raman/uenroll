@@ -7,13 +7,11 @@ import { useState } from "react";
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useTermParam } from "@/hooks/useTermParam";
 import { useDataParam } from "@/hooks/useDataParam";
-import { useAvailableTermsQuery } from "@/hooks/useAvailableTermsQuery";
 
 export default function SearchResults() {
-  const [data, setData] = useDataParam();
-  const [selectedTerm, setSelectedTerm] = useTermParam();
+  const [data] = useDataParam();
+  const [selectedTerm] = useTermParam();
 
-  const { data: availableTerms } = useAvailableTermsQuery();
   const [openResults, setOpenResults] = useState<string[]>([]);
 
   const courseCodes = Object.keys(data ? data : {});
@@ -21,24 +19,11 @@ export default function SearchResults() {
   const courseQueries = useCourseQueries(
     selectedTerm,
     courseCodes,
-    courseCodes.length > 0,
+    !!selectedTerm && courseCodes.length > 0,
   );
 
-  if (
-    courseQueries.some(query => query.isLoading) ||
-    !availableTerms ||
-    availableTerms.length === 0
-  ) {
+  if (courseQueries.some(query => query.isLoading)) {
     return <div>Loading...</div>;
-  }
-
-  const termInUrl = availableTerms.find(
-    availableTerm => availableTerm.value === selectedTerm,
-  );
-
-  if (!termInUrl) {
-    setSelectedTerm(availableTerms[0]?.value as string);
-    setData({});
   }
 
   const courseSearchResults = courseQueries

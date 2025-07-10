@@ -1,5 +1,3 @@
-"use client";
-
 import { useAvailableTermsQuery } from "@/hooks/useAvailableTermsQuery";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
@@ -11,7 +9,7 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 export default function TermSelector() {
   const [selectedTerm, setSelectedTerm] = useTermParam();
@@ -26,9 +24,24 @@ export default function TermSelector() {
     [setData, setSelectedTerm],
   );
 
+  useEffect(() => {
+    if (!availableTerms || availableTerms.length === 0) return;
+
+    const termInUrl = selectedTerm
+      ? availableTerms.find(
+          availableTerm => availableTerm.value === selectedTerm,
+        )
+      : null;
+
+    if (!termInUrl) {
+      setSelectedTerm(availableTerms[0]?.value as string);
+      setData(null);
+    }
+  }, [availableTerms, selectedTerm, setSelectedTerm, setData]);
+
   return (
     <>
-      {!availableTerms || availableTerms.length === 0 ? (
+      {!selectedTerm || !availableTerms || availableTerms.length === 0 ? (
         <Skeleton className="h-8 w-full" />
       ) : (
         <Select defaultValue={selectedTerm} onValueChange={handleChangeTerm}>
