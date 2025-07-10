@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import "./app.css";
 import "@repo/ui/shadcn.css";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "@repo/ui/components/sonner";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -73,15 +73,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NuqsAdapter>
-            <Toaster
-              position="top-right"
-              toastOptions={{
-                duration: 3000,
-                className: "w-[90%]",
-              }}
-            />
             <Provider>
               <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+              <Toaster richColors position="top-right" />
             </Provider>
           </NuqsAdapter>
         </ThemeProvider>
