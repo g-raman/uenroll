@@ -44,7 +44,7 @@ export default function TermSelector() {
       {!selectedTerm || !availableTerms || availableTerms.length === 0 ? (
         <Skeleton className="h-8 w-full" />
       ) : (
-        <Select defaultValue={selectedTerm} onValueChange={handleChangeTerm}>
+        <Select value={selectedTerm} onValueChange={handleChangeTerm}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Term" />
           </SelectTrigger>
