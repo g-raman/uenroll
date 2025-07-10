@@ -19,9 +19,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@t3-oss/env-core": "^0.13.6",
-    "@types/node": "^22.15.24",
-    "zod": "^3.25.36"
+    "@t3-oss/env-core": "^0.13.8",
+    "@types/node": "^24.0.13",
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
