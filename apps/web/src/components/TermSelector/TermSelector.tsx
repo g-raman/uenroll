@@ -1,6 +1,7 @@
 import { useAvailableTermsQuery } from "@/hooks/useAvailableTermsQuery";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
+import { useColoursActions } from "@/stores/colourStore";
 import {
   Select,
   SelectContent,
@@ -12,6 +13,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { useCallback, useEffect } from "react";
 
 export default function TermSelector() {
+  const { resetColours } = useColoursActions();
   const [selectedTerm, setSelectedTerm] = useTermParam();
   const [, setData] = useDataParam();
   const { data: availableTerms } = useAvailableTermsQuery();
@@ -20,8 +22,9 @@ export default function TermSelector() {
     (term: string) => {
       setSelectedTerm(term);
       setData(null);
+      resetColours();
     },
-    [setData, setSelectedTerm],
+    [resetColours, setData, setSelectedTerm],
   );
 
   useEffect(() => {
