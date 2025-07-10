@@ -14,7 +14,7 @@ import {
 } from "@repo/ui/components/tooltip";
 import { ResultAsync } from "neverthrow";
 import React, { useCallback, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 export const CopyLinkButton = () => {
   const [isCopied, setIsCopied] = useState(false);
@@ -45,6 +45,7 @@ export const CopyLinkButton = () => {
       toast.error("Failed to copy URL. Please report this error.");
       return;
     }
+    toast.success("Copied URL!");
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   }, [selectedTerm, serialized]);
