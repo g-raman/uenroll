@@ -42,7 +42,7 @@
     "sonner": "^2.0.6",
     "ts-ics": "^2.2.0",
     "uuid": "^11.1.0",
-    "zod": "^3.25.76",
+    "zod": "^4.0.5",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
