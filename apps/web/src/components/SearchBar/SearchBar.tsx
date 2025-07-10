@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 import { AutoComplete } from "@repo/ui/components/autocomplete";
 import { useQuery } from "@tanstack/react-query";
@@ -53,7 +53,7 @@ export default function SearchBar() {
     if (!isUnderMaxResults && !!selectedValue) {
       setQuery("");
       setSelectedValue("");
-      toast.error("Max Results Reached");
+      toast.error("Max Search Results Reached");
     }
   }, [isUnderMaxResults, selectedValue]);
 
