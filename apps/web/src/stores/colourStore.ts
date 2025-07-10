@@ -18,6 +18,7 @@ interface ColoursState {
 interface ColoursActions {
   getColour: (course: string) => string;
   addColour: (course: string, colour: string) => void;
+  resetColours: () => void;
 }
 
 const useColoursStore = create<ColoursState>(set => ({
@@ -53,6 +54,8 @@ const useColoursStore = create<ColoursState>(set => ({
 
         return { ...old, colours: newColours, colourMap: newColourMap };
       }),
+    resetColours: () =>
+      set(() => ({ colours: shuffleArray(INITIAL_COLOURS), colourMap: {} })),
   },
 }));
 
