@@ -38,17 +38,12 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
     } else {
       const currSubSections = [...newSelected[courseCode]];
 
-      // This only accepts components that are different types from the one being selected
+      // Only accept components that are different types from the one being selected
       const acceptableSubSections = [...(course.sections[section] as Section[])]
-        .filter(
-          toAdd =>
-            toAdd.type !== component.type ||
-            (toAdd.subSection !== component.subSection &&
-              toAdd.type === component.subSection),
-        )
+        .filter(toAdd => toAdd.type !== component.type)
         .map(toAdd => toAdd.subSection);
 
-      // If there is no overlap in the acceptable additions and the
+      // If there is no overlap in the acceptable subSections and the
       // currently selected sub sections, the user must be selecting
       // a new subsection
       const intersection = getIntersection(
@@ -60,7 +55,8 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
           ? [subSection]
           : [...currSubSections, subSection];
 
-      // Removes any components with duplicate types
+      // Keep the sub section that was just added
+      // and remove all duplicate types
       newSelected[courseCode] = newSubSections.filter(
         newSubSection =>
           newSubSection === component.subSection ||
