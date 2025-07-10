@@ -51,6 +51,8 @@ export default function SearchBar() {
 
   useEffect(() => {
     if (!isUnderMaxResults && !!selectedValue) {
+      setQuery("");
+      setSelectedValue("");
       toast.error("Max Results Reached");
     }
   }, [isUnderMaxResults, selectedValue]);
