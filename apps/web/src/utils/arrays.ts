@@ -1,0 +1,13 @@
+export const getIntersection = <T>(array1: T[], array2: T[]): T[] => {
+  const set2 = new Set(array2);
+  return array1.filter(item => set2.has(item));
+};
+
+export const shuffleArray = (array: string[]) => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j] as string, shuffled[i] as string];
+  }
+  return shuffled;
+};

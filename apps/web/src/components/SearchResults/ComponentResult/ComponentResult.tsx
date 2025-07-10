@@ -4,6 +4,7 @@ import { Checkbox } from "@repo/ui/components/checkbox";
 import { Section } from "@repo/db/types";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useCallback } from "react";
+import { getIntersection } from "@/utils/arrays";
 
 interface ComponentResultProps {
   component: Section;
@@ -22,7 +23,6 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   const isSelected = Boolean(data[courseCode]?.includes(subSection));
 
   const addSession = useCallback(() => {
-    const { courseCode } = course;
     if (
       data &&
       data[courseCode] &&
@@ -33,14 +33,26 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
 
     const newSelected = data ? { ...data } : {};
 
-    if (!newSelected[courseCode]) {
+    if (!newSelected[courseCode] || newSelected[courseCode].length === 0) {
       newSelected[courseCode] = [subSection];
     } else {
-      newSelected[courseCode].push(subSection);
+      const currSubSections = [...newSelected[courseCode]];
+      const toAddSubSections = [...(course.sections[section] as Section[])].map(
+        toAdd => toAdd.subSection,
+      );
+
+      // If there is no overlap between the currently selected subsections
+      // and the subsections from the section the user wants to add from,
+      // the user is selecting a different section
+      const intersection = getIntersection(currSubSections, toAddSubSections);
+      newSelected[courseCode] =
+        intersection.length === 0
+          ? [subSection]
+          : [...currSubSections, subSection];
     }
 
     setData(newSelected);
-  }, [course, data, setData, subSection]);
+  }, [course.sections, courseCode, data, section, setData, subSection]);
 
   const removeSession = useCallback(() => {
     const { courseCode } = course;
