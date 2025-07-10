@@ -3,7 +3,7 @@ import { dayOfWeekToNumberMap } from "./constants";
 import { Session, Section } from "@repo/db/types";
 import dayjs from "dayjs";
 import { datetime, RRule } from "rrule";
-import { VEvent } from "ts-ics";
+import { IcsEvent } from "ts-ics";
 import { v4 } from "uuid";
 
 type EventCreationFunction<T> = (
@@ -81,7 +81,7 @@ export const createDownloadableCalendarEvent = (
     `${session.endDate} ${session.endTime.slice(0, -3)}`,
   );
 
-  const event: VEvent = {
+  const event: IcsEvent = {
     uid: v4(),
     stamp: { date: new Date() },
     start: { date: startTime.toDate() },
