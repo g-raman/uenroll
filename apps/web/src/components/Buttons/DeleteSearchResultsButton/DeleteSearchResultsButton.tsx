@@ -1,4 +1,5 @@
 import { useDataParam } from "@/hooks/useDataParam";
+import { useColoursActions } from "@/stores/colourStore";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
@@ -10,12 +11,14 @@ import {
 import React, { useCallback } from "react";
 
 export const DeleteSearchResultsButton = () => {
+  const { resetColours } = useColoursActions();
   const [data, setData] = useDataParam();
   const courseCodes = Object.keys(data ? data : {});
 
   const handleClick = useCallback(() => {
+    resetColours();
     setData(null);
-  }, [setData]);
+  }, [resetColours, setData]);
 
   return (
     <Tooltip>
