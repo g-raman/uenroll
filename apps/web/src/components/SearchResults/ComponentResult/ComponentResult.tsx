@@ -39,7 +39,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
       const currSubSections = [...newSelected[courseCode]];
 
       // This only accepts components that are different types from the one being selected
-      const acceptableAdditions = [...(course.sections[section] as Section[])]
+      const acceptableSubSections = [...(course.sections[section] as Section[])]
         .filter(
           toAdd =>
             toAdd.type !== component.type ||
@@ -53,7 +53,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
       // a new subsection
       const intersection = getIntersection(
         currSubSections,
-        acceptableAdditions,
+        acceptableSubSections,
       );
       const newSubSections =
         intersection.length === 0
@@ -64,7 +64,7 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
       newSelected[courseCode] = newSubSections.filter(
         newSubSection =>
           newSubSection === component.subSection ||
-          acceptableAdditions.includes(newSubSection),
+          acceptableSubSections.includes(newSubSection),
       );
     }
 
