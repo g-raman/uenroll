@@ -1,11 +1,7 @@
-"use client";
-
-import {
-  useAvailableTerms,
-  useScheduleActions,
-  useSelectedTerm,
-} from "@/stores/scheduleStore";
-import { Term } from "@/types/Types";
+import { useAvailableTermsQuery } from "@/hooks/useAvailableTermsQuery";
+import { useDataParam } from "@/hooks/useDataParam";
+import { useTermParam } from "@/hooks/useTermParam";
+import { useColoursActions } from "@/stores/colourStore";
 import {
   Select,
   SelectContent,
@@ -14,34 +10,60 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { useCallback, useEffect, useRef } from "react";
 
 export default function TermSelector() {
-  const availableTerms = useAvailableTerms();
-  const selectedTerm = useSelectedTerm();
-  const { changeTerm } = useScheduleActions();
+  const { resetColours } = useColoursActions();
+  const [selectedTerm, setSelectedTerm] = useTermParam();
+  const [, setData] = useDataParam();
+  const { data: availableTerms } = useAvailableTermsQuery();
 
-  function handleSelect(event: string) {
-    const term = JSON.parse(event) as Term;
-    changeTerm(term);
-  }
+  const handleChangeTerm = useCallback(
+    (term: string) => {
+      setSelectedTerm(term);
+      setData(null);
+      resetColours();
+    },
+    [resetColours, setData, setSelectedTerm],
+  );
+
+  const hasInitialized = useRef(false);
+  useEffect(() => {
+    if (
+      hasInitialized.current ||
+      !availableTerms ||
+      availableTerms.length === 0
+    ) {
+      return;
+    }
+    hasInitialized.current = true;
+
+    const termInUrl = selectedTerm
+      ? availableTerms.find(
+          availableTerm => availableTerm.value === selectedTerm,
+        )
+      : null;
+
+    if (!termInUrl) {
+      setSelectedTerm(availableTerms[0]?.value as string);
+      setData(null);
+    }
+  }, [availableTerms, selectedTerm, setSelectedTerm, setData]);
 
   return (
     <>
-      {availableTerms.length === 0 ? (
+      {!selectedTerm || !availableTerms || availableTerms.length === 0 ? (
         <Skeleton className="h-8 w-full" />
       ) : (
-        <Select
-          defaultValue={selectedTerm ? JSON.stringify(selectedTerm) : ""}
-          onValueChange={handleSelect}
-        >
+        <Select value={selectedTerm} onValueChange={handleChangeTerm}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Term" />
           </SelectTrigger>
 
           <SelectContent>
-            {availableTerms.map(elem => (
-              <SelectItem key={elem.value} value={JSON.stringify(elem)}>
-                {elem.term}
+            {availableTerms.map(availableTerm => (
+              <SelectItem key={availableTerm.value} value={availableTerm.value}>
+                {availableTerm.term}
               </SelectItem>
             ))}
           </SelectContent>

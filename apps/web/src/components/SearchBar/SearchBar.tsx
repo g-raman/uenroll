@@ -1,66 +1,75 @@
-import { useQuery } from "@tanstack/react-query";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
 import toast from "react-hot-toast";
 import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
-import { fetchAllCourses, fetchCourse } from "@/utils/fetchData";
 import { AutoComplete } from "@repo/ui/components/autocomplete";
-import {
-  useCourseSearchResults,
-  useScheduleActions,
-  useSelectedTerm,
-} from "@/stores/scheduleStore";
-import { CourseSearchResult } from "@repo/db/types";
+import { useQuery } from "@tanstack/react-query";
+import { trpc } from "@/app/_trpc/client";
+import { useDataParam } from "@/hooks/useDataParam";
+import { useTermParam } from "@/hooks/useTermParam";
+import { useCourseQuery } from "@/hooks/useCourseQuery";
 
 export default function SearchBar() {
-  const selectedTerm = useSelectedTerm();
-  const courseSearchResults = useCourseSearchResults();
-  const { addCourse } = useScheduleActions();
+  const [selectedTerm] = useTermParam();
+  const [data, setData] = useDataParam();
 
   const [query, setQuery] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
 
-  const { refetch } = useQuery<CourseSearchResult>({
-    queryKey: ["courses", selectedValue, selectedTerm],
-    queryFn: () => fetchCourse(selectedValue, selectedTerm),
-    enabled: false,
-    retry: false,
-    networkMode: "online",
-    gcTime: 1_800_000, // 30 minutes
-  });
+  const { data: dataAllCourses } = useQuery(
+    trpc.getAvailableCoursesByTerm.queryOptions(
+      { term: selectedTerm },
+      { staleTime: Infinity },
+    ),
+  );
+  const isUnderMaxResults =
+    Object.keys(data ? data : {}).length < MAX_RESULTS_ALLOWED;
 
-  const { data: dataAllCourses } = useQuery({
-    queryKey: ["courses", selectedTerm],
-    queryFn: () => fetchAllCourses(selectedTerm),
-    staleTime: Infinity,
-  });
-
-  const performSearch = useCallback(async () => {
-    const { data, error, isSuccess } = await refetch();
-    if (isSuccess) {
-      addCourse(data);
-    } else if (error) {
-      toast.error(error.message);
-    }
-    setQuery("");
-    setSelectedValue("");
-  }, [addCourse, refetch]);
+  const {
+    data: courseData,
+    error,
+    isSuccess,
+    isError,
+  } = useCourseQuery(selectedValue, isUnderMaxResults);
 
   useEffect(() => {
-    if (selectedValue === "") return;
+    if (isError && error) {
+      toast.error(error.message);
+    }
 
-    if (courseSearchResults.length >= MAX_RESULTS_ALLOWED) {
+    if (isSuccess && courseData) {
+      const newSelected = data ? { ...data } : {};
+      newSelected[courseData.courseCode] = [];
+      setData(newSelected);
+    }
+
+    if (isError || isSuccess) {
       setQuery("");
       setSelectedValue("");
-      toast.error("Max search results reached.");
-      return;
     }
+  }, [isError, error, isSuccess, courseData, data, setData]);
 
-    async function search() {
-      await performSearch();
+  useEffect(() => {
+    if (!isUnderMaxResults && !!selectedValue) {
+      setQuery("");
+      setSelectedValue("");
+      toast.error("Max Results Reached");
     }
-    search();
-  }, [performSearch, selectedValue, courseSearchResults.length]);
+  }, [isUnderMaxResults, selectedValue]);
+
+  const autocompleteItems = useMemo(
+    () =>
+      dataAllCourses
+        ? dataAllCourses.map((course, index) => {
+            return {
+              label: `${course.courseCode} ${course.courseTitle}`,
+              value: course.courseCode,
+              id: `${index}`,
+            };
+          })
+        : [],
+    [dataAllCourses],
+  );
 
   return (
     <div className="sticky top-0 z-10 mb-2 flex flex-col gap-2">
@@ -73,17 +82,7 @@ export default function SearchBar() {
           onSearchValueChange={setQuery}
           placeholder="Course Code or Course Name..."
           emptyMessage="No Courses Found..."
-          items={
-            dataAllCourses
-              ? dataAllCourses.map((course, index) => {
-                  return {
-                    label: `${course.courseCode} ${course.courseTitle}`,
-                    value: course.courseCode,
-                    id: `${index}`,
-                  };
-                })
-              : []
-          }
+          items={autocompleteItems}
         />
       </div>
     </div>

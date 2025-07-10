@@ -1,11 +1,9 @@
 import { ColouredCourse } from "@/types/Types";
 import { SessionResult } from "../SessionResult/SessionResult";
 import { Checkbox } from "@repo/ui/components/checkbox";
-import {
-  useScheduleActions,
-  useSelectedSessionsURL,
-} from "@/stores/scheduleStore";
 import { Section } from "@repo/db/types";
+import { useDataParam } from "@/hooks/useDataParam";
+import { useCallback } from "react";
 
 interface ComponentResultProps {
   component: Section;
@@ -19,22 +17,55 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   section,
   subSection,
 }) => {
-  const selectedSessionsURL = useSelectedSessionsURL();
-  const { addSession, removeSession } = useScheduleActions();
+  const [data, setData] = useDataParam();
   const { courseCode } = course;
-  const isSelected = Boolean(
-    selectedSessionsURL &&
-      selectedSessionsURL[courseCode] &&
-      selectedSessionsURL[courseCode].includes(subSection),
-  );
+  const isSelected = Boolean(data[courseCode]?.includes(subSection));
 
-  function handleToggle() {
-    if (isSelected) {
-      removeSession({ courseCode, subSection });
+  const addSession = useCallback(() => {
+    const { courseCode } = course;
+    if (
+      data &&
+      data[courseCode] &&
+      data[courseCode].some(section => section === subSection)
+    ) {
       return;
     }
-    addSession({ courseCode, subSection });
-  }
+
+    const newSelected = data ? { ...data } : {};
+
+    if (!newSelected[courseCode]) {
+      newSelected[courseCode] = [subSection];
+    } else {
+      newSelected[courseCode].push(subSection);
+    }
+
+    setData(newSelected);
+  }, [course, data, setData, subSection]);
+
+  const removeSession = useCallback(() => {
+    const { courseCode } = course;
+
+    if (data === null) return;
+
+    if (!data[courseCode]) return;
+
+    const filteredSubsections = data[courseCode].filter(
+      section => section !== subSection,
+    );
+
+    const newData = { ...data };
+    newData[courseCode] = filteredSubsections;
+
+    setData(Object.keys(newData).length === 0 ? null : newData);
+  }, [course, data, setData, subSection]);
+
+  const handleToggle = useCallback(() => {
+    if (isSelected) {
+      removeSession();
+      return;
+    }
+    addSession();
+  }, [addSession, isSelected, removeSession]);
 
   return (
     <div className="flex h-full w-full items-center justify-between border-x border-b md:text-xs">

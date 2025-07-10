@@ -5,7 +5,7 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "env": ["DATABASE_URL", "ENVIRONMENT"]
+      "env": ["DATABASE_URL", "ENVIRONMENT", "NEXT_PUBLIC_BASE_URL"]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -16,7 +16,11 @@
     "dev": {
       "persistent": true,
       "cache": false,
-      "env": ["ENVIRONMENT", "PUPPETEER_EXECUTABLE_PATH"]
+      "env": [
+        "ENVIRONMENT",
+        "PUPPETEER_EXECUTABLE_PATH",
+        "NEXT_PUBLIC_BASE_URL"
+      ]
     }
   }
 }

@@ -29,6 +29,9 @@ export const BG_COLOURS = [
 
 export const MAX_RESULTS_ALLOWED = INITIAL_COLOURS.length;
 
+export const STALE_TIME = 1000 * 60 * 5; // 5 minutes
+export const GC_TIME = 1000 * 60 * 10; // 10 minutes
+
 export const dayOfWeekToNumberMap: { [key: string]: number } = {
   "N/A": -1,
   Mo: 1,
@@ -39,5 +42,3 @@ export const dayOfWeekToNumberMap: { [key: string]: number } = {
   Sa: 6,
   Su: 7,
 };
-
-export const BASE_URL = "https://uenroll.ca";

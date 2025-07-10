@@ -1,7 +1,5 @@
-import {
-  useCourseSearchResults,
-  useScheduleActions,
-} from "@/stores/scheduleStore";
+import { useDataParam } from "@/hooks/useDataParam";
+import { useColoursActions } from "@/stores/colourStore";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
@@ -10,11 +8,17 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
-import React from "react";
+import React, { useCallback } from "react";
 
 export const DeleteSearchResultsButton = () => {
-  const courseSearchResults = useCourseSearchResults();
-  const { resetData } = useScheduleActions();
+  const { resetColours } = useColoursActions();
+  const [data, setData] = useDataParam();
+  const courseCodes = Object.keys(data ? data : {});
+
+  const handleClick = useCallback(() => {
+    resetColours();
+    setData(null);
+  }, [resetColours, setData]);
 
   return (
     <Tooltip>
@@ -23,8 +27,8 @@ export const DeleteSearchResultsButton = () => {
           className="grow"
           variant="outline"
           size="lg"
-          onClick={() => resetData()}
-          disabled={courseSearchResults.length === 0}
+          onClick={handleClick}
+          disabled={courseCodes.length === 0}
         >
           <FontAwesomeIcon className="size-4" icon={faTrash} />
           <p className="hidden text-xs min-[375px]:inline sm:inline md:hidden min-[1440px]:inline">

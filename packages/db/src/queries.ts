@@ -12,6 +12,7 @@ import type {
   CourseDetailsInsert,
   CourseInsert,
   GetCourseResult,
+  GetCourseResultOkValue,
   SessionInsert,
   SubjectInsert,
   Term,
@@ -22,7 +23,10 @@ import { err, ok, Result, ResultAsync } from "neverthrow";
 export async function getAvailableTerms() {
   return ResultAsync.fromPromise(
     db
-      .select()
+      .select({
+        term: availableTermsTable.term,
+        value: availableTermsTable.value,
+      })
       .from(availableTermsTable)
       .orderBy(asc(availableTermsTable.value)),
     error => new Error(`Failed to fetch available terms: ${error}`),
@@ -259,31 +263,36 @@ export const getCourse = async (term: string, courseCode: string) => {
   );
 };
 
+export const parseCourse = (course: GetCourseResultOkValue) => {
+  const parsedSections = course.courseComponents.reduce(
+    (acc, curr) => {
+      if (!acc[curr.section]) {
+        acc[curr.section] = [curr];
+      } else {
+        acc[curr.section]?.push(curr);
+      }
+      return acc;
+    },
+    {} as Record<string, typeof course.courseComponents>,
+  );
+
+  const parsed = {
+    courseCode: course.courseCode,
+    courseTitle: course.courseTitle,
+    term: course.term,
+    sections: parsedSections,
+  };
+
+  return parsed;
+};
+
 export const processCourse = (course: GetCourseResult) => {
   return course.andThen(result => {
     if (!result) {
       return err(new Error(`Course not found`));
     }
 
-    const parsedSections = result.courseComponents.reduce(
-      (acc, curr) => {
-        if (!acc[curr.section]) {
-          acc[curr.section] = [curr];
-        } else {
-          acc[curr.section]?.push(curr);
-        }
-        return acc;
-      },
-      {} as Record<string, typeof result.courseComponents>,
-    );
-
-    const parsed = {
-      courseCode: result.courseCode,
-      courseTitle: result.courseTitle,
-      term: result.term,
-      sections: parsedSections,
-    };
-
+    const parsed = parseCourse(result);
     return ok(parsed);
   });
 };
