@@ -37,22 +37,49 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
       newSelected[courseCode] = [subSection];
     } else {
       const currSubSections = [...newSelected[courseCode]];
-      const toAddSubSections = [...(course.sections[section] as Section[])].map(
-        toAdd => toAdd.subSection,
-      );
 
-      // If there is no overlap between the currently selected subsections
-      // and the subsections from the section the user wants to add from,
-      // the user is selecting a different section
-      const intersection = getIntersection(currSubSections, toAddSubSections);
-      newSelected[courseCode] =
+      const acceptableAdditions = [...(course.sections[section] as Section[])]
+        .map(toAdd => ({ subSection: toAdd.subSection, type: toAdd.type }))
+        // This only accepts components that are different types from the one being selected
+        .filter(
+          toAdd =>
+            toAdd.type !== component.type ||
+            (toAdd.subSection !== component.subSection &&
+              toAdd.type === component.subSection),
+        )
+        .map(toAdd => toAdd.subSection);
+
+      // If there is no overlap in the acceptable additions and the
+      // currently selected sub sections, the user must be selecting
+      // a new subsection
+      const intersection = getIntersection(
+        currSubSections,
+        acceptableAdditions,
+      );
+      const newSubSections =
         intersection.length === 0
           ? [subSection]
           : [...currSubSections, subSection];
+
+      // Removes any components with duplicate types
+      newSelected[courseCode] = newSubSections.filter(
+        newSubSection =>
+          newSubSection === component.subSection ||
+          acceptableAdditions.includes(newSubSection),
+      );
     }
 
     setData(newSelected);
-  }, [course.sections, courseCode, data, section, setData, subSection]);
+  }, [
+    component.subSection,
+    component.type,
+    course.sections,
+    courseCode,
+    data,
+    section,
+    setData,
+    subSection,
+  ]);
 
   const removeSession = useCallback(() => {
     const { courseCode } = course;
