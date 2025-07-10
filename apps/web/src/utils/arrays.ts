@@ -4,9 +4,10 @@ export const getIntersection = <T>(array1: T[], array2: T[]): T[] => {
 };
 
 export const shuffleArray = (array: string[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j] as string, array[i] as string];
+    [shuffled[i], shuffled[j]] = [shuffled[j] as string, shuffled[i] as string];
   }
-  return array;
+  return shuffled;
 };
