@@ -1,16 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import TermSelector from "../TermSelector/TermSelector";
 import toast from "react-hot-toast";
-import {
-  COURSE_GC_TIME,
-  COURSE_STALE_TIME,
-  MAX_RESULTS_ALLOWED,
-} from "@/utils/constants";
+import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 import { AutoComplete } from "@repo/ui/components/autocomplete";
 import { useQuery } from "@tanstack/react-query";
 import { trpc } from "@/app/_trpc/client";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
+import { useCourseQuery } from "@/hooks/useCourseQuery";
 
 export default function SearchBar() {
   const [selectedTerm] = useTermParam();
@@ -25,24 +22,15 @@ export default function SearchBar() {
       { staleTime: Infinity },
     ),
   );
-  const maxResultsReached =
-    Object.keys(data ? data : {}).length > MAX_RESULTS_ALLOWED;
+  const isUnderMaxResults =
+    Object.keys(data ? data : {}).length < MAX_RESULTS_ALLOWED;
 
   const {
     data: courseData,
     error,
     isSuccess,
     isError,
-  } = useQuery(
-    trpc.getCourseByTermAndCourseCode.queryOptions(
-      { term: selectedTerm, courseCode: selectedValue },
-      {
-        enabled: !!selectedValue && !maxResultsReached,
-        staleTime: COURSE_STALE_TIME,
-        gcTime: COURSE_GC_TIME,
-      },
-    ),
-  );
+  } = useCourseQuery(selectedValue, isUnderMaxResults);
 
   useEffect(() => {
     if (isError && error) {
@@ -60,6 +48,12 @@ export default function SearchBar() {
       setSelectedValue("");
     }
   }, [isError, error, isSuccess, courseData, data, setData]);
+
+  useEffect(() => {
+    if (!isUnderMaxResults && !!selectedValue) {
+      toast.error("Max Results Reached");
+    }
+  }, [isUnderMaxResults, selectedValue]);
 
   const autocompleteItems = useMemo(
     () =>
