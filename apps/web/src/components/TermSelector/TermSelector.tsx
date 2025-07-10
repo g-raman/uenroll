@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export default function TermSelector() {
   const { resetColours } = useColoursActions();
@@ -27,8 +27,16 @@ export default function TermSelector() {
     [resetColours, setData, setSelectedTerm],
   );
 
+  const hasInitialized = useRef(false);
   useEffect(() => {
-    if (!availableTerms || availableTerms.length === 0) return;
+    if (
+      hasInitialized.current ||
+      !availableTerms ||
+      availableTerms.length === 0
+    ) {
+      return;
+    }
+    hasInitialized.current = true;
 
     const termInUrl = selectedTerm
       ? availableTerms.find(
