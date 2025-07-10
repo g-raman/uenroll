@@ -51,8 +51,8 @@ importers:
         specifier: ^1.0.0
         version: 1.1.0
       dotenv:
-        specifier: ^16.5.0
-        version: 16.6.1
+        specifier: ^17.2.0
+        version: 17.2.0
       fetch-cookie:
         specifier: ^3.1.0
         version: 3.1.0
@@ -73,8 +73,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@types/node':
-        specifier: ^22.15.14
-        version: 22.16.3
+        specifier: ^24.0.13
+        version: 24.0.13
       domhandler:
         specifier: ^5.0.3
         version: 5.0.3
@@ -2645,6 +2645,10 @@ packages:
 
   dotenv@16.6.1:
     resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+    engines: {node: '>=12'}
+
+  dotenv@17.2.0:
+    resolution: {integrity: sha512-Q4sgBT60gzd0BB0lSyYD3xM4YxrXA9y4uBDof1JNYGzOXrQdQ6yX+7XIAqoFOGQFOTK1D3Hts5OllpxMDZFONQ==}
     engines: {node: '>=12'}
 
   dotenv@8.6.0:
@@ -6279,7 +6283,7 @@ snapshots:
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 22.16.3
+      '@types/node': 24.0.13
     optional: true
 
   '@typescript-eslint/eslint-plugin@8.36.0(@typescript-eslint/parser@8.36.0(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3))(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3)':
@@ -6954,6 +6958,8 @@ snapshots:
   dotenv@16.0.3: {}
 
   dotenv@16.6.1: {}
+
+  dotenv@17.2.0: {}
 
   dotenv@8.6.0: {}
 
