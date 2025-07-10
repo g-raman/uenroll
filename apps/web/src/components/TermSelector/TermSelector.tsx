@@ -1,6 +1,6 @@
 "use client";
 
-import { trpc } from "@/app/_trpc/client";
+import { useAvailableTermsQuery } from "@/hooks/useAvailableTermsQuery";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import {
@@ -11,15 +11,12 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 
 export default function TermSelector() {
   const [selectedTerm, setSelectedTerm] = useTermParam();
   const [, setData] = useDataParam();
-  const { data: availableTerms } = useQuery(
-    trpc.getAvailableTerms.queryOptions(),
-  );
+  const { data: availableTerms } = useAvailableTermsQuery();
 
   const handleChangeTerm = useCallback(
     (term: string) => {

@@ -4,19 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, AccordionItem } from "@repo/ui/components/accordion";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { trpc } from "@/app/_trpc/client";
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useTermParam } from "@/hooks/useTermParam";
 import { useDataParam } from "@/hooks/useDataParam";
+import { useAvailableTermsQuery } from "@/hooks/useAvailableTermsQuery";
 
 export default function SearchResults() {
   const [data, setData] = useDataParam();
   const [selectedTerm, setSelectedTerm] = useTermParam();
 
-  const { data: availableTerms } = useQuery(
-    trpc.getAvailableTerms.queryOptions(),
-  );
+  const { data: availableTerms } = useAvailableTermsQuery();
   const [openResults, setOpenResults] = useState<string[]>([]);
 
   const courseCodes = Object.keys(data ? data : {});
