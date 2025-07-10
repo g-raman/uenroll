@@ -1,5 +1,19 @@
 # web
 
+## 0.10.0
+
+### Minor Changes
+
+- [#111](https://github.com/g-raman/uenroll/pull/111) [`6dd6e04`](https://github.com/g-raman/uenroll/commit/6dd6e04cc350021bbb06b60df6bbc2088eccacb0) Thanks [@g-raman](https://github.com/g-raman)! - Migrated to TRPC and simplifed client side state
+
+### Patch Changes
+
+- [#112](https://github.com/g-raman/uenroll/pull/112) [`070aff2`](https://github.com/g-raman/uenroll/commit/070aff2dd657a6db555fed9e0ebc07652b5c0f81) Thanks [@g-raman](https://github.com/g-raman)! - Used window object to get base url to avoid issues on non-production branches
+
+- [#113](https://github.com/g-raman/uenroll/pull/113) [`f0740da`](https://github.com/g-raman/uenroll/commit/f0740da837a81588362e6e118f54ecdc32ec4726) Thanks [@g-raman](https://github.com/g-raman)! - Made sub section selection mutually exclusive based on sections
+
+- [#109](https://github.com/g-raman/uenroll/pull/109) [`57ff20f`](https://github.com/g-raman/uenroll/commit/57ff20ff90eb73771941aaa7158fff07cb5506dd) Thanks [@g-raman](https://github.com/g-raman)! - Cached get course query
+
 ## 0.9.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @repo/db
 
+## 0.5.1
+
+### Patch Changes
+
+- [#111](https://github.com/g-raman/uenroll/pull/111) [`6dd6e04`](https://github.com/g-raman/uenroll/commit/6dd6e04cc350021bbb06b60df6bbc2088eccacb0) Thanks [@g-raman](https://github.com/g-raman)! - Removed unnecessary fields
+
 ## 0.5.0
 
 ### Minor Changes
