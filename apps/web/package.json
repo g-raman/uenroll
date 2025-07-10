@@ -38,7 +38,6 @@
     "nuqs": "^2.4.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-hot-toast": "^2.5.2",
     "rrule": "^2.8.1",
     "sonner": "^2.0.6",
     "ts-ics": "^1.6.8",
