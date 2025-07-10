@@ -38,9 +38,8 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
     } else {
       const currSubSections = [...newSelected[courseCode]];
 
+      // This only accepts components that are different types from the one being selected
       const acceptableAdditions = [...(course.sections[section] as Section[])]
-        .map(toAdd => ({ subSection: toAdd.subSection, type: toAdd.type }))
-        // This only accepts components that are different types from the one being selected
         .filter(
           toAdd =>
             toAdd.type !== component.type ||
