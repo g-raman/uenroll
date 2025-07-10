@@ -54,7 +54,7 @@
     "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^24.0.13",
     "@types/react": "19.1.8",
-    "@types/react-dom": "19.1.5",
+    "@types/react-dom": "19.1.6",
     "eslint": "catalog:",
     "tailwindcss": "^4.1.11",
     "typescript": "catalog:"
