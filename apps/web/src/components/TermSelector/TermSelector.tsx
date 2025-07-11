@@ -25,15 +25,25 @@ import {
 export default function TermSelector() {
   const { resetColours } = useColoursActions();
   const [selectedTerm, setSelectedTerm] = useTermParam();
-  const [, setData] = useDataParam();
+  const [data, setData] = useDataParam();
   const { data: availableTerms } = useAvailableTermsQuery();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [pendingTerm, setPendingTerm] = useState<string | null>(null);
 
-  const handleChangeTerm = useCallback((term: string) => {
-    setPendingTerm(term);
-    setIsAlertOpen(true);
-  }, []);
+  const handleChangeTerm = useCallback(
+    (term: string) => {
+      if (data === null) {
+        setSelectedTerm(term);
+        setData(null);
+        resetColours();
+        return;
+      }
+
+      setPendingTerm(term);
+      setIsAlertOpen(true);
+    },
+    [data, resetColours, setData, setSelectedTerm],
+  );
 
   const handleConfirmChangeTerm = useCallback(() => {
     if (pendingTerm) {
