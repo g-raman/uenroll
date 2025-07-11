@@ -91,7 +91,7 @@ export default function TermSelector() {
                 <AlertDialogCancel onClick={handleCancelChangeTerm}>
                   Cancel
                 </AlertDialogCancel>
-                <AlertDialogAction onClickCapture={handleConfirmChangeTerm}>
+                <AlertDialogAction onClick={handleConfirmChangeTerm}>
                   Continue
                 </AlertDialogAction>
               </AlertDialogFooter>
