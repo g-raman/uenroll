@@ -1,5 +1,19 @@
 # web
 
+## 0.11.0
+
+### Minor Changes
+
+- [#114](https://github.com/g-raman/uenroll/pull/114) [`8e3e091`](https://github.com/g-raman/uenroll/commit/8e3e091ffb1e70a0717565017133f6839b57dae3) Thanks [@g-raman](https://github.com/g-raman)! - Added sonner for toasts and removed react hot toast
+
+### Patch Changes
+
+- [#116](https://github.com/g-raman/uenroll/pull/116) [`be9f67d`](https://github.com/g-raman/uenroll/commit/be9f67d8a56548661606a43ef07b10610e9aef54) Thanks [@g-raman](https://github.com/g-raman)! - Updated all dependencies to latest
+
+- [#118](https://github.com/g-raman/uenroll/pull/118) [`bf1ffd2`](https://github.com/g-raman/uenroll/commit/bf1ffd20172a5d0738ab0e694e24775c9f6ee67b) Thanks [@g-raman](https://github.com/g-raman)! - Showed alert dialog before changing terms
+
+- [#117](https://github.com/g-raman/uenroll/pull/117) [`924038d`](https://github.com/g-raman/uenroll/commit/924038d684562786a25baaa0f484781b7aaac54d) Thanks [@g-raman](https://github.com/g-raman)! - Made sub section selection mutually exclusive
+
 ## 0.10.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # scraper
 
+## 1.4.1
+
+### Patch Changes
+
+- [#116](https://github.com/g-raman/uenroll/pull/116) [`be9f67d`](https://github.com/g-raman/uenroll/commit/be9f67d8a56548661606a43ef07b10610e9aef54) Thanks [@g-raman](https://github.com/g-raman)! - Updated all dependencies to latest
+
 ## 1.4.0
 
 ### Minor Changes
