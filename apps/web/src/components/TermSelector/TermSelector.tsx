@@ -10,22 +10,45 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@repo/ui/components/alert-dialog";
 
 export default function TermSelector() {
   const { resetColours } = useColoursActions();
   const [selectedTerm, setSelectedTerm] = useTermParam();
   const [, setData] = useDataParam();
   const { data: availableTerms } = useAvailableTermsQuery();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [pendingTerm, setPendingTerm] = useState<string | null>(null);
 
-  const handleChangeTerm = useCallback(
-    (term: string) => {
-      setSelectedTerm(term);
+  const handleChangeTerm = useCallback((term: string) => {
+    setPendingTerm(term);
+    setIsAlertOpen(true);
+  }, []);
+
+  const handleConfirmChangeTerm = useCallback(() => {
+    if (pendingTerm) {
+      setSelectedTerm(pendingTerm);
       setData(null);
       resetColours();
-    },
-    [resetColours, setData, setSelectedTerm],
-  );
+    }
+    setIsAlertOpen(false);
+    setPendingTerm(null);
+  }, [pendingTerm, resetColours, setData, setSelectedTerm]);
+
+  const handleCancelChangeTerm = useCallback(() => {
+    setIsAlertOpen(false);
+    setPendingTerm(null);
+  }, []);
 
   const hasInitialized = useRef(false);
   useEffect(() => {
@@ -55,19 +78,43 @@ export default function TermSelector() {
       {!selectedTerm || !availableTerms || availableTerms.length === 0 ? (
         <Skeleton className="h-8 w-full" />
       ) : (
-        <Select value={selectedTerm} onValueChange={handleChangeTerm}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Term" />
-          </SelectTrigger>
+        <>
+          <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will remove all your search results and schedule.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={handleCancelChangeTerm}>
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction onClick={handleConfirmChangeTerm}>
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
-          <SelectContent>
-            {availableTerms.map(availableTerm => (
-              <SelectItem key={availableTerm.value} value={availableTerm.value}>
-                {availableTerm.term}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          <Select value={selectedTerm} onValueChange={handleChangeTerm}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Term" />
+            </SelectTrigger>
+
+            <SelectContent>
+              {availableTerms.map(availableTerm => (
+                <SelectItem
+                  key={availableTerm.value}
+                  value={availableTerm.value}
+                >
+                  {availableTerm.term}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </>
       )}
     </>
   );
