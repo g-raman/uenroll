@@ -2,4 +2,4 @@
 "web": patch
 ---
 
-Showed alert dialog before change terms
+Showed alert dialog before changing terms
