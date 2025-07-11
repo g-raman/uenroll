@@ -1,5 +1,11 @@
 # web
 
+## 0.11.1
+
+### Patch Changes
+
+- [#119](https://github.com/g-raman/uenroll/pull/119) [`8b6fbae`](https://github.com/g-raman/uenroll/commit/8b6fbae2c473732a67949d26c0f08d39c13e9e66) Thanks [@g-raman](https://github.com/g-raman)! - Removed alert dialog if there are no search results
+
 ## 0.11.0
 
 ### Minor Changes
