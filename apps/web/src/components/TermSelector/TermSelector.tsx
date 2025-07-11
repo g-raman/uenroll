@@ -25,15 +25,10 @@ import {
 export default function TermSelector() {
   const { resetColours } = useColoursActions();
   const [selectedTerm, setSelectedTerm] = useTermParam();
-  const [, setData] = useDataParam();
+  const [data, setData] = useDataParam();
   const { data: availableTerms } = useAvailableTermsQuery();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [pendingTerm, setPendingTerm] = useState<string | null>(null);
-
-  const handleChangeTerm = useCallback((term: string) => {
-    setPendingTerm(term);
-    setIsAlertOpen(true);
-  }, []);
 
   const handleConfirmChangeTerm = useCallback(() => {
     if (pendingTerm) {
@@ -49,6 +44,19 @@ export default function TermSelector() {
     setIsAlertOpen(false);
     setPendingTerm(null);
   }, []);
+
+  const handleChangeTerm = useCallback(
+    (term: string) => {
+      setPendingTerm(term);
+
+      if (data === null) {
+        handleConfirmChangeTerm();
+        return;
+      }
+      setIsAlertOpen(true);
+    },
+    [data, handleConfirmChangeTerm],
+  );
 
   const hasInitialized = useRef(false);
   useEffect(() => {
