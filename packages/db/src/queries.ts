@@ -125,7 +125,6 @@ export const upsertCourseDetails = async (
   const coursesUpdated = await updateCourses(details.courses);
   const errors = [];
   if (coursesUpdated.isErr()) {
-    console.error(coursesUpdated.error);
     errors.push(coursesUpdated.error);
   }
 
@@ -133,18 +132,12 @@ export const upsertCourseDetails = async (
     details.courseComponents,
   );
   if (courseComponentsUpdated.isErr()) {
-    console.error(courseComponentsUpdated.error);
     errors.push(courseComponentsUpdated.error);
   }
 
   const sessionsUpdated = await updateSessions(details.sessions);
   if (sessionsUpdated.isErr()) {
-    console.error(sessionsUpdated.error);
     errors.push(sessionsUpdated.error);
-  }
-
-  for (const course of details.courses) {
-    console.log(`Updated details for ${course.courseCode}`);
   }
 
   return errors.length > 0 ? err(errors) : ok(undefined);
