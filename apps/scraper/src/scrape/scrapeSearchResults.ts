@@ -12,6 +12,7 @@ import {
   processSessions,
 } from "../utils/scrape.js";
 import * as cheerio from "cheerio";
+import { logger } from "../utils/logger.js";
 
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";
 const COURSE_TITLE_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2GP$";
@@ -45,7 +46,7 @@ export default (
     const courseContainer = $(courseContainerSelector);
     const parsedCourseHeader = getCourseCodeAndCourseTitle($(this));
     if (parsedCourseHeader.isErr()) {
-      console.error(parsedCourseHeader.error);
+      logger.error(parsedCourseHeader.error);
       return false;
     }
     const [courseCode, courseTitle] = parsedCourseHeader.value;
@@ -58,32 +59,32 @@ export default (
       const section = $(this);
       const parsedSubsectionDetails = getSectionAndType(section, sectionNumber);
       if (parsedSubsectionDetails.isErr()) {
-        console.error(parsedSubsectionDetails.error);
+        logger.error(parsedSubsectionDetails.error);
         return false;
       }
       const [subSection, type] = parsedSubsectionDetails.value;
 
       const instructors = getInstructors(section, sectionNumber);
       if (instructors.isErr()) {
-        console.error(instructors.error);
+        logger.error(instructors.error);
         return false;
       }
 
       const dates = getDates(section, sectionNumber);
       if (dates.isErr()) {
-        console.error(dates.error);
+        logger.error(dates.error);
         return false;
       }
 
       const timings = getTimings(section, sectionNumber);
       if (timings.isErr()) {
-        console.error(timings.error);
+        logger.error(timings.error);
         return false;
       }
 
       const status = getStatus(section, sectionNumber);
       if (status.isErr()) {
-        console.error(status.error);
+        logger.error(status.error);
         return false;
       }
 

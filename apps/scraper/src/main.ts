@@ -11,16 +11,17 @@ import {
 } from "@repo/db/queries";
 import { err, ok, Result } from "neverthrow";
 import type { CourseDetailsInsert, Term } from "@repo/db/types";
+import { logger } from "./utils/logger.js";
 
 const terms = await getAvailableTerms();
 if (terms.isErr()) {
-  console.error(terms.error);
+  logger.error(terms.error);
   process.exit(1);
 }
 
 const subjects = await getAvailableSubjects();
 if (subjects.isErr()) {
-  console.error(subjects.error);
+  logger.error(subjects.error);
   process.exit(1);
 }
 
@@ -57,40 +58,73 @@ const handleScraping = async (
 };
 
 for (const term of terms.value) {
-  console.log(`Searching for courses in term ${term.term}`);
+  logger.info(`Searching for courses in term ${term.term}`);
   for (const subject of subjects.value) {
     for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
-      console.log(`Searching for subject ${subject} in year ${year}`);
+      logger.info(`Searching for subject ${subject} in year ${year}`);
       const bothLanguages = await handleScraping(term, year, subject);
 
       if (
         bothLanguages.isErr() &&
         bothLanguages.error.message === "Search results exceed 300 items."
       ) {
-        console.log("Searching for English and French courses separately");
+        logger.info("Searching for English and French courses separately");
         const english = await handleScraping(term, year, subject, true, false);
         if (english.isErr()) {
-          console.error(english.error + "\n");
+          logger.error(english.error + "\n");
           continue;
         }
-        await upsertCourseDetails(english.value);
-        console.log("Updated English courses.\n");
+        const resultEnglish = await upsertCourseDetails(english.value);
+        if (resultEnglish.isOk()) {
+          english.value.courses.forEach(englishCourse =>
+            logger.info(
+              `Updated course details for ${englishCourse.courseCode}`,
+            ),
+          );
+        } else {
+          resultEnglish.error.forEach(englishError =>
+            logger.error(englishError),
+          );
+        }
+        logger.info("Updated English courses.\n");
 
         const french = await handleScraping(term, year, subject, false, true);
         if (french.isErr()) {
-          console.error(french.error + "\n");
+          logger.error(french.error + "\n");
           continue;
         }
-        await upsertCourseDetails(french.value);
-        console.log("Updated French courses.\n");
+        const resultFrench = await upsertCourseDetails(french.value);
+        if (resultFrench.isOk()) {
+          french.value.courses.forEach(frenchCourse =>
+            logger.info(
+              `Updated course details for ${frenchCourse.courseCode}`,
+            ),
+          );
+        } else {
+          resultFrench.error.forEach(frenchError => logger.error(frenchError));
+        }
+        logger.info("Updated French courses.\n");
       } else if (bothLanguages.isErr()) {
-        console.error(bothLanguages.error.message + "\n");
+        logger.error(bothLanguages.error.message + "\n");
         continue;
       } else {
-        await upsertCourseDetails(bothLanguages.value);
+        const resultBothLanguages = await upsertCourseDetails(
+          bothLanguages.value,
+        );
+        if (resultBothLanguages.isOk()) {
+          bothLanguages.value.courses.forEach(bothLanguageCourse =>
+            logger.info(
+              `Updated course details for ${bothLanguageCourse.courseCode}`,
+            ),
+          );
+        } else {
+          resultBothLanguages.error.forEach(bothLanguagesError =>
+            logger.error(bothLanguagesError),
+          );
+        }
       }
 
-      console.log(`Year ${year} processing complete.\n`);
+      logger.info(`Year ${year} processing complete.\n`);
     }
   }
 }
