@@ -15,13 +15,13 @@ import { logger } from "./utils/logger.js";
 
 const terms = await getAvailableTerms();
 if (terms.isErr()) {
-  console.error(terms.error);
+  logger.error(terms.error);
   process.exit(1);
 }
 
 const subjects = await getAvailableSubjects();
 if (subjects.isErr()) {
-  console.error(subjects.error);
+  logger.error(subjects.error);
   process.exit(1);
 }
 

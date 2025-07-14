@@ -7,6 +7,7 @@ import {
   updateAvailableTerms,
 } from "@repo/db/queries";
 import type { TermInsert } from "@repo/db/types";
+import { logger } from "../utils/logger.js";
 
 const response = await fetchCookie(COURSE_REGISTRY_URL);
 const html = await response.text();
@@ -32,13 +33,13 @@ $("[id='CLASS_SRCH_WRK2_STRM$35$']")
 
 const currentAvailableTerms = await getAvailableTerms();
 if (currentAvailableTerms.isErr()) {
-  console.error(currentAvailableTerms.error);
+  logger.error(currentAvailableTerms.error);
   process.exit(1);
 }
 const updateAvailableTermsResult =
   await updateAvailableTerms(newlyAvailableTerms);
 if (updateAvailableTermsResult.isErr()) {
-  console.error(updateAvailableTermsResult.error);
+  logger.error(updateAvailableTermsResult.error);
 }
 
 const termsToDelete = currentAvailableTerms.value.filter(
@@ -50,7 +51,7 @@ const termsToDelete = currentAvailableTerms.value.filter(
 );
 const deleteTermsResult = await deleteTerms(termsToDelete);
 if (deleteTermsResult.isErr()) {
-  console.error(deleteTermsResult.error);
+  logger.error(deleteTermsResult.error);
 }
 
 process.exit(0);
