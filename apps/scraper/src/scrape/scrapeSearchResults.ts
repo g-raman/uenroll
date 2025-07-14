@@ -87,7 +87,7 @@ export default (
         return false;
       }
 
-      const newSectionRegex = /^[A-Z]?[A-Z]00$/;
+      const newSectionRegex = /^[A-Z][A-Z]?[1-9]?00$/;
       const isNewSection = newSectionRegex.test(subSection);
       currentSection = isNewSection ? subSection : currentSection;
 
