@@ -10,6 +10,8 @@ export default async function getSubjectByYear(
   term: Omit<Term, "isDeleted">,
   year: number,
   subject: string,
+  english: boolean = true,
+  french: boolean = true,
 ) {
   // HACK: Somtimes ICSID isn't found and it takes ~2-3 attempts to get one
   let icsid = undefined;
@@ -31,6 +33,8 @@ export default async function getSubjectByYear(
     ICStateNum: "1",
     ICAction: "CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH",
     ICSID: icsid,
+    UO_PUB_SRCH_WRK_UO_LNG_EN$chk$0: english ? "Y" : "N",
+    UO_PUB_SRCH_WRK_UO_LNG_FR$chk$0: french ? "Y" : "N",
     CLASS_SRCH_WRK2_STRM$35$: term.value,
     SSR_CLSRCH_WRK_SUBJECT$0: subject.toUpperCase(),
     SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$0: "G",
