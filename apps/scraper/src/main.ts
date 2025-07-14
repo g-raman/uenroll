@@ -74,7 +74,18 @@ for (const term of terms.value) {
           logger.error(english.error + "\n");
           continue;
         }
-        await upsertCourseDetails(english.value);
+        const resultEnglish = await upsertCourseDetails(english.value);
+        if (resultEnglish.isOk()) {
+          english.value.courses.forEach(englishCourse =>
+            logger.info(
+              `Updated course details for ${englishCourse.courseCode}`,
+            ),
+          );
+        } else {
+          resultEnglish.error.forEach(englishError =>
+            logger.error(englishError),
+          );
+        }
         logger.info("Updated English courses.\n");
 
         const french = await handleScraping(term, year, subject, false, true);
@@ -82,13 +93,35 @@ for (const term of terms.value) {
           logger.error(french.error + "\n");
           continue;
         }
-        await upsertCourseDetails(french.value);
+        const resultFrench = await upsertCourseDetails(french.value);
+        if (resultFrench.isOk()) {
+          french.value.courses.forEach(frenchCourse =>
+            logger.info(
+              `Updated course details for ${frenchCourse.courseCode}`,
+            ),
+          );
+        } else {
+          resultFrench.error.forEach(frenchError => logger.error(frenchError));
+        }
         logger.info("Updated French courses.\n");
       } else if (bothLanguages.isErr()) {
         logger.error(bothLanguages.error.message + "\n");
         continue;
       } else {
-        await upsertCourseDetails(bothLanguages.value);
+        const resultBothLanguages = await upsertCourseDetails(
+          bothLanguages.value,
+        );
+        if (resultBothLanguages.isOk()) {
+          bothLanguages.value.courses.forEach(bothLanguageCourse =>
+            logger.info(
+              `Updated course details for ${bothLanguageCourse.courseCode}`,
+            ),
+          );
+        } else {
+          resultBothLanguages.error.forEach(bothLanguagesError =>
+            logger.error(bothLanguagesError),
+          );
+        }
       }
 
       logger.info(`Year ${year} processing complete.\n`);
