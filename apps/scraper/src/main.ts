@@ -9,6 +9,8 @@ import {
   getAvailableTerms,
   getAvailableSubjects,
 } from "@repo/db/queries";
+import { err, ok, Result } from "neverthrow";
+import type { CourseDetailsInsert, Term } from "@repo/db/types";
 
 const terms = await getAvailableTerms();
 if (terms.isErr()) {
@@ -16,41 +18,76 @@ if (terms.isErr()) {
   process.exit(1);
 }
 
-const courses = await getAvailableSubjects();
-if (courses.isErr()) {
-  console.error(courses.error);
+const subjects = await getAvailableSubjects();
+if (subjects.isErr()) {
+  console.error(subjects.error);
   process.exit(1);
 }
 
+const handleScraping = async (
+  term: Term,
+  year: number,
+  course: string,
+  english = true,
+  french = true,
+): Promise<Result<CourseDetailsInsert, Error>> => {
+  const html = await getSubjectByYear(term, year, course, english, french);
+  if (html.isErr()) {
+    return err(html.error);
+  }
+
+  if (html.value.length === 0) return err(new Error("HTML didn't load"));
+  const parser = cheerio.load(html.value);
+  const error = getError(parser);
+
+  if (error != null) {
+    return err(new Error(error));
+  }
+
+  const results = scrapeSearchResults(parser, term);
+  if (
+    results.courses.length === 0 ||
+    results.courseComponents.length === 0 ||
+    results.sessions.length === 0
+  ) {
+    return err(new Error("No search results found."));
+  }
+
+  return ok(results);
+};
+
 for (const term of terms.value) {
-  for (const course of courses.value) {
+  console.log(`Searching for courses in term ${term.term}`);
+  for (const subject of subjects.value) {
     for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
-      console.log(`Searching for ${course} year ${year} courses:`);
-      const html = await getSubjectByYear(term, year, course);
-      if (html.isErr()) {
-        console.error(html.error);
-        continue;
-      }
-      if (html.value.length === 0) continue;
+      console.log(`Searching for subject ${subject} in year ${year}`);
+      const bothLanguages = await handleScraping(term, year, subject);
 
-      const parser = cheerio.load(html.value);
-
-      const error = getError(parser);
-      if (error != null) {
-        console.log(error + "\n");
-        continue;
-      }
-
-      const results = scrapeSearchResults(parser, term);
-      console.log("Results scraped.");
       if (
-        results.courses.length === 0 ||
-        results.courseComponents.length === 0 ||
-        results.sessions.length === 0
+        bothLanguages.isErr() &&
+        bothLanguages.error.message === "Search results exceed 300 items."
       ) {
-        console.log("No results found.");
+        console.log("Searching for English and French courses separately");
+        const english = await handleScraping(term, year, subject, true, false);
+        if (english.isErr()) {
+          console.error(english.error + "\n");
+          continue;
+        }
+        await upsertCourseDetails(english.value);
+        console.log("Updated English courses.\n");
+
+        const french = await handleScraping(term, year, subject, false, true);
+        if (french.isErr()) {
+          console.error(french.error + "\n");
+          continue;
+        }
+        await upsertCourseDetails(french.value);
+        console.log("Updated French courses.\n");
+      } else if (bothLanguages.isErr()) {
+        console.error(bothLanguages.error.message + "\n");
+        continue;
       } else {
-        await upsertCourseDetails(results);
+        await upsertCourseDetails(bothLanguages.value);
       }
 
       console.log(`Year ${year} processing complete.\n`);
