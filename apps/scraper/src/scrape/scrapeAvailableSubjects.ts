@@ -4,18 +4,19 @@ import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 import { getIdSelector, getIdStartsWithSelector } from "../utils/scrape.js";
 import { updateAvailableSubjects } from "@repo/db/queries";
 import type { Subject } from "@repo/db/types";
+import { logger } from "../utils/logger.js";
 
 const characters = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", ..."0123456789"];
 const browserEndpoint = await getBrowserEndpoint();
 if (browserEndpoint.isErr()) {
-  console.error("Failed to get browser endpoint");
+  logger.error("Failed to get browser endpoint");
   process.exit(1);
 }
 
 const browser = await getBrowser(browserEndpoint.value);
 const page = await browser.newPage();
 
-console.log("Going to subjects page...");
+logger.info("Going to subjects page...");
 await page.goto(COURSE_REGISTRY_URL, { waitUntil: "networkidle0" });
 const SUBJECT_LIST_SELECTOR = "CLASS_SRCH_WRK2_SSR_PB_SUBJ_SRCH$";
 const subjectListSelector = getIdSelector(SUBJECT_LIST_SELECTOR, 0);
@@ -24,7 +25,7 @@ await page.click(subjectListSelector);
 await page.waitForNetworkIdle({ concurrency: 0 });
 
 for (const character of characters) {
-  console.log(`Searching for subjects starting with ${character}`);
+  logger.info(`Searching for subjects starting with ${character}`);
   const ALPHA_NUM_SELECTOR = "SSR_CLSRCH_WRK2_SSR_ALPHANUM_";
   const alphaNumSelector = `[id='${ALPHA_NUM_SELECTOR}${character}']`;
 
@@ -45,12 +46,12 @@ for (const character of characters) {
     });
 
   if (subjects.length === 0) {
-    console.log("No subjects found.\n");
+    logger.error("No subjects found.\n");
     continue;
   }
 
   await updateAvailableSubjects(subjects);
-  console.log("");
+  logger.silent("");
 }
 
 await page.close();

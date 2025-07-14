@@ -5,6 +5,7 @@ import {
 } from "../utils/constants.js";
 import { fetchCookie, getICSID } from "../utils/cookies.js";
 import { err, ResultAsync } from "neverthrow";
+import { logger } from "../utils/logger.js";
 
 export default async function getSubjectByYear(
   term: Omit<Term, "isDeleted">,
@@ -21,7 +22,7 @@ export default async function getSubjectByYear(
       return err(new Error("Failed to get ICSID"));
     }
     icsid = (await getICSID()).unwrapOr(undefined);
-    console.log(`ICSID attempt ${counter}`);
+    logger.info(`ICSID attempt ${counter}`);
     counter++;
   }
 

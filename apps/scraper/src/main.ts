@@ -11,6 +11,7 @@ import {
 } from "@repo/db/queries";
 import { err, ok, Result } from "neverthrow";
 import type { CourseDetailsInsert, Term } from "@repo/db/types";
+import { logger } from "./utils/logger.js";
 
 const terms = await getAvailableTerms();
 if (terms.isErr()) {
@@ -57,40 +58,40 @@ const handleScraping = async (
 };
 
 for (const term of terms.value) {
-  console.log(`Searching for courses in term ${term.term}`);
+  logger.info(`Searching for courses in term ${term.term}`);
   for (const subject of subjects.value) {
     for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
-      console.log(`Searching for subject ${subject} in year ${year}`);
+      logger.info(`Searching for subject ${subject} in year ${year}`);
       const bothLanguages = await handleScraping(term, year, subject);
 
       if (
         bothLanguages.isErr() &&
         bothLanguages.error.message === "Search results exceed 300 items."
       ) {
-        console.log("Searching for English and French courses separately");
+        logger.info("Searching for English and French courses separately");
         const english = await handleScraping(term, year, subject, true, false);
         if (english.isErr()) {
-          console.error(english.error + "\n");
+          logger.error(english.error + "\n");
           continue;
         }
         await upsertCourseDetails(english.value);
-        console.log("Updated English courses.\n");
+        logger.info("Updated English courses.\n");
 
         const french = await handleScraping(term, year, subject, false, true);
         if (french.isErr()) {
-          console.error(french.error + "\n");
+          logger.error(french.error + "\n");
           continue;
         }
         await upsertCourseDetails(french.value);
-        console.log("Updated French courses.\n");
+        logger.info("Updated French courses.\n");
       } else if (bothLanguages.isErr()) {
-        console.error(bothLanguages.error.message + "\n");
+        logger.error(bothLanguages.error.message + "\n");
         continue;
       } else {
         await upsertCourseDetails(bothLanguages.value);
       }
 
-      console.log(`Year ${year} processing complete.\n`);
+      logger.info(`Year ${year} processing complete.\n`);
     }
   }
 }
