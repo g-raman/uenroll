@@ -75,7 +75,7 @@ export default function SearchBar() {
   );
 
   return (
-    <div className="bg-background sticky top-0 z-10 mb-2 flex flex-col gap-2">
+    <div className="bg-background sticky top-0 z-10 flex flex-col gap-2 py-4">
       <TermSelector />
       <div className="flex items-center justify-between gap-2">
         <AutoComplete
@@ -89,7 +89,7 @@ export default function SearchBar() {
         />
       </div>
 
-      <div className="mb-4 flex gap-2">
+      <div className="flex gap-2">
         <DeleteSearchResultsButton />
         <CopyLinkButton />
         <DownloadCalendarButton />
