@@ -4,7 +4,6 @@ import { Checkbox } from "@repo/ui/components/checkbox";
 import { Section } from "@repo/db/types";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useCallback } from "react";
-import { getIntersection } from "@/utils/arrays";
 
 interface ComponentResultProps {
   component: Section;
@@ -36,45 +35,11 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
     if (!newSelected[courseCode] || newSelected[courseCode].length === 0) {
       newSelected[courseCode] = [subSection];
     } else {
-      const currSubSections = [...newSelected[courseCode]];
-
-      // Only accept components that are different types from the one being selected
-      const acceptableSubSections = [...(course.sections[section] as Section[])]
-        .filter(toAdd => toAdd.type !== component.type)
-        .map(toAdd => toAdd.subSection);
-
-      // If there is no overlap in the acceptable subSections and the
-      // currently selected sub sections, the user must be selecting
-      // a new subsection
-      const intersection = getIntersection(
-        currSubSections,
-        acceptableSubSections,
-      );
-      const newSubSections =
-        intersection.length === 0
-          ? [subSection]
-          : [...currSubSections, subSection];
-
-      // Keep the sub section that was just added
-      // and remove all duplicate types
-      newSelected[courseCode] = newSubSections.filter(
-        newSubSection =>
-          newSubSection === component.subSection ||
-          acceptableSubSections.includes(newSubSection),
-      );
+      newSelected[courseCode].push(subSection);
     }
 
     setData(newSelected);
-  }, [
-    component.subSection,
-    component.type,
-    course.sections,
-    courseCode,
-    data,
-    section,
-    setData,
-    subSection,
-  ]);
+  }, [courseCode, data, setData, subSection]);
 
   const removeSession = useCallback(() => {
     const { courseCode } = course;
