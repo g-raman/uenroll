@@ -8,6 +8,9 @@ import { trpc } from "@/app/_trpc/client";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import { useCourseQuery } from "@/hooks/useCourseQuery";
+import { DeleteSearchResultsButton } from "../Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
+import { CopyLinkButton } from "../Buttons/CopyLinkButton/CopyLinkButton";
+import DownloadCalendarButton from "../Buttons/DownloadCalendarButton/DownloadCalendarButton";
 
 export default function SearchBar() {
   const [selectedTerm] = useTermParam();
@@ -72,7 +75,7 @@ export default function SearchBar() {
   );
 
   return (
-    <div className="sticky top-0 z-10 mb-2 flex flex-col gap-2">
+    <div className="bg-background sticky top-0 z-10 flex flex-col gap-2 py-4">
       <TermSelector />
       <div className="flex items-center justify-between gap-2">
         <AutoComplete
@@ -84,6 +87,12 @@ export default function SearchBar() {
           emptyMessage="No Courses Found..."
           items={autocompleteItems}
         />
+      </div>
+
+      <div className="flex gap-2">
+        <DeleteSearchResultsButton />
+        <CopyLinkButton />
+        <DownloadCalendarButton />
       </div>
     </div>
   );
