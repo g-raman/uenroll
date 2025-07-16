@@ -32,7 +32,7 @@ export default function SearchResults() {
     .map(query => query.data);
 
   return (
-    <div className="overflow-y-scroll">
+    <div>
       <Accordion type="multiple" onValueChange={value => setOpenResults(value)}>
         {courseSearchResults.map(course => {
           return (
