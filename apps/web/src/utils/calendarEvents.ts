@@ -16,7 +16,6 @@ const getOffsettedStartDate = (startDate: string, dayOfWeek: string) => {
   const baseStartDate = dayjs(startDate);
   const dayOfWeekNum = dayOfWeekToNumberMap[dayOfWeek] as number;
   const dayOffset = dayOfWeekNum - baseStartDate.get("d");
-  console.log(dayOfWeekNum, baseStartDate.get("d"));
 
   return baseStartDate.add(dayOffset < 0 ? 7 + dayOffset : dayOffset, "days");
 };
