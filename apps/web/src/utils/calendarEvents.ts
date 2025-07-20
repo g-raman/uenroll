@@ -12,20 +12,21 @@ type EventCreationFunction<T> = (
   course: ColouredCourse,
 ) => T;
 
+const getOffsettedStartDate = (startDate: string, dayOfWeek: string) => {
+  const baseStartDate = dayjs(startDate);
+  const dayOfWeekNum = dayOfWeekToNumberMap[dayOfWeek] as number;
+  const dayOffset = dayOfWeekNum - baseStartDate.get("d");
+
+  return baseStartDate.add(dayOffset < 0 ? 7 + dayOffset : dayOffset, "days");
+};
+
 const DATE_FORMAT = "YYYY-MM-DD";
 const createCalendarEvent = (
   session: Session,
   component: Section,
   course: ColouredCourse,
 ) => {
-  const baseStartDate = dayjs(session.startDate);
-  const dayOfWeek = dayOfWeekToNumberMap[session.dayOfWeek] as number;
-  const dayOffset = dayOfWeek - baseStartDate.day();
-
-  const startDate = baseStartDate.add(
-    dayOffset < 0 ? 7 + dayOffset : dayOffset,
-    "days",
-  );
+  const startDate = getOffsettedStartDate(session.startDate, session.dayOfWeek);
   const endDate = dayjs(session.endDate);
 
   const rrule = new RRule({
@@ -66,20 +67,18 @@ export const createDownloadableCalendarEvent = (
   component: Section,
   course: ColouredCourse,
 ) => {
+  const startDate = getOffsettedStartDate(
+    session.startDate,
+    session.dayOfWeek,
+  ).format(DATE_FORMAT);
+
   const parsedStartTime = session.startTime.slice(0, -3);
   const parsedEndTime = session.endTime.slice(0, -3);
 
-  const baseStartTime = dayjs(`${session.startDate} ${parsedStartTime}`);
-  const baseEndTime = dayjs(`${session.startDate} ${parsedEndTime}`);
-  const dayOfWeek = dayOfWeekToNumberMap[session.dayOfWeek] as number;
-  const dayOffset = Math.abs(baseStartTime.get("d") - dayOfWeek);
+  const startTime = dayjs(`${startDate} ${parsedStartTime}`);
+  const endTime = dayjs(`${startDate} ${parsedEndTime}`);
 
-  const startTime = baseStartTime.add(dayOffset, "days");
-  const endTime = baseEndTime.add(dayOffset, "days");
-
-  const recurrenceUntil = dayjs(
-    `${session.endDate} ${session.endTime.slice(0, -3)}`,
-  );
+  const recurrenceUntil = dayjs(`${session.endDate} ${parsedEndTime}`);
 
   const event: IcsEvent = {
     uid: v4(),
