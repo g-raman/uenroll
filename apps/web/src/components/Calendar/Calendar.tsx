@@ -1,5 +1,7 @@
 "use client";
 
+import "temporal-polyfill/global";
+
 import { ScheduleXCalendar, useNextCalendarApp } from "@schedule-x/react";
 import { createViewMonthAgenda, createViewWeek } from "@schedule-x/calendar";
 import { createEventsServicePlugin } from "@schedule-x/events-service";
@@ -47,6 +49,7 @@ function Calendar() {
 
   const calendar = useNextCalendarApp(
     {
+      timezone: "America/Toronto",
       views: [createViewWeek(), createViewMonthAgenda()],
       theme: "shadcn",
       isDark: theme === "dark" || systemTheme === "dark",
