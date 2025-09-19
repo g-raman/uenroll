@@ -20,6 +20,19 @@ const getOffsettedStartDate = (startDate: string, dayOfWeek: string) => {
   return baseStartDate.add(dayOffset < 0 ? 7 + dayOffset : dayOffset, "days");
 };
 
+export const getOffsettedStartDateTime = (
+  date: string,
+  time: string,
+  dayOfWeek: string,
+) => {
+  const baseStartDate = getZonedDateTime(date, time);
+  const target = dayOfWeekToNumberMap[dayOfWeek] as number;
+  // Difference (could be negative if target < start day, so normalize with +7 % 7)
+  const dayOffset = (target - baseStartDate.dayOfWeek + 7) % 7;
+
+  return baseStartDate.add({ days: dayOffset });
+};
+
 export const getPlainStringTime = (zonedDateTime: Temporal.ZonedDateTime) => {
   return new Intl.DateTimeFormat("en-US", {
     hour: "2-digit",
@@ -29,7 +42,6 @@ export const getPlainStringTime = (zonedDateTime: Temporal.ZonedDateTime) => {
 };
 
 export const getZonedDateTime = (date: string, time: string) => {
-  console.log(`${date}T${time}${TIMEZONE}`);
   return Temporal.ZonedDateTime.from(`${date}T${time}${TIMEZONE}`);
 };
 
@@ -39,11 +51,15 @@ const createCalendarEvent = (
   component: Section,
   course: ColouredCourse,
 ) => {
-  const startDate = getOffsettedStartDate(session.startDate, session.dayOfWeek);
-  const startDateStr = startDate.format(DATE_FORMAT);
-
-  const zonedStartDateTime = getZonedDateTime(startDateStr, session.startTime);
-  const zonedEndDateTime = getZonedDateTime(startDateStr, session.endTime);
+  const zonedStartDateTime = getOffsettedStartDateTime(
+    session.startDate,
+    session.startTime,
+    session.dayOfWeek,
+  );
+  const zonedEndDateTime = getZonedDateTime(
+    zonedStartDateTime.toPlainDate().toString(),
+    session.endTime,
+  );
 
   const recurrenceEndDateTime = getZonedDateTime(
     session.endDate,
