@@ -28,6 +28,10 @@ export const getPlainStringTime = (zonedDateTime: Temporal.ZonedDateTime) => {
   }).format(new Date(zonedDateTime.epochMilliseconds));
 };
 
+export const getZonedDateTime = (date: string, time: string) => {
+  return Temporal.ZonedDateTime.from(`${date}T${time}${TIMEZONE}`);
+};
+
 const DATE_FORMAT = "YYYY-MM-DD";
 const createCalendarEvent = (
   session: Session,
