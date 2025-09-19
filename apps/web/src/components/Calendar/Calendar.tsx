@@ -85,14 +85,11 @@ function Calendar() {
   // Hardcoding for now
   useEffect(() => {
     switch (selectedTerm) {
-      case "2255":
-        calendarControls.setDate("2025-05-05");
-        break;
       case "2259":
-        calendarControls.setDate("2025-09-03");
+        calendarControls.setDate(Temporal.PlainDate.from("2025-09-03"));
         break;
       case "2261":
-        calendarControls.setDate("2026-01-12");
+        calendarControls.setDate(Temporal.PlainDate.from("2026-01-12"));
         break;
     }
   }, [calendarControls, selectedTerm]);
