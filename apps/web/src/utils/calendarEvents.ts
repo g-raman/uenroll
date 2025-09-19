@@ -40,6 +40,10 @@ const createCalendarEvent = (
 ) => {
   const startDate = getOffsettedStartDate(session.startDate, session.dayOfWeek);
   const endDate = dayjs(session.endDate);
+  const startDateStr = startDate.format(DATE_FORMAT);
+
+  const zonedStartDateTime = getZonedDateTime(startDateStr, session.startTime);
+  const zonedEndDateTime = getZonedDateTime(startDateStr, session.endTime);
 
   const rrule = new RRule({
     freq: RRule.WEEKLY,
@@ -54,14 +58,12 @@ const createCalendarEvent = (
       endDate.get("day"),
     ),
   });
-  const startTime = session.startTime.slice(0, -3);
-  const endTime = session.endTime.slice(0, -3);
 
   return {
     id: `${course.courseCode}${component.subSection}`,
     title: `${course.courseCode}`,
-    start: `${startDate.format(DATE_FORMAT)} ${startTime}`,
-    end: `${startDate.format(DATE_FORMAT)} ${endTime}`,
+    start: zonedStartDateTime,
+    end: zonedEndDateTime,
     rrule: rrule.toString(),
     backgroundColour: course.colour,
     courseCode: course.courseCode,
