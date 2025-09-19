@@ -29,6 +29,7 @@ export const getPlainStringTime = (zonedDateTime: Temporal.ZonedDateTime) => {
 };
 
 export const getZonedDateTime = (date: string, time: string) => {
+  console.log(`${date}T${time}${TIMEZONE}`);
   return Temporal.ZonedDateTime.from(`${date}T${time}${TIMEZONE}`);
 };
 
@@ -39,23 +40,31 @@ const createCalendarEvent = (
   course: ColouredCourse,
 ) => {
   const startDate = getOffsettedStartDate(session.startDate, session.dayOfWeek);
-  const endDate = dayjs(session.endDate);
   const startDateStr = startDate.format(DATE_FORMAT);
 
   const zonedStartDateTime = getZonedDateTime(startDateStr, session.startTime);
   const zonedEndDateTime = getZonedDateTime(startDateStr, session.endTime);
 
+  const recurrenceEndDateTime = getZonedDateTime(
+    session.endDate,
+    session.endTime,
+  );
+
   const rrule = new RRule({
     freq: RRule.WEEKLY,
     dtstart: datetime(
-      startDate.get("year"),
-      startDate.get("month") + 1,
-      startDate.get("day"),
+      zonedStartDateTime.year,
+      zonedStartDateTime.month,
+      zonedStartDateTime.day,
+      zonedStartDateTime.hour,
+      zonedStartDateTime.minute,
     ),
     until: datetime(
-      endDate.get("year"),
-      endDate.get("month") + 1,
-      endDate.get("day"),
+      recurrenceEndDateTime.year,
+      recurrenceEndDateTime.month,
+      recurrenceEndDateTime.day,
+      recurrenceEndDateTime.hour,
+      zonedEndDateTime.minute,
     ),
   });
 
