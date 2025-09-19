@@ -180,6 +180,9 @@ importers:
       sonner:
         specifier: ^2.0.6
         version: 2.0.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      temporal-polyfill:
+        specifier: ^0.3.0
+        version: 0.3.0
       ts-ics:
         specifier: ^2.2.0
         version: 2.3.0
