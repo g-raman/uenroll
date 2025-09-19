@@ -1,5 +1,5 @@
 import { ColouredCourse, Selected } from "@/types/Types";
-import { dayOfWeekToNumberMap } from "./constants";
+import { dayOfWeekToNumberMap, TIMEZONE } from "./constants";
 import { Session, Section } from "@repo/db/types";
 import dayjs from "dayjs";
 import { datetime, RRule } from "rrule";
@@ -18,6 +18,14 @@ const getOffsettedStartDate = (startDate: string, dayOfWeek: string) => {
   const dayOffset = dayOfWeekNum - baseStartDate.get("d");
 
   return baseStartDate.add(dayOffset < 0 ? 7 + dayOffset : dayOffset, "days");
+};
+
+export const getPlainStringTime = (zonedDateTime: Temporal.ZonedDateTime) => {
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  }).format(new Date(zonedDateTime.epochMilliseconds));
 };
 
 const DATE_FORMAT = "YYYY-MM-DD";
