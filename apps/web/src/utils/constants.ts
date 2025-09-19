@@ -43,4 +43,4 @@ export const dayOfWeekToNumberMap: { [key: string]: number } = {
   Su: 7,
 };
 
-export const TIMEZONE = "-04:00[America/Toronto]";
+export const TIMEZONE = "[America/Toronto]";
