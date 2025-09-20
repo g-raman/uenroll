@@ -29,6 +29,7 @@ export const getPlainStringTime = (zonedDateTime: Temporal.ZonedDateTime) => {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
+    timeZone: zonedDateTime.timeZoneId,
   }).format(new Date(zonedDateTime.epochMilliseconds));
 };
 
