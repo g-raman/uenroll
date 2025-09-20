@@ -61,7 +61,7 @@ export default function CalendarHeader({ $app }: { $app: App }) {
         {monthStart === monthEnd ? monthStart : `${monthStart} - ${monthEnd}`}
       </p>
 
-      <div className="ml-auto flex hidden gap-2 lg:block">
+      <div className="ml-auto hidden space-x-2 lg:block">
         <Button
           className="bg-background! shadow-xs! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! border text-black dark:text-white"
           onClick={() =>
