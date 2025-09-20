@@ -1,5 +1,19 @@
 # scraper
 
+## 1.5.0
+
+### Minor Changes
+
+- [#122](https://github.com/g-raman/uenroll/pull/122) [`fb33f1f`](https://github.com/g-raman/uenroll/commit/fb33f1ff00b7f6cd678171afe68c03a91548a4d6) Thanks [@g-raman](https://github.com/g-raman)! - Handled case where search results exceed maximum by querying english and french courses separately
+
+- [#123](https://github.com/g-raman/uenroll/pull/123) [`e5649e6`](https://github.com/g-raman/uenroll/commit/e5649e669a334e91eeefdd71ed944aab9b5ca65c) Thanks [@g-raman](https://github.com/g-raman)! - Used pino for logging
+
+### Patch Changes
+
+- [#127](https://github.com/g-raman/uenroll/pull/127) [`491dac5`](https://github.com/g-raman/uenroll/commit/491dac53a60ffbbf267313db543a7f606e960779) Thanks [@g-raman](https://github.com/g-raman)! - Fixed bug with pino
+
+- [#121](https://github.com/g-raman/uenroll/pull/121) [`5325388`](https://github.com/g-raman/uenroll/commit/5325388488fb44a3f66c51b7a4abccf2ba0e94f9) Thanks [@g-raman](https://github.com/g-raman)! - Updated new section regex to include section of format P200
+
 ## 1.4.1
 
 ### Patch Changes

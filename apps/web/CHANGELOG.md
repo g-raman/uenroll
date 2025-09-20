@@ -1,5 +1,21 @@
 # web
 
+## 0.12.0
+
+### Minor Changes
+
+- [#127](https://github.com/g-raman/uenroll/pull/127) [`491dac5`](https://github.com/g-raman/uenroll/commit/491dac53a60ffbbf267313db543a7f606e960779) Thanks [@g-raman](https://github.com/g-raman)! - Updated schedule-x to v3 and migrated to Temporal API for DateTimes
+
+### Patch Changes
+
+- [#126](https://github.com/g-raman/uenroll/pull/126) [`50018a5`](https://github.com/g-raman/uenroll/commit/50018a56d33030a117aaf8511002bc4f730a68ee) Thanks [@g-raman](https://github.com/g-raman)! - Fixed date offset calcuation for downloadable calendar events
+
+- [#125](https://github.com/g-raman/uenroll/pull/125) [`5e9f57d`](https://github.com/g-raman/uenroll/commit/5e9f57d9b47cc64a2001fd0d3a34ae7ac921d214) Thanks [@g-raman](https://github.com/g-raman)! - Removed mutual exclusion of sections because of bio courses
+
+- [#119](https://github.com/g-raman/uenroll/pull/119) [`8b6fbae`](https://github.com/g-raman/uenroll/commit/8b6fbae2c473732a67949d26c0f08d39c13e9e66) Thanks [@g-raman](https://github.com/g-raman)! - Removed alert dialog if there are no search results
+
+- [#124](https://github.com/g-raman/uenroll/pull/124) [`1dc84b2`](https://github.com/g-raman/uenroll/commit/1dc84b26c702ce340ec9138ff5e377edf6d583bf) Thanks [@g-raman](https://github.com/g-raman)! - Fixed scrolling issues with lots of search results
+
 ## 0.11.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @repo/db
 
+## 0.5.3
+
+### Patch Changes
+
+- [#123](https://github.com/g-raman/uenroll/pull/123) [`e5649e6`](https://github.com/g-raman/uenroll/commit/e5649e669a334e91eeefdd71ed944aab9b5ca65c) Thanks [@g-raman](https://github.com/g-raman)! - Moved logging for upsert function to scraper package
+
 ## 0.5.2
 
 ### Patch Changes
