@@ -1,7 +1,7 @@
 import { ColouredCourse, Selected } from "@/types/Types";
 import { dayOfWeekToNumberMap, TIMEZONE } from "./constants";
 import { Session, Section } from "@repo/db/types";
-import { datetime, RRule } from "rrule";
+import { RRule } from "rrule";
 import { IcsEvent } from "ts-ics";
 import { v4 } from "uuid";
 
@@ -59,20 +59,8 @@ const createCalendarEvent = (
 
   const rrule = new RRule({
     freq: RRule.WEEKLY,
-    dtstart: datetime(
-      zonedStartDateTime.year,
-      zonedStartDateTime.month,
-      zonedStartDateTime.day,
-      zonedStartDateTime.hour,
-      zonedStartDateTime.minute,
-    ),
-    until: datetime(
-      recurrenceEndDateTime.year,
-      recurrenceEndDateTime.month,
-      recurrenceEndDateTime.day,
-      recurrenceEndDateTime.hour,
-      zonedEndDateTime.minute,
-    ),
+    dtstart: new Date(zonedStartDateTime.epochMilliseconds),
+    until: new Date(recurrenceEndDateTime.epochMilliseconds),
   });
 
   return {
