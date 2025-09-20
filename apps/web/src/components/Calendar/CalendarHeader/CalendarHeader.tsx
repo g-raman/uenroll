@@ -1,3 +1,4 @@
+import { useTermParam } from "@/hooks/useTermParam";
 import { TIMEZONE } from "@/utils/constants";
 import {
   faChevronLeft,
@@ -23,6 +24,8 @@ export interface App {
 }
 
 export default function CalendarHeader({ $app }: { $app: App }) {
+  const [term] = useTermParam();
+
   const date = $app.config.plugins.calendarControls.getDate();
   const { start, end } = $app.config.plugins.calendarControls.getRange();
 
@@ -43,11 +46,15 @@ export default function CalendarHeader({ $app }: { $app: App }) {
         size="lg"
         onClick={() =>
           $app.config.plugins.calendarControls.setDate(
-            Temporal.Now.zonedDateTimeISO(TIMEZONE).toPlainDate(),
+            term === "2259"
+              ? Temporal.PlainDate.from("2025-09-03")
+              : term === "2261"
+                ? Temporal.PlainDate.from("2026-01-12")
+                : Temporal.Now.zonedDateTimeISO(TIMEZONE).toPlainDate(),
           )
         }
       >
-        Today
+        Term Start
       </Button>
 
       <p className="text-base font-bold">
