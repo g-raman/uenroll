@@ -60,18 +60,8 @@ function Calendar() {
         end: "23:00",
       },
       callbacks: {
-        onRender: () => {
-          // HACK: Calendar UI doesn't affect latest changes unless I do this
-          const currentView = calendarControls.getView();
-          if (currentView === "week") {
-            calendarControls.setView("list");
-            calendarControls.setView("week");
-          } else {
-            calendarControls.setView("week");
-            calendarControls.setView("list");
-          }
-        },
         beforeRender($app) {
+          eventsService.getAll();
           // Need a multiplier to reduce grid height as some space
           // is taken up by the calendar navigation
           const multiplier = 0.735;
