@@ -19,6 +19,7 @@ import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { createCalendarAppEvents } from "@/utils/calendarEvents";
 import { useDataParam } from "@/hooks/useDataParam";
 import { TIMEZONE } from "@/utils/constants";
+import CalendarHeader from "./CalendarHeader/CalendarHeader";
 
 function Calendar() {
   const [selectedTerm] = useTermParam();
@@ -113,6 +114,7 @@ function Calendar() {
           timeGridEvent: CalendarEvent,
           monthAgendaEvent: CalendarEvent,
           eventModal: CalendarEventModal,
+          headerContent: CalendarHeader,
         }}
       />
     </div>
