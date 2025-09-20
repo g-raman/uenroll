@@ -34,7 +34,7 @@ export const getPlainStringTime = (zonedDateTime: Temporal.ZonedDateTime) => {
 };
 
 export const getZonedDateTime = (date: string, time: string) => {
-  return Temporal.ZonedDateTime.from(`${date}T${time}${TIMEZONE}`);
+  return Temporal.ZonedDateTime.from(`${date}T${time}[${TIMEZONE}]`);
 };
 
 const createCalendarEvent = (

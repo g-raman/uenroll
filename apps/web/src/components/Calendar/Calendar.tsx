@@ -18,6 +18,7 @@ import { useTermParam } from "@/hooks/useTermParam";
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { createCalendarAppEvents } from "@/utils/calendarEvents";
 import { useDataParam } from "@/hooks/useDataParam";
+import { TIMEZONE } from "@/utils/constants";
 
 function Calendar() {
   const [selectedTerm] = useTermParam();
@@ -49,7 +50,7 @@ function Calendar() {
 
   const calendar = useNextCalendarApp(
     {
-      timezone: "America/Toronto",
+      timezone: TIMEZONE,
       views: [createViewWeek(), createViewMonthAgenda()],
       theme: "shadcn",
       isDark: theme === "dark" || systemTheme === "dark",
