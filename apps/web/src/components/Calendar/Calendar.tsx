@@ -3,7 +3,7 @@
 import "temporal-polyfill/global";
 
 import { ScheduleXCalendar, useNextCalendarApp } from "@schedule-x/react";
-import { createViewMonthAgenda, createViewWeek } from "@schedule-x/calendar";
+import { createViewList, createViewWeek } from "@schedule-x/calendar";
 import { createEventsServicePlugin } from "@schedule-x/events-service";
 
 import "@schedule-x/theme-shadcn/dist/index.css";
@@ -52,7 +52,7 @@ function Calendar() {
   const calendar = useNextCalendarApp(
     {
       timezone: TIMEZONE,
-      views: [createViewWeek(), createViewMonthAgenda()],
+      views: [createViewWeek(), createViewList()],
       theme: "shadcn",
       isDark: theme === "dark" || systemTheme === "dark",
       dayBoundaries: {
@@ -64,11 +64,11 @@ function Calendar() {
           // HACK: Calendar UI doesn't affect latest changes unless I do this
           const currentView = calendarControls.getView();
           if (currentView === "week") {
-            calendarControls.setView("month-agenda");
+            calendarControls.setView("list");
             calendarControls.setView("week");
           } else {
             calendarControls.setView("week");
-            calendarControls.setView("month-agenda");
+            calendarControls.setView("list");
           }
         },
         beforeRender($app) {
