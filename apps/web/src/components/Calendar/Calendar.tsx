@@ -108,6 +108,13 @@ function Calendar() {
           headerContent: CalendarHeader,
         }}
       />
+      {events.length === 0 ? (
+        <p className="mt-8 h-max w-full text-center lg:hidden">
+          No courses selected.
+        </p>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
