@@ -63,7 +63,7 @@ const createCalendarEvent = (
   });
 
   return {
-    id: `${course.courseCode}${component.subSection}-${session.dayOfWeek}-${session.startTime}`,
+    id: `${course.courseCode}${component.subSection}-${session.dayOfWeek}-${session.startTime.replaceAll(":", "")}`,
     title: `${course.courseCode}`,
     start: zonedStartDateTime,
     end: zonedEndDateTime,
