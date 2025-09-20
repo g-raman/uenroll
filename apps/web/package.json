@@ -20,7 +20,6 @@
     "@schedule-x/event-recurrence": "^3.1.2",
     "@schedule-x/events-service": "^3.1.2",
     "@schedule-x/react": "^3.1.0",
-    "@schedule-x/theme-default": "^2.36.0",
     "@schedule-x/theme-shadcn": "^3.1.2",
     "@tanstack/react-query": "^5.82.0",
     "@trpc/client": "^11.4.3",

@@ -120,9 +120,6 @@ importers:
       '@schedule-x/react':
         specifier: ^3.1.0
         version: 3.1.0(@schedule-x/calendar@3.2.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)(temporal-polyfill@0.3.0))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@schedule-x/theme-default':
-        specifier: ^2.36.0
-        version: 2.36.0
       '@schedule-x/theme-shadcn':
         specifier: ^3.1.2
         version: 3.2.0
@@ -1834,9 +1831,6 @@ packages:
       '@schedule-x/calendar': ^3.1.0
       react: ^16.7.0 || ^17 || ^18 || ^19
       react-dom: ^16.7.0 || ^17 || ^18 || ^19
-
-  '@schedule-x/theme-default@2.36.0':
-    resolution: {integrity: sha512-jkN9/srYS54dO2h12iCvNMMrLEiod6BAoUc47KbOgGE66zyUU+kmQwUOYQ3A2LrKyIWjwtCp3Ewdd4h/HHvG9A==}
 
   '@schedule-x/theme-shadcn@3.2.0':
     resolution: {integrity: sha512-aodQoSMMEErT9RmhR7k4duK4VMYyB9htBoh/5zmkZj6XY3yb5q7250zlq7tyEb1KG3bSJIQxljQmCjYxBj7z+w==}
@@ -6167,8 +6161,6 @@ snapshots:
       '@schedule-x/calendar': 3.2.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)(temporal-polyfill@0.3.0)
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
-
-  '@schedule-x/theme-default@2.36.0': {}
 
   '@schedule-x/theme-shadcn@3.2.0': {}
 
