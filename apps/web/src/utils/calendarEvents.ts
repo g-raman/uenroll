@@ -3,7 +3,6 @@ import { dayOfWeekToNumberMap, TIMEZONE } from "./constants";
 import { Session, Section } from "@repo/db/types";
 import { RRule } from "rrule";
 import { IcsEvent } from "ts-ics";
-import { v4 } from "uuid";
 
 type EventCreationFunction<T> = (
   session: Session,
@@ -101,7 +100,7 @@ export const createDownloadableCalendarEvent = (
   );
 
   const event: IcsEvent = {
-    uid: v4(),
+    uid: `${course.term}-${course.courseCode}-${component.subSection}-${session.dayOfWeek}-${session.startDate}-${session.startTime}`,
     stamp: { date: new Date() },
     start: { date: new Date(startDateTime.epochMilliseconds) },
     end: { date: new Date(endDateTime.epochMilliseconds) },
