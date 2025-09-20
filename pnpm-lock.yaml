@@ -48,10 +48,10 @@ importers:
   apps/scraper:
     dependencies:
       cheerio:
-        specifier: ^1.0.0
+        specifier: ^1.1.2
         version: 1.1.2
       dotenv:
-        specifier: ^17.2.0
+        specifier: ^17.2.2
         version: 17.2.2
       fetch-cookie:
         specifier: ^3.1.0
@@ -60,13 +60,13 @@ importers:
         specifier: ^8.2.0
         version: 8.2.0
       pino:
-        specifier: ^9.7.0
-        version: 9.10.0
+        specifier: ^9.11.0
+        version: 9.11.0
       pino-pretty:
-        specifier: ^13.0.0
+        specifier: ^13.1.1
         version: 13.1.1
       puppeteer-core:
-        specifier: ^24.7.0
+        specifier: ^24.22.0
         version: 24.22.0
     devDependencies:
       '@repo/db':
@@ -79,7 +79,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@types/node':
-        specifier: ^24.0.13
+        specifier: ^24.5.2
         version: 24.5.2
       domhandler:
         specifier: ^5.0.3
@@ -103,29 +103,26 @@ importers:
         specifier: ^0.2.2
         version: 0.2.6(@fortawesome/fontawesome-svg-core@6.7.2)(react@19.1.1)
       '@schedule-x/calendar':
-        specifier: ^2.36.0
-        version: 2.36.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)
+        specifier: ^3.1.2
+        version: 3.2.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)(temporal-polyfill@0.3.0)
       '@schedule-x/calendar-controls':
-        specifier: ^2.36.0
-        version: 2.36.0
+        specifier: ^3.1.2
+        version: 3.2.0
       '@schedule-x/event-modal':
-        specifier: ^2.36.0
-        version: 2.36.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)
+        specifier: ^3.1.2
+        version: 3.2.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)
       '@schedule-x/event-recurrence':
-        specifier: ^2.36.0
-        version: 2.36.0
+        specifier: ^3.1.2
+        version: 3.2.0
       '@schedule-x/events-service':
-        specifier: ^2.36.0
-        version: 2.36.0
+        specifier: ^3.1.2
+        version: 3.2.0
       '@schedule-x/react':
-        specifier: ^2.36.0
-        version: 2.36.0(@schedule-x/calendar@2.36.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@schedule-x/theme-default':
-        specifier: ^2.36.0
-        version: 2.36.0
+        specifier: ^3.1.0
+        version: 3.1.0(@schedule-x/calendar@3.2.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)(temporal-polyfill@0.3.0))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@schedule-x/theme-shadcn':
-        specifier: ^2.36.0
-        version: 2.36.0
+        specifier: ^3.1.2
+        version: 3.2.0
       '@tanstack/react-query':
         specifier: ^5.82.0
         version: 5.89.0(react@19.1.1)
@@ -144,9 +141,6 @@ importers:
       '@vercel/speed-insights':
         specifier: ^1.2.0
         version: 1.2.0(next@15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
-      dayjs:
-        specifier: ^1.11.13
-        version: 1.11.18
       lz-string:
         specifier: ^1.5.0
         version: 1.5.0
@@ -180,12 +174,12 @@ importers:
       sonner:
         specifier: ^2.0.6
         version: 2.0.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      temporal-polyfill:
+        specifier: ^0.3.0
+        version: 0.3.0
       ts-ics:
         specifier: ^2.2.0
         version: 2.3.0
-      uuid:
-        specifier: ^11.1.0
-        version: 11.1.0
       zod:
         specifier: ^4.0.5
         version: 4.1.9
@@ -1774,13 +1768,13 @@ packages:
     cpu: [s390x]
     os: [linux]
 
-  '@rollup/rollup-linux-x64-gnu@4.44.2':
-    resolution: {integrity: sha512-/bXb0bEsWMyEkIsUL2Yt5nFB5naLAwyOWMEviQfQY1x3l5WsLKgvZf66TM7UTfED6erckUVUJQ/jJ1FSpm3pRQ==}
+  '@rollup/rollup-linux-x64-gnu@4.51.0':
+    resolution: {integrity: sha512-4YHhP+Rv3T3+H3TPbUvWOw5tuSwhrVhkHHZhk4hC9VXeAOKR26/IsUAT4FsB4mT+kfIdxxb1BezQDEg/voPO8A==}
     cpu: [x64]
     os: [linux]
 
-  '@rollup/rollup-linux-x64-gnu@4.51.0':
-    resolution: {integrity: sha512-4YHhP+Rv3T3+H3TPbUvWOw5tuSwhrVhkHHZhk4hC9VXeAOKR26/IsUAT4FsB4mT+kfIdxxb1BezQDEg/voPO8A==}
+  '@rollup/rollup-linux-x64-gnu@4.52.0':
+    resolution: {integrity: sha512-nmSVN+F2i1yKZ7rJNKO3G7ZzmxJgoQBQZ/6c4MuS553Grmr7WqR7LLDcYG53Z2m9409z3JLt4sCOhLdbKQ3HmA==}
     cpu: [x64]
     os: [linux]
 
@@ -1809,39 +1803,37 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@schedule-x/calendar-controls@2.36.0':
-    resolution: {integrity: sha512-ZZP7XCn7kyD4iTcWCJPEx8RdnVCC+LRD4iXt4/MdopBANWeB3MpL6QuoE+MdtM+W7ZjrmMBgjngGSZeOvAEiBw==}
+  '@schedule-x/calendar-controls@3.2.0':
+    resolution: {integrity: sha512-P5fYpVGnnY83UE+7njoi47DgsZJ5B1nc76QM3U9bOeEPT3JbKIGCNC4+ZFDQ/8voMtNl2BeN6aVEvMDUQTAHyA==}
 
-  '@schedule-x/calendar@2.36.0':
-    resolution: {integrity: sha512-UqPMoxjok3SFNvgx1+PY5Whmoig+gU7sjy80z68A9QQ1FjIt1Q3ODPZKdA3G0spDss9lDtKilpO393vWpXJyfg==}
+  '@schedule-x/calendar@3.2.0':
+    resolution: {integrity: sha512-3s2HHebhTYxQxNwZ+8gSE7ejqv6bgwGAuYzx0gD3KxDLrZhQg7ephkQdWkDsP2JYa08AKx9gB6p5MtTbbwoECQ==}
+    peerDependencies:
+      '@preact/signals': ^2.0.2
+      preact: ^10.19.2
+      temporal-polyfill: 0.3.0
+
+  '@schedule-x/event-modal@3.2.0':
+    resolution: {integrity: sha512-hma67P1Bi8QL6UK3LicrMaaMmCD6oCAA2SievFGDOs5q0hDQ3SnrpB65fYR3yDQ1jy3SzpKbpvoL8VyeXrFhnA==}
     peerDependencies:
       '@preact/signals': ^2.0.2
       preact: ^10.19.2
 
-  '@schedule-x/event-modal@2.36.0':
-    resolution: {integrity: sha512-dMjgtBhOTy/M/MUy1khGafVqs978zECv2Tb5MM4oBrPOO5ofbuKRpYzIsbnsyz5SsgCX1ThQHTLr7ndN5WocYA==}
+  '@schedule-x/event-recurrence@3.2.0':
+    resolution: {integrity: sha512-eJi2nZ3lCTTk6B9FvIn2VaqlwtBM+55aPcl1Ss2xzH3Pl76mpzfpd7F9WxTfSyUQJmetso7HlMkLZHtft088EQ==}
+
+  '@schedule-x/events-service@3.2.0':
+    resolution: {integrity: sha512-0wGQdrsByWsubwvGQQB43F5NytftL9kh+Vsxf0vgXS/sGlJtJcC3Nuk+XMD8BjR4xcEAQAQG7wdyTwuQyn6WAw==}
+
+  '@schedule-x/react@3.1.0':
+    resolution: {integrity: sha512-qmlju2jvKaTyWsdGTzZ3EZqzTzYsQjo5ktSQwKQd9E4nLF6+oFHWriJr4rrB0W+8sZmWQZfltKqC2+t1buPx0w==}
     peerDependencies:
-      '@preact/signals': ^2.0.2
-      preact: ^10.19.2
-
-  '@schedule-x/event-recurrence@2.36.0':
-    resolution: {integrity: sha512-C6guQjl6uiHsXVoTm29rxElK9D+w7iORJUIWRYW6BHv9rIv8IoKg9HS7ujqLjh/bqX4cOrpbkgC2ukR66tJXcQ==}
-
-  '@schedule-x/events-service@2.36.0':
-    resolution: {integrity: sha512-M4dz8AgaEtpbXAanvYvuPnEDAKlhMO7d6R8WQ8wX8hXsJSzWa18XS3qLJOT+5jCR7O8QD8aDIDg3RpihleUeiA==}
-
-  '@schedule-x/react@2.36.0':
-    resolution: {integrity: sha512-MZAs67Krn1zmxmmlM1iWUdypmYAiOkIV7Z4wi9PJKWjt4Dtbx8K8Q4kW38aWmfDCImPbfBUGDp3LaP9u53zCzg==}
-    peerDependencies:
-      '@schedule-x/calendar': ^2.25.0
+      '@schedule-x/calendar': ^3.1.0
       react: ^16.7.0 || ^17 || ^18 || ^19
       react-dom: ^16.7.0 || ^17 || ^18 || ^19
 
-  '@schedule-x/theme-default@2.36.0':
-    resolution: {integrity: sha512-jkN9/srYS54dO2h12iCvNMMrLEiod6BAoUc47KbOgGE66zyUU+kmQwUOYQ3A2LrKyIWjwtCp3Ewdd4h/HHvG9A==}
-
-  '@schedule-x/theme-shadcn@2.36.0':
-    resolution: {integrity: sha512-ScmEV9e5Cv9SpRreBTiIZl2joKVpS72RutMo+Z6PH6o8UwiFGe/yNhgIFSpoH/Jfad+6uAbXvxwjUUhI4eyong==}
+  '@schedule-x/theme-shadcn@3.2.0':
+    resolution: {integrity: sha512-aodQoSMMEErT9RmhR7k4duK4VMYyB9htBoh/5zmkZj6XY3yb5q7250zlq7tyEb1KG3bSJIQxljQmCjYxBj7z+w==}
 
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
@@ -2526,11 +2518,11 @@ packages:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
 
-  css-select@5.1.0:
-    resolution: {integrity: sha512-nwoRF1rvRRnnCqqY7updORDsuqKzqYJ28+oSMaJMMgOauh3fvwHqMS7EZpIPqK8GL+g9mKxF1vP/ZjSeNjEVHg==}
+  css-select@5.2.2:
+    resolution: {integrity: sha512-TizTzUddG/xYLA3NXodFM0fSbNizXjOKhqiQQwvhlspadZokn1KDy0NZFS0wuEubIYAV5/c1/lAr0TaaFXEXzw==}
 
-  css-what@6.1.0:
-    resolution: {integrity: sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==}
+  css-what@6.2.2:
+    resolution: {integrity: sha512-u/O3vwbptzhMs3L1fQE82ZSLHQQfto5gyZzwteVIEyeaY5Fc7R4dapF/BvRoSYFeqfBk4m0V1Vafq5Pjv25wvA==}
     engines: {node: '>= 6'}
 
   csstype@3.1.3:
@@ -2557,9 +2549,6 @@ packages:
 
   dateformat@4.6.3:
     resolution: {integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==}
-
-  dayjs@1.11.18:
-    resolution: {integrity: sha512-zFBQ7WFRvVRhKcWoUh+ZA1g2HVgUbsZm9sbddh8EC5iv93sui8DVVz1Npvz+r6meo9VKfa8NyLWBsQK1VvIKPA==}
 
   debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
@@ -2774,9 +2763,6 @@ packages:
   encoding-sniffer@0.2.1:
     resolution: {integrity: sha512-5gvq20T6vfpekVtqrYQsSCFZ1wEg5+wW0/QaZMWkFr6BqD3NfKs0rLCx4rrVlSWJeZb5NBJgVLswK/w2MWU+Gw==}
 
-  end-of-stream@1.4.4:
-    resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
-
   end-of-stream@1.4.5:
     resolution: {integrity: sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==}
 
@@ -2790,10 +2776,6 @@ packages:
 
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
-    engines: {node: '>=0.12'}
-
-  entities@6.0.0:
-    resolution: {integrity: sha512-aKstq2TDOndCn4diEyp9Uq/Flu2i1GlLkc6XIDQSDMuaFE3OPW5OphLCyQ5SpSJZTb4reN+kTcYru5yIfXoRPw==}
     engines: {node: '>=0.12'}
 
   entities@6.0.1:
@@ -3983,8 +3965,8 @@ packages:
   pino-std-serializers@7.0.0:
     resolution: {integrity: sha512-e906FRY0+tV27iq4juKzSYPbUj2do2X2JX4EzSca1631EB2QJQUqGbDuERal7LCtOpxl6x3+nvo9NPZcmjkiFA==}
 
-  pino@9.10.0:
-    resolution: {integrity: sha512-VOFxoNnxICtxaN8S3E73pR66c5MTFC+rwRcNRyHV/bV/c90dXvJqMfjkeRFsGBDXmlUN3LccJQPqGIufnaJePA==}
+  pino@9.11.0:
+    resolution: {integrity: sha512-+YIodBB9sxcWeR8PrXC2K3gEDyfkUuVEITOcbqrfcj+z5QW4ioIcqZfYFbrLTYLsmAwunbS7nfU/dpBB6PZc1g==}
     hasBin: true
 
   pirates@4.0.7:
@@ -4122,9 +4104,6 @@ packages:
 
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
-
-  pump@3.0.2:
-    resolution: {integrity: sha512-tUPXtzlGM8FE3P0ZL6DVs/3P58k9nk8/jZeQCurTJylQA8qFYzHFfhBJkuqyE0FifOsQ0uKWekiZ5g8wtr28cw==}
 
   pump@3.0.3:
     resolution: {integrity: sha512-todwxLMY7/heScKmntwQG8CXVkWUOdYxIvY2s0VWAAMh/nd8SoYiRaKjlr7+iCs984f2P8zvrfWcDDYVb73NfA==}
@@ -4562,6 +4541,12 @@ packages:
     resolution: {integrity: sha512-5S7Va8hKfV7W5U6g3aYxXmlPoZVAwUMy9AOKyF2fVuZa2UD3qZjg578OrLRt8PcNN1PleVaL/5/yYATNL0ICUw==}
     engines: {node: '>=18'}
 
+  temporal-polyfill@0.3.0:
+    resolution: {integrity: sha512-qNsTkX9K8hi+FHDfHmf22e/OGuXmfBm9RqNismxBrnSmZVJKegQ+HYYXT+R7Ha8F/YSm2Y34vmzD4cxMu2u95g==}
+
+  temporal-spec@0.3.0:
+    resolution: {integrity: sha512-n+noVpIqz4hYgFSMOSiINNOUOMFtV5cZQNCmmszA6GiVFVRt3G7AqVyhXjhCSmowvQn+NsGn+jMDMKJYHd3bSQ==}
+
   term-size@2.2.1:
     resolution: {integrity: sha512-wK0Ri4fOGjv/XPy8SBHZChl8CM7uMc5VML7SqiQ0zG7+J5Vr+RMQDoHa2CNT6KHUnTGIXH34UDMkPzAUyapBZg==}
     engines: {node: '>=8'}
@@ -4820,10 +4805,6 @@ packages:
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
-
-  uuid@11.1.0:
-    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
-    hasBin: true
 
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
@@ -6137,10 +6118,10 @@ snapshots:
   '@rollup/rollup-linux-s390x-gnu@4.51.0':
     optional: true
 
-  '@rollup/rollup-linux-x64-gnu@4.44.2':
+  '@rollup/rollup-linux-x64-gnu@4.51.0':
     optional: true
 
-  '@rollup/rollup-linux-x64-gnu@4.51.0':
+  '@rollup/rollup-linux-x64-gnu@4.52.0':
     optional: true
 
   '@rollup/rollup-linux-x64-musl@4.51.0':
@@ -6158,31 +6139,30 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.51.0':
     optional: true
 
-  '@schedule-x/calendar-controls@2.36.0': {}
+  '@schedule-x/calendar-controls@3.2.0': {}
 
-  '@schedule-x/calendar@2.36.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)':
+  '@schedule-x/calendar@3.2.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)(temporal-polyfill@0.3.0)':
+    dependencies:
+      '@preact/signals': 2.2.0(preact@10.26.8)
+      preact: 10.26.8
+      temporal-polyfill: 0.3.0
+
+  '@schedule-x/event-modal@3.2.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)':
     dependencies:
       '@preact/signals': 2.2.0(preact@10.26.8)
       preact: 10.26.8
 
-  '@schedule-x/event-modal@2.36.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)':
+  '@schedule-x/event-recurrence@3.2.0': {}
+
+  '@schedule-x/events-service@3.2.0': {}
+
+  '@schedule-x/react@3.1.0(@schedule-x/calendar@3.2.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)(temporal-polyfill@0.3.0))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
-      '@preact/signals': 2.2.0(preact@10.26.8)
-      preact: 10.26.8
-
-  '@schedule-x/event-recurrence@2.36.0': {}
-
-  '@schedule-x/events-service@2.36.0': {}
-
-  '@schedule-x/react@2.36.0(@schedule-x/calendar@2.36.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
-    dependencies:
-      '@schedule-x/calendar': 2.36.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)
+      '@schedule-x/calendar': 3.2.0(@preact/signals@2.2.0(preact@10.26.8))(preact@10.26.8)(temporal-polyfill@0.3.0)
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
 
-  '@schedule-x/theme-default@2.36.0': {}
-
-  '@schedule-x/theme-shadcn@2.36.0': {}
+  '@schedule-x/theme-shadcn@3.2.0': {}
 
   '@standard-schema/spec@1.0.0': {}
 
@@ -6772,8 +6752,8 @@ snapshots:
   cheerio-select@2.1.0:
     dependencies:
       boolbase: 1.0.0
-      css-select: 5.1.0
-      css-what: 6.1.0
+      css-select: 5.2.2
+      css-what: 6.2.2
       domelementtype: 2.3.0
       domhandler: 5.0.3
       domutils: 3.2.2
@@ -6895,15 +6875,15 @@ snapshots:
       shebang-command: 2.0.0
       which: 2.0.2
 
-  css-select@5.1.0:
+  css-select@5.2.2:
     dependencies:
       boolbase: 1.0.0
-      css-what: 6.1.0
+      css-what: 6.2.2
       domhandler: 5.0.3
       domutils: 3.2.2
       nth-check: 2.1.1
 
-  css-what@6.1.0: {}
+  css-what@6.2.2: {}
 
   csstype@3.1.3: {}
 
@@ -6930,8 +6910,6 @@ snapshots:
   dataloader@1.4.0: {}
 
   dateformat@4.6.3: {}
-
-  dayjs@1.11.18: {}
 
   debug@4.4.3:
     dependencies:
@@ -7057,10 +7035,6 @@ snapshots:
       iconv-lite: 0.6.3
       whatwg-encoding: 3.1.1
 
-  end-of-stream@1.4.4:
-    dependencies:
-      once: 1.4.0
-
   end-of-stream@1.4.5:
     dependencies:
       once: 1.4.0
@@ -7076,8 +7050,6 @@ snapshots:
       strip-ansi: 6.0.1
 
   entities@4.5.0: {}
-
-  entities@6.0.0: {}
 
   entities@6.0.1: {}
 
@@ -8194,7 +8166,7 @@ snapshots:
 
   neverthrow@8.2.0:
     optionalDependencies:
-      '@rollup/rollup-linux-x64-gnu': 4.44.2
+      '@rollup/rollup-linux-x64-gnu': 4.52.0
 
   next-themes@0.4.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
@@ -8420,7 +8392,7 @@ snapshots:
 
   parse5@7.3.0:
     dependencies:
-      entities: 6.0.0
+      entities: 6.0.1
 
   pascal-case@2.0.1:
     dependencies:
@@ -8475,14 +8447,14 @@ snapshots:
       minimist: 1.2.8
       on-exit-leak-free: 2.1.2
       pino-abstract-transport: 2.0.0
-      pump: 3.0.2
+      pump: 3.0.3
       secure-json-parse: 4.0.0
       sonic-boom: 4.2.0
       strip-json-comments: 5.0.3
 
   pino-std-serializers@7.0.0: {}
 
-  pino@9.10.0:
+  pino@9.11.0:
     dependencies:
       atomic-sleep: 1.0.0
       fast-redact: 3.5.0
@@ -8564,11 +8536,6 @@ snapshots:
       - supports-color
 
   proxy-from-env@1.1.0: {}
-
-  pump@3.0.2:
-    dependencies:
-      end-of-stream: 1.4.4
-      once: 1.4.0
 
   pump@3.0.3:
     dependencies:
@@ -9123,6 +9090,12 @@ snapshots:
       mkdirp: 3.0.1
       yallist: 5.0.0
 
+  temporal-polyfill@0.3.0:
+    dependencies:
+      temporal-spec: 0.3.0
+
+  temporal-spec@0.3.0: {}
+
   term-size@2.2.1: {}
 
   text-decoder@1.2.3:
@@ -9391,8 +9364,6 @@ snapshots:
       '@types/react': 19.1.13
 
   util-deprecate@1.0.2: {}
-
-  uuid@11.1.0: {}
 
   v8-compile-cache-lib@3.0.1: {}
 

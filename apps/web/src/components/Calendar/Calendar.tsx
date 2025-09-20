@@ -1,5 +1,7 @@
 "use client";
 
+import "temporal-polyfill/global";
+
 import { ScheduleXCalendar, useNextCalendarApp } from "@schedule-x/react";
 import { createViewMonthAgenda, createViewWeek } from "@schedule-x/calendar";
 import { createEventsServicePlugin } from "@schedule-x/events-service";
@@ -16,6 +18,7 @@ import { useTermParam } from "@/hooks/useTermParam";
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { createCalendarAppEvents } from "@/utils/calendarEvents";
 import { useDataParam } from "@/hooks/useDataParam";
+import { TIMEZONE } from "@/utils/constants";
 
 function Calendar() {
   const [selectedTerm] = useTermParam();
@@ -47,6 +50,7 @@ function Calendar() {
 
   const calendar = useNextCalendarApp(
     {
+      timezone: TIMEZONE,
       views: [createViewWeek(), createViewMonthAgenda()],
       theme: "shadcn",
       isDark: theme === "dark" || systemTheme === "dark",
@@ -82,14 +86,11 @@ function Calendar() {
   // Hardcoding for now
   useEffect(() => {
     switch (selectedTerm) {
-      case "2255":
-        calendarControls.setDate("2025-05-05");
-        break;
       case "2259":
-        calendarControls.setDate("2025-09-03");
+        calendarControls.setDate(Temporal.PlainDate.from("2025-09-03"));
         break;
       case "2261":
-        calendarControls.setDate("2026-01-12");
+        calendarControls.setDate(Temporal.PlainDate.from("2026-01-12"));
         break;
     }
   }, [calendarControls, selectedTerm]);

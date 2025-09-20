@@ -1,4 +1,3 @@
-import React from "react";
 import { CalendarEventProps } from "../CalendarEvent/CalendarEvent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
@@ -8,14 +7,13 @@ import {
   faUser,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import dayjs from "dayjs";
+import { getPlainStringTime } from "@/utils/calendarEvents";
 
-const TIME_FORMAT = "hh:mm A";
 export default function CalendarEventModal({
   calendarEvent,
 }: CalendarEventProps) {
-  const start = dayjs(calendarEvent.start).format(TIME_FORMAT);
-  const end = dayjs(calendarEvent.end).format(TIME_FORMAT);
+  const start = getPlainStringTime(calendarEvent.start);
+  const end = getPlainStringTime(calendarEvent.end);
 
   return (
     <div className="shadow-sx bg-background h-min w-full space-y-2 rounded-md p-6">

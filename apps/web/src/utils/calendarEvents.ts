@@ -1,10 +1,8 @@
 import { ColouredCourse, Selected } from "@/types/Types";
-import { dayOfWeekToNumberMap } from "./constants";
+import { dayOfWeekToNumberMap, TIMEZONE } from "./constants";
 import { Session, Section } from "@repo/db/types";
-import dayjs from "dayjs";
-import { datetime, RRule } from "rrule";
+import { RRule } from "rrule";
 import { IcsEvent } from "ts-ics";
-import { v4 } from "uuid";
 
 type EventCreationFunction<T> = (
   session: Session,
@@ -12,44 +10,63 @@ type EventCreationFunction<T> = (
   course: ColouredCourse,
 ) => T;
 
-const getOffsettedStartDate = (startDate: string, dayOfWeek: string) => {
-  const baseStartDate = dayjs(startDate);
-  const dayOfWeekNum = dayOfWeekToNumberMap[dayOfWeek] as number;
-  const dayOffset = dayOfWeekNum - baseStartDate.get("d");
+export const getOffsettedStartDateTime = (
+  date: string,
+  time: string,
+  dayOfWeek: string,
+) => {
+  const baseStartDate = getZonedDateTime(date, time);
+  const target = dayOfWeekToNumberMap[dayOfWeek] as number;
+  // Difference (could be negative if target < start day, so normalize with +7 % 7)
+  const dayOffset = (target - baseStartDate.dayOfWeek + 7) % 7;
 
-  return baseStartDate.add(dayOffset < 0 ? 7 + dayOffset : dayOffset, "days");
+  return baseStartDate.add({ days: dayOffset });
 };
 
-const DATE_FORMAT = "YYYY-MM-DD";
+export const getPlainStringTime = (zonedDateTime: Temporal.ZonedDateTime) => {
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: zonedDateTime.timeZoneId,
+  }).format(new Date(zonedDateTime.epochMilliseconds));
+};
+
+export const getZonedDateTime = (date: string, time: string) => {
+  return Temporal.ZonedDateTime.from(`${date}T${time}[${TIMEZONE}]`);
+};
+
 const createCalendarEvent = (
   session: Session,
   component: Section,
   course: ColouredCourse,
 ) => {
-  const startDate = getOffsettedStartDate(session.startDate, session.dayOfWeek);
-  const endDate = dayjs(session.endDate);
+  const zonedStartDateTime = getOffsettedStartDateTime(
+    session.startDate,
+    session.startTime,
+    session.dayOfWeek,
+  );
+  const zonedEndDateTime = getZonedDateTime(
+    zonedStartDateTime.toPlainDate().toString(),
+    session.endTime,
+  );
+
+  const recurrenceEndDateTime = getZonedDateTime(
+    session.endDate,
+    session.endTime,
+  );
 
   const rrule = new RRule({
     freq: RRule.WEEKLY,
-    dtstart: datetime(
-      startDate.get("year"),
-      startDate.get("month") + 1,
-      startDate.get("day"),
-    ),
-    until: datetime(
-      endDate.get("year"),
-      endDate.get("month") + 1,
-      endDate.get("day"),
-    ),
+    dtstart: new Date(zonedStartDateTime.epochMilliseconds),
+    until: new Date(recurrenceEndDateTime.epochMilliseconds),
   });
-  const startTime = session.startTime.slice(0, -3);
-  const endTime = session.endTime.slice(0, -3);
 
   return {
-    id: `${course.courseCode}${component.subSection}`,
+    id: `${course.courseCode}${component.subSection}-${session.dayOfWeek}-${session.startTime.replaceAll(":", "")}`,
     title: `${course.courseCode}`,
-    start: `${startDate.format(DATE_FORMAT)} ${startTime}`,
-    end: `${startDate.format(DATE_FORMAT)} ${endTime}`,
+    start: zonedStartDateTime,
+    end: zonedEndDateTime,
     rrule: rrule.toString(),
     backgroundColour: course.colour,
     courseCode: course.courseCode,
@@ -67,27 +84,29 @@ export const createDownloadableCalendarEvent = (
   component: Section,
   course: ColouredCourse,
 ) => {
-  const startDate = getOffsettedStartDate(
+  const startDateTime = getOffsettedStartDateTime(
     session.startDate,
+    session.startTime,
     session.dayOfWeek,
-  ).format(DATE_FORMAT);
+  );
+  const endDateTime = getZonedDateTime(
+    startDateTime.toPlainDate().toString(),
+    session.endTime,
+  );
 
-  const parsedStartTime = session.startTime.slice(0, -3);
-  const parsedEndTime = session.endTime.slice(0, -3);
-
-  const startTime = dayjs(`${startDate} ${parsedStartTime}`);
-  const endTime = dayjs(`${startDate} ${parsedEndTime}`);
-
-  const recurrenceUntil = dayjs(`${session.endDate} ${parsedEndTime}`);
+  const recurrenceEndDateTime = getZonedDateTime(
+    session.endDate,
+    session.endTime,
+  );
 
   const event: IcsEvent = {
-    uid: v4(),
+    uid: `${course.term}-${course.courseCode}-${component.subSection}-${session.dayOfWeek}-${session.startDate}-${session.startTime}`,
     stamp: { date: new Date() },
-    start: { date: startTime.toDate() },
-    end: { date: endTime.toDate() },
+    start: { date: new Date(startDateTime.epochMilliseconds) },
+    end: { date: new Date(endDateTime.epochMilliseconds) },
     recurrenceRule: {
       frequency: "WEEKLY",
-      until: { date: recurrenceUntil.toDate() },
+      until: { date: new Date(recurrenceEndDateTime.epochMilliseconds) },
     },
     summary: `${course.courseCode} ${course.courseTitle} - ${component.type}`,
   };
