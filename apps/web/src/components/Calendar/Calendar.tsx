@@ -54,6 +54,7 @@ function Calendar() {
       timezone: TIMEZONE,
       views: [createViewWeek(), createViewList()],
       theme: "shadcn",
+      isResponsive: true,
       isDark: theme === "dark" || systemTheme === "dark",
       dayBoundaries: {
         start: "06:00",

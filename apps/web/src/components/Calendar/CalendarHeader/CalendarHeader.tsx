@@ -41,7 +41,7 @@ export default function CalendarHeader({ $app }: { $app: App }) {
   return (
     <div className="flex h-full w-full items-center gap-4">
       <Button
-        className="bg-background! shadow-xs! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! border text-black dark:text-white"
+        className="bg-background! shadow-xs! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! hidden border text-black lg:block dark:text-white"
         variant="default"
         size="lg"
         onClick={() =>
@@ -61,7 +61,7 @@ export default function CalendarHeader({ $app }: { $app: App }) {
         {monthStart === monthEnd ? monthStart : `${monthStart} - ${monthEnd}`}
       </p>
 
-      <div className="ml-auto flex gap-2">
+      <div className="ml-auto flex hidden gap-2 lg:block">
         <Button
           className="bg-background! shadow-xs! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! border text-black dark:text-white"
           onClick={() =>
