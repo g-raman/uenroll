@@ -3,7 +3,7 @@
 import "temporal-polyfill/global";
 
 import { ScheduleXCalendar, useNextCalendarApp } from "@schedule-x/react";
-import { createViewMonthAgenda, createViewWeek } from "@schedule-x/calendar";
+import { createViewList, createViewWeek } from "@schedule-x/calendar";
 import { createEventsServicePlugin } from "@schedule-x/events-service";
 
 import "@schedule-x/theme-shadcn/dist/index.css";
@@ -19,6 +19,7 @@ import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { createCalendarAppEvents } from "@/utils/calendarEvents";
 import { useDataParam } from "@/hooks/useDataParam";
 import { TIMEZONE } from "@/utils/constants";
+import CalendarHeader from "./CalendarHeader/CalendarHeader";
 
 function Calendar() {
   const [selectedTerm] = useTermParam();
@@ -51,29 +52,20 @@ function Calendar() {
   const calendar = useNextCalendarApp(
     {
       timezone: TIMEZONE,
-      views: [createViewWeek(), createViewMonthAgenda()],
+      views: [createViewWeek(), createViewList()],
       theme: "shadcn",
+      isResponsive: true,
       isDark: theme === "dark" || systemTheme === "dark",
       dayBoundaries: {
         start: "06:00",
         end: "23:00",
       },
       callbacks: {
-        onRender: () => {
-          // HACK: Calendar UI doesn't affect latest changes unless I do this
-          const currentView = calendarControls.getView();
-          if (currentView === "week") {
-            calendarControls.setView("month-agenda");
-            calendarControls.setView("week");
-          } else {
-            calendarControls.setView("week");
-            calendarControls.setView("month-agenda");
-          }
-        },
         beforeRender($app) {
+          eventsService.getAll();
           // Need a multiplier to reduce grid height as some space
           // is taken up by the calendar navigation
-          const multiplier = 0.735;
+          const multiplier = 0.77;
           const height = window.innerHeight * multiplier;
           $app.config.weekOptions.value.gridHeight = height;
         },
@@ -113,8 +105,16 @@ function Calendar() {
           timeGridEvent: CalendarEvent,
           monthAgendaEvent: CalendarEvent,
           eventModal: CalendarEventModal,
+          headerContent: CalendarHeader,
         }}
       />
+      {events.length === 0 ? (
+        <p className="mt-8 h-max w-full text-center lg:hidden">
+          No courses selected.
+        </p>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
