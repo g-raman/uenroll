@@ -1,5 +1,13 @@
 # web
 
+## 0.13.0
+
+### Minor Changes
+
+- [#128](https://github.com/g-raman/uenroll/pull/128) [`66bea3a`](https://github.com/g-raman/uenroll/commit/66bea3a8598f4925bdc068766e666d89b3adfbbc) Thanks [@g-raman](https://github.com/g-raman)! - Changed month agenda view to list view.
+  Made a custom header component.
+  Removed event loading hack.
+
 ## 0.12.0
 
 ### Minor Changes
