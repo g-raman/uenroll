@@ -1,3 +1,4 @@
+import { Temporal } from "temporal-polyfill";
 import { ColouredCourse, Selected } from "@/types/Types";
 import { dayOfWeekToNumberMap, TIMEZONE } from "./constants";
 import { Session, Section } from "@repo/db/types";
@@ -22,6 +23,46 @@ export const getOffsettedStartDateTime = (
 
   return baseStartDate.add({ days: dayOffset });
 };
+
+export function isOverlappingTime(first: Session, second: Session) {
+  const firstDateStartTime = getOffsettedStartDateTime(
+    first.startDate,
+    first.startTime,
+    first.dayOfWeek,
+  );
+
+  const firstDateEndTime = getOffsettedStartDateTime(
+    first.startDate,
+    first.endTime,
+    first.dayOfWeek,
+  );
+
+  const secondDateStartTime = getOffsettedStartDateTime(
+    second.startDate,
+    second.startTime,
+    second.dayOfWeek,
+  );
+
+  const secondDateEndTime = getOffsettedStartDateTime(
+    second.startDate,
+    second.endTime,
+    second.dayOfWeek,
+  );
+
+  const range1Compare = Temporal.ZonedDateTime.compare(
+    firstDateStartTime,
+    secondDateEndTime,
+  );
+  const range1Overlaps = range1Compare === 0 || range1Compare < 0;
+
+  const range2Compare = Temporal.ZonedDateTime.compare(
+    firstDateEndTime,
+    secondDateStartTime,
+  );
+  const range2Overlaps = range2Compare === 0 || range2Compare > 0;
+
+  return range1Overlaps && range2Overlaps;
+}
 
 export const getPlainStringTime = (zonedDateTime: Temporal.ZonedDateTime) => {
   return new Intl.DateTimeFormat("en-US", {

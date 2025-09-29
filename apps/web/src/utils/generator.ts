@@ -1,5 +1,5 @@
+import { isOverlappingTime } from "./calendarEvents";
 import { courses, ScheduleComponent } from "./courseData";
-import { isOverlappingTime } from "./dates";
 
 interface ScheduleQueueItem {
   nextComponentIndex: number;
