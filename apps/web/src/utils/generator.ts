@@ -1,5 +1,5 @@
 import { isOverlappingTime } from "./calendarEvents";
-import { courses, ScheduleComponent } from "./courseData";
+import { ScheduleComponent } from "./courseData";
 
 interface ScheduleQueueItem {
   nextComponentIndex: number;
@@ -45,7 +45,7 @@ const logQueue = (queue: ScheduleQueueItem[]) => {
 
 // TODO: Handle case where alternate section exists
 // Example: 2 labs for the same course at the same time
-function generateSchedules(components: ScheduleComponent[]) {
+export const generateSchedules = (components: ScheduleComponent[]) => {
   const validSchedules: Record<string, ScheduleComponent[]> = {};
   const numComponents = components.length;
 
@@ -229,8 +229,5 @@ function generateSchedules(components: ScheduleComponent[]) {
     });
     seen.add(scheduleHash);
   }
-  // logValidSchedules(validSchedules);
-  console.log(JSON.stringify(Object.values(validSchedules).length, null, 2));
-}
-
-generateSchedules(courses);
+  return validSchedules;
+};
