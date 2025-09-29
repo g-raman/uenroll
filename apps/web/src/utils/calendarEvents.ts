@@ -4,6 +4,7 @@ import { dayOfWeekToNumberMap, TIMEZONE } from "./constants";
 import { Session, Section } from "@repo/db/types";
 import { RRule } from "rrule";
 import { IcsEvent } from "ts-ics";
+import { ScheduleComponent } from "./courseData";
 
 type EventCreationFunction<T> = (
   session: Session,
@@ -118,6 +119,49 @@ const createCalendarEvent = (
     type: component.type,
     isOpen: component.isOpen,
   };
+};
+
+export const scheduleToCalendarEvents = (schedule: ScheduleComponent[]) => {
+  return schedule.map(component =>
+    component.sessions.map(session => {
+      const zonedStartDateTime = getOffsettedStartDateTime(
+        session.startDate,
+        session.startTime,
+        session.dayOfWeek,
+      );
+      const zonedEndDateTime = getZonedDateTime(
+        zonedStartDateTime.toPlainDate().toString(),
+        session.endTime,
+      );
+
+      const recurrenceEndDateTime = getZonedDateTime(
+        session.endDate,
+        session.endTime,
+      );
+
+      const rrule = new RRule({
+        freq: RRule.WEEKLY,
+        dtstart: new Date(zonedStartDateTime.epochMilliseconds),
+        until: new Date(recurrenceEndDateTime.epochMilliseconds),
+      });
+
+      return {
+        id: `${component.courseCode}${component.subSection}-${session.dayOfWeek}-${session.startTime.replaceAll(":", "")}`,
+        title: `${component.courseCode}`,
+        start: zonedStartDateTime,
+        end: zonedEndDateTime,
+        rrule: rrule.toString(),
+        backgroundColour: component.colour,
+        courseCode: component.courseCode,
+        courseTitle: component.courseTitle,
+        term: component.term,
+        subSection: component.subSection,
+        instructor: session.instructor,
+        type: component.type,
+        isOpen: component.isOpen,
+      };
+    }),
+  );
 };
 
 export const createDownloadableCalendarEvent = (
