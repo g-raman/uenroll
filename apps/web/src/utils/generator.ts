@@ -22,6 +22,17 @@ const getScheduleHash = (schedule: ScheduleComponent[]) => {
     .join(",");
 };
 
+const getScheduleQueueHash = (
+  schedule: ScheduleComponent[],
+  nextIndex: number,
+) => {
+  return `[${nextIndex}]`.concat(
+    schedule
+      .flatMap(component => `${component.courseCode}:${component.subSection}`)
+      .join(","),
+  );
+};
+
 const logQueue = (queue: ScheduleQueueItem[]) => {
   const result = queue.map(item =>
     item.selectedComponents.flatMap(
@@ -38,6 +49,8 @@ function generateSchedules(components: ScheduleComponent[]) {
   const validSchedules: Record<string, ScheduleComponent[]> = {};
   const numComponents = components.length;
 
+  const seen = new Set();
+
   const queue: ScheduleQueueItem[] = [
     { nextComponentIndex: 0, selectedComponents: [] },
   ];
@@ -50,6 +63,7 @@ function generateSchedules(components: ScheduleComponent[]) {
     const { nextComponentIndex, selectedComponents } = item;
 
     if (nextComponentIndex === numComponents) {
+      // Ensure only unique schedules are added
       const scheduleHash = getScheduleHash(selectedComponents);
       if (validSchedules[scheduleHash]) continue;
       validSchedules[scheduleHash] = selectedComponents;
@@ -87,10 +101,16 @@ function generateSchedules(components: ScheduleComponent[]) {
     }
 
     if (hasTimeConflicts) {
+      const scheduleHash = getScheduleQueueHash(
+        selectedComponents,
+        nextComponentIndex + 1,
+      );
+      if (seen.has(scheduleHash)) continue;
       queue.push({
         nextComponentIndex: nextComponentIndex + 1,
         selectedComponents,
       });
+      seen.add(scheduleHash);
       continue;
     }
 
@@ -115,26 +135,40 @@ function generateSchedules(components: ScheduleComponent[]) {
       const newComponentIndex =
         nextCourseIndex === -1 ? numComponents : nextCourseIndex;
 
+      const scheduleHashBranch1 = getScheduleQueueHash(
+        selectedComponents,
+        newComponentIndex,
+      );
+
+      if (seen.has(scheduleHashBranch1)) continue;
       queue.push({
         nextComponentIndex: newComponentIndex,
         selectedComponents,
       });
+      seen.add(scheduleHashBranch1);
 
       // Branch 2:
+      const newSelectedComponents = [
+        ...selectedComponents.filter(
+          selected =>
+            !(
+              selected.courseCode === componentWithSectionConflict.courseCode &&
+              selected.section === componentWithSectionConflict.section
+            ),
+        ),
+        currentComponent,
+      ];
+      const scheduleHashBranch2 = getScheduleQueueHash(
+        newSelectedComponents,
+        nextComponentIndex + 1,
+      );
+
+      if (seen.has(scheduleHashBranch2)) continue;
       queue.push({
         nextComponentIndex: nextComponentIndex + 1,
-        selectedComponents: [
-          ...selectedComponents.filter(
-            selected =>
-              !(
-                selected.courseCode ===
-                  componentWithSectionConflict.courseCode &&
-                selected.section === componentWithSectionConflict.section
-              ),
-          ),
-          currentComponent,
-        ],
+        selectedComponents: newSelectedComponents,
       });
+      seen.add(scheduleHashBranch2);
       continue;
     }
 
@@ -145,10 +179,17 @@ function generateSchedules(components: ScheduleComponent[]) {
        * */
 
       // Branch 1
+      const scheduleHashBranch1 = getScheduleQueueHash(
+        selectedComponents,
+        nextComponentIndex + 1,
+      );
+
+      if (seen.has(scheduleHashBranch1)) continue;
       queue.push({
         nextComponentIndex: nextComponentIndex + 1,
         selectedComponents,
       });
+      seen.add(scheduleHashBranch1);
 
       // Branch 2
       const toReplace = selectedComponents.findIndex(
@@ -160,20 +201,35 @@ function generateSchedules(components: ScheduleComponent[]) {
       const newSelectedComponents = [...selectedComponents];
       newSelectedComponents[toReplace] = currentComponent;
 
+      const scheduleHashBranch2 = getScheduleQueueHash(
+        newSelectedComponents,
+        nextComponentIndex + 1,
+      );
+
+      if (seen.has(scheduleHashBranch2)) continue;
       queue.push({
         nextComponentIndex: nextComponentIndex + 1,
         selectedComponents: newSelectedComponents,
       });
+      seen.add(scheduleHashBranch2);
       continue;
     }
 
     // Default case: No Conflicts
+    const newSelectedComponents = [...selectedComponents, currentComponent];
+    const scheduleHash = getScheduleQueueHash(
+      newSelectedComponents,
+      nextComponentIndex + 1,
+    );
+
+    if (seen.has(scheduleHash)) continue;
     queue.push({
       nextComponentIndex: nextComponentIndex + 1,
-      selectedComponents: [...selectedComponents, currentComponent],
+      selectedComponents: newSelectedComponents,
     });
+    seen.add(scheduleHash);
   }
-  logValidSchedules(validSchedules);
+  // logValidSchedules(validSchedules);
   console.log(JSON.stringify(Object.values(validSchedules).length, null, 2));
 }
 
