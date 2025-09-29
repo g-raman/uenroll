@@ -61,13 +61,29 @@ function generateSchedules(components: ScheduleComponent[]) {
     if (!currentComponent) continue;
 
     let hasTimeConflicts = false;
+    let componentWithSectionConflict = undefined;
+    let componentWithTypeConflict = undefined;
     for (const component of selectedComponents) {
+      // Rule 1: Cannot overlap in time
       hasTimeConflicts = component.sessions.some(session =>
         currentComponent.sessions.some(currSession =>
-          // Rule 1: Cannot overlap in time
           isOverlappingTime(session, currSession),
         ),
       );
+
+      // Rule 2: Cannot have components from different sections
+      componentWithSectionConflict =
+        component.courseCode === currentComponent.courseCode &&
+        component.section !== currentComponent.section
+          ? component
+          : undefined;
+
+      // Rule 3: Cannot have the same type of component twice from the same course
+      componentWithTypeConflict =
+        component.type === currentComponent.type &&
+        component.courseCode === currentComponent.courseCode
+          ? component
+          : undefined;
     }
 
     if (hasTimeConflicts) {
@@ -75,31 +91,36 @@ function generateSchedules(components: ScheduleComponent[]) {
         nextComponentIndex: nextComponentIndex + 1,
         selectedComponents,
       });
-      // logQueue(queue);
       continue;
     }
 
-    // Rule 2: Cannot have components from different sections
-    const componentWithSectionConflict = getComponentWithSectionConflict(
-      selectedComponents,
-      currentComponent,
-    );
-
     if (componentWithSectionConflict) {
-      const nextCourse = selectedComponents
+      /* Split into two branches
+       * 1: Keep old section and move onto the next course
+       * 2: Remove old section and replace with current section
+       * */
+
+      // Branch 1
+      const nextCourseIndex = selectedComponents
         .slice(nextComponentIndex, -1)
         .findIndex(
           selected =>
             selected.courseCode !== componentWithSectionConflict.courseCode,
         );
 
-      const newIndex = nextCourse === -1 ? numComponents : nextCourse;
+      /* It is possible that there are no more courses after the current one
+       * in which case we set the newIndex to be the length of the array as this
+       * will end the loop in the next iteration, and add the schedule to valid schedules
+       * */
+      const newComponentIndex =
+        nextCourseIndex === -1 ? numComponents : nextCourseIndex;
 
       queue.push({
-        nextComponentIndex: newIndex,
+        nextComponentIndex: newComponentIndex,
         selectedComponents,
       });
 
+      // Branch 2:
       queue.push({
         nextComponentIndex: nextComponentIndex + 1,
         selectedComponents: [
@@ -114,22 +135,22 @@ function generateSchedules(components: ScheduleComponent[]) {
           currentComponent,
         ],
       });
-      // logQueue(queue);
       continue;
     }
 
-    // Rule 3: Cannot have the same type of component twice from the same course
-    const componentWithTypeConflict = getComponentWithTypeConflict(
-      selectedComponents,
-      currentComponent,
-    );
-
     if (componentWithTypeConflict) {
+      /* Split into two branches
+       * 1: Keep old component and move onto next component
+       * 2: Remove old component and replace with current component
+       * */
+
+      // Branch 1
       queue.push({
         nextComponentIndex: nextComponentIndex + 1,
         selectedComponents,
       });
 
+      // Branch 2
       const toReplace = selectedComponents.findIndex(
         selected =>
           selected.courseCode === componentWithTypeConflict.courseCode &&
@@ -143,7 +164,6 @@ function generateSchedules(components: ScheduleComponent[]) {
         nextComponentIndex: nextComponentIndex + 1,
         selectedComponents: newSelectedComponents,
       });
-      // logQueue(queue);
       continue;
     }
 
@@ -152,33 +172,9 @@ function generateSchedules(components: ScheduleComponent[]) {
       nextComponentIndex: nextComponentIndex + 1,
       selectedComponents: [...selectedComponents, currentComponent],
     });
-
-    // logQueue(queue);
   }
   logValidSchedules(validSchedules);
   console.log(JSON.stringify(Object.values(validSchedules).length, null, 2));
 }
-
-const getComponentWithTypeConflict = (
-  components: ScheduleComponent[],
-  toCheck: ScheduleComponent,
-) => {
-  return components.find(
-    component =>
-      component.type === toCheck.type &&
-      component.courseCode === toCheck.courseCode,
-  );
-};
-
-const getComponentWithSectionConflict = (
-  components: ScheduleComponent[],
-  toCheck: ScheduleComponent,
-) => {
-  return components.find(
-    component =>
-      component.section !== toCheck.section &&
-      component.courseCode === toCheck.courseCode,
-  );
-};
 
 generateSchedules(courses);
