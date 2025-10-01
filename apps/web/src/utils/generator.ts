@@ -13,10 +13,7 @@ const getScheduleHash = (schedule: ScheduleComponent[]) => {
     .join(",");
 };
 
-const getScheduleQueueHash = (
-  schedule: ScheduleComponent[],
-  nextIndex: number,
-) => {
+const getQueueHash = (schedule: ScheduleComponent[], nextIndex: number) => {
   return `[${nextIndex}]`.concat(
     schedule
       .flatMap(component => `${component.courseCode}:${component.subSection}`)
@@ -30,7 +27,7 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
   const validSchedules: Record<string, ScheduleComponent[]> = {};
   const numComponents = components.length;
 
-  const seen = new Set();
+  const seen = new Set<string>();
 
   const queue: ScheduleQueueItem[] = [
     { nextComponentIndex: 0, selectedComponents: [] },
@@ -41,13 +38,13 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
     if (!item) {
       return [];
     }
-    const { nextComponentIndex, selectedComponents } = item;
+    const { nextComponentIndex, selectedComponents: selected } = item;
 
     if (nextComponentIndex === numComponents) {
       // Ensure only unique schedules are added
-      const scheduleHash = getScheduleHash(selectedComponents);
+      const scheduleHash = getScheduleHash(selected);
       if (validSchedules[scheduleHash]) continue;
-      validSchedules[scheduleHash] = selectedComponents;
+      validSchedules[scheduleHash] = selected;
     }
 
     const currentComponent = components[
@@ -56,127 +53,51 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
     if (!currentComponent) continue;
 
     const { hasTimeConflicts, sectionConflict, typeConflict } = getConflicts(
-      selectedComponents,
+      selected,
       currentComponent,
     );
 
     if (hasTimeConflicts) {
-      const scheduleHash = getScheduleQueueHash(
-        selectedComponents,
-        nextComponentIndex + 1,
-      );
-      if (seen.has(scheduleHash)) continue;
-      queue.push({
-        nextComponentIndex: nextComponentIndex + 1,
-        selectedComponents,
-      });
-      seen.add(scheduleHash);
+      enqueueIfNew(queue, seen, selected, nextComponentIndex + 1);
       continue;
     }
 
+    /* Split into two branches
+     * 1: Keep old section and move onto the next course
+     * 2: Remove old section and replace with current section
+     * */
     if (sectionConflict) {
-      /* Split into two branches
-       * 1: Keep old section and move onto the next course
-       * 2: Remove old section and replace with current section
-       * */
-
-      // Branch 1
-      const nextCourseIndex = selectedComponents
-        .slice(nextComponentIndex, -1)
-        .findIndex(
-          selected => selected.courseCode !== sectionConflict.courseCode,
-        );
-
-      /* It is possible that there are no more courses after the current one
-       * in which case we set the newIndex to be the length of the array as this
-       * will end the loop in the next iteration, and add the schedule to valid schedules
-       * */
-      const newComponentIndex =
-        nextCourseIndex === -1 ? numComponents : nextCourseIndex;
-
-      const scheduleHashBranch1 = getScheduleQueueHash(
-        selectedComponents,
-        newComponentIndex,
-      );
-
-      if (seen.has(scheduleHashBranch1)) continue;
-      queue.push({
-        nextComponentIndex: newComponentIndex,
-        selectedComponents,
-      });
-      seen.add(scheduleHashBranch1);
-
-      // Branch 2:
-      const newSelectedComponents = [
-        ...selectedComponents.filter(
-          selected =>
-            !(
-              selected.courseCode === sectionConflict.courseCode &&
-              selected.section === sectionConflict.section
-            ),
-        ),
+      handleSectionConflict(
+        queue,
+        seen,
+        selected,
         currentComponent,
-      ];
-      const scheduleHashBranch2 = getScheduleQueueHash(
-        newSelectedComponents,
-        nextComponentIndex + 1,
+        sectionConflict,
+        nextComponentIndex,
+        numComponents,
       );
-
-      if (seen.has(scheduleHashBranch2)) continue;
-      queue.push({
-        nextComponentIndex: nextComponentIndex + 1,
-        selectedComponents: newSelectedComponents,
-      });
-      seen.add(scheduleHashBranch2);
       continue;
     }
 
+    /* Split into two branches
+     * 1: Keep old component and move onto next component
+     * 2: Remove old component and replace with current component
+     * */
     if (typeConflict) {
-      /* Split into two branches
-       * 1: Keep old component and move onto next component
-       * 2: Remove old component and replace with current component
-       * */
-
-      // Branch 1
-      const scheduleHashBranch1 = getScheduleQueueHash(
-        selectedComponents,
-        nextComponentIndex + 1,
+      handleTypeConflict(
+        queue,
+        seen,
+        selected,
+        currentComponent,
+        typeConflict,
+        nextComponentIndex,
       );
-
-      if (seen.has(scheduleHashBranch1)) continue;
-      queue.push({
-        nextComponentIndex: nextComponentIndex + 1,
-        selectedComponents,
-      });
-      seen.add(scheduleHashBranch1);
-
-      // Branch 2
-      const toReplace = selectedComponents.findIndex(
-        selected =>
-          selected.courseCode === typeConflict.courseCode &&
-          selected.type === typeConflict.type,
-      );
-
-      const newSelectedComponents = [...selectedComponents];
-      newSelectedComponents[toReplace] = currentComponent;
-
-      const scheduleHashBranch2 = getScheduleQueueHash(
-        newSelectedComponents,
-        nextComponentIndex + 1,
-      );
-
-      if (seen.has(scheduleHashBranch2)) continue;
-      queue.push({
-        nextComponentIndex: nextComponentIndex + 1,
-        selectedComponents: newSelectedComponents,
-      });
-      seen.add(scheduleHashBranch2);
       continue;
     }
 
     // Default case: No Conflicts
-    const newSelectedComponents = [...selectedComponents, currentComponent];
-    const scheduleHash = getScheduleQueueHash(
+    const newSelectedComponents = [...selected, currentComponent];
+    const scheduleHash = getQueueHash(
       newSelectedComponents,
       nextComponentIndex + 1,
     );
@@ -234,6 +155,75 @@ const getConflicts = (
   }
 
   return { hasTimeConflicts, sectionConflict, typeConflict };
+};
+
+const enqueueIfNew = (
+  queue: ScheduleQueueItem[],
+  seen: Set<string>,
+  selected: ScheduleComponent[],
+  idx: number,
+) => {
+  const hash = getQueueHash(selected, idx);
+  if (seen.has(hash)) return;
+
+  queue.push({ nextComponentIndex: idx, selectedComponents: selected });
+  seen.add(hash);
+};
+
+const handleSectionConflict = (
+  queue: ScheduleQueueItem[],
+  seen: Set<string>,
+  selected: ScheduleComponent[],
+  current: ScheduleComponent,
+  conflict: ScheduleComponent,
+  idx: number,
+  totalComponents: number,
+) => {
+  // Branch 1: Keep old section, skip to next course
+  const nextCourseIdx = selected
+    .slice(idx)
+    .findIndex(s => s.courseCode !== conflict.courseCode);
+
+  /* It is possible that there are no more courses after the current one
+   * in which case we set the newIndex to be the length of the array as this
+   * will end the loop in the next iteration, and add the schedule to valid schedules
+   * */
+  const skipToIdx =
+    nextCourseIdx === -1 ? totalComponents : idx + nextCourseIdx;
+  enqueueIfNew(queue, seen, selected, skipToIdx);
+
+  // Branch 2: Replace old section with current
+  const newSelected = [
+    ...selected.filter(
+      selectedComponent =>
+        !(
+          selectedComponent.courseCode === conflict.courseCode &&
+          selectedComponent.section === conflict.section
+        ),
+    ),
+    current,
+  ];
+  enqueueIfNew(queue, seen, newSelected, idx + 1);
+};
+
+const handleTypeConflict = (
+  queue: ScheduleQueueItem[],
+  seen: Set<string>,
+  selected: ScheduleComponent[],
+  current: ScheduleComponent,
+  conflict: ScheduleComponent,
+  idx: number,
+) => {
+  // Branch 1: Keep old component
+  enqueueIfNew(queue, seen, selected, idx + 1);
+
+  // Branch 2: Replace with current component
+  const replaceIdx = selected.findIndex(
+    s => s.courseCode === conflict.courseCode && s.type === conflict.type,
+  );
+  const newSelected = [...selected];
+  newSelected[replaceIdx] = current;
+  enqueueIfNew(queue, seen, newSelected, idx + 1);
 };
 
 export const filterIncompleteSchedules = (
