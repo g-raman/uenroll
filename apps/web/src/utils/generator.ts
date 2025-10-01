@@ -111,8 +111,8 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
       nextComponentIndex + 1,
     );
   }
-  const values = Object.values(validSchedules);
-  return values.length === 0 ? [] : values;
+
+  return Object.values(validSchedules);
 };
 
 const getConflicts = (
