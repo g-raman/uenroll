@@ -96,18 +96,12 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
     }
 
     // Default case: No Conflicts
-    const newSelectedComponents = [...selected, currentComponent];
-    const scheduleHash = getQueueHash(
-      newSelectedComponents,
+    enqueueIfNew(
+      queue,
+      seen,
+      [...selected, currentComponent],
       nextComponentIndex + 1,
     );
-
-    if (seen.has(scheduleHash)) continue;
-    queue.push({
-      nextComponentIndex: nextComponentIndex + 1,
-      selectedComponents: newSelectedComponents,
-    });
-    seen.add(scheduleHash);
   }
   const values = Object.values(validSchedules);
   return values.length === 0 ? [] : values;
