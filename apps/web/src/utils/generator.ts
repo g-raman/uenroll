@@ -55,39 +55,10 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
     ] as ScheduleComponent;
     if (!currentComponent) continue;
 
-    let hasTimeConflicts = false;
-    let componentWithSectionConflict = undefined;
-    let componentWithTypeConflict = undefined;
-    for (const component of selectedComponents) {
-      // Rule 1: Cannot have time conflicts
-      if (
-        component.sessions.some(session =>
-          currentComponent.sessions.some(currSession =>
-            isOverlappingTime(session, currSession),
-          ),
-        )
-      ) {
-        hasTimeConflicts = true;
-      }
-
-      // Rule 2: Cannot have components from two different sections
-      // E.g. Lab from A and Tutorial from B
-      if (
-        component.courseCode === currentComponent.courseCode &&
-        component.section !== currentComponent.section
-      ) {
-        componentWithSectionConflict = component;
-      }
-
-      // Rule 3: Cannot have two of the same types of components
-      // E.g. Lab A01 and Lab A02
-      if (
-        component.type === currentComponent.type &&
-        component.courseCode === currentComponent.courseCode
-      ) {
-        componentWithTypeConflict = component;
-      }
-    }
+    const { hasTimeConflicts, sectionConflict, typeConflict } = getConflicts(
+      selectedComponents,
+      currentComponent,
+    );
 
     if (hasTimeConflicts) {
       const scheduleHash = getScheduleQueueHash(
@@ -103,7 +74,7 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
       continue;
     }
 
-    if (componentWithSectionConflict) {
+    if (sectionConflict) {
       /* Split into two branches
        * 1: Keep old section and move onto the next course
        * 2: Remove old section and replace with current section
@@ -113,8 +84,7 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
       const nextCourseIndex = selectedComponents
         .slice(nextComponentIndex, -1)
         .findIndex(
-          selected =>
-            selected.courseCode !== componentWithSectionConflict.courseCode,
+          selected => selected.courseCode !== sectionConflict.courseCode,
         );
 
       /* It is possible that there are no more courses after the current one
@@ -141,8 +111,8 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
         ...selectedComponents.filter(
           selected =>
             !(
-              selected.courseCode === componentWithSectionConflict.courseCode &&
-              selected.section === componentWithSectionConflict.section
+              selected.courseCode === sectionConflict.courseCode &&
+              selected.section === sectionConflict.section
             ),
         ),
         currentComponent,
@@ -161,7 +131,7 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
       continue;
     }
 
-    if (componentWithTypeConflict) {
+    if (typeConflict) {
       /* Split into two branches
        * 1: Keep old component and move onto next component
        * 2: Remove old component and replace with current component
@@ -183,8 +153,8 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
       // Branch 2
       const toReplace = selectedComponents.findIndex(
         selected =>
-          selected.courseCode === componentWithTypeConflict.courseCode &&
-          selected.type === componentWithTypeConflict.type,
+          selected.courseCode === typeConflict.courseCode &&
+          selected.type === typeConflict.type,
       );
 
       const newSelectedComponents = [...selectedComponents];
@@ -220,6 +190,50 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
   }
   const values = Object.values(validSchedules);
   return values.length === 0 ? [] : values;
+};
+
+const getConflicts = (
+  selected: ScheduleComponent[],
+  toAdd: ScheduleComponent,
+) => {
+  let hasTimeConflicts = false;
+  let sectionConflict: ScheduleComponent | undefined;
+  let typeConflict: ScheduleComponent | undefined;
+
+  for (const component of selected) {
+    // Rule 1: Cannot have time conflicts
+    if (
+      component.sessions.some(session =>
+        toAdd.sessions.some(currSession =>
+          isOverlappingTime(session, currSession),
+        ),
+      )
+    ) {
+      hasTimeConflicts = true;
+    }
+
+    // Rule 2: Cannot have components from two different sections
+    // E.g. Lab from A and Tutorial from B
+    if (
+      component.courseCode === toAdd.courseCode &&
+      component.section !== toAdd.section
+    ) {
+      sectionConflict = component;
+    }
+
+    // Rule 3: Cannot have two of the same types of components
+    // E.g. Lab A01 and Lab A02
+    if (
+      component.type === toAdd.type &&
+      component.courseCode === toAdd.courseCode
+    ) {
+      typeConflict = component;
+    }
+
+    if (hasTimeConflicts && sectionConflict && typeConflict) break;
+  }
+
+  return { hasTimeConflicts, sectionConflict, typeConflict };
 };
 
 export const filterIncompleteSchedules = (
