@@ -26,43 +26,35 @@ export const getOffsettedStartDateTime = (
 };
 
 export function isOverlappingTime(first: Session, second: Session) {
-  const firstDateStartTime = getOffsettedStartDateTime(
+  const firstStart = getOffsettedStartDateTime(
     first.startDate,
     first.startTime,
     first.dayOfWeek,
   );
 
-  const firstDateEndTime = getOffsettedStartDateTime(
+  const firstEnd = getOffsettedStartDateTime(
     first.startDate,
     first.endTime,
     first.dayOfWeek,
   );
 
-  const secondDateStartTime = getOffsettedStartDateTime(
+  const secondStart = getOffsettedStartDateTime(
     second.startDate,
     second.startTime,
     second.dayOfWeek,
   );
 
-  const secondDateEndTime = getOffsettedStartDateTime(
+  const secondEnd = getOffsettedStartDateTime(
     second.startDate,
     second.endTime,
     second.dayOfWeek,
   );
 
-  const range1Compare = Temporal.ZonedDateTime.compare(
-    firstDateStartTime,
-    secondDateEndTime,
+  // Standard overlap check
+  return (
+    Temporal.ZonedDateTime.compare(firstStart, secondEnd) < 0 &&
+    Temporal.ZonedDateTime.compare(secondStart, firstEnd) < 0
   );
-  const range1Overlaps = range1Compare === 0 || range1Compare < 0;
-
-  const range2Compare = Temporal.ZonedDateTime.compare(
-    firstDateEndTime,
-    secondDateStartTime,
-  );
-  const range2Overlaps = range2Compare === 0 || range2Compare > 0;
-
-  return range1Overlaps && range2Overlaps;
 }
 
 export const getPlainStringTime = (zonedDateTime: Temporal.ZonedDateTime) => {
@@ -122,8 +114,8 @@ const createCalendarEvent = (
 };
 
 export const scheduleToCalendarEvents = (schedule: ScheduleComponent[]) => {
-  return schedule.map(component =>
-    component.sessions.map(session => {
+  return schedule.flatMap(component =>
+    component.sessions.flatMap(session => {
       const zonedStartDateTime = getOffsettedStartDateTime(
         session.startDate,
         session.startTime,
