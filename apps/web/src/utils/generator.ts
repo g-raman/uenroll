@@ -1,3 +1,4 @@
+import { ColouredCourse } from "@/types/Types";
 import { isOverlappingTime } from "./calendarEvents";
 import { ScheduleComponent } from "./courseData";
 
@@ -58,7 +59,7 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
   while (queue.length !== 0) {
     const item = queue.shift();
     if (!item) {
-      return;
+      return [];
     }
     const { nextComponentIndex, selectedComponents } = item;
 
@@ -78,26 +79,34 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
     let componentWithSectionConflict = undefined;
     let componentWithTypeConflict = undefined;
     for (const component of selectedComponents) {
-      // Rule 1: Cannot overlap in time
-      hasTimeConflicts = component.sessions.some(session =>
-        currentComponent.sessions.some(currSession =>
-          isOverlappingTime(session, currSession),
-        ),
-      );
+      // Rule 1: Cannot have time conflicts
+      if (
+        component.sessions.some(session =>
+          currentComponent.sessions.some(currSession =>
+            isOverlappingTime(session, currSession),
+          ),
+        )
+      ) {
+        hasTimeConflicts = true;
+      }
 
-      // Rule 2: Cannot have components from different sections
-      componentWithSectionConflict =
+      // Rule 2: Cannot have components from two different sections
+      // E.g. Lab from A and Tutorial from B
+      if (
         component.courseCode === currentComponent.courseCode &&
         component.section !== currentComponent.section
-          ? component
-          : undefined;
+      ) {
+        componentWithSectionConflict = component;
+      }
 
-      // Rule 3: Cannot have the same type of component twice from the same course
-      componentWithTypeConflict =
+      // Rule 3: Cannot have two of the same types of components
+      // E.g. Lab A01 and Lab A02
+      if (
         component.type === currentComponent.type &&
         component.courseCode === currentComponent.courseCode
-          ? component
-          : undefined;
+      ) {
+        componentWithTypeConflict = component;
+      }
     }
 
     if (hasTimeConflicts) {
@@ -229,5 +238,18 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
     });
     seen.add(scheduleHash);
   }
-  return validSchedules;
+  const values = Object.values(validSchedules);
+  return values.length === 0 ? [] : values;
+};
+
+export const filterIncompleteSchedules = (
+  courses: ColouredCourse[],
+  schedules: ScheduleComponent[][],
+) => {
+  const filtered = schedules.filter(schedule =>
+    courses.every(course =>
+      schedule.some(component => component.courseCode === course.courseCode),
+    ),
+  );
+  return filtered;
 };
