@@ -40,8 +40,8 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
     }
     const { nextComponentIndex, selectedComponents: selected } = item;
 
+    // Ensure only unique schedules are added
     if (nextComponentIndex === numComponents) {
-      // Ensure only unique schedules are added
       const scheduleHash = getScheduleHash(selected);
       if (validSchedules[scheduleHash]) continue;
       validSchedules[scheduleHash] = selected;
