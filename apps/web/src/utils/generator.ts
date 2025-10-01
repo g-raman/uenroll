@@ -7,16 +7,6 @@ interface ScheduleQueueItem {
   selectedComponents: ScheduleComponent[];
 }
 
-const logValidSchedules = (schedules: Record<string, ScheduleComponent[]>) => {
-  const result = Object.values(schedules).map(schedule =>
-    schedule.map(
-      component =>
-        `${component.courseCode} ${component.subSection} ${component.type}`,
-    ),
-  );
-  console.log(JSON.stringify(result, null, 2));
-};
-
 const getScheduleHash = (schedule: ScheduleComponent[]) => {
   return schedule
     .flatMap(component => `${component.courseCode}:${component.subSection}`)
@@ -32,16 +22,6 @@ const getScheduleQueueHash = (
       .flatMap(component => `${component.courseCode}:${component.subSection}`)
       .join(","),
   );
-};
-
-const logQueue = (queue: ScheduleQueueItem[]) => {
-  const result = queue.map(item =>
-    item.selectedComponents.flatMap(
-      selectedComponent =>
-        `${selectedComponent.courseCode} ${selectedComponent.subSection} ${selectedComponent.type}`,
-    ),
-  );
-  console.log(result);
 };
 
 // TODO: Handle case where alternate section exists
@@ -252,4 +232,26 @@ export const filterIncompleteSchedules = (
     ),
   );
   return filtered;
+};
+
+export const logValidSchedules = (
+  schedules: Record<string, ScheduleComponent[]>,
+) => {
+  const result = Object.values(schedules).map(schedule =>
+    schedule.map(
+      component =>
+        `${component.courseCode} ${component.subSection} ${component.type}`,
+    ),
+  );
+  console.log(JSON.stringify(result, null, 2));
+};
+
+export const logQueue = (queue: ScheduleQueueItem[]) => {
+  const result = queue.map(item =>
+    item.selectedComponents.flatMap(
+      selectedComponent =>
+        `${selectedComponent.courseCode} ${selectedComponent.subSection} ${selectedComponent.type}`,
+    ),
+  );
+  console.log(result);
 };
