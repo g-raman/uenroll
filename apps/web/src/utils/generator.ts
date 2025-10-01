@@ -46,9 +46,7 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
       validSchedules[scheduleHash] = selected;
     }
 
-    const currentComponent = components[
-      nextComponentIndex
-    ] as ScheduleComponent;
+    const currentComponent = components[nextComponentIndex];
     if (!currentComponent) continue;
 
     const { hasTimeConflicts, sectionConflict, typeConflict } = getConflicts(
