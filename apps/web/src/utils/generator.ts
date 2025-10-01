@@ -57,12 +57,16 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
       currentComponent,
     );
 
+    // Rule 1: Cannot have time conflicts
     if (hasTimeConflicts) {
       enqueueIfNew(queue, seen, selected, nextComponentIndex + 1);
       continue;
     }
 
-    /* Split into two branches
+    /* Rule 2: Cannot have components from two different sections
+     * E.g. Lab from A and Tutorial from B
+     *
+     * Split into two branches
      * 1: Keep old section and move onto the next course
      * 2: Remove old section and replace with current section
      * */
@@ -79,7 +83,11 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
       continue;
     }
 
-    /* Split into two branches
+    /*
+     * Rule 3: Cannot have two of the same types of components
+     * E.g. Lab A01 and Lab A02
+     *
+     * Split into two branches
      * 1: Keep old component and move onto next component
      * 2: Remove old component and replace with current component
      * */
@@ -116,7 +124,6 @@ const getConflicts = (
   let typeConflict: ScheduleComponent | undefined;
 
   for (const component of selected) {
-    // Rule 1: Cannot have time conflicts
     if (
       component.sessions.some(session =>
         toAdd.sessions.some(currSession =>
@@ -127,8 +134,6 @@ const getConflicts = (
       hasTimeConflicts = true;
     }
 
-    // Rule 2: Cannot have components from two different sections
-    // E.g. Lab from A and Tutorial from B
     if (
       component.courseCode === toAdd.courseCode &&
       component.section !== toAdd.section
@@ -136,8 +141,6 @@ const getConflicts = (
       sectionConflict = component;
     }
 
-    // Rule 3: Cannot have two of the same types of components
-    // E.g. Lab A01 and Lab A02
     if (
       component.type === toAdd.type &&
       component.courseCode === toAdd.courseCode
@@ -213,7 +216,9 @@ const handleTypeConflict = (
 
   // Branch 2: Replace with current component
   const replaceIdx = selected.findIndex(
-    s => s.courseCode === conflict.courseCode && s.type === conflict.type,
+    selectedComponent =>
+      selectedComponent.courseCode === conflict.courseCode &&
+      selectedComponent.type === conflict.type,
   );
   const newSelected = [...selected];
   newSelected[replaceIdx] = current;
