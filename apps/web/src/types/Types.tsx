@@ -60,6 +60,6 @@ export interface IScheduleItem extends ISectionWithAlternatives {
 export type ScheduleItem = Expand<IScheduleItem>;
 export type SectionWithAlternatives = Expand<ISectionWithAlternatives>;
 
-export type GroupedSearchResults = ReturnType<
+export type CourseWithSectionAlternatives = ReturnType<
   typeof courseToCourseWithSectionAlternatives
 >;

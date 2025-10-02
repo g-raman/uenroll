@@ -1,11 +1,13 @@
 import {
-  GroupedSearchResults,
+  CourseWithSectionAlternatives,
   ScheduleItem,
   SectionWithAlternatives,
 } from "@/types/Types";
 import { isOverlappingTime } from "@/utils/datetime";
 
-export const getCombinationsByType = (course: GroupedSearchResults) => {
+export const getCombinationsByType = (
+  course: CourseWithSectionAlternatives,
+) => {
   const groupedByType: Record<string, SectionWithAlternatives[]> = {};
 
   for (const section of Object.values(course.sections)) {
@@ -47,7 +49,7 @@ export const getCombinationsByType = (course: GroupedSearchResults) => {
   return combinations;
 };
 
-export const generateSchedule = (courses: GroupedSearchResults[]) => {
+export const generateSchedule = (courses: CourseWithSectionAlternatives[]) => {
   const courseCombinations = courses.map(course =>
     getCombinationsByType(course),
   );

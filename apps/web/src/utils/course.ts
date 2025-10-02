@@ -1,4 +1,8 @@
-import { ColouredCourse, GroupedSearchResults, Selected } from "@/types/Types";
+import {
+  ColouredCourse,
+  CourseWithSectionAlternatives,
+  Selected,
+} from "@/types/Types";
 import { Section } from "@repo/db/types";
 
 export const isSelected = (
@@ -35,7 +39,7 @@ export const isAlternativeSubSection = (first: Section, second: Section) => {
 };
 
 export const sortCoursesByNumSubSections = (
-  courses: GroupedSearchResults[],
+  courses: CourseWithSectionAlternatives[],
 ) => {
   courses.sort(
     (a, b) =>
