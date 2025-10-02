@@ -1,4 +1,4 @@
-import { courseToCourseWithAlternatives } from "@/utils/mappers/course";
+import { courseToCourseWithSectionAlternatives } from "@/utils/mappers/course";
 import { CourseSearchResult, Section } from "@repo/db/types";
 
 export interface ColouredCourse extends CourseSearchResult {
@@ -61,5 +61,5 @@ export type ScheduleItem = Expand<IScheduleItem>;
 export type SectionWithAlternatives = Expand<ISectionWithAlternatives>;
 
 export type GroupedSearchResults = ReturnType<
-  typeof courseToCourseWithAlternatives
+  typeof courseToCourseWithSectionAlternatives
 >;

@@ -1,7 +1,9 @@
 import { ColouredCourse, SectionWithAlternatives } from "@/types/Types";
 import { isAlternativeSubSection } from "@/utils/course";
 
-export const courseToCourseWithAlternatives = (course: ColouredCourse) => {
+export const courseToCourseWithSectionAlternatives = (
+  course: ColouredCourse,
+) => {
   const newSections: Record<string, SectionWithAlternatives[]> = {};
 
   for (const [key, sectionList] of Object.entries(course.sections)) {
