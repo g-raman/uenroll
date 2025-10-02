@@ -1,31 +1,12 @@
 import { ColouredCourse } from "@/types/Types";
 import { isOverlappingTime } from "./calendarEvents";
-import { ScheduleComponent } from "./courseData";
+import { ScheduleComponent } from "./mappers";
 
 interface ScheduleQueueItem {
   nextComponentIndex: number;
   selectedComponents: ScheduleComponent[];
 }
 
-const getScheduleHash = (schedule: ScheduleComponent[]) => {
-  return schedule
-    .flatMap(component => `${component.courseCode}:${component.subSection}`)
-    .join(",");
-};
-
-const getQueueHash = (schedule: ScheduleComponent[], nextIndex: number) => {
-  return `[${nextIndex}]`.concat(
-    schedule
-      .flatMap(component => `${component.courseCode}:${component.subSection}`)
-      .join(","),
-  );
-};
-
-// TODO: Handle case where alternate section exists
-// Example: 2 labs for the same course at the same time
-//
-//
-// Potential solution: Pre process and mark alternatives and remove duplicates
 export const generateSchedules = (components: ScheduleComponent[]) => {
   const validSchedules: Record<string, ScheduleComponent[]> = {};
   const numComponents = components.length;
@@ -255,4 +236,18 @@ export const logQueue = (queue: ScheduleQueueItem[]) => {
     ),
   );
   console.log(result);
+};
+
+const getScheduleHash = (schedule: ScheduleComponent[]) => {
+  return schedule
+    .flatMap(component => `${component.courseCode}:${component.subSection}`)
+    .join(",");
+};
+
+const getQueueHash = (schedule: ScheduleComponent[], nextIndex: number) => {
+  return `[${nextIndex}]`.concat(
+    schedule
+      .flatMap(component => `${component.courseCode}:${component.subSection}`)
+      .join(","),
+  );
 };
