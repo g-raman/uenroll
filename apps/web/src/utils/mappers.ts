@@ -106,6 +106,6 @@ export const searchResultToScheduleComponents = (
     ),
   );
 
-export type ScheduleComponent = ReturnType<
+export type ScheduleItem = ReturnType<
   typeof searchResultToScheduleComponents
 >[0];

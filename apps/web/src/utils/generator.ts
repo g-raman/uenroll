@@ -1,14 +1,14 @@
 import { ColouredCourse } from "@/types/Types";
 import { isOverlappingTime } from "./calendarEvents";
-import { ScheduleComponent } from "./mappers";
+import { ScheduleItem } from "./mappers";
 
 interface ScheduleQueueItem {
   nextComponentIndex: number;
-  selectedComponents: ScheduleComponent[];
+  selectedComponents: ScheduleItem[];
 }
 
-export const generateSchedules = (components: ScheduleComponent[]) => {
-  const validSchedules: Record<string, ScheduleComponent[]> = {};
+export const generateSchedules = (components: ScheduleItem[]) => {
+  const validSchedules: Record<string, ScheduleItem[]> = {};
   const numComponents = components.length;
 
   const seen = new Set<string>();
@@ -95,13 +95,10 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
   return Object.values(validSchedules);
 };
 
-const getConflicts = (
-  selected: ScheduleComponent[],
-  toAdd: ScheduleComponent,
-) => {
+const getConflicts = (selected: ScheduleItem[], toAdd: ScheduleItem) => {
   let hasTimeConflicts = false;
-  let sectionConflict: ScheduleComponent | undefined;
-  let typeConflict: ScheduleComponent | undefined;
+  let sectionConflict: ScheduleItem | undefined;
+  let typeConflict: ScheduleItem | undefined;
 
   for (const component of selected) {
     if (
@@ -137,7 +134,7 @@ const getConflicts = (
 const enqueueIfNew = (
   queue: ScheduleQueueItem[],
   seen: Set<string>,
-  selected: ScheduleComponent[],
+  selected: ScheduleItem[],
   idx: number,
 ) => {
   const hash = getQueueHash(selected, idx);
@@ -150,9 +147,9 @@ const enqueueIfNew = (
 const handleSectionConflict = (
   queue: ScheduleQueueItem[],
   seen: Set<string>,
-  selected: ScheduleComponent[],
-  current: ScheduleComponent,
-  conflict: ScheduleComponent,
+  selected: ScheduleItem[],
+  current: ScheduleItem,
+  conflict: ScheduleItem,
   idx: number,
 ) => {
   // Branch 1: Keep old section, skip to next course
@@ -175,9 +172,9 @@ const handleSectionConflict = (
 const handleTypeConflict = (
   queue: ScheduleQueueItem[],
   seen: Set<string>,
-  selected: ScheduleComponent[],
-  current: ScheduleComponent,
-  conflict: ScheduleComponent,
+  selected: ScheduleItem[],
+  current: ScheduleItem,
+  conflict: ScheduleItem,
   idx: number,
 ) => {
   // Branch 1: Keep old component
@@ -196,7 +193,7 @@ const handleTypeConflict = (
 
 export const filterIncompleteSchedules = (
   courses: ColouredCourse[],
-  schedules: ScheduleComponent[][],
+  schedules: ScheduleItem[][],
 ) => {
   const filtered = schedules.filter(schedule =>
     courses.every(course => {
@@ -217,7 +214,7 @@ export const filterIncompleteSchedules = (
 };
 
 export const logValidSchedules = (
-  schedules: Record<string, ScheduleComponent[]>,
+  schedules: Record<string, ScheduleItem[]>,
 ) => {
   const result = Object.values(schedules).map(schedule =>
     schedule.map(
@@ -238,13 +235,13 @@ export const logQueue = (queue: ScheduleQueueItem[]) => {
   console.log(result);
 };
 
-const getScheduleHash = (schedule: ScheduleComponent[]) => {
+const getScheduleHash = (schedule: ScheduleItem[]) => {
   return schedule
     .flatMap(component => `${component.courseCode}:${component.subSection}`)
     .join(",");
 };
 
-const getQueueHash = (schedule: ScheduleComponent[], nextIndex: number) => {
+const getQueueHash = (schedule: ScheduleItem[], nextIndex: number) => {
   return `[${nextIndex}]`.concat(
     schedule
       .flatMap(component => `${component.courseCode}:${component.subSection}`)
