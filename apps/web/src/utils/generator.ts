@@ -5,6 +5,40 @@ import {
 } from "@/types/Types";
 import { isOverlappingTime } from "@/utils/datetime";
 
+/*
+ * This method uses a DFS approach to generate all possible schedules
+ * */
+export const generateSchedule = (courses: CourseWithSectionAlternatives[]) => {
+  const courseCombinations = courses.map(course =>
+    getSubSectionCombinationsByType(course),
+  );
+  const selected: ScheduleItem[] = [];
+  const results: ScheduleItem[][] = [];
+
+  const backtrack = (index: number) => {
+    if (index === courseCombinations.length) {
+      results.push([...selected]);
+      return;
+    }
+
+    for (const combination of courseCombinations[index] as ScheduleItem[][]) {
+      if (hasConflict(selected, combination)) continue;
+
+      selected.push(...combination);
+      backtrack(index + 1);
+      selected.splice(selected.length - combination.length);
+    }
+  };
+  backtrack(0);
+  return results;
+};
+
+/*
+ * This method generates all valid combinations where each type of
+ * sub section is selected once.
+ *
+ * E.g. one LEC, one LAB, one DGD, etc.
+ * */
 const getSubSectionCombinationsByType = (
   course: CourseWithSectionAlternatives,
 ) => {
@@ -49,48 +83,23 @@ const getSubSectionCombinationsByType = (
   return combinations;
 };
 
-export const generateSchedule = (courses: CourseWithSectionAlternatives[]) => {
-  const courseCombinations = courses.map(course =>
-    getSubSectionCombinationsByType(course),
-  );
-  const selected: ScheduleItem[] = [];
-  const results: ScheduleItem[][] = [];
-
-  const backtrack = (index: number) => {
-    if (index === courseCombinations.length) {
-      results.push([...selected]);
-      return;
-    }
-
-    for (const combination of courseCombinations[index] as ScheduleItem[][]) {
-      if (hasConflict(selected, combination)) continue;
-
-      selected.push(...combination);
-      backtrack(index + 1);
-      selected.splice(selected.length - combination.length);
-    }
-  };
-  backtrack(0);
-  return results;
-};
-
+/*
+ * This method checks if a given potential addition
+ * to the schedule, any time conflicts are created.
+ * */
 const hasConflict = (
   selected: ScheduleItem[],
   newOption: ScheduleItem[],
 ): boolean => {
   for (const section of newOption) {
     for (const chosen of selected) {
-      // Same course, ignore
       if (chosen.courseCode === section.courseCode) continue;
 
-      // Time conflict -> prune early
-      if (
-        chosen.sessions.some(c =>
-          section.sessions.some(s => isOverlappingTime(c, s)),
-        )
-      ) {
-        return true;
-      }
+      const hasConflict = chosen.sessions.some(chosen =>
+        section.sessions.some(session => isOverlappingTime(chosen, session)),
+      );
+
+      if (hasConflict) return true;
     }
   }
   return false;
