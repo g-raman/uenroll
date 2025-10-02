@@ -57,3 +57,39 @@ export const sortCoursesByNumSubSections = (
       ),
   );
 };
+
+export const filterVirtualSessions = (course: ColouredCourse) => {
+  const cleanedSections = Object.fromEntries(
+    Object.entries(course.sections)
+      .map(([key, sections]) => [
+        key,
+        sections
+          .map(section => ({
+            ...section,
+            sessions: section.sessions.filter(
+              session => session.dayOfWeek !== "N/A",
+            ),
+          }))
+          // Only keep sub sections with sessions remaning
+          .filter(section => section.sessions.length > 0),
+      ])
+      // Only keep sections with sub sections remaining
+      .filter(([, sections]) => sections && sections.length > 0),
+  );
+
+  // If no sections remain, remove course
+  if (Object.keys(cleanedSections).length === 0) {
+    return null;
+  }
+
+  return {
+    ...course,
+    sections: cleanedSections,
+  };
+};
+
+export const filterCoursesWithVirutalSessions = (courses: ColouredCourse[]) => {
+  return courses
+    .map(course => filterVirtualSessions(course))
+    .filter(course => course != null);
+};
