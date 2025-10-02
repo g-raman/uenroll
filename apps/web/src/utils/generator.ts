@@ -4,7 +4,7 @@ import { ScheduleItem } from "./mappers";
 
 interface ScheduleQueueItem {
   nextComponentIndex: number;
-  selectedComponents: ScheduleItem[];
+  selected: ScheduleItem[];
 }
 
 export const generateSchedules = (components: ScheduleItem[]) => {
@@ -13,15 +13,13 @@ export const generateSchedules = (components: ScheduleItem[]) => {
 
   const seen = new Set<string>();
 
-  const queue: ScheduleQueueItem[] = [
-    { nextComponentIndex: 0, selectedComponents: [] },
-  ];
+  const queue: ScheduleQueueItem[] = [{ nextComponentIndex: 0, selected: [] }];
 
   while (queue.length !== 0) {
     const item = queue.shift();
     if (!item) break;
 
-    const { nextComponentIndex, selectedComponents: selected } = item;
+    const { nextComponentIndex, selected } = item;
 
     // Ensure only unique schedules are added
     if (nextComponentIndex === numComponents) {
@@ -140,7 +138,7 @@ const enqueueIfNew = (
   const hash = getQueueHash(selected, idx);
   if (seen.has(hash)) return;
 
-  queue.push({ nextComponentIndex: idx, selectedComponents: selected });
+  queue.push({ nextComponentIndex: idx, selected: selected });
   seen.add(hash);
 };
 
@@ -227,7 +225,7 @@ export const logValidSchedules = (
 
 export const logQueue = (queue: ScheduleQueueItem[]) => {
   const result = queue.map(item =>
-    item.selectedComponents.flatMap(
+    item.selected.flatMap(
       selectedComponent =>
         `${selectedComponent.courseCode} ${selectedComponent.subSection} ${selectedComponent.type}`,
     ),
