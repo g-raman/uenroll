@@ -45,6 +45,26 @@ export const groupSubSectionAlternatives = (course: ColouredCourse) => {
   };
 };
 
+export const sortCoursesByNumSubSections = (
+  courses: GroupedSearchResults[],
+) => {
+  courses.sort(
+    (a, b) =>
+      Object.values(a.sections).reduce(
+        (prev, curr) =>
+          prev +
+          curr.reduce((prev2, curr2) => prev2 + curr2.sessions.length, 0),
+        0,
+      ) -
+      Object.values(b.sections).reduce(
+        (prev, curr) =>
+          prev +
+          curr.reduce((prev2, curr2) => prev2 + curr2.sessions.length, 0),
+        0,
+      ),
+  );
+};
+
 const isAlternativeSubSection = (first: Section, second: Section) => {
   if (
     first.sessions.length !== second.sessions.length ||
