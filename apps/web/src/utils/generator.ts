@@ -23,6 +23,9 @@ const getQueueHash = (schedule: ScheduleComponent[], nextIndex: number) => {
 
 // TODO: Handle case where alternate section exists
 // Example: 2 labs for the same course at the same time
+//
+//
+// Potential solution: Pre process and mark alternatives and remove duplicates
 export const generateSchedules = (components: ScheduleComponent[]) => {
   const validSchedules: Record<string, ScheduleComponent[]> = {};
   const numComponents = components.length;
@@ -227,9 +230,19 @@ export const filterIncompleteSchedules = (
   schedules: ScheduleComponent[][],
 ) => {
   const filtered = schedules.filter(schedule =>
-    courses.every(course =>
-      schedule.some(component => component.courseCode === course.courseCode),
-    ),
+    courses.every(course => {
+      const requiredTypes = new Set(
+        Object.values(course.sections).flatMap(sections =>
+          sections.map(component => component.type),
+        ),
+      );
+
+      return Array.from(requiredTypes).every(type =>
+        schedule.some(
+          comp => comp.courseCode === course.courseCode && comp.type === type,
+        ),
+      );
+    }),
   );
   return filtered;
 };
