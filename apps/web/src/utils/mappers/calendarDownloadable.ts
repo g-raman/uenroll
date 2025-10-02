@@ -4,7 +4,7 @@ import { Section, Session } from "@repo/db/types";
 import { getOffsettedStartDateTime, getZonedDateTime } from "@/utils/datetime";
 import { IcsEvent } from "ts-ics";
 
-export const createDownloadableCalendarEvents = (
+export const coursesToDownloadableCalendarEvents = (
   courses: ColouredCourse[],
   selected: Selected | null,
 ) => {
