@@ -1,5 +1,5 @@
 import { SelectedSession } from "@/types/Types";
-import { getPlainStringTime } from "@/utils/calendarEvents";
+import { getPlainStringTime } from "@/utils/datetime";
 
 type ExtendedCalendarEvent = {
   id: string | number;

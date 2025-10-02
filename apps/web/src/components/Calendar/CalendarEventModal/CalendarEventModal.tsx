@@ -7,7 +7,7 @@ import {
   faUser,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { getPlainStringTime } from "@/utils/calendarEvents";
+import { getPlainStringTime } from "@/utils/datetime";
 
 export default function CalendarEventModal({
   calendarEvent,
