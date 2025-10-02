@@ -1,9 +1,9 @@
-import { ColouredCourse } from "@/types/Types";
+import {
+  ColouredCourse,
+  GroupedSearchResults,
+  SectionWithAlternatives,
+} from "@/types/Types";
 import { Section } from "@repo/db/types";
-
-interface SectionWithAlternatives extends Section {
-  alternatives: string[];
-}
 
 export const groupSubSectionAlternatives = (course: ColouredCourse) => {
   const newSections: Record<string, SectionWithAlternatives[]> = {};
@@ -84,10 +84,6 @@ const isAlternativeSubSection = (first: Section, second: Section) => {
     ),
   );
 };
-
-export type GroupedSearchResults = ReturnType<
-  typeof groupSubSectionAlternatives
->;
 
 export const searchResultToScheduleComponents = (
   courses: GroupedSearchResults[],

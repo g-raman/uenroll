@@ -1,18 +1,6 @@
-import { GroupedSearchResults, SectionWithAlternatives } from "./mappers";
+import { GroupedSearchResults } from "./mappers";
 import { isOverlappingTime } from "./calendarEvents";
-
-export type Expand<T> = {
-  [K in keyof T]: T[K];
-};
-
-export interface IScheduleItem extends SectionWithAlternatives {
-  courseCode: string;
-  courseTitle: string;
-  colour: string;
-  term: string;
-}
-
-export type ScheduleItem = Expand<IScheduleItem>;
+import { ScheduleItem, SectionWithAlternatives } from "@/types/Types";
 
 export const getCombinationsByType = (course: GroupedSearchResults) => {
   const groupedByType: Record<string, SectionWithAlternatives[]> = {};
