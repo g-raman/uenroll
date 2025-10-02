@@ -78,7 +78,6 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
         currentComponent,
         sectionConflict,
         nextComponentIndex,
-        numComponents,
       );
       continue;
     }
@@ -174,7 +173,6 @@ const handleSectionConflict = (
   current: ScheduleComponent,
   conflict: ScheduleComponent,
   idx: number,
-  totalComponents: number,
 ) => {
   // Branch 1: Keep old section, skip to next course
   enqueueIfNew(queue, seen, selected, idx + 1);
