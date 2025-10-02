@@ -2,25 +2,13 @@ import { ColouredCourse, ScheduleItem, Selected } from "@/types/Types";
 import { Section, Session } from "@repo/db/types";
 import { RRule } from "rrule";
 import { getOffsettedStartDateTime, getZonedDateTime } from "@/utils/datetime";
+import { isSelected } from "@/utils/course";
 
 type EventCreationFunction<T> = (
   session: Session,
   component: Section,
   course: ColouredCourse,
 ) => T;
-
-const isSelected = (
-  subSection: Section,
-  course: ColouredCourse,
-  selected: Selected,
-) => {
-  if (!selected) return false;
-  if (!selected[course.courseCode]) return false;
-
-  return selected[course.courseCode]?.some(
-    (section: string) => subSection.subSection === section,
-  );
-};
 
 export const createCalendarEvents = <T>(
   courses: ColouredCourse[],

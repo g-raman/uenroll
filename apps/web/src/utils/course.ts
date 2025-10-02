@@ -1,5 +1,18 @@
-import { GroupedSearchResults } from "@/types/Types";
+import { ColouredCourse, GroupedSearchResults, Selected } from "@/types/Types";
 import { Section } from "@repo/db/types";
+
+export const isSelected = (
+  subSection: Section,
+  course: ColouredCourse,
+  selected: Selected,
+) => {
+  if (!selected) return false;
+  if (!selected[course.courseCode]) return false;
+
+  return selected[course.courseCode]?.some(
+    (section: string) => subSection.subSection === section,
+  );
+};
 
 export const isAlternativeSubSection = (first: Section, second: Section) => {
   if (
