@@ -56,7 +56,7 @@ export const getCombinationsByType = (course: GroupedSearchResults) => {
   return combinations;
 };
 
-export const generateSched = (courses: GroupedSearchResults[]) => {
+export const generateSchedule = (courses: GroupedSearchResults[]) => {
   const courseCombinations = courses.map(course =>
     getCombinationsByType(course),
   );
@@ -85,14 +85,15 @@ const hasConflict = (
   selected: ScheduleItem[],
   newOption: ScheduleItem[],
 ): boolean => {
-  for (const sec of newOption) {
+  for (const section of newOption) {
     for (const chosen of selected) {
-      if (chosen.courseCode === sec.courseCode) continue; // same course, ignore
+      // Same course, ignore
+      if (chosen.courseCode === section.courseCode) continue;
 
       // Time conflict -> prune early
       if (
         chosen.sessions.some(c =>
-          sec.sessions.some(s => isOverlappingTime(c, s)),
+          section.sessions.some(s => isOverlappingTime(c, s)),
         )
       ) {
         return true;
