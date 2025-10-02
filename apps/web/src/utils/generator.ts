@@ -177,17 +177,7 @@ const handleSectionConflict = (
   totalComponents: number,
 ) => {
   // Branch 1: Keep old section, skip to next course
-  const nextCourseIdx = selected
-    .slice(idx)
-    .findIndex(s => s.courseCode !== conflict.courseCode);
-
-  /* It is possible that there are no more courses after the current one
-   * in which case we set the newIndex to be the length of the array as this
-   * will end the loop in the next iteration, and add the schedule to valid schedules
-   * */
-  const skipToIdx =
-    nextCourseIdx === -1 ? totalComponents : idx + nextCourseIdx;
-  enqueueIfNew(queue, seen, selected, skipToIdx);
+  enqueueIfNew(queue, seen, selected, idx + 1);
 
   // Branch 2: Replace old section with current
   const newSelected = [
