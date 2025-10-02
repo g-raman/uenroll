@@ -38,7 +38,7 @@ export const generateSchedules = (components: ScheduleComponent[]) => {
 
   while (queue.length !== 0) {
     const item = queue.shift();
-    if (!item) return Object.values(validSchedules);
+    if (!item) break;
 
     const { nextComponentIndex, selectedComponents: selected } = item;
 
