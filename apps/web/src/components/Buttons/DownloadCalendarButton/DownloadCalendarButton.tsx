@@ -1,7 +1,7 @@
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
-import { createDownloadableCalendarEvents } from "@/utils/calendarEvents";
+import { coursesToDownloadableCalendarEvents } from "@/utils/mappers/calendarDownloadable";
 import { faFileExport } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
@@ -33,7 +33,10 @@ export default function DownloadCalendarButton() {
     .map(query => query.data);
 
   const handleDownload = useCallback(async () => {
-    const events = createDownloadableCalendarEvents(courseSearchResults, data);
+    const events = coursesToDownloadableCalendarEvents(
+      courseSearchResults,
+      data,
+    );
     const calendar = generateIcsCalendar({
       version: "2.0",
       prodId: "//uEnroll//Calendar Export 1.0//EN",
