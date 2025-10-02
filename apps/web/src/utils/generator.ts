@@ -1,6 +1,9 @@
-import { GroupedSearchResults } from "./mappers";
-import { isOverlappingTime } from "./calendarEvents";
-import { ScheduleItem, SectionWithAlternatives } from "@/types/Types";
+import {
+  GroupedSearchResults,
+  ScheduleItem,
+  SectionWithAlternatives,
+} from "@/types/Types";
+import { isOverlappingTime } from "@/utils/datetime";
 
 export const getCombinationsByType = (course: GroupedSearchResults) => {
   const groupedByType: Record<string, SectionWithAlternatives[]> = {};
