@@ -84,24 +84,3 @@ const isAlternativeSubSection = (first: Section, second: Section) => {
     ),
   );
 };
-
-export const searchResultToScheduleComponents = (
-  courses: GroupedSearchResults[],
-) =>
-  courses.flatMap(course =>
-    Object.entries(course.sections).flatMap(([section, components]) =>
-      components.flatMap(component => ({
-        ...component,
-        courseCode: course.courseCode,
-        courseTitle: course.courseTitle,
-        term: course.term,
-        colour: course.colour,
-        alternatives: component.alternatives,
-        section: section,
-      })),
-    ),
-  );
-
-export type ScheduleItem = ReturnType<
-  typeof searchResultToScheduleComponents
->[0];
