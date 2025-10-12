@@ -3,23 +3,49 @@ import { create } from "zustand";
 
 interface GeneratorState {
   schedules: ScheduleItem[][];
+  selected: null | number;
   actions: GeneratorActions;
 }
 
 interface GeneratorActions {
+  previousSchedule: () => void;
+  nextSchedule: () => void;
   setSchedules: (schedules: ScheduleItem[][]) => void;
   resetSchedules: () => void;
 }
 
 const useGeneratorStore = create<GeneratorState>(set => ({
   schedules: [],
+  selected: null,
   actions: {
+    previousSchedule: () =>
+      set(old => ({
+        ...old,
+        selected:
+          old.selected !== null
+            ? (old.selected - 1) % old.schedules.length
+            : null,
+      })),
+    nextSchedule: () =>
+      set(old => ({
+        ...old,
+        selected:
+          old.selected !== null
+            ? (old.selected + 1) % old.schedules.length
+            : null,
+      })),
     setSchedules: (schedules: ScheduleItem[][]) =>
-      set(old => ({ ...old, schedules })),
+      set(old => ({
+        ...old,
+        schedules,
+        selected: schedules.length > 0 ? 0 : null,
+      })),
     resetSchedules: () => set(old => ({ ...old, schedules: [] })),
   },
 }));
 
 export const useSchedules = () => useGeneratorStore(state => state.schedules);
+export const useSelectedSchedule = () =>
+  useGeneratorStore(state => state.selected);
 export const useGeneratorActions = () =>
   useGeneratorStore(state => state.actions);
