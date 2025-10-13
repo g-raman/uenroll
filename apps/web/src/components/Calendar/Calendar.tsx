@@ -81,6 +81,9 @@ export function Calendar({ events }: CalendarProps) {
 
   if (!calendar) return;
   eventsService.set(events);
+  events.sort((first, second) =>
+    Temporal.ZonedDateTime.compare(first.start, second.start),
+  );
 
   // HACK: Events don't update otherwise
   const view = calendarControls.getView();
@@ -91,6 +94,10 @@ export function Calendar({ events }: CalendarProps) {
     calendarControls.setView("list");
     calendarControls.setView("week");
   }
+
+  const latestStartingEvent = events.at(-1);
+  if (latestStartingEvent)
+    calendarControls.setDate(latestStartingEvent.start.toPlainDate());
 
   return (
     <ScheduleXCalendar
