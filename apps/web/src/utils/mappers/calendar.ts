@@ -59,7 +59,6 @@ const courseToCalendarAppEvent = (
 
   const rrule = new RRule({
     freq: RRule.WEEKLY,
-    dtstart: new Date(zonedStartDateTime.epochMilliseconds),
     until: new Date(recurrenceEndDateTime.epochMilliseconds),
   });
 
