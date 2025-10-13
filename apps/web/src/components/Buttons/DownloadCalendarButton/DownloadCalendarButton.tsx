@@ -2,7 +2,7 @@ import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import { coursesToDownloadableCalendarEvents } from "@/utils/mappers/calendarDownloadable";
-import { faFileExport } from "@fortawesome/free-solid-svg-icons";
+import { faFileExport, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -61,13 +61,13 @@ export default function DownloadCalendarButton() {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="grow"
+          className="text-primary grow"
           variant="default"
           size="lg"
           onClick={handleDownload}
           disabled={!hasAnySelectedSessions}
         >
-          <FontAwesomeIcon className="size-4" icon={faFileExport} />
+          <FontAwesomeIcon className="size-4" icon={faFloppyDisk} />
           <p className="hidden text-xs min-[375px]:inline sm:inline md:hidden min-[1440px]:inline">
             Export
           </p>
