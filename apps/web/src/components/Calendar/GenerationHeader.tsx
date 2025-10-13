@@ -37,6 +37,7 @@ export function GenerationHeader() {
 
   const schedules = useSchedules();
   const selectedSchedule = useSelectedSchedule();
+  const noSchedules = schedules.length <= 0;
 
   const { previousSchedule, nextSchedule, setSelectedSchedule, setSchedules } =
     useGeneratorActions();
@@ -68,7 +69,7 @@ export function GenerationHeader() {
   };
 
   const handlePrevious = () => {
-    if (schedules.length <= 0) return;
+    if (noSchedules) return;
     if (selectedSchedule === null) {
       setSelectedSchedule(0);
       return;
@@ -78,7 +79,7 @@ export function GenerationHeader() {
   };
 
   const handleNext = () => {
-    if (schedules.length <= 0) return;
+    if (noSchedules) return;
     if (selectedSchedule === null) {
       setSelectedSchedule(schedules.length - 1);
       return;
@@ -101,6 +102,7 @@ export function GenerationHeader() {
         <div className="flex gap-2">
           <div className="flex items-center">
             <Button
+              disabled={noSchedules}
               className="w-6 rounded-e-none border-e-[0px]"
               variant="outline"
               onClick={handlePrevious}
@@ -112,21 +114,24 @@ export function GenerationHeader() {
               <Input
                 onChange={handleInputChange}
                 className="!max-w-28 rounded-none text-center"
-                disabled={schedules.length <= 0}
+                disabled={noSchedules}
                 value={
-                  schedules.length <= 0
+                  noSchedules
                     ? `No results`
                     : selectedSchedule !== null
                       ? selectedSchedule + 1
                       : ""
                 }
               />
-              <span className="bg-muted border-input flex h-full items-center border-y px-2 text-sm text-gray-500">
-                of {schedules.length}
-              </span>
+              {!noSchedules && (
+                <span className="bg-muted border-input flex h-full items-center border-y px-2 text-sm text-gray-500">
+                  of {schedules.length}
+                </span>
+              )}
             </div>
 
             <Button
+              disabled={noSchedules}
               className="w-6 rounded-s-none border-s-[0px]"
               variant="outline"
               onClick={handleNext}
