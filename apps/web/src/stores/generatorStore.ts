@@ -10,6 +10,7 @@ interface GeneratorState {
 interface GeneratorActions {
   previousSchedule: () => void;
   nextSchedule: () => void;
+  setSelectedSchedule: (selected: number | null) => void;
   setSchedules: (schedules: ScheduleItem[][]) => void;
   resetSchedules: () => void;
 }
@@ -36,6 +37,7 @@ const useGeneratorStore = create<GeneratorState>(set => ({
             ? (old.selected + 1) % old.schedules.length
             : null,
       })),
+    setSelectedSchedule: selected => set(old => ({ ...old, selected })),
     setSchedules: (schedules: ScheduleItem[][]) =>
       set(old => ({
         ...old,
