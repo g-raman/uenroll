@@ -7,10 +7,12 @@ import { useState } from "react";
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useTermParam } from "@/hooks/useTermParam";
 import { useDataParam } from "@/hooks/useDataParam";
+import { useMode } from "@/stores/modeStore";
 
 export default function SearchResults() {
   const [data] = useDataParam();
   const [selectedTerm] = useTermParam();
+  const isGenerationMode = useMode();
 
   const [openResults, setOpenResults] = useState<string[]>([]);
 
@@ -33,6 +35,12 @@ export default function SearchResults() {
 
   return (
     <div>
+      {isGenerationMode && (
+        <p className="mb-4 mt-2 px-2 text-sm italic">
+          Uncheck all sections you don&apos;t want
+        </p>
+      )}
+
       <Accordion type="multiple" onValueChange={value => setOpenResults(value)}>
         {courseSearchResults.map(course => {
           return (
