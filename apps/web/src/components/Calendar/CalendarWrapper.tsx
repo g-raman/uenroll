@@ -40,7 +40,7 @@ export function CalendarWrapper() {
 
   return (
     <div className="h-full space-y-4 overflow-scroll">
-      {isGenerationMode && <GenerationHeader />}
+      <GenerationHeader />
       <Calendar events={events} />
       {events.length === 0 ? (
         <p className="mt-8 h-max w-full text-center lg:hidden">
