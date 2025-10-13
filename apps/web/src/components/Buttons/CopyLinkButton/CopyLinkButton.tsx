@@ -45,9 +45,9 @@ export const CopyLinkButton = () => {
 
   const serialized = parseAsSelectedSessions.serialize(newSelected);
 
-  const hasAnySelectedSessions = Object.values(data ? data : {}).some(
-    value => value.length > 0,
-  );
+  const hasAnySelectedSessions = data
+    ? Object.values(data).some(value => value.length > 0)
+    : false;
 
   const handleClick = useCallback(async () => {
     const clipboardAppendResult = await ResultAsync.fromPromise(

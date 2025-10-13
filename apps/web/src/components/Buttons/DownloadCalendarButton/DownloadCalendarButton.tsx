@@ -31,9 +31,9 @@ export default function DownloadCalendarButton() {
   const schedules = useSchedules();
   const selecteSchedule = useSelectedSchedule();
 
-  const hasAnySelectedSessions = Object.values(data ? data : {}).some(
-    value => value.length > 0,
-  );
+  const hasAnySelectedSessions = data
+    ? Object.values(data).some(value => value.length > 0)
+    : false;
 
   const courseSearchResults = courseQueries
     .filter(query => query.isSuccess)
