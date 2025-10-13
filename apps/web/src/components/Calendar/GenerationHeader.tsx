@@ -40,8 +40,13 @@ export function GenerationHeader() {
   const selectedSchedule = useSelectedSchedule();
   const noSchedules = schedules.length <= 0;
 
-  const { previousSchedule, nextSchedule, setSelectedSchedule, setSchedules } =
-    useGeneratorActions();
+  const {
+    previousSchedule,
+    nextSchedule,
+    setSelectedSchedule,
+    setSchedules,
+    resetSchedules,
+  } = useGeneratorActions();
 
   const courseSearchResults = courseQueries
     .filter(query => query.isSuccess)
@@ -94,6 +99,7 @@ export function GenerationHeader() {
     const newData: Selected = {};
     courseCodes.forEach(courseCode => (newData[courseCode] = []));
     setData(newData);
+    resetSchedules();
     toggleMode();
   };
 

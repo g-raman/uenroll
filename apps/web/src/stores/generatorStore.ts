@@ -44,7 +44,8 @@ const useGeneratorStore = create<GeneratorState>(set => ({
         schedules,
         selected: schedules.length > 0 ? 0 : null,
       })),
-    resetSchedules: () => set(old => ({ ...old, schedules: [] })),
+    resetSchedules: () =>
+      set(old => ({ ...old, selected: null, schedules: [] })),
   },
 }));
 
