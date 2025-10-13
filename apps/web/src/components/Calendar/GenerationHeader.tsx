@@ -155,7 +155,11 @@ export function GenerationHeader() {
             </Button>
           </div>
 
-          <Button variant="default" onClick={handleGeneration}>
+          <Button
+            disabled={courseSearchResults.length <= 0}
+            variant="default"
+            onClick={handleGeneration}
+          >
             Generate
           </Button>
         </div>
