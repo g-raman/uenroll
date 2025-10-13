@@ -19,6 +19,7 @@ import { Switch } from "@repo/ui/components/switch";
 import { Label } from "@repo/ui/components/label";
 import { Input } from "@repo/ui/components/input";
 import { useMode, useModeActions } from "@/stores/modeStore";
+import { ChangeEvent } from "react";
 
 export function GenerationHeader() {
   const [selectedTerm] = useTermParam();
@@ -37,7 +38,7 @@ export function GenerationHeader() {
   const schedules = useSchedules();
   const selectedSchedule = useSelectedSchedule();
 
-  const { previousSchedule, nextSchedule, setSchedules } =
+  const { previousSchedule, nextSchedule, setSelectedSchedule, setSchedules } =
     useGeneratorActions();
 
   const courseSearchResults = courseQueries
@@ -51,6 +52,39 @@ export function GenerationHeader() {
     const schedules = generateSchedule(coursesWithAlternatives);
 
     setSchedules(schedules);
+  };
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+
+    // Allow only digits and empty string
+    if (/^\d*$/.test(value)) {
+      const num = Number(value);
+
+      if (value === "") setSelectedSchedule(null);
+      else if (num >= 1 && num <= schedules.length)
+        setSelectedSchedule(num - 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (schedules.length <= 0) return;
+    if (selectedSchedule === null) {
+      setSelectedSchedule(0);
+      return;
+    }
+
+    previousSchedule();
+  };
+
+  const handleNext = () => {
+    if (schedules.length <= 0) return;
+    if (selectedSchedule === null) {
+      setSelectedSchedule(schedules.length - 1);
+      return;
+    }
+
+    nextSchedule();
   };
 
   return (
@@ -69,25 +103,33 @@ export function GenerationHeader() {
             <Button
               className="w-6 rounded-e-none border-e-[0px]"
               variant="outline"
-              onClick={previousSchedule}
+              onClick={handlePrevious}
             >
               <FontAwesomeIcon icon={faChevronLeft} />
             </Button>
 
-            <Input
-              className="!max-w-28 rounded-none text-center"
-              disabled={selectedSchedule === null}
-              value={
-                selectedSchedule === null
-                  ? `No results`
-                  : `${selectedSchedule + 1} of ${schedules.length}`
-              }
-            />
+            <div className="flex h-full items-center">
+              <Input
+                onChange={handleInputChange}
+                className="!max-w-28 rounded-none text-center"
+                disabled={schedules.length <= 0}
+                value={
+                  schedules.length <= 0
+                    ? `No results`
+                    : selectedSchedule !== null
+                      ? selectedSchedule + 1
+                      : ""
+                }
+              />
+              <span className="bg-muted border-input flex h-full items-center border-y px-2 text-sm text-gray-500">
+                of {schedules.length}
+              </span>
+            </div>
 
             <Button
               className="w-6 rounded-s-none border-s-[0px]"
               variant="outline"
-              onClick={nextSchedule}
+              onClick={handleNext}
             >
               <FontAwesomeIcon icon={faChevronRight} />
             </Button>
