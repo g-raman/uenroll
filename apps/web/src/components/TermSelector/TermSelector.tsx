@@ -21,6 +21,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@repo/ui/components/alert-dialog";
+import { useGeneratorActions } from "@/stores/generatorStore";
 
 export default function TermSelector() {
   const { resetColours } = useColoursActions();
@@ -29,12 +30,14 @@ export default function TermSelector() {
   const { data: availableTerms } = useAvailableTermsQuery();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [pendingTerm, setPendingTerm] = useState<string | null>(null);
+  const { resetSchedules } = useGeneratorActions();
 
   const handleChangeTerm = useCallback(
     (term: string) => {
       if (data === null) {
         setSelectedTerm(term);
         setData(null);
+        resetSchedules();
         resetColours();
         return;
       }
@@ -42,18 +45,19 @@ export default function TermSelector() {
       setPendingTerm(term);
       setIsAlertOpen(true);
     },
-    [data, resetColours, setData, setSelectedTerm],
+    [data, resetColours, resetSchedules, setData, setSelectedTerm],
   );
 
   const handleConfirmChangeTerm = useCallback(() => {
     if (pendingTerm) {
       setSelectedTerm(pendingTerm);
       setData(null);
+      resetSchedules();
       resetColours();
     }
     setIsAlertOpen(false);
     setPendingTerm(null);
-  }, [pendingTerm, resetColours, setData, setSelectedTerm]);
+  }, [pendingTerm, resetColours, resetSchedules, setData, setSelectedTerm]);
 
   const handleCancelChangeTerm = useCallback(() => {
     setIsAlertOpen(false);
