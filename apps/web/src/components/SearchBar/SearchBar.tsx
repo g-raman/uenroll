@@ -11,8 +11,6 @@ import { useCourseQuery } from "@/hooks/useCourseQuery";
 import { DeleteSearchResultsButton } from "../Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
 import { CopyLinkButton } from "../Buttons/CopyLinkButton/CopyLinkButton";
 import DownloadCalendarButton from "../Buttons/DownloadCalendarButton/DownloadCalendarButton";
-import { Button } from "@repo/ui/components/button";
-import { useMode, useModeActions } from "@/stores/modeStore";
 
 export default function SearchBar() {
   const [selectedTerm] = useTermParam();
@@ -20,9 +18,6 @@ export default function SearchBar() {
 
   const [query, setQuery] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
-
-  const isGenerationMode = useMode();
-  const { toggleMode } = useModeActions();
 
   const { data: dataAllCourses } = useQuery(
     trpc.getAvailableCoursesByTerm.queryOptions(
@@ -100,10 +95,6 @@ export default function SearchBar() {
         <CopyLinkButton />
         <DownloadCalendarButton />
       </div>
-
-      <Button variant="default" onClick={toggleMode}>
-        {isGenerationMode ? "Gen Mode" : "Manual"}
-      </Button>
     </div>
   );
 }
