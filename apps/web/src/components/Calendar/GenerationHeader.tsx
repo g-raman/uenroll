@@ -9,11 +9,16 @@ import {
 import { generateSchedule } from "@/utils/generator";
 import { courseToCourseWithSectionAlternatives } from "@/utils/mappers/course";
 import {
+  faBuildingColumns,
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
+import { Switch } from "@repo/ui/components/switch";
+import { Label } from "@repo/ui/components/label";
+import { Input } from "@repo/ui/components/input";
+import { useMode, useModeActions } from "@/stores/modeStore";
 
 export function GenerationHeader() {
   const [selectedTerm] = useTermParam();
@@ -25,6 +30,9 @@ export function GenerationHeader() {
     courseCodes,
     courseCodes.length > 0,
   );
+
+  const isGenerationMode = useMode();
+  const { toggleMode } = useModeActions();
 
   const schedules = useSchedules();
   const selectedSchedule = useSelectedSchedule();
@@ -46,25 +54,58 @@ export function GenerationHeader() {
   };
 
   return (
-    <div className="flex w-full items-center rounded-md border px-4 py-3">
-      <Button variant="default" onClick={handleGeneration}>
-        Generate
-      </Button>
+    <div className="flex items-center justify-between rounded-md border px-4 py-3">
+      <div className="flex items-baseline justify-start text-4xl">
+        <FontAwesomeIcon
+          className="text-primary size-12"
+          icon={faBuildingColumns}
+        />
+        <p>uEnroll</p>
+      </div>
 
-      <div className="ms-auto flex items-center gap-1">
-        <p className="me-4 text-base">
-          {selectedSchedule !== null
-            ? `${selectedSchedule + 1} out of ${schedules.length}`
-            : null}
-        </p>
+      {isGenerationMode && (
+        <div className="flex gap-2">
+          <div className="flex items-center">
+            <Button
+              className="w-6 rounded-e-none border-e-[0px]"
+              variant="outline"
+              onClick={previousSchedule}
+            >
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </Button>
 
-        <Button variant="outline" onClick={previousSchedule}>
-          <FontAwesomeIcon icon={faChevronLeft} />
-        </Button>
+            <Input
+              className="!max-w-28 rounded-none text-center"
+              disabled={selectedSchedule === null}
+              value={
+                selectedSchedule === null
+                  ? `No results`
+                  : `${selectedSchedule + 1} of ${schedules.length}`
+              }
+            />
 
-        <Button variant="outline" onClick={nextSchedule}>
-          <FontAwesomeIcon icon={faChevronRight} />
-        </Button>
+            <Button
+              className="w-6 rounded-s-none border-s-[0px]"
+              variant="outline"
+              onClick={nextSchedule}
+            >
+              <FontAwesomeIcon icon={faChevronRight} />
+            </Button>
+          </div>
+
+          <Button variant="default" onClick={handleGeneration}>
+            Generate
+          </Button>
+        </div>
+      )}
+
+      <div className="ms-4 flex items-center space-x-2">
+        <Switch
+          id="generation-mode"
+          checked={isGenerationMode}
+          onCheckedChange={toggleMode}
+        />
+        <Label htmlFor="airplane-mode">Generation Mode</Label>
       </div>
     </div>
   );
