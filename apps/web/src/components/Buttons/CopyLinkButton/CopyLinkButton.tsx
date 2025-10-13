@@ -3,6 +3,8 @@
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import { parseAsSelectedSessions } from "@/hooks/utils";
+import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
+import { useMode } from "@/stores/modeStore";
 import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { envClient } from "@repo/env";
@@ -20,13 +22,34 @@ export const CopyLinkButton = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [selectedTerm] = useTermParam();
   const [data] = useDataParam();
-  const newSelected = data ? { ...data } : {};
+  let newSelected = data ? { ...data } : {};
 
-  Object.keys(newSelected).forEach(key => {
-    if (newSelected[key] && newSelected[key].length === 0) {
-      delete newSelected[key];
-    }
-  });
+  const isGenerationMode = useMode();
+  const schedules = useSchedules();
+  const selectedSchedule = useSelectedSchedule();
+
+  if (
+    isGenerationMode &&
+    selectedSchedule !== null &&
+    schedules[selectedSchedule]
+  ) {
+    newSelected = {};
+
+    const schedule = schedules[selectedSchedule];
+    schedule.forEach(item => {
+      const key = item.courseCode;
+
+      if (!newSelected[key]) newSelected[key] = [item.subSection as string];
+      else newSelected[key].push(item.subSection as string);
+    });
+  } else {
+    Object.keys(newSelected).forEach(key => {
+      if (newSelected[key] && newSelected[key].length === 0) {
+        delete newSelected[key];
+      }
+    });
+  }
+
   const serialized = parseAsSelectedSessions.serialize(newSelected);
 
   const hasAnySelectedSessions = Object.values(data ? data : {}).some(
@@ -57,7 +80,10 @@ export const CopyLinkButton = () => {
           className="grow"
           variant="outline"
           size="lg"
-          disabled={!hasAnySelectedSessions}
+          disabled={
+            (isGenerationMode && schedules.length === 0) ||
+            (!isGenerationMode && !hasAnySelectedSessions)
+          }
           onClick={handleClick}
         >
           <FontAwesomeIcon
