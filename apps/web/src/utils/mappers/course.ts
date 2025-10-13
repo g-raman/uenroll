@@ -1,5 +1,10 @@
-import { ColouredCourse, SectionWithAlternatives } from "@/types/Types";
+import {
+  ColouredCourse,
+  SectionWithAlternatives,
+  Selected,
+} from "@/types/Types";
 import { isAlternativeSubSection } from "@/utils/course";
+import { Section } from "@repo/db/types";
 
 export const courseToCourseWithSectionAlternatives = (
   course: ColouredCourse,
@@ -40,4 +45,33 @@ export const courseToCourseWithSectionAlternatives = (
     term: course.term,
     sections: newSections,
   };
+};
+
+export const filterExcludedSections = (
+  course: ColouredCourse,
+  excluded: Selected | null,
+) => {
+  if (!excluded) return course;
+  if (!excluded[course.courseCode]) return course;
+
+  const newCourse = { ...course };
+  newCourse.sections = {};
+
+  for (const [key, sectionList] of Object.entries(course.sections)) {
+    const newSections: Section[] = [];
+
+    sectionList.forEach(subSection => {
+      if (
+        excluded[course.courseCode]?.includes(
+          subSection.subSection ? subSection.subSection : "",
+        )
+      ) {
+        return;
+      }
+      newSections.push(subSection);
+    });
+
+    newCourse.sections[key] = newSections;
+  }
+  return newCourse;
 };
