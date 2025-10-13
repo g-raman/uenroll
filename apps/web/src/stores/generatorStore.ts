@@ -23,7 +23,9 @@ const useGeneratorStore = create<GeneratorState>(set => ({
         ...old,
         selected:
           old.selected !== null
-            ? (old.selected - 1) % old.schedules.length
+            ? (((old.selected - 1) % old.schedules.length) +
+                old.schedules.length) %
+              old.schedules.length
             : null,
       })),
     nextSchedule: () =>
