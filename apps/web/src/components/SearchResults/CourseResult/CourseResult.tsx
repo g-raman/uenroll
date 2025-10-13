@@ -16,6 +16,7 @@ import {
 import { useColoursActions } from "@/stores/colourStore";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useCallback } from "react";
+import { useGeneratorActions } from "@/stores/generatorStore";
 
 interface CourseResultProps {
   course: ColouredCourse;
@@ -25,6 +26,7 @@ interface CourseResultProps {
 const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
   const { addColour } = useColoursActions();
   const [data, setData] = useDataParam();
+  const { resetSchedules } = useGeneratorActions();
 
   const removeCourse = useCallback(() => {
     if (data === null || !data[course.courseCode]) {
@@ -33,9 +35,20 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
     const newData = { ...data };
     delete newData[course.courseCode];
 
+    if (Object.keys(newData).length === 0) {
+      setData(null);
+    }
     setData(Object.keys(newData).length === 0 ? null : newData);
     addColour(course.courseCode, course.colour);
-  }, [addColour, course.colour, course.courseCode, data, setData]);
+    resetSchedules();
+  }, [
+    addColour,
+    course.colour,
+    course.courseCode,
+    data,
+    resetSchedules,
+    setData,
+  ]);
 
   return (
     <>
