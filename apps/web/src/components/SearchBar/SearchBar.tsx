@@ -92,8 +92,6 @@ export default function SearchBar() {
 
       <div className="flex gap-2">
         <DeleteSearchResultsButton />
-        <CopyLinkButton />
-        <DownloadCalendarButton />
       </div>
     </div>
   );

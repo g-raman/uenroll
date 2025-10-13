@@ -1,3 +1,5 @@
+import { CopyLinkButton } from "@/components/Buttons/CopyLinkButton/CopyLinkButton";
+import DownloadCalendarButton from "@/components/Buttons/DownloadCalendarButton/DownloadCalendarButton";
 import { useTermParam } from "@/hooks/useTermParam";
 import { TIMEZONE } from "@/utils/constants";
 import {
@@ -63,6 +65,8 @@ export default function CalendarHeader({ $app }: { $app: App }) {
         </p>
 
         <div className="ml-auto space-x-2">
+          <DownloadCalendarButton />
+          <CopyLinkButton />
           <Button
             className="bg-background! shadow-xs! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! border text-black dark:text-white"
             onClick={() =>
