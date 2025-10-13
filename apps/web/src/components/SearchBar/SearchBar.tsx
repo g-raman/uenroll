@@ -11,6 +11,7 @@ import { useCourseQuery } from "@/hooks/useCourseQuery";
 import { DeleteSearchResultsButton } from "../Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
 import { CopyLinkButton } from "../Buttons/CopyLinkButton/CopyLinkButton";
 import DownloadCalendarButton from "../Buttons/DownloadCalendarButton/DownloadCalendarButton";
+import { ThemeSwitchingButton } from "../Buttons/ThemeSwitchingButton/ThemeSwitchingButton";
 
 export default function SearchBar() {
   const [selectedTerm] = useTermParam();
@@ -92,6 +93,7 @@ export default function SearchBar() {
 
       <div className="flex gap-2">
         <DeleteSearchResultsButton />
+        <ThemeSwitchingButton />
       </div>
     </div>
   );
