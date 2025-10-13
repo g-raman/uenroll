@@ -2,12 +2,16 @@ import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import {
+  useExcluded,
   useGeneratorActions,
   useSchedules,
   useSelectedSchedule,
 } from "@/stores/generatorStore";
 import { generateSchedule } from "@/utils/generator";
-import { courseToCourseWithSectionAlternatives } from "@/utils/mappers/course";
+import {
+  courseToCourseWithSectionAlternatives,
+  filterExcludedSections,
+} from "@/utils/mappers/course";
 import {
   faBuildingColumns,
   faChevronLeft,
@@ -35,6 +39,7 @@ export function GenerationHeader() {
 
   const isGenerationMode = useMode();
   const { toggleMode } = useModeActions();
+  const excluded = useExcluded();
 
   const schedules = useSchedules();
   const selectedSchedule = useSelectedSchedule();
@@ -53,7 +58,10 @@ export function GenerationHeader() {
     .map(query => query.data);
 
   const handleGeneration = () => {
-    const coursesWithAlternatives = courseSearchResults.map(result =>
+    const filtered = courseSearchResults.map(result =>
+      filterExcludedSections(result, excluded),
+    );
+    const coursesWithAlternatives = filtered.map(result =>
       courseToCourseWithSectionAlternatives(result),
     );
     const schedules = generateSchedule(coursesWithAlternatives);
