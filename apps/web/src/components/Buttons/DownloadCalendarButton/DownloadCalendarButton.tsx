@@ -1,7 +1,10 @@
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
+import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
+import { useMode } from "@/stores/modeStore";
 import { coursesToDownloadableCalendarEvents } from "@/utils/mappers/calendarDownloadable";
+import { scheduleToSelected } from "@/utils/mappers/schedule";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
@@ -24,6 +27,10 @@ export default function DownloadCalendarButton() {
     courseCodes.length > 0,
   );
 
+  const isGenerationMode = useMode();
+  const schedules = useSchedules();
+  const selecteSchedule = useSelectedSchedule();
+
   const hasAnySelectedSessions = Object.values(data ? data : {}).some(
     value => value.length > 0,
   );
@@ -33,9 +40,14 @@ export default function DownloadCalendarButton() {
     .map(query => query.data);
 
   const handleDownload = useCallback(async () => {
+    const selected =
+      isGenerationMode && selecteSchedule !== null && schedules[selecteSchedule]
+        ? scheduleToSelected(schedules[selecteSchedule])
+        : data;
+
     const events = coursesToDownloadableCalendarEvents(
       courseSearchResults,
-      data,
+      selected,
     );
     const calendar = generateIcsCalendar({
       version: "2.0",
@@ -55,7 +67,7 @@ export default function DownloadCalendarButton() {
     document.body.removeChild(anchor);
 
     URL.revokeObjectURL(url);
-  }, [courseSearchResults, data]);
+  }, [courseSearchResults, data, isGenerationMode, schedules, selecteSchedule]);
 
   return (
     <Tooltip>
@@ -65,7 +77,10 @@ export default function DownloadCalendarButton() {
           variant="default"
           size="lg"
           onClick={handleDownload}
-          disabled={!hasAnySelectedSessions}
+          disabled={
+            (isGenerationMode && schedules.length === 0) ||
+            (!isGenerationMode && !hasAnySelectedSessions)
+          }
         >
           <FontAwesomeIcon className="size-4" icon={faDownload} />
           <p className="hidden text-xs min-[375px]:inline sm:inline md:hidden min-[1440px]:inline">
