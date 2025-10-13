@@ -20,10 +20,11 @@ import { Label } from "@repo/ui/components/label";
 import { Input } from "@repo/ui/components/input";
 import { useMode, useModeActions } from "@/stores/modeStore";
 import { ChangeEvent } from "react";
+import { Selected } from "@/types/Types";
 
 export function GenerationHeader() {
   const [selectedTerm] = useTermParam();
-  const [data] = useDataParam();
+  const [data, setData] = useDataParam();
   const courseCodes = Object.keys(data ? data : {});
 
   const courseQueries = useCourseQueries(
@@ -88,6 +89,14 @@ export function GenerationHeader() {
     nextSchedule();
   };
 
+  const handleToggle = () => {
+    const courseCodes = Object.keys(data);
+    const newData: Selected = {};
+    courseCodes.forEach(courseCode => (newData[courseCode] = []));
+    setData(newData);
+    toggleMode();
+  };
+
   return (
     <div className="bg-background sticky top-0 z-10 flex items-center justify-between rounded-md border px-4 py-3">
       <div className="flex items-baseline justify-start text-4xl">
@@ -150,7 +159,7 @@ export function GenerationHeader() {
         <Switch
           id="generation-mode"
           checked={isGenerationMode}
-          onCheckedChange={toggleMode}
+          onCheckedChange={handleToggle}
         />
         <Label htmlFor="airplane-mode">Generation Mode</Label>
       </div>
