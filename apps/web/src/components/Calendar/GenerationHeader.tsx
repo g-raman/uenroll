@@ -89,7 +89,7 @@ export function GenerationHeader() {
   };
 
   return (
-    <div className="flex items-center justify-between rounded-md border px-4 py-3">
+    <div className="bg-background sticky top-0 z-10 flex items-center justify-between rounded-md border px-4 py-3">
       <div className="flex items-baseline justify-start text-4xl">
         <FontAwesomeIcon
           className="text-primary size-12"

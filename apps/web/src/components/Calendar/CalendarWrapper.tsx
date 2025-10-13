@@ -39,7 +39,7 @@ export function CalendarWrapper() {
     : coursesToCalendarAppEvents(courseSearchResults, data);
 
   return (
-    <div className="h-full space-y-4 overflow-scroll">
+    <div className="h-full space-y-4 overflow-y-scroll">
       <GenerationHeader />
       <Calendar events={events} />
       {events.length === 0 ? (

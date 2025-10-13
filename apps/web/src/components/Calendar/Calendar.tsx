@@ -50,7 +50,7 @@ export function Calendar({ events }: CalendarProps) {
         beforeRender($app) {
           // Need a multiplier to reduce grid height as some space
           // is taken up by the calendar navigation
-          const multiplier = 0.77;
+          const multiplier = 0.66;
           const height = window.innerHeight * multiplier;
           $app.config.weekOptions.value.gridHeight = height;
         },
