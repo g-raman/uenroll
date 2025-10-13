@@ -90,7 +90,7 @@ export function GenerationHeader() {
   };
 
   const handleToggle = () => {
-    const courseCodes = Object.keys(data);
+    const courseCodes = Object.keys(data ? data : {});
     const newData: Selected = {};
     courseCodes.forEach(courseCode => (newData[courseCode] = []));
     setData(newData);
