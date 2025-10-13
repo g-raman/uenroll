@@ -1,7 +1,8 @@
-import { ScheduleItem } from "@/types/Types";
+import { ScheduleItem, Selected } from "@/types/Types";
 import { create } from "zustand";
 
 interface GeneratorState {
+  excluded: Selected | null;
   schedules: ScheduleItem[][];
   selected: null | number;
   actions: GeneratorActions;
@@ -12,10 +13,12 @@ interface GeneratorActions {
   nextSchedule: () => void;
   setSelectedSchedule: (selected: number | null) => void;
   setSchedules: (schedules: ScheduleItem[][]) => void;
+  setExcluded: (excluded: Selected | null) => void;
   resetSchedules: () => void;
 }
 
 const useGeneratorStore = create<GeneratorState>(set => ({
+  excluded: null,
   schedules: [],
   selected: null,
   actions: {
@@ -44,13 +47,16 @@ const useGeneratorStore = create<GeneratorState>(set => ({
         schedules,
         selected: schedules.length > 0 ? 0 : null,
       })),
+    setExcluded: excluded => set(old => ({ ...old, excluded })),
     resetSchedules: () =>
-      set(old => ({ ...old, selected: null, schedules: [] })),
+      set(old => ({ ...old, selected: null, excluded: null, schedules: [] })),
   },
 }));
 
 export const useSchedules = () => useGeneratorStore(state => state.schedules);
+export const useExcluded = () => useGeneratorStore(state => state.excluded);
 export const useSelectedSchedule = () =>
   useGeneratorStore(state => state.selected);
+
 export const useGeneratorActions = () =>
   useGeneratorStore(state => state.actions);
