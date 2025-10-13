@@ -5,6 +5,7 @@ import { useTermParam } from "@/hooks/useTermParam";
 import { parseAsSelectedSessions } from "@/hooks/utils";
 import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
 import { useMode } from "@/stores/modeStore";
+import { scheduleToSelected } from "@/utils/mappers/schedule";
 import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { envClient } from "@repo/env";
@@ -33,15 +34,7 @@ export const CopyLinkButton = () => {
     selectedSchedule !== null &&
     schedules[selectedSchedule]
   ) {
-    newSelected = {};
-
-    const schedule = schedules[selectedSchedule];
-    schedule.forEach(item => {
-      const key = item.courseCode;
-
-      if (!newSelected[key]) newSelected[key] = [item.subSection as string];
-      else newSelected[key].push(item.subSection as string);
-    });
+    newSelected = scheduleToSelected(schedules[selectedSchedule]);
   } else {
     Object.keys(newSelected).forEach(key => {
       if (newSelected[key] && newSelected[key].length === 0) {
