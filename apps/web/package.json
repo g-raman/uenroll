@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "build:wasm": "cd ./generator/ && wasm-pack build --target web --release && rm -rf pkg/.gitignore",
+    "build:wasm": "cd ./generator/ && wasm-pack build --target web --release --out-dir ./public/wasm && rm -rf ./public/wasm/.gitignore",
     "check-types": "tsc --noEmit",
     "dev": "next dev --turbopack --port 3000",
     "lint": "next lint --max-warnings 0",
@@ -28,7 +28,6 @@
     "@trpc/tanstack-react-query": "^11.4.3",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
-    "generator": "link:generator/pkg",
     "lz-string": "^1.5.0",
     "minisearch": "^7.1.2",
     "moment": "^2.30.1",
