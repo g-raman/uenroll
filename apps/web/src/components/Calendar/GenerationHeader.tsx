@@ -1,3 +1,5 @@
+"use client";
+
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
