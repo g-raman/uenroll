@@ -141,6 +141,9 @@ importers:
       '@vercel/speed-insights':
         specifier: ^1.2.0
         version: 1.2.0(next@15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
+      generator:
+        specifier: link:generator/pkg
+        version: link:generator/pkg
       lz-string:
         specifier: ^1.5.0
         version: 1.5.0

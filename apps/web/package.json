@@ -27,6 +27,7 @@
     "@trpc/tanstack-react-query": "^11.4.3",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
+    "generator": "link:generator/pkg",
     "lz-string": "^1.5.0",
     "minisearch": "^7.1.2",
     "moment": "^2.30.1",
