@@ -7,7 +7,6 @@ import {
   useSchedules,
   useSelectedSchedule,
 } from "@/stores/generatorStore";
-import { generateSchedule } from "@/utils/generator";
 import {
   courseToCourseWithSectionAlternatives,
   filterExcludedSections,
@@ -24,7 +23,9 @@ import { Label } from "@repo/ui/components/label";
 import { Input } from "@repo/ui/components/input";
 import { useMode, useModeActions } from "@/stores/modeStore";
 import { ChangeEvent } from "react";
-import { Selected } from "@/types/Types";
+import { ScheduleItem, Selected } from "@/types/Types";
+import { generate_schedules_wasm } from "generator";
+import { sortCoursesByNumSubSections } from "@/utils/course";
 
 export function GenerationHeader() {
   const [selectedTerm] = useTermParam();
@@ -64,9 +65,13 @@ export function GenerationHeader() {
     const coursesWithAlternatives = filtered.map(result =>
       courseToCourseWithSectionAlternatives(result),
     );
-    const schedules = generateSchedule(coursesWithAlternatives);
+    sortCoursesByNumSubSections(coursesWithAlternatives);
+    const schedules = generate_schedules_wasm(
+      JSON.stringify(coursesWithAlternatives),
+    );
+    const parsed = JSON.parse(schedules) as ScheduleItem[][];
 
-    setSchedules(schedules);
+    setSchedules(parsed);
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
