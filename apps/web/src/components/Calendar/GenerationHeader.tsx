@@ -24,15 +24,17 @@ import { Switch } from "@repo/ui/components/switch";
 import { Label } from "@repo/ui/components/label";
 import { Input } from "@repo/ui/components/input";
 import { useMode, useModeActions } from "@/stores/modeStore";
-import { ChangeEvent } from "react";
-import { ScheduleItem, Selected } from "@/types/Types";
+import { ChangeEvent, useRef, useState } from "react";
+import { Selected } from "@/types/Types";
 import {
   filterCoursesWithVirutalSessions,
   sortCoursesByNumSubSections,
 } from "@/utils/course";
-import { loadWasm } from "@/utils/wasmClient";
 
 export function GenerationHeader() {
+  const [loading, setLoading] = useState(false);
+  const workerRef = useRef<Worker | null>(null);
+
   const [selectedTerm] = useTermParam();
   const [data, setData] = useDataParam();
   const courseCodes = Object.keys(data ? data : {});
@@ -64,6 +66,22 @@ export function GenerationHeader() {
     .map(query => query.data);
 
   const handleGeneration = async () => {
+    if (!workerRef.current) {
+      workerRef.current = new Worker(
+        new URL("../../utils/generatorWorker.js", import.meta.url),
+        { type: "module" },
+      );
+    }
+
+    const worker = workerRef.current;
+    setLoading(true);
+
+    worker.onmessage = e => {
+      const { ok, result } = e.data;
+      if (ok) setSchedules(result);
+      setLoading(false);
+    };
+
     const filteredVirtual =
       filterCoursesWithVirutalSessions(courseSearchResults);
     const filteredExcluded = filteredVirtual.map(result =>
@@ -73,13 +91,8 @@ export function GenerationHeader() {
       courseToCourseWithSectionAlternatives(result),
     );
     sortCoursesByNumSubSections(coursesWithAlternatives);
-    const wasm = await loadWasm();
-    const schedules = wasm.generate_schedules_wasm(
-      JSON.stringify(coursesWithAlternatives),
-    );
-    const parsed = JSON.parse(schedules) as ScheduleItem[][];
 
-    setSchedules(parsed);
+    worker.postMessage({ input: coursesWithAlternatives });
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -177,11 +190,11 @@ export function GenerationHeader() {
           </div>
 
           <Button
-            disabled={courseSearchResults.length <= 0}
+            disabled={loading || courseSearchResults.length <= 0}
             variant="default"
             onClick={handleGeneration}
           >
-            Generate
+            {loading ? "Loading..." : "Generate"}
           </Button>
         </div>
       )}
