@@ -5,13 +5,11 @@
   "files": [
     "generator_bg.wasm",
     "generator.js",
-    "generator_bg.js",
     "generator.d.ts"
   ],
   "main": "generator.js",
   "types": "generator.d.ts",
   "sideEffects": [
-    "./generator.js",
     "./snippets/*"
   ]
 }

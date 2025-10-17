@@ -24,15 +24,20 @@ import { Switch } from "@repo/ui/components/switch";
 import { Label } from "@repo/ui/components/label";
 import { Input } from "@repo/ui/components/input";
 import { useMode, useModeActions } from "@/stores/modeStore";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ScheduleItem, Selected } from "@/types/Types";
-import { generate_schedules_wasm } from "generator";
+import init, { generate_schedules_wasm } from "generator";
 import { sortCoursesByNumSubSections } from "@/utils/course";
 
 export function GenerationHeader() {
   const [selectedTerm] = useTermParam();
   const [data, setData] = useDataParam();
   const courseCodes = Object.keys(data ? data : {});
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    init().then(() => setIsReady(true));
+  }, []);
 
   const courseQueries = useCourseQueries(
     selectedTerm,
@@ -171,7 +176,7 @@ export function GenerationHeader() {
           </div>
 
           <Button
-            disabled={courseSearchResults.length <= 0}
+            disabled={!isReady || courseSearchResults.length <= 0}
             variant="default"
             onClick={handleGeneration}
           >

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "build:wasm": "cd ./generator/ && wasm-pack build --target bundler --release && rm -rf pkg/.gitignore",
+    "build:wasm": "cd ./generator/ && wasm-pack build --target web --release && rm -rf pkg/.gitignore",
     "check-types": "tsc --noEmit",
     "dev": "next dev --turbopack --port 3000",
     "lint": "next lint --max-warnings 0",
