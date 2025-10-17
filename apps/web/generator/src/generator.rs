@@ -99,6 +99,10 @@ pub fn get_sub_section_combinations_by_type(
                     sessions: sub_section.sessions.clone(),
                 };
 
+                if has_conflict(&[new_item.clone()], &chosen) {
+                    continue;
+                }
+
                 chosen.push(new_item.clone());
                 backtrack(
                     index + 1,
