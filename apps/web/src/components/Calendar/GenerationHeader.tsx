@@ -24,20 +24,15 @@ import { Switch } from "@repo/ui/components/switch";
 import { Label } from "@repo/ui/components/label";
 import { Input } from "@repo/ui/components/input";
 import { useMode, useModeActions } from "@/stores/modeStore";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent } from "react";
 import { ScheduleItem, Selected } from "@/types/Types";
-import init, { generate_schedules_wasm } from "generator";
 import { sortCoursesByNumSubSections } from "@/utils/course";
+import { loadWasm } from "@/utils/wasmClient";
 
 export function GenerationHeader() {
   const [selectedTerm] = useTermParam();
   const [data, setData] = useDataParam();
   const courseCodes = Object.keys(data ? data : {});
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    init().then(() => setIsReady(true));
-  }, []);
 
   const courseQueries = useCourseQueries(
     selectedTerm,
@@ -65,7 +60,7 @@ export function GenerationHeader() {
     .filter(query => query.isSuccess)
     .map(query => query.data);
 
-  const handleGeneration = () => {
+  const handleGeneration = async () => {
     const filtered = courseSearchResults.map(result =>
       filterExcludedSections(result, excluded),
     );
@@ -73,7 +68,8 @@ export function GenerationHeader() {
       courseToCourseWithSectionAlternatives(result),
     );
     sortCoursesByNumSubSections(coursesWithAlternatives);
-    const schedules = generate_schedules_wasm(
+    const wasm = await loadWasm();
+    const schedules = wasm.generate_schedules_wasm(
       JSON.stringify(coursesWithAlternatives),
     );
     const parsed = JSON.parse(schedules) as ScheduleItem[][];
@@ -176,7 +172,7 @@ export function GenerationHeader() {
           </div>
 
           <Button
-            disabled={!isReady || courseSearchResults.length <= 0}
+            disabled={courseSearchResults.length <= 0}
             variant="default"
             onClick={handleGeneration}
           >
