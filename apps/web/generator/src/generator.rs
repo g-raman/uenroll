@@ -1,4 +1,7 @@
-use crate::types::{CourseWithSectionAlternatives, ScheduleItem, SectionWithAlternatives};
+use crate::{
+    datetime::is_overlapping_time,
+    types::{CourseWithSectionAlternatives, ScheduleItem, SectionWithAlternatives},
+};
 use std::collections::HashMap;
 
 pub fn get_sub_section_combinations_by_type(
@@ -81,4 +84,26 @@ pub fn get_sub_section_combinations_by_type(
     );
 
     combinations
+}
+
+fn has_conflict(selected: &[ScheduleItem], new_option: &[ScheduleItem]) -> bool {
+    for section in new_option {
+        for chosen in selected {
+            if chosen.course_code == section.course_code {
+                continue;
+            }
+
+            let overlap = chosen.sessions.iter().any(|chosen_session| {
+                section
+                    .sessions
+                    .iter()
+                    .any(|new_session| is_overlapping_time(chosen_session, new_session))
+            });
+
+            if overlap {
+                return true;
+            }
+        }
+    }
+    false
 }
