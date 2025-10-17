@@ -4,6 +4,44 @@ use crate::{
 };
 use std::collections::HashMap;
 
+pub fn generate_schedules(courses: &[CourseWithSectionAlternatives]) -> Vec<Vec<ScheduleItem>> {
+    let course_combinations: Vec<Vec<Vec<ScheduleItem>>> = courses
+        .iter()
+        .map(|course| get_sub_section_combinations_by_type(course))
+        .collect();
+
+    let mut selected: Vec<ScheduleItem> = Vec::new();
+    let mut results: Vec<Vec<ScheduleItem>> = Vec::new();
+
+    fn backtrack(
+        index: usize,
+        course_combinations: &[Vec<Vec<ScheduleItem>>],
+        selected: &mut Vec<ScheduleItem>,
+        results: &mut Vec<Vec<ScheduleItem>>,
+    ) {
+        if index == course_combinations.len() {
+            results.push(selected.clone());
+            return;
+        }
+
+        for combination in &course_combinations[index] {
+            if has_conflict(selected, combination) {
+                continue;
+            }
+
+            selected.extend_from_slice(combination);
+            backtrack(index + 1, course_combinations, selected, results);
+
+            for _ in 0..combination.len() {
+                selected.pop();
+            }
+        }
+    }
+
+    backtrack(0, &course_combinations, &mut selected, &mut results);
+    results
+}
+
 pub fn get_sub_section_combinations_by_type(
     course: &CourseWithSectionAlternatives,
 ) -> Vec<Vec<ScheduleItem>> {
