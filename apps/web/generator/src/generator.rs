@@ -3,6 +3,7 @@ use crate::{
     types::{CourseWithSectionAlternatives, ScheduleItem, SectionWithAlternatives},
 };
 use std::collections::HashMap;
+use wasm_bindgen::prelude::*;
 
 pub fn generate_schedules(courses: &[CourseWithSectionAlternatives]) -> Vec<Vec<ScheduleItem>> {
     let course_combinations: Vec<Vec<Vec<ScheduleItem>>> = courses
@@ -144,4 +145,17 @@ fn has_conflict(selected: &[ScheduleItem], new_option: &[ScheduleItem]) -> bool 
         }
     }
     false
+}
+
+#[wasm_bindgen]
+pub fn generate_schedule_wasm(courses_json: &str) -> String {
+    let courses_result: Result<Vec<CourseWithSectionAlternatives>, _> =
+        serde_json::from_str(courses_json);
+
+    if let Ok(courses) = courses_result {
+        let schedules = generate_schedules(&courses);
+        serde_json::to_string(&schedules).expect("Failed to serialize schedules")
+    } else {
+        String::from("[]")
+    }
 }
