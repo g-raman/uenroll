@@ -129,13 +129,9 @@ pub fn get_sub_section_combinations_by_type(
     combinations
 }
 
-fn has_conflict(selected: &[ScheduleItem], new_option: &[ScheduleItem]) -> bool {
-    for section in new_option {
-        for chosen in selected {
-            if chosen.course_code == section.course_code {
-                continue;
-            }
-
+pub fn has_conflict(selected: &[ScheduleItem], new_option: &[ScheduleItem]) -> bool {
+    for chosen in selected {
+        for section in new_option {
             let overlap = chosen.sessions.iter().any(|chosen_session| {
                 section
                     .sessions
