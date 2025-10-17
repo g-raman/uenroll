@@ -26,7 +26,10 @@ import { Input } from "@repo/ui/components/input";
 import { useMode, useModeActions } from "@/stores/modeStore";
 import { ChangeEvent } from "react";
 import { ScheduleItem, Selected } from "@/types/Types";
-import { sortCoursesByNumSubSections } from "@/utils/course";
+import {
+  filterCoursesWithVirutalSessions,
+  sortCoursesByNumSubSections,
+} from "@/utils/course";
 import { loadWasm } from "@/utils/wasmClient";
 
 export function GenerationHeader() {
@@ -61,10 +64,12 @@ export function GenerationHeader() {
     .map(query => query.data);
 
   const handleGeneration = async () => {
-    const filtered = courseSearchResults.map(result =>
+    const filteredVirtual =
+      filterCoursesWithVirutalSessions(courseSearchResults);
+    const filteredExcluded = filteredVirtual.map(result =>
       filterExcludedSections(result, excluded),
     );
-    const coursesWithAlternatives = filtered.map(result =>
+    const coursesWithAlternatives = filteredExcluded.map(result =>
       courseToCourseWithSectionAlternatives(result),
     );
     sortCoursesByNumSubSections(coursesWithAlternatives);
