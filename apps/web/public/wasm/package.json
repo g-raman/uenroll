@@ -1,0 +1,15 @@
+{
+  "name": "generator",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "generator_bg.wasm",
+    "generator.js",
+    "generator.d.ts"
+  ],
+  "main": "generator.js",
+  "types": "generator.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
