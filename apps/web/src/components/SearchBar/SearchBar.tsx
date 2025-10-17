@@ -9,8 +9,6 @@ import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import { useCourseQuery } from "@/hooks/useCourseQuery";
 import { DeleteSearchResultsButton } from "../Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
-import { CopyLinkButton } from "../Buttons/CopyLinkButton/CopyLinkButton";
-import DownloadCalendarButton from "../Buttons/DownloadCalendarButton/DownloadCalendarButton";
 import { ThemeSwitchingButton } from "../Buttons/ThemeSwitchingButton/ThemeSwitchingButton";
 
 export default function SearchBar() {
