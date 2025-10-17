@@ -7,7 +7,9 @@ export async function loadWasm() {
 
   initPromise = (async () => {
     const mod = await import("../../public/wasm/generator.js");
-    await mod.default("/wasm/generator_bg.wasm");
+    await mod.default({
+      module_or_path: `${self.location.origin}/wasm/generator_bg.wasm`,
+    });
     wasm = mod;
     return wasm;
   })();
