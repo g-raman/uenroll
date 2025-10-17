@@ -148,7 +148,7 @@ pub fn has_conflict(selected: &[ScheduleItem], new_option: &[ScheduleItem]) -> b
 }
 
 #[wasm_bindgen]
-pub fn generate_schedule_wasm(courses_json: &str) -> String {
+pub fn generate_schedules_wasm(courses_json: &str) -> String {
     let courses_result: Result<Vec<CourseWithSectionAlternatives>, _> =
         serde_json::from_str(courses_json);
 
