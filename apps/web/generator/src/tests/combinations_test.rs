@@ -11,6 +11,8 @@ fn test_get_sub_section_combinations() {
         serde_json::from_str(&json_data).expect("JSON parse failed");
 
     let combinations = get_sub_section_combinations_by_type(&course);
+    assert!(!combinations.is_empty(), "Expected non-empty combinations");
+    assert_eq!(combinations.len(), 4);
 
     println!("Found {} combinations", combinations.len());
     for (i, combo) in combinations.iter().enumerate() {
@@ -24,5 +26,4 @@ fn test_get_sub_section_combinations() {
             );
         }
     }
-    assert!(!combinations.is_empty(), "Expected non-empty combinations");
 }
