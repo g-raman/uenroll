@@ -54,6 +54,7 @@
     "@types/node": "^24.0.13",
     "@types/react": "19.1.13",
     "@types/react-dom": "19.1.9",
+    "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "catalog:",
     "tailwindcss": "^4.1.11",
     "typescript": "catalog:"
