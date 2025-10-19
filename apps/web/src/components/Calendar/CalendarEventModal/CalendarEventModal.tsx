@@ -24,6 +24,8 @@ export default function CalendarEventModal({
         <p className="font-bold">{calendarEvent.courseCode}</p>
         &nbsp;-&nbsp;
         <p>{calendarEvent.subSection}</p>
+        &nbsp;
+        <p>({calendarEvent.type})</p>
       </div>
 
       <div className="flex items-center gap-2 text-base font-light">
