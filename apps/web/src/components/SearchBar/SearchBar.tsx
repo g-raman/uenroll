@@ -10,6 +10,7 @@ import { useTermParam } from "@/hooks/useTermParam";
 import { useCourseQuery } from "@/hooks/useCourseQuery";
 import { DeleteSearchResultsButton } from "../Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
 import { ThemeSwitchingButton } from "../Buttons/ThemeSwitchingButton/ThemeSwitchingButton";
+import Autocomplete from "./Autocomplete";
 
 export default function SearchBar() {
   const [selectedTerm] = useTermParam();
@@ -77,17 +78,7 @@ export default function SearchBar() {
     <div className="bg-background sticky top-0 z-10 flex flex-col gap-2 py-4">
       <TermSelector />
 
-      <div className="flex items-center justify-between gap-2">
-        <AutoComplete
-          searchValue={query}
-          selectedValue={selectedValue}
-          onSelectedValueChange={setSelectedValue}
-          onSearchValueChange={setQuery}
-          placeholder="Course Code or Course Name..."
-          emptyMessage="No Courses Found..."
-          items={autocompleteItems}
-        />
-      </div>
+      <Autocomplete />
 
       <div className="flex gap-2">
         <DeleteSearchResultsButton />
