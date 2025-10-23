@@ -16,11 +16,17 @@ import {
 } from "@repo/ui/components/popover";
 import { useQuery } from "@tanstack/react-query";
 import Fuse from "fuse.js";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export default function Autocomplete() {
   const [selectedTerm] = useTermParam();
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedQuery(query), 250);
+    return () => clearTimeout(handler);
+  }, [query]);
 
   const { data: dataAllCourses } = useQuery(
     trpc.getAvailableCoursesByTerm.queryOptions(
@@ -41,8 +47,8 @@ export default function Autocomplete() {
   );
 
   const results = useCallback(() => {
-    return fuse.search(query);
-  }, [fuse, query])();
+    return fuse.search(debouncedQuery);
+  }, [debouncedQuery, fuse])();
 
   if (!dataAllCourses) return <p>loading...</p>;
 
@@ -63,8 +69,11 @@ export default function Autocomplete() {
         >
           <CommandList>
             <CommandEmpty className="px-2 py-4 text-xs">
-              {query.length > 0 && results.length === 0 && "No results found"}
-              {query.length === 0 &&
+              {debouncedQuery.length > 0 &&
+                results.length === 0 &&
+                "No results found"}
+
+              {debouncedQuery.length === 0 &&
                 results.length === 0 &&
                 "Type in a course code or course name"}
             </CommandEmpty>
