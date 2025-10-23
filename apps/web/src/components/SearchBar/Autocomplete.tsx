@@ -7,7 +7,6 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from "@repo/ui/components/command";
 import {
   Popover,
@@ -16,17 +15,23 @@ import {
 } from "@repo/ui/components/popover";
 import { useQuery } from "@tanstack/react-query";
 import Fuse from "fuse.js";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+// Remove spaces only when searching by course code
+// ADM 1100 -> becomes ADM1100
+// Introduction to Business -> remains untouched
+const normalizeCourseCode = (str: string) => {
+  const pattern = /^([A-Za-z]{3})\s+(\d.*)$/;
+  if (pattern.test(str)) {
+    return str.replace(/\s+/g, "");
+  }
+  return str;
+};
 
 export default function Autocomplete() {
   const [selectedTerm] = useTermParam();
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-
-  useEffect(() => {
-    const handler = setTimeout(() => setDebouncedQuery(query), 250);
-    return () => clearTimeout(handler);
-  }, [query]);
 
   const { data: dataAllCourses } = useQuery(
     trpc.getAvailableCoursesByTerm.queryOptions(
@@ -35,21 +40,45 @@ export default function Autocomplete() {
     ),
   );
 
-  const fuse = useMemo(
-    () =>
-      dataAllCourses
-        ? new Fuse(dataAllCourses, {
-            isCaseSensitive: false,
-            keys: ["courseCode", "courseTitle"],
-          })
-        : new Fuse([]),
-    [dataAllCourses],
+  useEffect(() => {
+    const cleanQuery = query.replaceAll(" ", "").trim();
+    const handler = setTimeout(() => setDebouncedQuery(cleanQuery), 200);
+    return () => clearTimeout(handler);
+  }, [query]);
+
+  const fuse = useMemo(() => {
+    const toParse = dataAllCourses ?? [];
+    const parsed = toParse.map(course => ({
+      courseCode: course.courseCode,
+      courseTitle: course.courseTitle.replaceAll(/\s+/g, ""),
+      displayCourseTitle: course.courseTitle
+        .replace(/\s*\(\+1 combined\)\s*/gi, "")
+        .trim(),
+    }));
+
+    return new Fuse(parsed, {
+      isCaseSensitive: false,
+      keys: ["courseCode", "courseTitle"],
+    });
+  }, [dataAllCourses]);
+
+  const results = useMemo(
+    () => fuse.search(debouncedQuery),
+    [fuse, debouncedQuery],
   );
 
-  const results = useCallback(() => {
-    return fuse.search(debouncedQuery);
-  }, [debouncedQuery, fuse])();
-
+  const items = useMemo(
+    () =>
+      results.slice(0, 7).map(result => (
+        <CommandItem
+          onSelect={v => console.log(v)}
+          key={`autocomplete-${result.item.courseCode}-${result.item.courseTitle}`}
+        >
+          {`${result.item.courseCode} ${result.item.displayCourseTitle}`}
+        </CommandItem>
+      )),
+    [results],
+  );
   if (!dataAllCourses) return <p>loading...</p>;
 
   return (
@@ -58,7 +87,9 @@ export default function Autocomplete() {
         <PopoverTrigger asChild>
           <CommandInput
             value={query}
-            onValueChange={newString => setQuery(newString)}
+            onValueChange={newString =>
+              setQuery(normalizeCourseCode(newString))
+            }
             placeholder="Type a course code or course name"
           />
         </PopoverTrigger>
@@ -79,27 +110,7 @@ export default function Autocomplete() {
             </CommandEmpty>
 
             {results.length > 0 && (
-              <CommandGroup heading="By course code">
-                {results.slice(0, 5).map(course => (
-                  <CommandItem key={`autocomplete-${course.item.courseCode}`}>
-                    {course.item.courseCode}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            )}
-            {results.length > 0 && (
-              <>
-                <CommandSeparator />
-                <CommandGroup heading="By course name">
-                  {results.map(result => (
-                    <CommandItem
-                      key={`autocomplete-${result.item.courseCode}-${result.item.courseTitle}`}
-                    >
-                      {result.item.courseTitle}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </>
+              <CommandGroup heading="Results">{items}</CommandGroup>
             )}
           </CommandList>
         </PopoverContent>
