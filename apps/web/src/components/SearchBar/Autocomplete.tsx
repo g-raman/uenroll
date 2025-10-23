@@ -1,5 +1,8 @@
 import { trpc } from "@/app/_trpc/client";
+import { useCourseQuery } from "@/hooks/useCourseQuery";
+import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
+import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
 import {
   Command,
   CommandEmpty,
@@ -13,9 +16,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import Fuse from "fuse.js";
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 
 // Remove spaces only when searching by course code
 // ADM 1100 -> becomes ADM1100
@@ -32,6 +37,8 @@ export default function Autocomplete() {
   const [selectedTerm] = useTermParam();
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [selectedValue, setSelectedValue] = useState("");
+  const [data, setData] = useDataParam();
 
   const { data: dataAllCourses } = useQuery(
     trpc.getAvailableCoursesByTerm.queryOptions(
@@ -39,6 +46,41 @@ export default function Autocomplete() {
       { staleTime: Infinity },
     ),
   );
+
+  const isUnderMaxResults =
+    Object.keys(data ? data : {}).length < MAX_RESULTS_ALLOWED;
+
+  const {
+    data: courseData,
+    error,
+    isSuccess,
+    isError,
+  } = useCourseQuery(selectedValue, isUnderMaxResults);
+
+  useEffect(() => {
+    if (isError && error) {
+      toast.error(error.message);
+    }
+
+    if (isSuccess && courseData) {
+      const newSelected = data ? { ...data } : {};
+      newSelected[courseData.courseCode] = [];
+      setData(newSelected);
+    }
+
+    if (isError || isSuccess) {
+      setQuery("");
+      setSelectedValue("");
+    }
+  }, [isError, error, isSuccess, courseData, data, setData]);
+
+  useEffect(() => {
+    if (!isUnderMaxResults && !!selectedValue) {
+      setQuery("");
+      setSelectedValue("");
+      toast.error("Max Search Results Reached");
+    }
+  }, [isUnderMaxResults, selectedValue]);
 
   useEffect(() => {
     const cleanQuery = query.replaceAll(" ", "").trim();
@@ -71,7 +113,7 @@ export default function Autocomplete() {
     () =>
       results.slice(0, 7).map(result => (
         <CommandItem
-          onSelect={v => console.log(v)}
+          onSelect={() => setSelectedValue(result.item.courseCode)}
           key={`autocomplete-${result.item.courseCode}-${result.item.courseTitle}`}
         >
           {`${result.item.courseCode} ${result.item.displayCourseTitle}`}
@@ -79,7 +121,7 @@ export default function Autocomplete() {
       )),
     [results],
   );
-  if (!dataAllCourses) return <p>loading...</p>;
+  if (!dataAllCourses) return <Skeleton className="h-8" />;
 
   return (
     <Popover>
