@@ -79,10 +79,7 @@ export default function Autocomplete() {
             </CommandEmpty>
 
             {results.length > 0 && (
-              <CommandGroup
-                className="h-42 overflow-scroll"
-                heading="By course code"
-              >
+              <CommandGroup heading="By course code">
                 {results.slice(0, 5).map(course => (
                   <CommandItem key={`autocomplete-${course.item.courseCode}`}>
                     {course.item.courseCode}
@@ -93,10 +90,7 @@ export default function Autocomplete() {
             {results.length > 0 && (
               <>
                 <CommandSeparator />
-                <CommandGroup
-                  className="h-42 overflow-scroll"
-                  heading="By course name"
-                >
+                <CommandGroup heading="By course name">
                   {results.map(result => (
                     <CommandItem
                       key={`autocomplete-${result.item.courseCode}-${result.item.courseTitle}`}
