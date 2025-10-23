@@ -1,3 +1,5 @@
+import { trpc } from "@/app/_trpc/client";
+import { useTermParam } from "@/hooks/useTermParam";
 import {
   Command,
   CommandEmpty,
@@ -12,8 +14,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Autocomplete() {
+  const [selectedTerm] = useTermParam();
+
+  const { data: dataAllCourses } = useQuery(
+    trpc.getAvailableCoursesByTerm.queryOptions(
+      { term: selectedTerm },
+      { staleTime: Infinity },
+    ),
+  );
+
   return (
     <Popover>
       <Command>
@@ -25,13 +37,31 @@ export default function Autocomplete() {
           <CommandList>
             <CommandEmpty>No results found</CommandEmpty>
 
-            <CommandGroup heading="By course code">
-              <CommandItem>CSI 3120</CommandItem>
+            <CommandGroup
+              className="h-42 overflow-scroll"
+              heading="By course code"
+            >
+              {dataAllCourses &&
+                dataAllCourses.map(course => (
+                  <CommandItem key={`autocomplete-${course.courseCode}`}>
+                    {course.courseCode}
+                  </CommandItem>
+                ))}
             </CommandGroup>
             <CommandSeparator />
 
-            <CommandGroup heading="By course name">
-              <CommandItem>Intro to Programming Languages</CommandItem>
+            <CommandGroup
+              className="h-42 overflow-scroll"
+              heading="By course name"
+            >
+              {dataAllCourses &&
+                dataAllCourses.map(course => (
+                  <CommandItem
+                    key={`autocomplete-${course.courseCode}-${course.courseTitle}`}
+                  >
+                    {course.courseTitle}
+                  </CommandItem>
+                ))}
             </CommandGroup>
           </CommandList>
         </PopoverContent>
