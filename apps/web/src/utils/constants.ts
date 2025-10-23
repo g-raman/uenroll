@@ -12,21 +12,6 @@ export const INITIAL_COLOURS = [
   "text-black border-l-blue-500 bg-blue-300",
 ];
 
-// Explicity defined to let Tailwind compiler know to include these in CSS bundle
-export const BG_COLOURS = [
-  "bg-red-300/50",
-  "bg-sky-300/50",
-  "bg-lime-200/50",
-  "bg-yellow-200/50",
-  "bg-amber-300/50",
-  "bg-emerald-400/50",
-  "bg-indigo-400/50",
-  "bg-pink-300/50",
-  "bg-violet-300/50",
-  "bg-orange-300/50",
-  "bg-blue-300/50",
-];
-
 export const MAX_RESULTS_ALLOWED = INITIAL_COLOURS.length;
 
 export const STALE_TIME = 1000 * 60 * 5; // 5 minutes
