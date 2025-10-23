@@ -15,9 +15,12 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/popover";
 import { useQuery } from "@tanstack/react-query";
+import Fuse from "fuse.js";
+import { useCallback, useMemo, useState } from "react";
 
 export default function Autocomplete() {
   const [selectedTerm] = useTermParam();
+  const [query, setQuery] = useState("");
 
   const { data: dataAllCourses } = useQuery(
     trpc.getAvailableCoursesByTerm.queryOptions(
@@ -26,43 +29,75 @@ export default function Autocomplete() {
     ),
   );
 
+  const fuse = useMemo(
+    () =>
+      dataAllCourses
+        ? new Fuse(dataAllCourses, {
+            isCaseSensitive: false,
+            keys: ["courseCode", "courseTitle"],
+          })
+        : new Fuse([]),
+    [dataAllCourses],
+  );
+
+  const results = useCallback(() => {
+    return fuse.search(query);
+  }, [fuse, query])();
+
+  if (!dataAllCourses) return <p>loading...</p>;
+
   return (
     <Popover>
       <Command>
         <PopoverTrigger asChild>
-          <CommandInput placeholder="Type a course code or course name" />
+          <CommandInput
+            value={query}
+            onValueChange={newString => setQuery(newString)}
+            placeholder="Type a course code or course name"
+          />
         </PopoverTrigger>
 
-        <PopoverContent className="w-78 p-1">
+        <PopoverContent
+          onOpenAutoFocus={e => e.preventDefault()}
+          className="p-1"
+        >
           <CommandList>
-            <CommandEmpty>No results found</CommandEmpty>
+            <CommandEmpty className="px-2 py-4 text-xs">
+              {query.length > 0 && results.length === 0 && "No results found"}
+              {query.length === 0 &&
+                results.length === 0 &&
+                "Type in a course code or course name"}
+            </CommandEmpty>
 
-            <CommandGroup
-              className="h-42 overflow-scroll"
-              heading="By course code"
-            >
-              {dataAllCourses &&
-                dataAllCourses.map(course => (
-                  <CommandItem key={`autocomplete-${course.courseCode}`}>
-                    {course.courseCode}
+            {results.length > 0 && (
+              <CommandGroup
+                className="h-42 overflow-scroll"
+                heading="By course code"
+              >
+                {results.slice(0, 5).map(course => (
+                  <CommandItem key={`autocomplete-${course.item.courseCode}`}>
+                    {course.item.courseCode}
                   </CommandItem>
                 ))}
-            </CommandGroup>
-            <CommandSeparator />
-
-            <CommandGroup
-              className="h-42 overflow-scroll"
-              heading="By course name"
-            >
-              {dataAllCourses &&
-                dataAllCourses.map(course => (
-                  <CommandItem
-                    key={`autocomplete-${course.courseCode}-${course.courseTitle}`}
-                  >
-                    {course.courseTitle}
-                  </CommandItem>
-                ))}
-            </CommandGroup>
+              </CommandGroup>
+            )}
+            {results.length > 0 && (
+              <>
+                <CommandSeparator />
+                <CommandGroup
+                  className="h-42 overflow-scroll"
+                  heading="By course name"
+                >
+                  {results.map(result => (
+                    <CommandItem
+                      key={`autocomplete-${result.item.courseCode}-${result.item.courseTitle}`}
+                    >
+                      {result.item.courseTitle}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </>
+            )}
           </CommandList>
         </PopoverContent>
       </Command>
