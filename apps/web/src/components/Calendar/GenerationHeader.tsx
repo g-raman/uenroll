@@ -30,6 +30,7 @@ import {
   filterCoursesWithVirutalSessions,
   sortCoursesByNumSubSections,
 } from "@/utils/course";
+import { toast } from "sonner";
 
 export function GenerationHeader() {
   const [loading, setLoading] = useState(false);
@@ -66,6 +67,7 @@ export function GenerationHeader() {
     .map(query => query.data);
 
   const handleGeneration = async () => {
+    setSchedules([]);
     if (!workerRef.current) {
       workerRef.current = new Worker(
         new URL("../../utils/generatorWorker.js", import.meta.url),
@@ -78,8 +80,14 @@ export function GenerationHeader() {
 
     worker.onmessage = e => {
       const { ok, result } = e.data;
-      if (ok) setSchedules(result);
       setLoading(false);
+      if (!ok) return;
+
+      if (result.length === 0) {
+        toast.error("No Possible Schedules. Adjust filters or remove courses.");
+        return;
+      }
+      setSchedules(result);
     };
 
     const filteredVirtual =
