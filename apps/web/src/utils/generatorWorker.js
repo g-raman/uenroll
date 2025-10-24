@@ -8,7 +8,7 @@ self.onmessage = async e => {
     const result = mod.generate_schedules_wasm(JSON.stringify(input));
 
     self.postMessage({ ok: true, result: JSON.parse(result) });
-  } catch (_) {
+  } catch {
     self.postMessage({
       ok: false,
       error: "Something went wrong, Please report this Error.",
