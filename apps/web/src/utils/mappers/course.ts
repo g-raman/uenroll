@@ -71,7 +71,9 @@ export const filterExcludedSections = (
       newSections.push(subSection);
     });
 
+    if (newSections.length === 0) continue;
     newCourse.sections[key] = newSections;
   }
+
   return newCourse;
 };
