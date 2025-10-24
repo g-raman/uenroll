@@ -35,7 +35,7 @@ export default function SearchResults() {
 
   return (
     <div>
-      {isGenerationMode && (
+      {isGenerationMode && courseQueries.length > 0 && (
         <p className="mb-4 mt-2 px-2 text-sm italic">
           Uncheck all sections you don&apos;t want
         </p>
