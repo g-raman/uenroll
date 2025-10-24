@@ -16,7 +16,8 @@ import {
 import { useColoursActions } from "@/stores/colourStore";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useCallback } from "react";
-import { useGeneratorActions } from "@/stores/generatorStore";
+import { useExcluded, useGeneratorActions } from "@/stores/generatorStore";
+import { useMode } from "@/stores/modeStore";
 
 interface CourseResultProps {
   course: ColouredCourse;
@@ -26,27 +27,34 @@ interface CourseResultProps {
 const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
   const { addColour } = useColoursActions();
   const [data, setData] = useDataParam();
-  const { resetSchedules } = useGeneratorActions();
+  const isGenerationMode = useMode();
+  const excluded = useExcluded();
+  const { resetSchedulesKeepExcluded } = useGeneratorActions();
 
   const removeCourse = useCallback(() => {
-    if (data === null || !data[course.courseCode]) {
-      return;
-    }
+    if (data === null || !data[course.courseCode]) return;
     const newData = { ...data };
     delete newData[course.courseCode];
 
-    if (Object.keys(newData).length === 0) {
-      setData(null);
-    }
     setData(Object.keys(newData).length === 0 ? null : newData);
     addColour(course.courseCode, course.colour);
-    resetSchedules();
+
+    if (!isGenerationMode || excluded === null || !excluded[course.courseCode])
+      return;
+    const newExcluded = { ...excluded };
+    delete newExcluded[course.courseCode];
+
+    resetSchedulesKeepExcluded(
+      Object.keys(newData).length === 0 ? null : newData,
+    );
   }, [
     addColour,
     course.colour,
     course.courseCode,
     data,
-    resetSchedules,
+    excluded,
+    isGenerationMode,
+    resetSchedulesKeepExcluded,
     setData,
   ]);
 

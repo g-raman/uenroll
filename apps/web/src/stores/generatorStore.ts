@@ -14,6 +14,7 @@ interface GeneratorActions {
   setSelectedSchedule: (selected: number | null) => void;
   setSchedules: (schedules: ScheduleItem[][]) => void;
   setExcluded: (excluded: Selected | null) => void;
+  resetSchedulesKeepExcluded: (excluded: Selected | null) => void;
   resetSchedules: () => void;
 }
 
@@ -48,6 +49,8 @@ const useGeneratorStore = create<GeneratorState>(set => ({
         selected: schedules.length > 0 ? 0 : null,
       })),
     setExcluded: excluded => set(old => ({ ...old, excluded })),
+    resetSchedulesKeepExcluded: excluded =>
+      set(old => ({ ...old, selected: null, excluded, schedules: [] })),
     resetSchedules: () =>
       set(old => ({ ...old, selected: null, excluded: null, schedules: [] })),
   },
