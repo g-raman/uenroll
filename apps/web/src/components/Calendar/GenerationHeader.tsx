@@ -83,7 +83,8 @@ export function GenerationHeader() {
       setLoading(false);
       if (!ok) return;
 
-      if (result.length === 0) {
+      // result[0] will be empty if there are search results but all components are unchecked
+      if (result.length === 0 || result[0].length === 0) {
         toast.error("No Possible Schedules. Adjust filters or remove courses.");
         return;
       }
