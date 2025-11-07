@@ -31,6 +31,7 @@ import {
   sortCoursesByNumSubSections,
 } from "@/utils/course";
 import { toast } from "sonner";
+import { useScreenSize } from "@/hooks/useScreenSize";
 
 export function GenerationHeader() {
   const [loading, setLoading] = useState(false);
@@ -53,6 +54,7 @@ export function GenerationHeader() {
   const schedules = useSchedules();
   const selectedSchedule = useSelectedSchedule();
   const noSchedules = schedules.length <= 0;
+  const { width } = useScreenSize();
 
   const {
     previousSchedule,
@@ -147,8 +149,8 @@ export function GenerationHeader() {
   };
 
   return (
-    <div className="bg-background sticky top-0 z-10 flex items-center justify-between rounded-md border px-4 py-3">
-      {!isGenerationMode && (
+    <div className="bg-background sticky top-0 z-10 flex flex-wrap items-center justify-between rounded-md border p-2">
+      {width && width >= 1024 && (
         <div className="flex items-center justify-start text-4xl">
           <FontAwesomeIcon
             className="text-primary size-12"
@@ -173,7 +175,7 @@ export function GenerationHeader() {
             <div className="flex h-full items-center">
               <Input
                 onChange={handleInputChange}
-                className="!max-w-28 rounded-none text-center"
+                className="!max-w-8 rounded-none text-center text-xs lg:!max-w-28 lg:text-sm"
                 disabled={noSchedules}
                 value={
                   noSchedules
@@ -203,6 +205,7 @@ export function GenerationHeader() {
           <Button
             disabled={loading || courseSearchResults.length <= 0}
             variant="default"
+            className="px-2 text-xs lg:text-sm"
             onClick={handleGeneration}
           >
             {loading ? "Loading..." : "Generate"}
@@ -210,13 +213,15 @@ export function GenerationHeader() {
         </div>
       )}
 
-      <div className="ms-4 flex items-center space-x-2">
+      <div className="flex items-center space-x-2">
         <Switch
           id="generation-mode"
           checked={isGenerationMode}
           onCheckedChange={handleToggle}
         />
-        <Label htmlFor="airplane-mode">Generation Mode</Label>
+        <Label className="text-xs lg:text-sm" htmlFor="generation-mode">
+          Gen Mode
+        </Label>
       </div>
     </div>
   );
