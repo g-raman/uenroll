@@ -69,16 +69,20 @@ export default function Autocomplete() {
     }
 
     if (isError || isSuccess) {
-      setQuery("");
-      setSelectedValue("");
+      queueMicrotask(() => {
+        setQuery("");
+        setSelectedValue("");
+      });
     }
   }, [isError, error, isSuccess, courseData, data, setData]);
 
   useEffect(() => {
     if (!isUnderMaxResults && !!selectedValue) {
-      setQuery("");
-      setSelectedValue("");
-      toast.error("Max Search Results Reached");
+      queueMicrotask(() => {
+        setQuery("");
+        setSelectedValue("");
+        toast.error("Max Search Results Reached");
+      });
     }
   }, [isUnderMaxResults, selectedValue]);
 

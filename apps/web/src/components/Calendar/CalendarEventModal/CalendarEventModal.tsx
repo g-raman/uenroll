@@ -59,7 +59,7 @@ export default function CalendarEventModal({
     <div className="shadow-sx bg-background h-min w-full space-y-2 rounded-md p-6">
       <div className="flex items-center text-lg">
         <div
-          className={`rounded-xs mr-2 size-5 ${calendarEvent.backgroundColour}`}
+          className={`mr-2 size-5 rounded-xs ${calendarEvent.backgroundColour}`}
         ></div>
         <p className="font-bold">{calendarEvent.courseCode}</p>
         &nbsp;-&nbsp;
@@ -106,7 +106,7 @@ export default function CalendarEventModal({
                   key={`alternative-${calendarEvent.courseCode}${alternative}`}
                   onClick={() => handleSelected(alternative)}
                   size="sm"
-                  className={`rounded-xs hover:!bg-secondary-foreground/10 h-min w-min cursor-pointer px-2 ${selected === alternative ? "!bg-primary hover:!bg-primary" : null}`}
+                  className={`hover:!bg-secondary-foreground/10 h-min w-min cursor-pointer rounded-xs px-2 ${selected === alternative ? "!bg-primary hover:!bg-primary" : null}`}
                 >
                   {alternative}
                 </Button>

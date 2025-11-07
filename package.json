@@ -18,13 +18,13 @@
     "@changesets/cli": "^2.29.7",
     "eslint": "catalog:",
     "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.6.14",
+    "prettier-plugin-tailwindcss": "^0.7.1",
     "sort-package-json": "^3.4.0",
     "tsup": "^8.5.0",
-    "turbo": "^2.5.6",
+    "turbo": "^2.6.0",
     "typescript": "catalog:"
   },
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.20.0+sha512.cf9998222162dd85864d0a8102e7892e7ba4ceadebbf5a31f9c2fce48dfce317a9c53b9f6464d1ef9042cba2e02ae02a9f7c143a2b438cd93c91840f0192b9dd",
   "engines": {
     "node": ">=22"
   }

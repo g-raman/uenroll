@@ -83,7 +83,7 @@ export default function DownloadCalendarButton() {
           }
         >
           <FontAwesomeIcon className="size-4" icon={faDownload} />
-          <p className="hidden text-xs sm:inline md:hidden min-[1440px]:inline">
+          <p className="hidden text-xs min-[1440px]:inline sm:inline md:hidden">
             Export
           </p>
         </Button>
