@@ -27,6 +27,11 @@ export default function CalendarEventModal({
   const selectedSchedule = useSelectedSchedule();
   const { updateCurrentSchedule } = useGeneratorActions();
 
+  const alternatives = [
+    ...calendarEvent.alternatives,
+    calendarEvent.subSection,
+  ].sort();
+
   const handleSelected = (newSubSection: string) => {
     if (selectedSchedule === null || schedules[selectedSchedule] === undefined)
       return;
@@ -92,21 +97,9 @@ export default function CalendarEventModal({
           <div className="flex items-center gap-2 text-base font-light">
             <FontAwesomeIcon icon={faPuzzlePiece} />
             <div className="flex w-full items-center">
-              <Button
-                key={`alternative-${calendarEvent.courseCode}${calendarEvent.subSection}`}
-                onClick={() => {
-                  handleSelected(calendarEvent.subSection);
-                }}
-                size="sm"
-                className={`rounded-xs hover:!bg-secondary-foreground/10 h-min w-min cursor-pointer px-2 ${selected === calendarEvent.subSection ? "!bg-primary hover:!bg-primary" : null}`}
-              >
-                {calendarEvent.subSection}
-              </Button>
-
-              {calendarEvent.alternatives.map(alternative => (
+              {alternatives.map(alternative => (
                 <Button
                   key={`alternative-${calendarEvent.courseCode}${alternative}`}
-                  variant={selected === alternative ? "default" : "ghost"}
                   onClick={() => handleSelected(alternative)}
                   size="sm"
                   className={`rounded-xs hover:!bg-secondary-foreground/10 h-min w-min cursor-pointer px-2 ${selected === alternative ? "!bg-primary hover:!bg-primary" : null}`}
