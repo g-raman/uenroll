@@ -73,6 +73,7 @@ const courseToCalendarAppEvent = (
     courseTitle: course.courseTitle,
     term: course.term,
     subSection: component.subSection,
+    alternatives: [] as string[],
     instructor: session.instructor,
     type: component.type,
     isOpen: component.isOpen,
