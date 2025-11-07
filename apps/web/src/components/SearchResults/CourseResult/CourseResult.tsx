@@ -39,13 +39,15 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
     setData(Object.keys(newData).length === 0 ? null : newData);
     addColour(course.courseCode, course.colour);
 
-    if (!isGenerationMode || excluded === null || !excluded[course.courseCode])
-      return;
-    const newExcluded = { ...excluded };
-    delete newExcluded[course.courseCode];
+    if (!isGenerationMode) return;
+    const newExcluded = excluded === null ? null : { ...excluded };
+
+    if (newExcluded !== null) delete newExcluded[course.courseCode];
 
     resetSchedulesKeepExcluded(
-      Object.keys(newData).length === 0 ? null : newData,
+      newExcluded === null || Object.keys(newExcluded).length === 0
+        ? null
+        : newExcluded,
     );
   }, [
     addColour,
