@@ -73,7 +73,7 @@ export default function DownloadCalendarButton() {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="text-primary !px-2"
+          className="text-primary !border-input !border !px-3"
           variant="default"
           size="lg"
           onClick={handleDownload}

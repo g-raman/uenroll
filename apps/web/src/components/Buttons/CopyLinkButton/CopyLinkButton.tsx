@@ -70,7 +70,7 @@ export const CopyLinkButton = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="!px-2"
+          className="!border-input !border !px-3"
           variant="outline"
           size="lg"
           disabled={
