@@ -35,12 +35,6 @@ export default function SearchResults() {
 
   return (
     <div>
-      {isGenerationMode && courseQueries.length > 0 && (
-        <p className="mt-2 mb-4 px-2 text-base font-semibold">
-          Uncheck all sections you don&apos;t want
-        </p>
-      )}
-
       <Accordion type="multiple" onValueChange={value => setOpenResults(value)}>
         {courseSearchResults.map(course => {
           return (
@@ -67,6 +61,12 @@ export default function SearchResults() {
           );
         })}
       </Accordion>
+
+      {isGenerationMode && courseQueries.length > 0 && (
+        <p className="mt-2 mb-4 px-2 text-sm font-semibold">
+          Customize by unchecking sections
+        </p>
+      )}
     </div>
   );
 }

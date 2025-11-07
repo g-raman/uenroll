@@ -1,3 +1,8 @@
+@import "tailwindcss";
+@source "../**/*.{ts,tsx}";
+
+@custom-variant dark (&:is(.dark *));
+
 :root {
   --sx-color-primary: #8f001b !important;
 }

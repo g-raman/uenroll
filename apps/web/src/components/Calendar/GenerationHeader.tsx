@@ -32,6 +32,11 @@ import {
 } from "@/utils/course";
 import { toast } from "sonner";
 import { useScreenSize } from "@/hooks/useScreenSize";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 
 export function GenerationHeader() {
   const [loading, setLoading] = useState(false);
@@ -149,7 +154,7 @@ export function GenerationHeader() {
   };
 
   return (
-    <div className="bg-background sticky top-0 z-10 flex flex-wrap items-center justify-between rounded-md border p-2">
+    <div className="bg-background sticky top-0 z-10 flex flex-wrap items-center justify-between gap-2 rounded-md border p-2">
       {width && width >= 1024 && (
         <div className="flex items-center justify-start text-4xl">
           <FontAwesomeIcon
@@ -213,16 +218,24 @@ export function GenerationHeader() {
         </div>
       )}
 
-      <div className="flex items-center space-x-2">
-        <Switch
-          id="generation-mode"
-          checked={isGenerationMode}
-          onCheckedChange={handleToggle}
-        />
-        <Label className="text-xs lg:text-sm" htmlFor="generation-mode">
-          Gen Mode
-        </Label>
-      </div>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="generation-mode"
+              checked={isGenerationMode}
+              onCheckedChange={handleToggle}
+            />
+            <Label className="text-xs lg:text-sm" htmlFor="generation-mode">
+              Schedule Generation
+            </Label>
+          </div>
+        </TooltipTrigger>
+
+        <TooltipContent>
+          Turn this on to automatically generate all possible schedules
+        </TooltipContent>
+      </Tooltip>
     </div>
   );
 }
