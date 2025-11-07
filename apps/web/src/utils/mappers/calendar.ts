@@ -117,6 +117,7 @@ export const scheduleToCalendarAppEvents = (schedule: ScheduleItem[]) =>
         instructor: session.instructor,
         type: component.type,
         isOpen: component.isOpen,
+        alternatives: component.alternatives,
       };
     }),
   );
