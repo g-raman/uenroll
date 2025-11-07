@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 0.5.0
+
+### Minor Changes
+
+- [#130](https://github.com/g-raman/uenroll/pull/130) [`aed6027`](https://github.com/g-raman/uenroll/commit/aed6027132f304dd7506354e53ee28e225e5994e) Thanks [@g-raman](https://github.com/g-raman)! - Add label and switch components
+
 ## 0.4.0
 
 ### Minor Changes

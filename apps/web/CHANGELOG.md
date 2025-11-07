@@ -1,5 +1,21 @@
 # web
 
+## 1.0.0
+
+### Major Changes
+
+- [#130](https://github.com/g-raman/uenroll/pull/130) [`aed6027`](https://github.com/g-raman/uenroll/commit/aed6027132f304dd7506354e53ee28e225e5994e) Thanks [@g-raman](https://github.com/g-raman)! - Added schedule generation
+  - Added rust based algorithm that compiles to wasm and runs in a web worker
+  - Improved fuzzy searching for classes
+  - Added React compiler
+  - Improved mobile ui for calendar
+
+### Minor Changes
+
+- [#128](https://github.com/g-raman/uenroll/pull/128) [`66bea3a`](https://github.com/g-raman/uenroll/commit/66bea3a8598f4925bdc068766e666d89b3adfbbc) Thanks [@g-raman](https://github.com/g-raman)! - Changed month agenda view to list view.
+  Made a custom header component.
+  Removed event loading hack.
+
 ## 0.12.0
 
 ### Minor Changes
