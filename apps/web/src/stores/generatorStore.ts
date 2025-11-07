@@ -51,7 +51,7 @@ const useGeneratorStore = create<GeneratorState>(set => ({
       })),
     updateCurrentSchedule: schedule =>
       set(old => {
-        if (!old.selected) return old;
+        if (old.selected === null) return old;
         const newSchedules = [...old.schedules];
         newSchedules[old.selected] = schedule;
         return { ...old, schedules: newSchedules };
