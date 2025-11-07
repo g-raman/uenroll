@@ -44,7 +44,7 @@ export function CalendarWrapper() {
   return (
     <div className="h-full space-y-4 overflow-y-scroll">
       <GenerationHeader />
-      {size.width && size.width <= 500 ? (
+      {size.width && size.width <= 1024 ? (
         <CalendarMobile events={events} />
       ) : (
         <Calendar events={events} />
