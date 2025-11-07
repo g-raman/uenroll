@@ -13,6 +13,7 @@ interface GeneratorActions {
   nextSchedule: () => void;
   setSelectedSchedule: (selected: number | null) => void;
   setSchedules: (schedules: ScheduleItem[][]) => void;
+  updateCurrentSchedule: (schedule: ScheduleItem[]) => void;
   setExcluded: (excluded: Selected | null) => void;
   resetSchedulesKeepExcluded: (excluded: Selected | null) => void;
   resetSchedules: () => void;
@@ -48,6 +49,13 @@ const useGeneratorStore = create<GeneratorState>(set => ({
         schedules,
         selected: schedules.length > 0 ? 0 : null,
       })),
+    updateCurrentSchedule: schedule =>
+      set(old => {
+        if (!old.selected) return old;
+        const newSchedules = [...old.schedules];
+        newSchedules[old.selected] = schedule;
+        return { ...old, schedules: newSchedules };
+      }),
     setExcluded: excluded => set(old => ({ ...old, excluded })),
     resetSchedulesKeepExcluded: excluded =>
       set(old => ({ ...old, selected: null, excluded, schedules: [] })),
