@@ -82,7 +82,7 @@ export default function CalendarHeader({ $app, delta }: CalendarHeaderProps) {
           Term Start
         </Button>
 
-        <p className="max-w-32 truncate text-xs font-bold lg:max-w-full lg:text-base">
+        <p className="max-w-10 truncate text-xs font-bold min-[428px]:max-w-24 lg:max-w-full lg:text-base">
           {monthStart === monthEnd ? monthStart : `${monthStart} - ${monthEnd}`}
         </p>
 
