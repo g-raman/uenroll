@@ -63,7 +63,7 @@ export default function SearchResults() {
       </Accordion>
 
       {isGenerationMode && courseQueries.length > 0 && (
-        <p className="mb-4 mt-2 px-2 text-sm font-semibold">
+        <p className="mt-2 mb-4 px-2 text-sm font-semibold">
           Customize by unchecking sections
         </p>
       )}
