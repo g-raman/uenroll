@@ -11,6 +11,11 @@ import {
 import { getPlainStringTime } from "@/utils/datetime";
 import { Button } from "@repo/ui/components/button";
 import { useState } from "react";
+import {
+  useGeneratorActions,
+  useSchedules,
+  useSelectedSchedule,
+} from "@/stores/generatorStore";
 
 export default function CalendarEventModal({
   calendarEvent,
@@ -18,6 +23,28 @@ export default function CalendarEventModal({
   const start = getPlainStringTime(calendarEvent.start);
   const end = getPlainStringTime(calendarEvent.end);
   const [selected, setSelected] = useState(calendarEvent.subSection);
+  const schedules = useSchedules();
+  const selectedSchedule = useSelectedSchedule();
+  const { updateCurrentSchedule } = useGeneratorActions();
+
+  const handleSelected = (newSubSection: string) => {
+    if (selectedSchedule === null || schedules[selectedSchedule] === undefined)
+      return;
+    const currentSchedule = schedules[selectedSchedule];
+
+    setSelected(newSubSection);
+    const newSchedule = currentSchedule.map(item =>
+      item.courseCode === calendarEvent.courseCode &&
+      item.subSection === calendarEvent.subSection
+        ? {
+            ...item,
+            subSection: newSubSection,
+            alternatives: [calendarEvent.subSection],
+          }
+        : item,
+    );
+    updateCurrentSchedule(newSchedule);
+  };
 
   return (
     <div className="shadow-sx bg-background h-min w-full space-y-2 rounded-md p-6">
@@ -67,7 +94,9 @@ export default function CalendarEventModal({
             <div className="flex w-full items-center">
               <Button
                 key={`alternative-${calendarEvent.courseCode}${calendarEvent.subSection}`}
-                onClick={() => setSelected(calendarEvent.subSection)}
+                onClick={() => {
+                  handleSelected(calendarEvent.subSection);
+                }}
                 size="sm"
                 className={`rounded-xs hover:!bg-secondary-foreground/10 h-min w-min cursor-pointer px-2 ${selected === calendarEvent.subSection ? "!bg-primary hover:!bg-primary" : null}`}
               >
@@ -78,7 +107,7 @@ export default function CalendarEventModal({
                 <Button
                   key={`alternative-${calendarEvent.courseCode}${alternative}`}
                   variant={selected === alternative ? "default" : "ghost"}
-                  onClick={() => setSelected(alternative)}
+                  onClick={() => handleSelected(alternative)}
                   size="sm"
                   className={`rounded-xs hover:!bg-secondary-foreground/10 h-min w-min cursor-pointer px-2 ${selected === alternative ? "!bg-primary hover:!bg-primary" : null}`}
                 >
