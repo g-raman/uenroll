@@ -39,7 +39,7 @@ export function Calendar({ events }: CalendarProps) {
       timezone: TIMEZONE,
       views: [createViewWeek(), createViewList()],
       theme: "shadcn",
-      isResponsive: true,
+      isResponsive: false,
       isDark: theme === "dark" || systemTheme === "dark",
       dayBoundaries: {
         start: "06:00",
@@ -107,7 +107,7 @@ export function Calendar({ events }: CalendarProps) {
         timeGridEvent: CalendarEvent,
         monthAgendaEvent: CalendarEvent,
         eventModal: CalendarEventModal,
-        headerContent: CalendarHeader,
+        headerContent: ({ $app }) => CalendarHeader({ $app, delta: 7 }),
       }}
     />
   );
