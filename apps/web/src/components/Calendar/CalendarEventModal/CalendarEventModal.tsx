@@ -33,7 +33,11 @@ export default function CalendarEventModal({
   ].sort();
 
   const handleSelected = (newSubSection: string) => {
-    if (selectedSchedule === null || schedules[selectedSchedule] === undefined)
+    if (
+      selectedSchedule === null ||
+      schedules[selectedSchedule] === undefined ||
+      newSubSection === selected
+    )
       return;
     const currentSchedule = schedules[selectedSchedule];
 
