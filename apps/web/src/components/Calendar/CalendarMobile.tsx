@@ -44,7 +44,7 @@ export function CalendarMobile({ events }: CalendarMobileProps) {
       isResponsive: false,
       isDark: theme === "dark" || systemTheme === "dark",
       weekOptions: {
-        nDays: 3,
+        nDays: 2,
       },
       dayBoundaries: {
         start: "06:00",
