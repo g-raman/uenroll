@@ -19,9 +19,9 @@ export default function CalendarEvent({ calendarEvent }: CalendarEventProps) {
 
   return (
     <div
-      className={`relative left-0 right-0 top-0 flex h-full cursor-pointer flex-col gap-1 rounded-sm border-l-4 p-2 ${calendarEvent.backgroundColour}`}
+      className={`relative top-0 right-0 left-0 flex h-full cursor-pointer flex-col gap-1 rounded-sm border-l-4 p-2 ${calendarEvent.backgroundColour}`}
     >
-      <div className="flex text-nowrap text-xs">
+      <div className="flex text-xs text-nowrap">
         <p className="font-bold">{calendarEvent.title}</p>
         &nbsp;-&nbsp;
         <p className="text-xs">{calendarEvent.subSection}</p>
@@ -30,12 +30,12 @@ export default function CalendarEvent({ calendarEvent }: CalendarEventProps) {
       </div>
 
       {calendarEvent.alternatives.length > 0 && (
-        <span className="absolute bottom-1 right-1 z-10 size-[16px] rounded-full !bg-black p-[2px] text-[10px] text-white">
+        <span className="absolute right-1 bottom-1 z-10 size-[16px] rounded-full !bg-black p-[2px] text-[10px] text-white">
           {`+${calendarEvent.alternatives.length}`}
         </span>
       )}
 
-      <p className="text-nowrap font-light">
+      <p className="font-light text-nowrap">
         {start} - {end}
       </p>
     </div>
