@@ -5,7 +5,7 @@ import Main from "@/layouts/Main/Main";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import Sidebar from "@/layouts/Sidebar/Sidebar";
 import SearchResults from "@/components/SearchResults/SearchResults";
-import Calendar from "@/components/Calendar/Calendar";
+import { CalendarWrapper } from "@/components/Calendar/CalendarWrapper";
 
 export default function Page() {
   return (
@@ -16,7 +16,7 @@ export default function Page() {
       </Sidebar>
 
       <Main>
-        <Calendar />
+        <CalendarWrapper />
       </Main>
     </App>
   );

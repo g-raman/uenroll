@@ -7,6 +7,7 @@ import globals from "globals";
 import pluginNext from "@next/eslint-plugin-next";
 import { config as baseConfig } from "./base.js";
 import pluginQuery from "@tanstack/eslint-plugin-query";
+import { globalIgnores } from "eslint/config";
 
 /**
  * A custom ESLint configuration for libraries that use Next.js.
@@ -49,4 +50,5 @@ export const nextJsConfig = [
       "react/react-in-jsx-scope": "off",
     },
   },
+  globalIgnores([".next/", "next-env.d.ts"]),
 ];

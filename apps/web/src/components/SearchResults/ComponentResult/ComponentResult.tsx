@@ -4,6 +4,8 @@ import { Checkbox } from "@repo/ui/components/checkbox";
 import { Section } from "@repo/db/types";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useCallback } from "react";
+import { useMode } from "@/stores/modeStore";
+import { useExcluded, useGeneratorActions } from "@/stores/generatorStore";
 
 interface ComponentResultProps {
   component: Section;
@@ -18,19 +20,29 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
   subSection,
 }) => {
   const [data, setData] = useDataParam();
+  const isGenerationMode = useMode();
+  const excluded = useExcluded();
+  const { setExcluded } = useGeneratorActions();
+
   const { courseCode } = course;
-  const isSelected = Boolean(data[courseCode]?.includes(subSection));
+  const isSelected =
+    (isGenerationMode && excluded === null) ||
+    (isGenerationMode &&
+      excluded &&
+      !excluded[courseCode]?.includes(subSection)) ||
+    (!isGenerationMode && Boolean(data[courseCode]?.includes(subSection)));
 
   const addSession = useCallback(() => {
+    const selected = isGenerationMode ? excluded : data;
     if (
-      data &&
-      data[courseCode] &&
-      data[courseCode].some(section => section === subSection)
+      selected &&
+      selected[courseCode] &&
+      selected[courseCode].some(section => section === subSection)
     ) {
       return;
     }
 
-    const newSelected = data ? { ...data } : {};
+    const newSelected = selected ? { ...selected } : {};
 
     if (!newSelected[courseCode] || newSelected[courseCode].length === 0) {
       newSelected[courseCode] = [subSection];
@@ -38,33 +50,57 @@ export const ComponentResult: React.FC<ComponentResultProps> = ({
       newSelected[courseCode].push(subSection);
     }
 
-    setData(newSelected);
-  }, [courseCode, data, setData, subSection]);
+    if (isGenerationMode) {
+      setExcluded(newSelected);
+    } else {
+      setData(newSelected);
+    }
+  }, [
+    courseCode,
+    data,
+    excluded,
+    isGenerationMode,
+    setData,
+    setExcluded,
+    subSection,
+  ]);
 
   const removeSession = useCallback(() => {
+    const selected = isGenerationMode ? excluded : data;
     const { courseCode } = course;
 
-    if (data === null) return;
+    if (selected === null) return;
 
-    if (!data[courseCode]) return;
+    if (!selected[courseCode]) return;
 
-    const filteredSubsections = data[courseCode].filter(
+    const filteredSubsections = selected[courseCode].filter(
       section => section !== subSection,
     );
 
-    const newData = { ...data };
-    newData[courseCode] = filteredSubsections;
+    const newSelected = { ...selected };
+    newSelected[courseCode] = filteredSubsections;
 
-    setData(Object.keys(newData).length === 0 ? null : newData);
-  }, [course, data, setData, subSection]);
+    if (isGenerationMode) {
+      setExcluded(Object.keys(newSelected).length === 0 ? null : newSelected);
+    } else {
+      setData(Object.keys(newSelected).length === 0 ? null : newSelected);
+    }
+  }, [
+    course,
+    data,
+    excluded,
+    isGenerationMode,
+    setData,
+    setExcluded,
+    subSection,
+  ]);
 
   const handleToggle = useCallback(() => {
-    if (isSelected) {
-      removeSession();
-      return;
-    }
-    addSession();
-  }, [addSession, isSelected, removeSession]);
+    if (isGenerationMode && isSelected) addSession();
+    else if (isGenerationMode && !isSelected) removeSession();
+    else if (!isGenerationMode && isSelected) removeSession();
+    else addSession();
+  }, [addSession, isGenerationMode, isSelected, removeSession]);
 
   return (
     <div className="flex h-full w-full items-center justify-between border-x border-b md:text-xs">

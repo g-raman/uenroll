@@ -1,4 +1,5 @@
-import { CourseSearchResult } from "@repo/db/types";
+import { courseToCourseWithSectionAlternatives } from "@/utils/mappers/course";
+import { CourseSearchResult, Section } from "@repo/db/types";
 
 export interface ColouredCourse extends CourseSearchResult {
   colour: string;
@@ -40,3 +41,25 @@ export interface CourseAutocomplete {
   courseCode: string;
   courseTitle: string;
 }
+
+export type Expand<T> = {
+  [K in keyof T]: T[K];
+};
+
+export interface ISectionWithAlternatives extends Section {
+  alternatives: string[];
+}
+
+export interface IScheduleItem extends ISectionWithAlternatives {
+  courseCode: string;
+  courseTitle: string;
+  colour: string;
+  term: string;
+}
+
+export type ScheduleItem = Expand<IScheduleItem>;
+export type SectionWithAlternatives = Expand<ISectionWithAlternatives>;
+
+export type CourseWithSectionAlternatives = ReturnType<
+  typeof courseToCourseWithSectionAlternatives
+>;

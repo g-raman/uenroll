@@ -1,41 +1,26 @@
-"use client";
-
-import "temporal-polyfill/global";
-
-import { ScheduleXCalendar, useNextCalendarApp } from "@schedule-x/react";
-import { createViewList, createViewWeek } from "@schedule-x/calendar";
-import { createEventsServicePlugin } from "@schedule-x/events-service";
-
 import "@schedule-x/theme-shadcn/dist/index.css";
-import { useEffect, useState } from "react";
-import { createEventRecurrencePlugin } from "@schedule-x/event-recurrence";
-import { createCalendarControlsPlugin } from "@schedule-x/calendar-controls";
-import CalendarEvent from "./CalendarEvent/CalendarEvent";
-import { createEventModalPlugin } from "@schedule-x/event-modal";
-import CalendarEventModal from "./CalendarEventModal/CalendarEventModal";
-import { useTheme } from "next-themes";
+
 import { useTermParam } from "@/hooks/useTermParam";
-import { useCourseQueries } from "@/hooks/useCourseQueries";
-import { createCalendarAppEvents } from "@/utils/calendarEvents";
-import { useDataParam } from "@/hooks/useDataParam";
 import { TIMEZONE } from "@/utils/constants";
-import CalendarHeader from "./CalendarHeader/CalendarHeader";
+import { coursesToCalendarAppEvents } from "@/utils/mappers/calendar";
+import { createCalendarControlsPlugin } from "@schedule-x/calendar-controls";
+import { createEventModalPlugin } from "@schedule-x/event-modal";
+import { createEventRecurrencePlugin } from "@schedule-x/event-recurrence";
+import { createEventsServicePlugin } from "@schedule-x/events-service";
+import { ScheduleXCalendar, useNextCalendarApp } from "@schedule-x/react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import CalendarEvent from "@/components/Calendar/CalendarEvent/CalendarEvent";
+import CalendarEventModal from "@/components/Calendar/CalendarEventModal/CalendarEventModal";
+import CalendarHeader from "@/components/Calendar/CalendarHeader/CalendarHeader";
+import { createViewList, createViewWeek } from "@schedule-x/calendar";
 
-function Calendar() {
+interface CalendarProps {
+  events: ReturnType<typeof coursesToCalendarAppEvents>;
+}
+
+export function Calendar({ events }: CalendarProps) {
   const [selectedTerm] = useTermParam();
-  const [data] = useDataParam();
-  const courseCodes = Object.keys(data ? data : {});
-  const courseQueries = useCourseQueries(
-    selectedTerm,
-    courseCodes,
-    courseCodes.length > 0,
-  );
-
-  const courseSearchResults = courseQueries
-    .filter(query => query.isSuccess)
-    .map(query => query.data);
-
-  const events = createCalendarAppEvents(courseSearchResults, data);
 
   const [eventsService] = useState(() => createEventsServicePlugin());
   const [eventRecurrence] = useState(() => createEventRecurrencePlugin());
@@ -54,18 +39,18 @@ function Calendar() {
       timezone: TIMEZONE,
       views: [createViewWeek(), createViewList()],
       theme: "shadcn",
-      isResponsive: true,
+      isResponsive: false,
       isDark: theme === "dark" || systemTheme === "dark",
       dayBoundaries: {
         start: "06:00",
         end: "23:00",
       },
+      events,
       callbacks: {
         beforeRender($app) {
-          eventsService.getAll();
           // Need a multiplier to reduce grid height as some space
           // is taken up by the calendar navigation
-          const multiplier = 0.77;
+          const multiplier = 0.66;
           const height = window.innerHeight * multiplier;
           $app.config.weekOptions.value.gridHeight = height;
         },
@@ -73,6 +58,7 @@ function Calendar() {
     },
     plugins,
   );
+  eventModal.close();
 
   // HACK: Gotta figure out a better way to do This
   // Hardcoding for now
@@ -94,29 +80,35 @@ function Calendar() {
     calendar.setTheme(newTheme as "dark" | "light");
   }, [theme, systemTheme, calendar]);
 
-  if (!selectedTerm || !calendar || !eventsService) return null;
+  if (!calendar) return;
   eventsService.set(events);
+  events.sort((first, second) =>
+    Temporal.ZonedDateTime.compare(first.start, second.start),
+  );
+
+  // HACK: Events don't update otherwise
+  const view = calendarControls.getView();
+  if (view === "list") {
+    calendarControls.setView("week");
+    calendarControls.setView("list");
+  } else {
+    calendarControls.setView("list");
+    calendarControls.setView("week");
+  }
+
+  const latestStartingEvent = events.at(-1);
+  if (latestStartingEvent)
+    calendarControls.setDate(latestStartingEvent.start.toPlainDate());
 
   return (
-    <div className="h-full overflow-scroll">
-      <ScheduleXCalendar
-        calendarApp={calendar}
-        customComponents={{
-          timeGridEvent: CalendarEvent,
-          monthAgendaEvent: CalendarEvent,
-          eventModal: CalendarEventModal,
-          headerContent: CalendarHeader,
-        }}
-      />
-      {events.length === 0 ? (
-        <p className="mt-8 h-max w-full text-center lg:hidden">
-          No courses selected.
-        </p>
-      ) : (
-        ""
-      )}
-    </div>
+    <ScheduleXCalendar
+      calendarApp={calendar}
+      customComponents={{
+        timeGridEvent: CalendarEvent,
+        monthAgendaEvent: CalendarEvent,
+        eventModal: CalendarEventModal,
+        headerContent: ({ $app }) => CalendarHeader({ $app, delta: 7 }),
+      }}
+    />
   );
 }
-
-export default Calendar;

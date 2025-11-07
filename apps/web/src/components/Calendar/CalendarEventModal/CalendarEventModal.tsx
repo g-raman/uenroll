@@ -4,16 +4,56 @@ import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
 import {
   faBook,
   faCheck,
+  faPuzzlePiece,
   faUser,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { getPlainStringTime } from "@/utils/calendarEvents";
+import { getPlainStringTime } from "@/utils/datetime";
+import { Button } from "@repo/ui/components/button";
+import { useState } from "react";
+import {
+  useGeneratorActions,
+  useSchedules,
+  useSelectedSchedule,
+} from "@/stores/generatorStore";
 
 export default function CalendarEventModal({
   calendarEvent,
 }: CalendarEventProps) {
   const start = getPlainStringTime(calendarEvent.start);
   const end = getPlainStringTime(calendarEvent.end);
+  const [selected, setSelected] = useState(calendarEvent.subSection);
+  const schedules = useSchedules();
+  const selectedSchedule = useSelectedSchedule();
+  const { updateCurrentSchedule } = useGeneratorActions();
+
+  const alternatives = [
+    ...calendarEvent.alternatives,
+    calendarEvent.subSection,
+  ].sort();
+
+  const handleSelected = (newSubSection: string) => {
+    if (
+      selectedSchedule === null ||
+      schedules[selectedSchedule] === undefined ||
+      newSubSection === selected
+    )
+      return;
+    const currentSchedule = schedules[selectedSchedule];
+
+    setSelected(newSubSection);
+    const newSchedule = currentSchedule.map(item =>
+      item.courseCode === calendarEvent.courseCode &&
+      item.subSection === calendarEvent.subSection
+        ? {
+            ...item,
+            subSection: newSubSection,
+            alternatives: [calendarEvent.subSection],
+          }
+        : item,
+    );
+    updateCurrentSchedule(newSchedule);
+  };
 
   return (
     <div className="shadow-sx bg-background h-min w-full space-y-2 rounded-md p-6">
@@ -24,6 +64,8 @@ export default function CalendarEventModal({
         <p className="font-bold">{calendarEvent.courseCode}</p>
         &nbsp;-&nbsp;
         <p>{calendarEvent.subSection}</p>
+        &nbsp;
+        <p>({calendarEvent.type})</p>
       </div>
 
       <div className="flex items-center gap-2 text-base font-light">
@@ -52,6 +94,28 @@ export default function CalendarEventModal({
           {calendarEvent.isOpen ? "Open" : "Closed"}
         </p>
       </div>
+
+      {calendarEvent.alternatives.length > 0 && (
+        <>
+          <hr />
+          <div className="flex items-center gap-2 text-base font-light">
+            <FontAwesomeIcon icon={faPuzzlePiece} />
+            <div className="flex w-full items-center">
+              {alternatives.map(alternative => (
+                <Button
+                  key={`alternative-${calendarEvent.courseCode}${alternative}`}
+                  onClick={() => handleSelected(alternative)}
+                  size="sm"
+                  className={`rounded-xs hover:!bg-secondary-foreground/10 h-min w-min cursor-pointer px-2 ${selected === alternative ? "!bg-primary hover:!bg-primary" : null}`}
+                >
+                  {alternative}
+                </Button>
+              ))}
+              <p className="ml-auto">(Alternatives)</p>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -12,6 +12,7 @@
 /* HACK: To hide the modal parent's border*/
 .sx__event-modal {
   border-radius: 100%;
+  z-index: 100 !important;
 }
 
 /* HACK: To hide change colours within day picker for calendar */

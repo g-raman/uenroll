@@ -3,6 +3,9 @@
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import { parseAsSelectedSessions } from "@/hooks/utils";
+import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
+import { useMode } from "@/stores/modeStore";
+import { scheduleToSelected } from "@/utils/mappers/schedule";
 import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { envClient } from "@repo/env";
@@ -20,18 +23,31 @@ export const CopyLinkButton = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [selectedTerm] = useTermParam();
   const [data] = useDataParam();
-  const newSelected = data ? { ...data } : {};
+  let newSelected = data ? { ...data } : {};
 
-  Object.keys(newSelected).forEach(key => {
-    if (newSelected[key] && newSelected[key].length === 0) {
-      delete newSelected[key];
-    }
-  });
+  const isGenerationMode = useMode();
+  const schedules = useSchedules();
+  const selectedSchedule = useSelectedSchedule();
+
+  if (
+    isGenerationMode &&
+    selectedSchedule !== null &&
+    schedules[selectedSchedule]
+  ) {
+    newSelected = scheduleToSelected(schedules[selectedSchedule]);
+  } else {
+    Object.keys(newSelected).forEach(key => {
+      if (newSelected[key] && newSelected[key].length === 0) {
+        delete newSelected[key];
+      }
+    });
+  }
+
   const serialized = parseAsSelectedSessions.serialize(newSelected);
 
-  const hasAnySelectedSessions = Object.values(data ? data : {}).some(
-    value => value.length > 0,
-  );
+  const hasAnySelectedSessions = data
+    ? Object.values(data).some(value => value.length > 0)
+    : false;
 
   const handleClick = useCallback(async () => {
     const clipboardAppendResult = await ResultAsync.fromPromise(
@@ -54,17 +70,20 @@ export const CopyLinkButton = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="grow"
+          className="!border-input !border !px-3"
           variant="outline"
           size="lg"
-          disabled={!hasAnySelectedSessions}
+          disabled={
+            (isGenerationMode && schedules.length === 0) ||
+            (!isGenerationMode && !hasAnySelectedSessions)
+          }
           onClick={handleClick}
         >
           <FontAwesomeIcon
             className="size-4"
             icon={isCopied ? faCheck : faLink}
           />
-          <p className="hidden text-xs min-[375px]:inline sm:inline md:hidden min-[1440px]:inline">
+          <p className="hidden text-xs sm:inline md:hidden min-[1440px]:inline">
             {isCopied ? "Copied" : "Copy Link"}
           </p>
         </Button>

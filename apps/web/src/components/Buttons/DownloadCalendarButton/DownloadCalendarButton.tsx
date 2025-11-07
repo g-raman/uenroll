@@ -1,8 +1,11 @@
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
-import { createDownloadableCalendarEvents } from "@/utils/calendarEvents";
-import { faFileExport } from "@fortawesome/free-solid-svg-icons";
+import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
+import { useMode } from "@/stores/modeStore";
+import { coursesToDownloadableCalendarEvents } from "@/utils/mappers/calendarDownloadable";
+import { scheduleToSelected } from "@/utils/mappers/schedule";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -24,16 +27,28 @@ export default function DownloadCalendarButton() {
     courseCodes.length > 0,
   );
 
-  const hasAnySelectedSessions = Object.values(data ? data : {}).some(
-    value => value.length > 0,
-  );
+  const isGenerationMode = useMode();
+  const schedules = useSchedules();
+  const selecteSchedule = useSelectedSchedule();
+
+  const hasAnySelectedSessions = data
+    ? Object.values(data).some(value => value.length > 0)
+    : false;
 
   const courseSearchResults = courseQueries
     .filter(query => query.isSuccess)
     .map(query => query.data);
 
   const handleDownload = useCallback(async () => {
-    const events = createDownloadableCalendarEvents(courseSearchResults, data);
+    const selected =
+      isGenerationMode && selecteSchedule !== null && schedules[selecteSchedule]
+        ? scheduleToSelected(schedules[selecteSchedule])
+        : data;
+
+    const events = coursesToDownloadableCalendarEvents(
+      courseSearchResults,
+      selected,
+    );
     const calendar = generateIcsCalendar({
       version: "2.0",
       prodId: "//uEnroll//Calendar Export 1.0//EN",
@@ -52,20 +67,23 @@ export default function DownloadCalendarButton() {
     document.body.removeChild(anchor);
 
     URL.revokeObjectURL(url);
-  }, [courseSearchResults, data]);
+  }, [courseSearchResults, data, isGenerationMode, schedules, selecteSchedule]);
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="grow"
+          className="text-primary !border-input !border !px-3"
           variant="default"
           size="lg"
           onClick={handleDownload}
-          disabled={!hasAnySelectedSessions}
+          disabled={
+            (isGenerationMode && schedules.length === 0) ||
+            (!isGenerationMode && !hasAnySelectedSessions)
+          }
         >
-          <FontAwesomeIcon className="size-4" icon={faFileExport} />
-          <p className="hidden text-xs min-[375px]:inline sm:inline md:hidden min-[1440px]:inline">
+          <FontAwesomeIcon className="size-4" icon={faDownload} />
+          <p className="hidden text-xs sm:inline md:hidden min-[1440px]:inline">
             Export
           </p>
         </Button>
