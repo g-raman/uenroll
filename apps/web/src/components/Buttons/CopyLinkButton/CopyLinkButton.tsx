@@ -70,7 +70,7 @@ export const CopyLinkButton = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="grow"
+          className="!px-2"
           variant="outline"
           size="lg"
           disabled={
