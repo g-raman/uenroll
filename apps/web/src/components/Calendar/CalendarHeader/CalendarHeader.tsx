@@ -2,6 +2,7 @@
 
 import { CopyLinkButton } from "@/components/Buttons/CopyLinkButton/CopyLinkButton";
 import DownloadCalendarButton from "@/components/Buttons/DownloadCalendarButton/DownloadCalendarButton";
+import { useScreenSize } from "@/hooks/useScreenSize";
 import { useTermParam } from "@/hooks/useTermParam";
 import { TIMEZONE } from "@/utils/constants";
 import {
@@ -39,14 +40,15 @@ export default function CalendarHeader({ $app, delta }: CalendarHeaderProps) {
 
   const date = $app.config.plugins.calendarControls.getDate();
   const { start, end } = $app.config.plugins.calendarControls.getRange();
+  const { width } = useScreenSize();
 
   const monthStart = start.toLocaleString("en-CA", {
     year: "numeric",
-    month: "long",
+    month: width && width <= 768 ? "short" : "long",
   });
   const monthEnd = end.toLocaleString("en-CA", {
     year: "numeric",
-    month: "long",
+    month: width && width <= 768 ? "short" : "long",
   });
 
   const handleNextOrPrevious = useCallback(
@@ -62,9 +64,9 @@ export default function CalendarHeader({ $app, delta }: CalendarHeaderProps) {
 
   return (
     <>
-      <div className="flex h-full w-full flex-wrap items-center gap-4">
+      <div className="flex h-full w-full flex-wrap items-center gap-2">
         <Button
-          className="bg-background! shadow-xs! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! border text-black dark:text-white"
+          className="bg-background! shadow-xs! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! border px-2 text-xs text-black lg:px-6 dark:text-white"
           variant="default"
           size="lg"
           onClick={() =>
@@ -80,11 +82,11 @@ export default function CalendarHeader({ $app, delta }: CalendarHeaderProps) {
           Term Start
         </Button>
 
-        <p className="text-base font-bold">
+        <p className="max-w-32 truncate text-xs font-bold lg:max-w-full lg:text-base">
           {monthStart === monthEnd ? monthStart : `${monthStart} - ${monthEnd}`}
         </p>
 
-        <div className="ml-auto space-x-2">
+        <div className="ml-auto space-x-1">
           <CopyLinkButton />
           <DownloadCalendarButton />
           <Button
