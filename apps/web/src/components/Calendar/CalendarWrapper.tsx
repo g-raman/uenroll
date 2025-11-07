@@ -13,6 +13,8 @@ import { useMode } from "@/stores/modeStore";
 import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
 import { Calendar } from "@/components/Calendar/Calendar";
 import { GenerationHeader } from "./GenerationHeader";
+import { CalendarMobile } from "./CalendarMobile";
+import { useScreenSize } from "@/hooks/useScreenSize";
 
 export function CalendarWrapper() {
   const [selectedTerm] = useTermParam();
@@ -27,6 +29,7 @@ export function CalendarWrapper() {
   const schedules = useSchedules();
   const selectedSchedule = useSelectedSchedule();
   const isGenerationMode = useMode();
+  const size = useScreenSize();
 
   const courseSearchResults = courseQueries
     .filter(query => query.isSuccess)
@@ -41,13 +44,10 @@ export function CalendarWrapper() {
   return (
     <div className="h-full space-y-4 overflow-y-scroll">
       <GenerationHeader />
-      <Calendar events={events} />
-      {events.length === 0 ? (
-        <p className="mt-8 h-max w-full text-center lg:hidden">
-          No courses selected.
-        </p>
+      {size.width && size.width <= 500 ? (
+        <CalendarMobile events={events} />
       ) : (
-        ""
+        <Calendar events={events} />
       )}
     </div>
   );
