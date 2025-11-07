@@ -1,5 +1,5 @@
-let wasm: any | null = null;
-let initPromise: Promise<any> | null = null;
+let wasm: unknown | null = null;
+let initPromise: Promise<unknown> | null = null;
 
 export async function loadWasm() {
   if (wasm) return wasm;
