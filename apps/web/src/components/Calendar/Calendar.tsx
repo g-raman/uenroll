@@ -58,6 +58,7 @@ export function Calendar({ events }: CalendarProps) {
     },
     plugins,
   );
+  eventModal.close();
 
   // HACK: Gotta figure out a better way to do This
   // Hardcoding for now
