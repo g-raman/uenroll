@@ -1,7 +1,6 @@
 import { SelectedSession } from "@/types/Types";
 import { getPlainStringTime } from "@/utils/datetime";
 
-// TODO: fix bug where deleting a course doesn't reset generated schedules state
 type ExtendedCalendarEvent = {
   id: string | number;
   title: string;
