@@ -83,7 +83,7 @@ export const CopyLinkButton = () => {
             className="size-4"
             icon={isCopied ? faCheck : faLink}
           />
-          <p className="hidden text-xs min-[375px]:inline sm:inline md:hidden min-[1440px]:inline">
+          <p className="hidden text-xs sm:inline md:hidden min-[1440px]:inline">
             {isCopied ? "Copied" : "Copy Link"}
           </p>
         </Button>
