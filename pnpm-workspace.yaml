@@ -2,8 +2,8 @@ packages:
   - apps/*
   - packages/*
 catalog:
-  eslint: ^9.36.0
-  typescript: ^5.9.2
+  eslint: ^9.39.0
+  typescript: ^5.9.3
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - '@vercel/speed-insights'
