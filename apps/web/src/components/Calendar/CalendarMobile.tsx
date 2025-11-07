@@ -45,21 +45,13 @@ export function CalendarMobile({ events }: CalendarMobileProps) {
       isDark: theme === "dark" || systemTheme === "dark",
       weekOptions: {
         nDays: 2,
+        gridHeight: 800,
       },
       dayBoundaries: {
         start: "06:00",
         end: "23:00",
       },
       events,
-      callbacks: {
-        beforeRender($app) {
-          // Need a multiplier to reduce grid height as some space
-          // is taken up by the calendar navigation
-          const multiplier = 0.66;
-          const height = window.innerHeight * multiplier;
-          $app.config.weekOptions.value.gridHeight = height;
-        },
-      },
     },
     plugins,
   );
