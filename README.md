@@ -5,8 +5,8 @@ A modern, open-source schedule builder for uOttawa.
 # Local Setup
 
 > [!NOTE]
-> You will need [Node.js](https://nodejs.org/en) (v22), [pnpm](https://pnpm.io/) (v10), and [Docker](https://www.docker.com/) (latest) installed.
-> Optional: install the `turbo` cli globally via pnpm.
+> You will need [bun](https://bun.com/) (v1.3.x), and [Docker](https://www.docker.com/) (latest) installed.
+> Optional: install the `turbo` cli globally via bun.
 
 ## Initialize
 
@@ -23,13 +23,13 @@ cd uenroll
 ```
 
 ```bash
-pnpm install
+bun install
 ```
 
 Build dependencies
 
 ```bash
-pnpm dlx turbo build --filter web
+bunx turbo build --filter web
 ```
 
 <details>
@@ -52,7 +52,7 @@ docker compose up -d
 Setup database
 
 ```bash
-pnpm --filter @repo/db db:init
+bun --filter @repo/db db:init
 ```
 
 Running this command populates the database with seed data.
@@ -64,7 +64,7 @@ Or alternatively see the [Request seed file](#request-seed-file) section.
 ## Setup webapp
 
 ```bash
-pnpm dev
+bun dev
 ```
 
 <details>
@@ -84,7 +84,7 @@ You can use the drizzle client (Recommended) to view the database and run SQL qu
 You can also use any database client that supports PostgreSQLof your choice (Beekeeper Studio, DBeaver, pgadmin, etc.)
 
 ```bash
-pnpm --filter @repo/db db:studio
+bun --filter @repo/db db:studio
 ```
 
 You can now open `http://local.drizzle.studio` in your web browser of choice.
@@ -118,7 +118,7 @@ However, you can modify the code to only scrape one or two terms for faster resu
 Build the scraper project and it's dependencies.
 
 ```bash
-pnpm dlx turbo build --filter scraper
+bunx turbo build --filter scraper
 ```
 
 Make the scrape script file executable.
