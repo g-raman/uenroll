@@ -15,12 +15,22 @@ import { useScreenSize } from "@/hooks/useScreenSize";
 
 export default function Page() {
   const { width } = useScreenSize();
-  if (!width) return;
+
+  if (!width) {
+    return (
+      <App>
+        <div className="flex h-full w-full items-center justify-center">
+          Loading...
+        </div>
+      </App>
+    );
+  }
+  const isMobile = width < 768;
 
   return (
     <App>
-      <ResizablePanelGroup direction={width >= 768 ? "horizontal" : "vertical"}>
-        <ResizablePanel defaultSize={width >= 768 ? 25 : 50}>
+      <ResizablePanelGroup direction={isMobile ? "vertical" : "horizontal"}>
+        <ResizablePanel defaultSize={isMobile ? 50 : 25}>
           <Sidebar>
             <SearchBar />
             <SearchResults />
@@ -28,7 +38,7 @@ export default function Page() {
         </ResizablePanel>
 
         <ResizableHandle className="!bg-transparent" withHandle />
-        <ResizablePanel defaultSize={width >= 768 ? 75 : 50}>
+        <ResizablePanel defaultSize={isMobile ? 50 : 75}>
           <Main>
             <CalendarWrapper />
           </Main>
