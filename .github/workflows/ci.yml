@@ -22,7 +22,6 @@ jobs:
       - name: Setup Bun
       - uses: oven-sh/setup-bun@v2
 
-
       - name: Debugging logs
         run: |
           echo "Bun Version"
