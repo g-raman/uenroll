@@ -4,13 +4,13 @@
   "description": "A modern scraper for the uOttawa public course registry",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "echo 'No Build needed for scraper with Bun'",
     "check-types": "tsc --noEmit",
-    "db:cleanup": "node dist/cleanup.js",
+    "db:cleanup": "bun src/cleanup.ts",
     "lint": "eslint .",
-    "scrape:courses": "node dist/main.js",
-    "scrape:subjects": "node dist/scrape/scrapeAvailableSubjects.js",
-    "scrape:terms": "node dist/scrape/scrapeAvailableTerms.js"
+    "scrape:courses": "bun src/main.ts",
+    "scrape:subjects": "bun src/scrape/scrapeAvailableSubjects.ts",
+    "scrape:terms": "bun src/scrape/scrapeAvailableTerms.ts"
   },
   "dependencies": {
     "cheerio": "^1.1.2",
