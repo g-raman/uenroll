@@ -15,7 +15,6 @@
   "scripts": {
     "build": "tsup",
     "check-types": "tsc --noEmit",
-    "clean": "rm -rf dist",
     "lint": "eslint ."
   },
   "dependencies": {
