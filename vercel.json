@@ -6,5 +6,7 @@
       "docs/*": false
     }
   },
+  "installCommand": "curl -fsSL https://bun.sh/install | bash && ~/.bun/bin/bun install --frozen-lockfile",
+  "buildCommand": "~/.bun/bin/bun run build --filter web",
   "bunVersion": "1.x"
 }
