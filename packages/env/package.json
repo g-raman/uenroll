@@ -28,6 +28,5 @@
     "@repo/typescript-config": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:"
-  },
-  "packageManager": "pnpm@10.11.0"
+  }
 }
