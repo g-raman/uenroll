@@ -28,7 +28,7 @@
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "pnpm clean && tsup",
+    "build": "tsup",
     "check-types": "tsc --noEmit",
     "clean": "rm -rf dist",
     "db:function": "drizzle-kit generate --custom --name=get_course_function",
