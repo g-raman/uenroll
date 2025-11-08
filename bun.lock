@@ -30,7 +30,6 @@
         "neverthrow": "^8.2.0",
         "pino": "^10.1.0",
         "pino-pretty": "^13.1.2",
-        "puppeteer-core": "^24.29.1",
       },
       "devDependencies": {
         "@repo/db": "workspace:*",
@@ -39,6 +38,7 @@
         "@types/node": "^24.10.0",
         "domhandler": "^5.0.3",
         "eslint": "catalog:",
+        "puppeteer-core": "^24.29.1",
         "typescript": "catalog:",
       },
     },
