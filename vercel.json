@@ -7,6 +7,6 @@
     }
   },
   "installCommand": "curl -fsSL https://bun.sh/install | bash && ~/.bun/bin/bun install --frozen-lockfile",
-  "buildCommand": "~/.bun/bin/bun run build",
+  "buildCommand": "~/.bun/bin/bun --bun next build",
   "bunVersion": "1.x"
 }
