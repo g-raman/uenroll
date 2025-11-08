@@ -29,7 +29,7 @@ bun install
 Build dependencies
 
 ```bash
-bunx turbo build --filter web
+bun run build --filter web
 ```
 
 <details>
@@ -118,7 +118,7 @@ However, you can modify the code to only scrape one or two terms for faster resu
 Build the scraper project and it's dependencies.
 
 ```bash
-bunx turbo build --filter scraper
+bun run build --filter scraper
 ```
 
 Make the scrape script file executable.
