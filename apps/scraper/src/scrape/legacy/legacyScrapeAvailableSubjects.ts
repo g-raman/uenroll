@@ -1,10 +1,10 @@
 import * as cheerio from "cheerio";
-import { getBrowser, getBrowserEndpoint } from "../utils/browser.js";
-import { COURSE_REGISTRY_URL } from "../utils/constants.js";
-import { getIdSelector, getIdStartsWithSelector } from "../utils/scrape.js";
 import { updateAvailableSubjects } from "@repo/db/queries";
 import type { Subject } from "@repo/db/types";
-import { logger } from "../utils/logger.js";
+import { getBrowser, getBrowserEndpoint } from "../../utils/browser.js";
+import { logger } from "../../utils/logger.js";
+import { COURSE_REGISTRY_URL } from "../../utils/constants.js";
+import { getIdSelector, getIdStartsWithSelector } from "../../utils/scrape.js";
 
 const characters = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", ..."0123456789"];
 const browserEndpoint = await getBrowserEndpoint();
