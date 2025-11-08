@@ -30,7 +30,6 @@
   "scripts": {
     "build": "tsup",
     "check-types": "tsc --noEmit",
-    "clean": "rm -rf dist",
     "db:function": "drizzle-kit generate --custom --name=get_course_function",
     "db:generate": "drizzle-kit generate",
     "db:init": "bun db:migrate && bun db:seed",
