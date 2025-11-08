@@ -1,6 +1,7 @@
 import { updateAvailableSubjects } from "@repo/db/queries";
 import type { SubjectInsert } from "@repo/db/types";
 import * as cheerio from "cheerio";
+import { logger } from "../utils/logger.js";
 
 const catalogue = await fetch("https://catalogue.uottawa.ca/en/courses/");
 const html = await catalogue.text();
@@ -14,13 +15,15 @@ $(".letternav-head + ul > li").each(function () {
   const subject = $(this).text();
   const isMatch = subjectCodeRegex.test(subject);
   if (!isMatch) {
-    console.log(`Coudln't find a match for ${subject}`);
+    logger.error(`Coudln't find a match for ${subject}`);
     return;
   }
 
   const subjectCode = subjectCodeRegex.exec(subject);
   if (!subjectCode || !subjectCode[1]) {
-    console.log(`Something went wrong trying to match for subject: ${subject}`);
+    logger.error(
+      `Something went wrong trying to match for subject: ${subject}`,
+    );
     return;
   }
 
@@ -42,7 +45,7 @@ subjects.push({ subject: "PHM" });
 
 const result = await updateAvailableSubjects(subjects);
 if (result.isErr()) {
-  console.log(result.error);
+  logger.error(result.error);
   process.exit(1);
 }
 process.exit(0);
