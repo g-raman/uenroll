@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import { updateAvailableSubjects } from "@repo/db/queries";
 import type { Subject } from "@repo/db/types";
-import { getBrowser, getBrowserEndpoint } from "../../utils/browser.js";
+import { getBrowser, getBrowserEndpoint } from "./browser.js";
 import { logger } from "../../utils/logger.js";
 import { COURSE_REGISTRY_URL } from "../../utils/constants.js";
 import { getIdSelector, getIdStartsWithSelector } from "../../utils/scrape.js";
