@@ -1,59 +1,51 @@
-import * as cheerio from "cheerio";
-import { getBrowser, getBrowserEndpoint } from "../utils/browser.js";
-import { COURSE_REGISTRY_URL } from "../utils/constants.js";
-import { getIdSelector, getIdStartsWithSelector } from "../utils/scrape.js";
 import { updateAvailableSubjects } from "@repo/db/queries";
-import type { Subject } from "@repo/db/types";
+import type { SubjectInsert } from "@repo/db/types";
+import * as cheerio from "cheerio";
 import { logger } from "../utils/logger.js";
 
-const characters = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", ..."0123456789"];
-const browserEndpoint = await getBrowserEndpoint();
-if (browserEndpoint.isErr()) {
-  logger.error("Failed to get browser endpoint");
-  process.exit(1);
-}
+const catalogue = await fetch("https://catalogue.uottawa.ca/en/courses/");
+const html = await catalogue.text();
+const $ = cheerio.load(html);
 
-const browser = await getBrowser(browserEndpoint.value);
-const page = await browser.newPage();
+const SUBJECT_CODE_REGEX = /\(([^()]*)\)(?!.*\([^()]*\))/;
+const subjectCodeRegex = new RegExp(SUBJECT_CODE_REGEX);
 
-logger.info("Going to subjects page...");
-await page.goto(COURSE_REGISTRY_URL, { waitUntil: "networkidle0" });
-const SUBJECT_LIST_SELECTOR = "CLASS_SRCH_WRK2_SSR_PB_SUBJ_SRCH$";
-const subjectListSelector = getIdSelector(SUBJECT_LIST_SELECTOR, 0);
-
-await page.click(subjectListSelector);
-await page.waitForNetworkIdle({ concurrency: 0 });
-
-for (const character of characters) {
-  logger.info(`Searching for subjects starting with ${character}`);
-  const ALPHA_NUM_SELECTOR = "SSR_CLSRCH_WRK2_SSR_ALPHANUM_";
-  const alphaNumSelector = `[id='${ALPHA_NUM_SELECTOR}${character}']`;
-
-  await page.click(alphaNumSelector);
-  await page.waitForNetworkIdle({ concurrency: 0 });
-
-  const html = await page.content();
-  const $ = cheerio.load(html);
-
-  const SUBJECT_SELECTOR = "win0divSSR_CLSRCH_SUBJ_SUBJECT$";
-  const subjectSelector = getIdStartsWithSelector(SUBJECT_SELECTOR);
-  const subjects: Omit<Subject, "isDeleted">[] = $(subjectSelector)
-    .text()
-    .split("\n")
-    .filter(subject => subject !== null && subject !== "")
-    .map(subject => {
-      return { subject };
-    });
-
-  if (subjects.length === 0) {
-    logger.error("No subjects found.\n");
-    continue;
+const subjects: SubjectInsert[] = [];
+$(".letternav-head + ul > li").each(function () {
+  const subject = $(this).text();
+  const isMatch = subjectCodeRegex.test(subject);
+  if (!isMatch) {
+    logger.error(`Coudln't find a match for ${subject}`);
+    return;
   }
 
-  await updateAvailableSubjects(subjects);
-  logger.silent("");
-}
+  const subjectCode = subjectCodeRegex.exec(subject);
+  if (!subjectCode || !subjectCode[1]) {
+    logger.error(
+      `Something went wrong trying to match for subject: ${subject}`,
+    );
+    return;
+  }
 
-await page.close();
-await browser.disconnect();
+  subjects.push({ subject: subjectCode[1] });
+});
+
+// Manual entries for courses that aren't listed in the catalogue
+subjects.push({ subject: "PBH" });
+subjects.push({ subject: "ADX" });
+subjects.push({ subject: "CTM" });
+subjects.push({ subject: "DTO" });
+subjects.push({ subject: "EHA" });
+subjects.push({ subject: "EMC" });
+subjects.push({ subject: "ESG" });
+subjects.push({ subject: "MEM" });
+subjects.push({ subject: "MIA" });
+subjects.push({ subject: "POP" });
+subjects.push({ subject: "PHM" });
+
+const result = await updateAvailableSubjects(subjects);
+if (result.isErr()) {
+  logger.error(result.error);
+  process.exit(1);
+}
 process.exit(0);

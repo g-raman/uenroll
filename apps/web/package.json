@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build",
+    "build": "bun --bun next build",
     "build:wasm": "cd ./generator/ && wasm-pack build --target web --release --out-dir ../public/wasm && rm -rf ../public/wasm/.gitignore",
     "check-types": "tsc --noEmit",
-    "dev": "next dev --turbopack --port 3000",
+    "dev": "bun --bun next dev --turbopack --port 3000",
     "lint": "eslint --max-warnings 0 .",
     "start": "next start"
   },
