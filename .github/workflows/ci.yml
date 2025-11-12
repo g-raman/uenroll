@@ -19,28 +19,40 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: "package.json"
+          cache: 'pnpm'
 
       - name: Debugging logs
         run: |
-          echo "Bun Version"
-          bun -v
+          echo "Node.js Version"
+          node -v
+          echo "PNPM Version"
+          pnpm -v
+          echo "PNPM Store Path"
+          pnpm store path
+          echo "TypeScript Version"
+          pnpm tsc -v
 
       - name: Install Dependencies
-        run: bun install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: bunx turbo lint --affected
+        run: pnpm dlx turbo lint --affected
 
       - name: Format
-        run: bun run ci:format
+        run: pnpm ci:format
 
       - name: Format Package json
-        run: bun run ci:format:packagejson
+        run: pnpm ci:format:packagejson
 
       - name: Build
-        run: bunx turbo build
+        run: pnpm dlx turbo build
 
       - name: Check Types
-        run: bunx turbo check-types
+        run: pnpm dlx turbo check-types

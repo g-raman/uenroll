@@ -28,13 +28,14 @@
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup",
+    "build": "pnpm clean && tsup",
     "check-types": "tsc --noEmit",
+    "clean": "rm -rf dist",
     "db:function": "drizzle-kit generate --custom --name=get_course_function",
     "db:generate": "drizzle-kit generate",
-    "db:init": "bun db:migrate && bun db:seed",
+    "db:init": "pnpm db:migrate && pnpm db:seed",
     "db:migrate": "drizzle-kit migrate",
-    "db:seed": "bun ./src/seeds/index.ts",
+    "db:seed": "tsx ./src/seeds/index.ts",
     "db:studio": "drizzle-kit studio",
     "lint": "eslint ."
   },
@@ -51,6 +52,8 @@
     "@types/node": "^24.0.13",
     "drizzle-kit": "^0.31.4",
     "eslint": "catalog:",
+    "tsx": "^4.20.3",
     "typescript": "catalog:"
-  }
+  },
+  "packageManager": "pnpm@10.11.0"
 }

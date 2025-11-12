@@ -1,0 +1,14 @@
+packages:
+  - apps/*
+  - packages/*
+
+catalog:
+  eslint: ^9.39.1
+  typescript: ^5.9.3
+
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - '@vercel/speed-insights'
+  - core-js-pure
+  - esbuild
+  - sharp
