@@ -112,7 +112,7 @@ locals {
 
 resource "aws_instance" "scraper" {
   ami                    = data.aws_ami.latest_amazon_linux.id
-  instance_type          = "t4g.nano"
+  instance_type          = "t4g.medium"
   key_name               = aws_key_pair.scraper_key_pair.key_name
   vpc_security_group_ids = [aws_security_group.scraper_sg.id]
   user_data = templatefile("${path.module}/setup.sh", {

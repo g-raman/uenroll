@@ -13,8 +13,9 @@
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup",
+    "build": "pnpm clean && tsup",
     "check-types": "tsc --noEmit",
+    "clean": "rm -rf dist",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -27,5 +28,6 @@
     "@repo/typescript-config": "workspace:*",
     "eslint": "catalog:",
     "typescript": "catalog:"
-  }
+  },
+  "packageManager": "pnpm@10.11.0"
 }

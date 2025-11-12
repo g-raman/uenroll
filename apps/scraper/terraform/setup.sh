@@ -3,6 +3,12 @@
 # Update system
 sudo dnf update -y
 
+# Set up docker
+sudo dnf install -y docker
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker ec2-user
+
 # Install git
 sudo dnf install -y git
 
@@ -27,10 +33,10 @@ echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$HOME/uenroll/apps/scraper/.env"
 
 # Install dependencies & ensure EC2 insance CPU & I/O is not exhausted
 cd "$WORK_DIR"
-bun install --filter scraper
+pnpm install --filter '!./apps/web' --network-concurrency=1
 
 # Build Scraper
-bun run build --filter scraper
+pnpm dlx turbo build --filter scraper
 
 # Make director to store logs
 mkdir -p /var/logs/scraper/
