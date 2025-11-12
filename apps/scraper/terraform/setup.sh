@@ -3,12 +3,6 @@
 # Update system
 sudo dnf update -y
 
-# Set up docker
-sudo dnf install -y docker
-sudo systemctl start docker
-sudo systemctl enable docker
-sudo usermod -aG docker ec2-user
-
 # Install git
 sudo dnf install -y git
 
