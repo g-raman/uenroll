@@ -17,7 +17,7 @@ sudo dnf install -y unzip
 
 # Install Bun
 curl -fsSL https://bun.com/install | bash -s "bun-v1.3.2"
-source /home/ec2-user/.bash_profile
+source "$HOME/.bash_profile"
 
 # Clone repo
 WORK_DIR="/uenroll"
@@ -26,12 +26,12 @@ git clone https://github.com/g-raman/uenroll.git "$WORK_DIR"
 # Add API key to .env
 echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$HOME/uenroll/apps/scraper/.env"
 
-# Install dependencies & ensure EC2 insance CPU & I/O is not exhausted
+# Install dependencies
 cd "$WORK_DIR"
-bun install --filter scraper
+"$HOME/.bun/bin/bun" install --filter scraper
 
 # Build Scraper
-bun run build --filter scraper
+"$HOME/.bun/bin/bun" run build --filter scraper
 
 # Make director to store logs
 mkdir -p /var/logs/scraper/
