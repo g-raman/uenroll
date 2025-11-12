@@ -13,7 +13,7 @@ sudo dnf install -y unzip
 
 # Install Bun
 curl -fsSL https://bun.com/install | bash -s "bun-v1.3.2"
-source ~/.bashrc
+source /home/ec2-user/.bash_profile
 
 # Clone repo
 WORK_DIR="/uenroll"
