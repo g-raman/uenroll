@@ -27,10 +27,10 @@ echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$HOME/uenroll/apps/scraper/.env"
 
 # Install dependencies & ensure EC2 insance CPU & I/O is not exhausted
 cd "$WORK_DIR"
-pnpm install --filter '!./apps/web' --network-concurrency=1
+bun install --filter scraper
 
 # Build Scraper
-pnpm dlx turbo build --filter scraper
+bun run build --filter scraper
 
 # Make director to store logs
 mkdir -p /var/logs/scraper/
