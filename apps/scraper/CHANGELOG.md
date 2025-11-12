@@ -1,5 +1,11 @@
 # scraper
 
+## 1.5.1
+
+### Patch Changes
+
+- [#131](https://github.com/g-raman/uenroll/pull/131) [`99f2e26`](https://github.com/g-raman/uenroll/commit/99f2e26eca69a9fc2b0d407894ab2c0d2e26d515) Thanks [@g-raman](https://github.com/g-raman)! - Update dependencies
+
 ## 1.5.0
 
 ### Minor Changes
