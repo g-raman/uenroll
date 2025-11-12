@@ -7,13 +7,8 @@ set -euo pipefail
 # Update system
 sudo dnf update -y
 
-# Install git
-sudo dnf install -y git
-
-# Install curl
-sudo dnf install -y curl
-
-sudo dnf install -y unzip
+# Install Basic Dependencies
+sudo dnf install -y git curl unzip --allowerasing
 
 # Install Bun
 curl -fsSL https://bun.com/install | bash -s "bun-v1.3.2"
