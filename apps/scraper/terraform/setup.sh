@@ -9,13 +9,10 @@ sudo dnf install -y git
 # Install curl
 sudo dnf install -y curl
 
-# Install NVM
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-source /.nvm/nvm.sh
-nvm install 24
+sudo dnf install -y unzip
 
-# Install PNPM
-npm install -g pnpm
+# Install Bun
+curl -fsSL https://bun.com/install | bash -s "bun-v1.3.2"
 source ~/.bashrc
 
 # Clone repo
