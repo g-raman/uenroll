@@ -1,5 +1,15 @@
 # web
 
+## 1.0.1
+
+### Patch Changes
+
+- [#134](https://github.com/g-raman/uenroll/pull/134) [`4bde4d1`](https://github.com/g-raman/uenroll/commit/4bde4d166af07bf51ae667f308489a4bc313b07b) Thanks [@g-raman](https://github.com/g-raman)! - Make panels resizable
+
+- [#131](https://github.com/g-raman/uenroll/pull/131) [`99f2e26`](https://github.com/g-raman/uenroll/commit/99f2e26eca69a9fc2b0d407894ab2c0d2e26d515) Thanks [@g-raman](https://github.com/g-raman)! - Format files
+
+- [#133](https://github.com/g-raman/uenroll/pull/133) [`cf18ba0`](https://github.com/g-raman/uenroll/commit/cf18ba0ca1ac819fd20d6fde1cf055421d43939d) Thanks [@g-raman](https://github.com/g-raman)! - Updated copy and fixed tailwind sourcing for autocomplete
+
 ## 1.0.0
 
 ### Major Changes
