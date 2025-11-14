@@ -19,7 +19,7 @@ WORK_DIR="/uenroll"
 git clone https://github.com/g-raman/uenroll.git "$WORK_DIR"
 
 # Add API key to .env
-echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$HOME/uenroll/apps/scraper/.env"
+echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "/uenroll/apps/scraper/.env"
 
 # Install dependencies
 cd "$WORK_DIR"
