@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eo pipefail
 
-export HOME="${HOME:-/home/ec2-user}"
+export HOME="$${HOME:-/home/ec2-user}"
 
 # Update system
 sudo dnf update -y
