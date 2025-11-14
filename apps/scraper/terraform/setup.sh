@@ -11,6 +11,11 @@ sudo dnf update -y
 # Install Basic Dependencies
 sudo dnf install -y git curl unzip --allowerasing
 
+# Install Node
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+source /.nvm/nvm.sh
+nvm install 24
+
 # Install Bun
 curl -fsSL https://bun.com/install | bash -s "bun-v1.3.2"
 source "$WORK_DIR/.bash_profile"
