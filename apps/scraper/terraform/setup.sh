@@ -16,7 +16,7 @@ curl -fsSL https://bun.com/install | bash -s "bun-v1.3.2"
 source "$WORK_DIR/.bash_profile"
 
 # Clone repo
-git clone https://github.com/g-raman/uenroll.git "$WORK_DIR"
+git clone https://github.com/g-raman/uenroll.git "$WORK_DIR/uenroll"
 
 # Add API key to .env
 echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$WORK_DIR/uenroll/apps/scraper/.env"
