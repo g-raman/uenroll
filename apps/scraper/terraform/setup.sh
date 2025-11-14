@@ -25,6 +25,9 @@ echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "/uenroll/apps/scraper/.env"
 cd "$WORK_DIR"
 "$HOME/.bun/bin/bun" install --filter scraper
 
+# Install Turbo
+"$HOME/.bun/bin/bun" install -g turbo
+
 # Build Scraper
 "$HOME/.bun/bin/bun" run build --filter scraper
 
