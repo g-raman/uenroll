@@ -156,7 +156,7 @@ export function GenerationHeader() {
   return (
     <div className="bg-background sticky top-0 z-10 flex flex-wrap items-center justify-between gap-2 rounded-b-md p-2">
       {width && width >= 1024 && (
-        <div className="flex items-center justify-start text-4xl">
+        <div className="flex items-baseline justify-start gap-2 text-4xl">
           <FontAwesomeIcon
             className="text-primary size-12"
             icon={faBuildingColumns}
