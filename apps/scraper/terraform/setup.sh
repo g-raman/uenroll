@@ -16,8 +16,9 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 source "$WORK_DIR/.nvm/nvm.sh"
 nvm install 24
 
-# Install Bun
-npm install -g bun@1.3.2
+# Install Bun & Turbo
+npm install -g bun@1.3.2 turbo
+source "$WORK_DIR/.bash_profile"
 
 # Clone repo
 git clone https://github.com/g-raman/uenroll.git "$WORK_DIR/uenroll"
@@ -28,10 +29,6 @@ echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$WORK_DIR/uenroll/apps/scraper/.env"
 # Install dependencies
 cd "$WORK_DIR/uenroll"
 bun install --filter scraper
-
-# Install Turbo
-bun install -g turbo
-source "$WORK_DIR/.bash_profile"
 
 # Build Scraper
 bun run build --filter scraper
