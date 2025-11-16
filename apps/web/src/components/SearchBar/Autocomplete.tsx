@@ -151,10 +151,10 @@ export default function Autocomplete() {
 
         <PopoverContent
           onOpenAutoFocus={e => e.preventDefault()}
-          className="p-1"
+          className="w-76! p-1"
         >
           <CommandList>
-            <CommandEmpty className="px-2 py-4 text-xs">
+            <CommandEmpty className="px-2 py-4 text-center text-xs">
               {debouncedQuery.length > 0 &&
                 results.length === 0 &&
                 "No results found"}
