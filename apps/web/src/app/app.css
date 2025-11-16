@@ -25,3 +25,8 @@
   background-color: var(--sx-color-primary) !important;
   color: white !important;
 }
+
+.sx__calendar {
+  border-radius: 0px !important;
+  border: none !important;
+}

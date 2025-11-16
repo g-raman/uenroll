@@ -42,13 +42,15 @@ export function CalendarWrapper() {
     : coursesToCalendarAppEvents(courseSearchResults, data);
 
   return (
-    <div className="h-full space-y-4 overflow-y-scroll">
+    <div className="flex h-full flex-col gap-2 bg-black md:gap-4">
       <GenerationHeader />
-      {size.width && size.width <= 1024 ? (
-        <CalendarMobile events={events} />
-      ) : (
-        <Calendar events={events} />
-      )}
+      <div className="h-full overflow-y-scroll rounded-t-md">
+        {size.width && size.width <= 1024 ? (
+          <CalendarMobile events={events} />
+        ) : (
+          <Calendar events={events} />
+        )}
+      </div>
     </div>
   );
 }

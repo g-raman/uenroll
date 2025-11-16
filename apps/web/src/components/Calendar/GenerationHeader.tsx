@@ -154,9 +154,9 @@ export function GenerationHeader() {
   };
 
   return (
-    <div className="bg-background sticky top-0 z-10 flex flex-wrap items-center justify-between gap-2 rounded-md border p-2">
+    <div className="bg-background sticky top-0 z-10 flex items-center justify-between gap-2 rounded-b-md p-2">
       {width && width >= 1024 && (
-        <div className="flex items-center justify-start text-4xl">
+        <div className="flex items-baseline justify-start gap-2 text-4xl">
           <FontAwesomeIcon
             className="text-primary size-12"
             icon={faBuildingColumns}
@@ -226,7 +226,10 @@ export function GenerationHeader() {
               checked={isGenerationMode}
               onCheckedChange={handleToggle}
             />
-            <Label className="text-xs lg:text-sm" htmlFor="generation-mode">
+            <Label
+              className="w-min text-xs md:w-max lg:text-sm"
+              htmlFor="generation-mode"
+            >
               Schedule Generation
             </Label>
           </div>

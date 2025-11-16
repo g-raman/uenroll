@@ -19,7 +19,7 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import Fuse from "fuse.js";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 // Remove spaces only when searching by course code
@@ -39,6 +39,9 @@ export default function Autocomplete() {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
   const [data, setData] = useDataParam();
+
+  const [open, setOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { data: dataAllCourses } = useQuery(
     trpc.getAvailableCoursesByTerm.queryOptions(
@@ -117,7 +120,11 @@ export default function Autocomplete() {
     () =>
       results.slice(0, 7).map(result => (
         <CommandItem
-          onSelect={() => setSelectedValue(result.item.courseCode)}
+          onSelect={() => {
+            setSelectedValue(result.item.courseCode);
+            inputRef.current?.blur();
+            setOpen(false);
+          }}
           key={`autocomplete-${result.item.courseCode}-${result.item.courseTitle}`}
         >
           {`${result.item.courseCode} ${result.item.displayCourseTitle}`}
@@ -128,24 +135,26 @@ export default function Autocomplete() {
   if (!dataAllCourses) return <Skeleton className="h-8" />;
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <Command>
         <PopoverTrigger asChild>
           <CommandInput
+            ref={inputRef}
             value={query}
-            onValueChange={newString =>
-              setQuery(normalizeCourseCode(newString))
-            }
+            onValueChange={newString => {
+              setQuery(normalizeCourseCode(newString));
+              setOpen(true);
+            }}
             placeholder="Type a course code or course name"
           />
         </PopoverTrigger>
 
         <PopoverContent
           onOpenAutoFocus={e => e.preventDefault()}
-          className="p-1"
+          className="w-76! p-1"
         >
           <CommandList>
-            <CommandEmpty className="px-2 py-4 text-xs">
+            <CommandEmpty className="px-2 py-4 text-center text-xs">
               {debouncedQuery.length > 0 &&
                 results.length === 0 &&
                 "No results found"}

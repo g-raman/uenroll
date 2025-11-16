@@ -66,7 +66,7 @@ export default function CalendarHeader({ $app, delta }: CalendarHeaderProps) {
     <>
       <div className="flex h-full w-full flex-wrap items-center gap-2">
         <Button
-          className="bg-background! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! border px-2 text-xs text-black shadow-xs! lg:px-6 dark:text-white"
+          className="bg-background! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! text-foreground! border px-2 text-xs shadow-xs! lg:px-6"
           variant="default"
           size="lg"
           onClick={() =>
@@ -90,14 +90,14 @@ export default function CalendarHeader({ $app, delta }: CalendarHeaderProps) {
           <CopyLinkButton />
           <DownloadCalendarButton />
           <Button
-            className="bg-background! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! border text-black shadow-xs! dark:text-white"
+            className="text-foreground! bg-background! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! border shadow-xs!"
             onClick={() => handleNextOrPrevious(delta * -1)}
           >
             <FontAwesomeIcon icon={faChevronLeft} />
           </Button>
 
           <Button
-            className="bg-background! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! border text-black shadow-xs! dark:text-white"
+            className="bg-background! hover:bg-accent! hover:text-accent-foreground! dark:bg-input/30! dark:border-input! dark:hover:bg-input/50! text-foreground! border shadow-xs!"
             onClick={() => handleNextOrPrevious(delta)}
           >
             <FontAwesomeIcon icon={faChevronRight} />
