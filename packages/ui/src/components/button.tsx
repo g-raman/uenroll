@@ -49,8 +49,8 @@ function Button({
   const Comp = asChild ? Slot : "button";
 
   return (
-    // HACK: I don't know why TS is yelling at me
-    // @ts-expect-error
+    // HACK
+    // @ts-expect-error: I don't know why TS is yelling at me
     <Comp
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
