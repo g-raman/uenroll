@@ -28,7 +28,7 @@ echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$WORK_DIR/uenroll/apps/scraper/.env"
 
 # Install dependencies
 cd "$WORK_DIR/uenroll"
-bun install --filter scraper
+bun install
 
 # Build Scraper
 bun run build --filter scraper
