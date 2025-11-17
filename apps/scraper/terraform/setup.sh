@@ -42,4 +42,4 @@ source /etc/profile
 
 cd "$WORK_DIR/uenroll/apps/scraper"
 chmod +x ./src/scrape.sh
-# ./src/scrape.sh >> /var/logs/scraper/scraper.log
+./src/scrape.sh >> /var/logs/scraper/scraper.log
