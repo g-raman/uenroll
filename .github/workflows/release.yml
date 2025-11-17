@@ -19,7 +19,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install Dependencies
-        run: bun installfrozen-lockfile
+        run: bun install
 
       - name: Create Versioning and Changelog Pull Request
         uses: changesets/action@v1
