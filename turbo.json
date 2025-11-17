@@ -5,7 +5,13 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "env": ["DATABASE_URL", "ENVIRONMENT", "NEXT_PUBLIC_BASE_URL"]
+      "env": [
+        "DATABASE_URL",
+        "ENVIRONMENT",
+        "NEXT_PUBLIC_BASE_URL",
+        "NEXT_PUBLIC_POSTHOG_HOST",
+        "NEXT_PUBLIC_POSTHOG_KEY"
+      ]
     },
     "lint": {
       "dependsOn": ["^lint"]
