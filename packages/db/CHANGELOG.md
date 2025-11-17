@@ -1,5 +1,11 @@
 # @repo/db
 
+## 0.6.0
+
+### Minor Changes
+
+- [#137](https://github.com/g-raman/uenroll/pull/137) [`34f162c`](https://github.com/g-raman/uenroll/commit/34f162c12fbd062d548ba84569c69f6db30bb55a) Thanks [@g-raman](https://github.com/g-raman)! - Use bun instead of pnpm
+
 ## 0.5.3
 
 ### Patch Changes

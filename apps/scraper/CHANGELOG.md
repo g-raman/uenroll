@@ -1,5 +1,17 @@
 # scraper
 
+## 1.6.0
+
+### Minor Changes
+
+- [#137](https://github.com/g-raman/uenroll/pull/137) [`34f162c`](https://github.com/g-raman/uenroll/commit/34f162c12fbd062d548ba84569c69f6db30bb55a) Thanks [@g-raman](https://github.com/g-raman)! - Use bun instead of pnpm
+
+- [#139](https://github.com/g-raman/uenroll/pull/139) [`9309484`](https://github.com/g-raman/uenroll/commit/9309484ab2bedab1f124f7702456ed9c1511b6a3) Thanks [@g-raman](https://github.com/g-raman)! - Migrate script to use bun
+
+### Patch Changes
+
+- [#131](https://github.com/g-raman/uenroll/pull/131) [`99f2e26`](https://github.com/g-raman/uenroll/commit/99f2e26eca69a9fc2b0d407894ab2c0d2e26d515) Thanks [@g-raman](https://github.com/g-raman)! - Update dependencies
+
 ## 1.5.0
 
 ### Minor Changes
