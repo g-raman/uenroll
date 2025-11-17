@@ -18,6 +18,7 @@ echo "Total Scraping Time: $execution_time seconds"
 bun db:cleanup
 
 # Take down AWS resources
+source /etc/profile
 curl -L \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer $GITHUB_TOKEN" \
