@@ -49,9 +49,53 @@ data "aws_ami" "latest_amazon_linux" {
   }
 }
 
+# --- Networking setup ---
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "scraper-vpc"
+  }
+}
+
+resource "aws_subnet" "public" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.1.0/24"
+  map_public_ip_on_launch = true
+  availability_zone       = "us-east-1a"
+  tags = {
+    Name = "scraper-public-subnet"
+  }
+}
+
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "scraper-igw"
+  }
+}
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Name = "scraper-public-rt"
+  }
+}
+
+resource "aws_route_table_association" "public_assoc" {
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.public.id
+}
+
 resource "aws_security_group" "scraper_sg" {
   name        = "uenroll-scraper-sg"
   description = "Allow SSH and HTTP traffic"
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     from_port   = 22
@@ -112,8 +156,9 @@ locals {
 
 resource "aws_instance" "scraper" {
   ami                    = data.aws_ami.latest_amazon_linux.id
-  instance_type          = "t4g.nano"
+  instance_type          = "t4g.small"
   key_name               = aws_key_pair.scraper_key_pair.key_name
+  subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.scraper_sg.id]
   user_data = templatefile("${path.module}/setup.sh", {
     DATABASE_URL = local.database_url
