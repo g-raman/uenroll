@@ -6,7 +6,7 @@
 # docker stop $(docker ps -q)
 # docker container prune -f
 
-source ~/.bashrc
+source /home/ec2-user/.bashrc
 
 start_time=$(date +%s)
 bun scrape:subjects
