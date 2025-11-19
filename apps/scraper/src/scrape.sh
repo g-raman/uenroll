@@ -6,6 +6,8 @@
 # docker stop $(docker ps -q)
 # docker container prune -f
 
+source ~/.bashrc
+
 start_time=$(date +%s)
 bun scrape:subjects
 bun scrape:terms 
