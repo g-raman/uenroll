@@ -26,6 +26,10 @@ git clone https://github.com/g-raman/uenroll.git "$WORK_DIR/uenroll"
 # Add API key to .env
 echo "DATABASE_URL=\"${DATABASE_URL}\"" >> "$WORK_DIR/uenroll/apps/scraper/.env"
 
+# Add dummy vars
+echo "NEXT_PUBLIC_POSTHOG_KEY=\"\"" >> "$WORK_DIR/uenroll/apps/scraper/.env"
+echo "NEXT_PUBLIC_POSTHOG_HOST=\"https://dummyurl.com\"" >> "$WORK_DIR/uenroll/apps/scraper/.env"
+
 # Install dependencies
 cd "$WORK_DIR/uenroll"
 bun install
