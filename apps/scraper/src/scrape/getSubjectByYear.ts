@@ -36,6 +36,8 @@ export default async function getSubjectByYear(
     ICSID: icsid,
     UO_PUB_SRCH_WRK_UO_LNG_EN$chk$0: english ? "Y" : "N",
     UO_PUB_SRCH_WRK_UO_LNG_FR$chk$0: french ? "Y" : "N",
+    UO_PUB_SRCH_WRK_UO_LNG_OT$chk$0: "Y",
+    UO_PUB_SRCH_WRK_UO_LNG_BI$chk$0: "Y",
     CLASS_SRCH_WRK2_STRM$35$: term.value,
     SSR_CLSRCH_WRK_SUBJECT$0: subject.toUpperCase(),
     SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$0: "G",
