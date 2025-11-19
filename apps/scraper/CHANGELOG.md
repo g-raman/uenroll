@@ -1,5 +1,11 @@
 # scraper
 
+## 1.6.1
+
+### Patch Changes
+
+- [#141](https://github.com/g-raman/uenroll/pull/141) [`5e0cdbf`](https://github.com/g-raman/uenroll/commit/5e0cdbf4f0575082266edc839b24458c464ef2ba) Thanks [@g-raman](https://github.com/g-raman)! - Fix check other and billingual option for languages because certain search results are excluded otherwise
+
 ## 1.6.0
 
 ### Minor Changes
