@@ -5,7 +5,7 @@ import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
 import { useMode } from "@/stores/modeStore";
 import { coursesToDownloadableCalendarEvents } from "@/utils/mappers/calendarDownloadable";
 import { scheduleToSelected } from "@/utils/mappers/schedule";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -73,7 +73,7 @@ export default function DownloadCalendarButton() {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="text-primary !border-input !border !px-3"
+          className="text-foreground !border-input !border !px-3"
           variant="default"
           size="lg"
           onClick={handleDownload}
@@ -82,7 +82,7 @@ export default function DownloadCalendarButton() {
             (!isGenerationMode && !hasAnySelectedSessions)
           }
         >
-          <FontAwesomeIcon className="size-4" icon={faDownload} />
+          <FontAwesomeIcon className="size-4" icon={faFloppyDisk} />
           <p className="hidden text-xs min-[1440px]:inline sm:inline md:hidden">
             Export
           </p>
