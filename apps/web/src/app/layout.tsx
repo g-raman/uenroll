@@ -4,8 +4,6 @@ import "./app.css";
 import "@repo/ui/shadcn.css";
 import { Toaster } from "@repo/ui/components/sonner";
 import { NuqsAdapter } from "nuqs/adapters/next";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "next-themes";
 import { Suspense } from "react";
 import Provider from "./_trpc/Provider";
@@ -79,8 +77,6 @@ export default function RootLayout({
             </Provider>
           </NuqsAdapter>
         </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );
