@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 0.5.2
+
+### Patch Changes
+
+- [#143](https://github.com/g-raman/uenroll/pull/143) [`3a8bcac`](https://github.com/g-raman/uenroll/commit/3a8bcac4b7470406ad7283229c03d98655199fa9) Thanks [@g-raman](https://github.com/g-raman)! - Update deps
+
 ## 0.5.1
 
 ### Patch Changes
