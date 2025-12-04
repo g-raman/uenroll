@@ -1,5 +1,15 @@
 # web
 
+## 1.2.0
+
+### Minor Changes
+
+- [#144](https://github.com/g-raman/uenroll/pull/144) [`cd368a5`](https://github.com/g-raman/uenroll/commit/cd368a53d437fabc8bc48f031a952ca8de72c833) Thanks [@g-raman](https://github.com/g-raman)! - Remove vercel anayltics
+
+### Patch Changes
+
+- [#143](https://github.com/g-raman/uenroll/pull/143) [`3a8bcac`](https://github.com/g-raman/uenroll/commit/3a8bcac4b7470406ad7283229c03d98655199fa9) Thanks [@g-raman](https://github.com/g-raman)! - Update deps
+
 ## 1.1.0
 
 ### Minor Changes
