@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "dotenv": "^17.2.0",
-    "drizzle-orm": "^0.45.0",
+    "drizzle-orm": "^0.45.1",
     "neverthrow": "^8.2.0",
     "postgres": "^3.4.7"
   },
@@ -48,7 +48,7 @@
     "@repo/env": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^24.0.13",
+    "@types/node": "^25.0.1",
     "drizzle-kit": "^0.31.8",
     "eslint": "catalog:",
     "typescript": "catalog:"

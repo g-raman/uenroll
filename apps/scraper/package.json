@@ -24,10 +24,10 @@
     "@repo/db": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^24.10.0",
+    "@types/node": "^25.0.1",
     "domhandler": "^5.0.3",
     "eslint": "catalog:",
-    "puppeteer-core": "^24.32.0",
+    "puppeteer-core": "^24.33.0",
     "typescript": "catalog:"
   }
 }
