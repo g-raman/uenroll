@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 0.5.3
+
+### Patch Changes
+
+- [#146](https://github.com/g-raman/uenroll/pull/146) [`fe81598`](https://github.com/g-raman/uenroll/commit/fe815982bda4ff5f6a733c8ba42a4fcf5a62d1d2) Thanks [@g-raman](https://github.com/g-raman)! - Update dependencies
+
 ## 0.5.2
 
 ### Patch Changes
