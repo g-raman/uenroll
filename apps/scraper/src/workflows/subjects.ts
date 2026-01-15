@@ -98,7 +98,7 @@ export class SubjectsWorkflow extends WorkflowEntrypoint<
               );
 
               if (english.isOk()) {
-                const result = await upsertCourseDetails(db, english.value);
+                const result = await upsertCourseDetails(english.value, db);
                 if (result.isErr()) {
                   console.error(
                     `Failed to upsert English courses for ${subject}: ${result.error}`,
@@ -124,7 +124,7 @@ export class SubjectsWorkflow extends WorkflowEntrypoint<
               );
 
               if (french.isOk()) {
-                const result = await upsertCourseDetails(db, french.value);
+                const result = await upsertCourseDetails(french.value, db);
                 if (result.isErr()) {
                   console.error(
                     `Failed to upsert French courses for ${subject}: ${result.error}`,
@@ -159,7 +159,7 @@ export class SubjectsWorkflow extends WorkflowEntrypoint<
               };
             } else {
               // Success with both languages
-              const result = await upsertCourseDetails(db, bothLanguages.value);
+              const result = await upsertCourseDetails(bothLanguages.value, db);
               if (result.isErr()) {
                 console.error(
                   `Failed to upsert courses for ${subject}: ${result.error}`,
@@ -188,8 +188,8 @@ export class SubjectsWorkflow extends WorkflowEntrypoint<
 
       // Remove sessions older than 5 hours
       const removeSessionsResult = await removeOldSessions(
-        db,
         5 * 60 * 60 * 1000,
+        db,
       );
 
       if (removeSessionsResult.isErr()) {

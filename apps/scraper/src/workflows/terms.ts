@@ -68,7 +68,7 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
     // Step 3: Update database with new terms
     await step.do("update-terms-db", async () => {
       const db = createDb(this.env);
-      const result = await updateAvailableTerms(db, scrapedTerms);
+      const result = await updateAvailableTerms(scrapedTerms, db);
 
       if (result.isErr()) {
         throw new Error(`Failed to update terms: ${result.error.message}`);
@@ -93,7 +93,7 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
       }
 
       const db = createDb(this.env);
-      const result = await deleteTerms(db, termsToDelete);
+      const result = await deleteTerms(termsToDelete, db);
 
       if (result.isErr()) {
         console.error(`Failed to delete terms: ${result.error.message}`);
@@ -130,7 +130,7 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
     // Step 6: Update database with subjects
     await step.do("update-subjects-db", async () => {
       const db = createDb(this.env);
-      const result = await updateAvailableSubjects(db, scrapedSubjects);
+      const result = await updateAvailableSubjects(scrapedSubjects, db);
 
       if (result.isErr()) {
         throw new Error(`Failed to update subjects: ${result.error.message}`);
