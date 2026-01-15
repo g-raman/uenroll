@@ -28,8 +28,7 @@
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
-      "id": "a24d5ae3a33047c2acdf27cc18526246",
-      "remote": true
+      "id": "a24d5ae3a33047c2acdf27cc18526246"
     }
   ],
   // Environment variables
