@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import { err, Result, ResultAsync } from "neverthrow";
-import { COURSE_REGISTRY_URL } from "../utils/constants.js";
+import { COURSE_REGISTRY_URL } from "./constants.js";
 
 /**
  * Cookie jar for maintaining session state across requests.

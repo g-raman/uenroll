@@ -1,8 +1,8 @@
 import type { TermInsert } from "@repo/db/types";
 import { ok, err, ResultAsync, type Result } from "neverthrow";
 import { createFetchWithCookies } from "../lib/cookies.js";
-import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 import * as cheerio from "cheerio";
+import { COURSE_REGISTRY_URL } from "../lib/constants.js";
 
 /*
  * Scrape available terms from the course registry
