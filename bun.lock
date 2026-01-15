@@ -30,7 +30,6 @@
         "postgres": "^3.4.7",
       },
       "devDependencies": {
-        "@cloudflare/workers-types": "^4.20241230.0",
         "@repo/db": "workspace:*",
         "@repo/eslint-config": "workspace:*",
         "@repo/typescript-config": "workspace:*",
