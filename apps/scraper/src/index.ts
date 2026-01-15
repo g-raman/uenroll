@@ -177,9 +177,7 @@ export default {
     console.log(`Cron triggered at ${startTime}`);
 
     try {
-      const instance = await env.MAIN_WORKFLOW.create({
-        id: `scheduled-${startTime}`,
-      });
+      const instance = await env.MAIN_WORKFLOW.create();
       console.log(`Triggered main workflow: ${instance.id}`);
     } catch (error) {
       console.error(
