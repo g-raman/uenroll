@@ -2,6 +2,7 @@ import {
   WorkflowEntrypoint,
   type WorkflowEvent,
   type WorkflowStep,
+  type WorkflowStepConfig,
 } from "cloudflare:workers";
 import type { TermInsert, SubjectInsert } from "@repo/db/types";
 import {
@@ -13,6 +14,14 @@ import {
 import { scrapeAvailableTerms } from "../scrape/terms.js";
 import { scrapeAvailableSubjects } from "../scrape/subjects.js";
 import { createDb } from "../utils/db.js";
+
+const defaultConfig: WorkflowStepConfig = {
+  retries: {
+    limit: 3,
+    delay: "10 seconds",
+    backoff: "exponential",
+  },
+};
 
 /**
  * Workflow to scrape and update available terms and subjects.
@@ -29,13 +38,7 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
     // Step 1: Scrape available terms from uOttawa
     const scrapedTerms = await step.do(
       "scrape-terms",
-      {
-        retries: {
-          limit: 3,
-          delay: "10 seconds",
-          backoff: "exponential",
-        },
-      },
+      defaultConfig,
       async () => {
         const result = await scrapeAvailableTerms();
 
@@ -49,21 +52,25 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
     );
 
     // Step 2: Get current terms from database (for comparison)
-    const currentTerms = await step.do("fetch-current-terms", async () => {
-      const db = createDb(this.env);
-      const result = await getAvailableTerms(db);
+    const currentTerms = await step.do(
+      "get-current-terms",
+      defaultConfig,
+      async () => {
+        const db = createDb(this.env);
+        const result = await getAvailableTerms(db);
 
-      if (result.isErr()) {
-        throw new Error(
-          `Failed to fetch current terms: ${result.error.message}`,
-        );
-      }
+        if (result.isErr()) {
+          throw new Error(
+            `Failed to fetch current terms: ${result.error.message}`,
+          );
+        }
 
-      return result.value;
-    });
+        return result.value;
+      },
+    );
 
     // Step 3: Update database with new terms
-    await step.do("update-terms-db", async () => {
+    await step.do("update-terms", defaultConfig, async () => {
       const db = createDb(this.env);
       const result = await updateAvailableTerms(scrapedTerms, db);
 
@@ -76,7 +83,7 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
     });
 
     // Step 4: Delete outdated terms
-    await step.do("delete-outdated-terms", async () => {
+    await step.do("delete-outdated-terms", defaultConfig, async () => {
       const termsToDelete = currentTerms.filter(
         currentTerm =>
           !scrapedTerms.some(
@@ -94,7 +101,6 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
 
       if (result.isErr()) {
         console.error(`Failed to delete terms: ${result.error.message}`);
-        // Don't throw - this is not critical
         return { deleted: 0, error: result.error.message };
       }
 
@@ -105,13 +111,7 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
     // Step 5: Scrape available subjects
     const scrapedSubjects = await step.do(
       "scrape-subjects",
-      {
-        retries: {
-          limit: 3,
-          delay: "10 seconds",
-          backoff: "exponential",
-        },
-      },
+      defaultConfig,
       async () => {
         const result = await scrapeAvailableSubjects();
 
@@ -125,7 +125,7 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
     );
 
     // Step 6: Update database with subjects
-    await step.do("update-subjects-db", async () => {
+    await step.do("update-subjects-db", defaultConfig, async () => {
       const db = createDb(this.env);
       const result = await updateAvailableSubjects(scrapedSubjects, db);
 
