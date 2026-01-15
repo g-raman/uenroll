@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import { err, ok, Result, ResultAsync } from "neverthrow";
-import type { CourseDetailsInsert, Term, SubjectInsert } from "@repo/db/types";
+import type { CourseDetailsInsert, Term } from "@repo/db/types";
 import {
   getCourseCodeAndCourseTitle,
   getDates,
@@ -20,8 +20,6 @@ import {
   COURSE_REGISTRY_URL,
 } from "./cookies.js";
 
-const COURSE_CATALOGUE_URL = "https://catalogue.uottawa.ca/en/courses/";
-
 const MAX_RETRIES_FOR_ICSID = 5;
 const FIRST_YEAR = 1;
 const LAST_YEAR = 6;
@@ -29,76 +27,6 @@ const LAST_YEAR = 6;
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";
 const COURSE_TITLE_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2GP$";
 const SECTION_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX3$";
-
-/**
- * Scrape available subjects from the course catalogue
- */
-export async function scrapeAvailableSubjects(): Promise<
-  Result<SubjectInsert[], Error>
-> {
-  const response = await ResultAsync.fromPromise(
-    fetch(COURSE_CATALOGUE_URL),
-    error => new Error(`Failed to fetch course catalogue: ${error}`),
-  );
-
-  if (response.isErr()) {
-    return err(response.error);
-  }
-
-  const html = await ResultAsync.fromPromise(
-    response.value.text(),
-    error => new Error(`Failed to get HTML text: ${error}`),
-  );
-
-  if (html.isErr()) {
-    return err(html.error);
-  }
-
-  const $ = cheerio.load(html.value);
-  const SUBJECT_CODE_REGEX = /\(([^()]*)\)(?!.*\([^()]*\))/;
-  const subjectCodeRegex = new RegExp(SUBJECT_CODE_REGEX);
-
-  const subjects: SubjectInsert[] = [];
-
-  $(".letternav-head + ul > li").each(function () {
-    const subject = $(this).text();
-    const isMatch = subjectCodeRegex.test(subject);
-    if (!isMatch) {
-      console.log(`Couldn't find a match for ${subject}`);
-      return;
-    }
-
-    const subjectCode = subjectCodeRegex.exec(subject);
-    if (!subjectCode || !subjectCode[1]) {
-      console.log(
-        `Something went wrong trying to match for subject: ${subject}`,
-      );
-      return;
-    }
-
-    subjects.push({ subject: subjectCode[1] });
-  });
-
-  // Manual entries for courses that aren't listed in the catalogue
-  const manualSubjects = [
-    "PBH",
-    "ADX",
-    "CTM",
-    "DTO",
-    "EHA",
-    "EMC",
-    "ESG",
-    "MEM",
-    "MIA",
-    "POP",
-    "PHM",
-  ];
-  for (const subject of manualSubjects) {
-    subjects.push({ subject });
-  }
-
-  return ok(subjects);
-}
 
 /**
  * Get search results for a specific subject and year
