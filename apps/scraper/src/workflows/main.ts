@@ -31,8 +31,8 @@ export class MainWorkflow extends WorkflowEntrypoint<Env, void> {
       "wait-for-terms",
       {
         retries: {
-          limit: 60, // Max 30 minutes of waiting
-          delay: "30 seconds",
+          limit: 30, // Max 5 minutes of waiting
+          delay: "10 seconds",
           backoff: "constant",
         },
       },
