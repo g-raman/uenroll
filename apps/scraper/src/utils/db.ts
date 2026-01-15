@@ -1,6 +1,4 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import * as schema from "@repo/db/schema";
+import { createDbFromConnectionString, type Database } from "@repo/db";
 
 /**
  * Creates a new database client for each request using Hyperdrive.
@@ -13,10 +11,9 @@ import * as schema from "@repo/db/schema";
  * const terms = await getAvailableTerms(db);
  * ```
  */
-export function createDb(env: Env) {
-  const client = postgres(env.HYPERDRIVE.connectionString, {
+export function createDb(env: Env): Database {
+  return createDbFromConnectionString(env.HYPERDRIVE.connectionString, {
     prepare: false,
-    max: 5, // Limit connections per Worker
+    max: 5,
   });
-  return drizzle(client, { schema, casing: "snake_case" });
 }
