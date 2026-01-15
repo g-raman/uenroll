@@ -1,8 +1,6 @@
 import * as cheerio from "cheerio";
 import { err, Result, ResultAsync } from "neverthrow";
-
-const COURSE_REGISTRY_URL =
-  "https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL";
+import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 
 /**
  * Cookie jar for maintaining session state across requests.
@@ -188,5 +186,3 @@ export async function getICSID(
 
   return icsid;
 }
-
-export { COURSE_REGISTRY_URL };
