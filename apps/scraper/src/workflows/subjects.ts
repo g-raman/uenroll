@@ -9,8 +9,8 @@ import {
   removeOldSessions,
   removeCoursesWithNoSessions,
 } from "@repo/db/queries";
-import { createDb } from "../lib/db.js";
-import { handleScraping, FIRST_YEAR, LAST_YEAR } from "../lib/scraper.js";
+import { createDb } from "../utils/db.js";
+import { handleScraping, FIRST_YEAR, LAST_YEAR } from "../utils/scraper.js";
 
 export interface SubjectsWorkflowParams {
   term: string; // e.g., "2025 Fall Term"

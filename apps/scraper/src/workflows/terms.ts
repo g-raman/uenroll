@@ -12,7 +12,7 @@ import {
 } from "@repo/db/queries";
 import { scrapeAvailableTerms } from "../scrape/terms.js";
 import { scrapeAvailableSubjects } from "../scrape/subjects.js";
-import { createDb } from "../lib/db.js";
+import { createDb } from "../utils/db.js";
 
 /**
  * Workflow to scrape and update available terms and subjects.

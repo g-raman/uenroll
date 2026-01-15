@@ -1,7 +1,7 @@
 import type { SubjectInsert } from "@repo/db/types";
 import { err, ok, ResultAsync, type Result } from "neverthrow";
 import * as cheerio from "cheerio";
-import { COURSE_CATALOGUE_URL } from "../lib/constants.js";
+import { COURSE_CATALOGUE_URL } from "../utils/constants.js";
 
 /**
  * Scrape available subjects from the course catalogue

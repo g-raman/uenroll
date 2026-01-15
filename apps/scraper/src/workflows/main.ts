@@ -3,7 +3,7 @@ import {
   type WorkflowEvent,
   type WorkflowStep,
 } from "cloudflare:workers";
-import { createDb } from "../lib/db.js";
+import { createDb } from "../utils/db.js";
 import { getAvailableTerms } from "@repo/db/queries";
 
 /**
