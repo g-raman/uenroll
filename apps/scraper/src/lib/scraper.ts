@@ -2,12 +2,9 @@ import * as cheerio from "cheerio";
 import { err, ok, Result, ResultAsync } from "neverthrow";
 import type { CourseDetailsInsert, Term } from "@repo/db/types";
 import { getError } from "../utils/scrape.js";
-import {
-  createFetchWithCookies,
-  getICSID,
-  COURSE_REGISTRY_URL,
-} from "./cookies.js";
+import { createFetchWithCookies, getICSID } from "./cookies.js";
 import { scrapeSearchResults } from "../scrape/courses.js";
+import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 
 const MAX_RETRIES_FOR_ICSID = 5;
 const FIRST_YEAR = 1;
