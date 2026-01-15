@@ -1,45 +1,40 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
+  "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "uenroll-scraper",
   "main": "src/index.ts",
   "compatibility_date": "2024-10-22",
   "compatibility_flags": ["nodejs_compat"],
-
   // Cron trigger: Every 2 days at 8 AM EST (13:00 UTC)
-  "triggers": {
-    "crons": ["0 13 */2 * *"],
-  },
-
+  "triggers": { "crons": ["0 13 */2 * *"] },
   // Workflow bindings
   "workflows": [
     {
       "name": "main-workflow",
       "binding": "MAIN_WORKFLOW",
-      "class_name": "MainWorkflow",
+      "class_name": "MainWorkflow"
     },
     {
       "name": "terms-workflow",
       "binding": "TERMS_WORKFLOW",
-      "class_name": "TermsWorkflow",
+      "class_name": "TermsWorkflow"
     },
     {
       "name": "subjects-workflow",
       "binding": "SUBJECTS_WORKFLOW",
-      "class_name": "SubjectsWorkflow",
-    },
+      "class_name": "SubjectsWorkflow"
+    }
   ],
-
   // Hyperdrive database connection
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
-      "id": "1d4b042f1f7a49cc86218d6775aa52bd",
-    },
+      "id": "a24d5ae3a33047c2acdf27cc18526246",
+      "remote": true
+    }
   ],
-
   // Environment variables
   "vars": {
     "COURSE_REGISTRY_URL": "https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL",
-    "COURSE_CATALOGUE_URL": "https://catalogue.uottawa.ca/en/courses/",
-  },
+    "COURSE_CATALOGUE_URL": "https://catalogue.uottawa.ca/en/courses/"
+  }
 }
