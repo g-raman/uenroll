@@ -25,9 +25,7 @@
       "version": "1.6.1",
       "dependencies": {
         "cheerio": "^1.1.2",
-        "drizzle-orm": "^0.45.1",
         "neverthrow": "^8.2.0",
-        "postgres": "^3.4.7",
       },
       "devDependencies": {
         "@repo/db": "workspace:*",
