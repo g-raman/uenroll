@@ -172,7 +172,7 @@ export default {
    * This triggers the main workflow which orchestrates the entire scraping process.
    */
   async scheduled(controller: ScheduledController, env: Env): Promise<void> {
-    const startTime = new Date().toISOString();
+    const startTime = new Date(controller.scheduledTime).toISOString();
 
     console.log(`Cron triggered at ${startTime}`);
 
