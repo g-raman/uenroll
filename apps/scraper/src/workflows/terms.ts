@@ -12,10 +12,8 @@ import {
   deleteTerms,
   updateAvailableSubjects,
 } from "../lib/db.js";
-import {
-  scrapeAvailableTerms,
-  scrapeAvailableSubjects,
-} from "../lib/scraper.js";
+import { scrapeAvailableSubjects } from "../lib/scraper.js";
+import { scrapeAvailableTerms } from "../scrape/terms.js";
 
 /**
  * Workflow to scrape and update available terms and subjects.

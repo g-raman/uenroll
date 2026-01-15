@@ -1,11 +1,6 @@
 import * as cheerio from "cheerio";
 import { err, ok, Result, ResultAsync } from "neverthrow";
-import type {
-  CourseDetailsInsert,
-  Term,
-  TermInsert,
-  SubjectInsert,
-} from "@repo/db/types";
+import type { CourseDetailsInsert, Term, SubjectInsert } from "@repo/db/types";
 import {
   getCourseCodeAndCourseTitle,
   getDates,
@@ -34,58 +29,6 @@ const LAST_YEAR = 6;
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";
 const COURSE_TITLE_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2GP$";
 const SECTION_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX3$";
-
-/**
- * Scrape available terms from the course registry
- */
-export async function scrapeAvailableTerms(): Promise<
-  Result<TermInsert[], Error>
-> {
-  const fetchWithCookies = createFetchWithCookies();
-
-  const response = await ResultAsync.fromPromise(
-    fetchWithCookies(COURSE_REGISTRY_URL),
-    error => new Error(`Failed to fetch course registry: ${error}`),
-  );
-
-  if (response.isErr()) {
-    return err(response.error);
-  }
-
-  const html = await ResultAsync.fromPromise(
-    response.value.text(),
-    error => new Error(`Failed to get HTML text: ${error}`),
-  );
-
-  if (html.isErr()) {
-    return err(html.error);
-  }
-
-  console.log(html.value);
-
-  const $ = cheerio.load(html.value);
-  const terms: TermInsert[] = [];
-
-  $("[id='CLASS_SRCH_WRK2_STRM$35$']")
-    .find("option")
-    .each(function (this) {
-      const option = $(this);
-      const value = option.attr("value");
-
-      if (!value || value === "") {
-        return;
-      }
-
-      const term = option.text();
-      terms.push({ term, value });
-    });
-
-  if (terms.length === 0) {
-    return err(new Error("No terms found"));
-  }
-
-  return ok(terms);
-}
 
 /**
  * Scrape available subjects from the course catalogue
