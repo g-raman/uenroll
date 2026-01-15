@@ -30,8 +30,6 @@ export async function scrapeAvailableTerms(): Promise<
     return err(html.error);
   }
 
-  console.log(html.value);
-
   const $ = cheerio.load(html.value);
   const terms: TermInsert[] = [];
 
