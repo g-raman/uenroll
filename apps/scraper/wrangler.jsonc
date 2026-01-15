@@ -32,9 +32,4 @@
       "localConnectionString": "postgresql://postgres:postgres@localhost:5432/postgres"
     }
   ],
-  // Environment variables
-  "vars": {
-    "COURSE_REGISTRY_URL": "https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL",
-    "COURSE_CATALOGUE_URL": "https://catalogue.uottawa.ca/en/courses/"
-  }
 }
