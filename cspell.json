@@ -13,6 +13,9 @@
     "PSGROUPBOXLABEL",
     "Sess",
     "CLSRCH",
-    "Hyperdrive"
+    "Hyperdrive",
+    "ICAJAX",
+    "ICNAVTYPEDROPDOWN",
+    "RPTCK"
   ]
 }
