@@ -11,7 +11,7 @@ import {
 } from "@repo/db/queries";
 import { createDb } from "../utils/db.js";
 import { handleScraping } from "../utils/scraper.js";
-import { FIRST_YEAR, LAST_YEAR } from "../utils/constants.js";
+import { defaultConfig, FIRST_YEAR, LAST_YEAR } from "../utils/constants.js";
 
 export interface SubjectsWorkflowParams {
   term: string; // e.g., "2025 Fall Term"
@@ -43,7 +43,7 @@ export class SubjectsWorkflow extends WorkflowEntrypoint<
     console.log(`Starting subjects workflow for term: ${term} (${termCode})`);
 
     // Step 1: Get all subjects from database
-    const subjects = await step.do("fetch-subjects", async () => {
+    const subjects = await step.do("get-subjects", defaultConfig, async () => {
       const db = createDb(this.env);
       const result = await getAvailableSubjects(db);
 
@@ -65,13 +65,7 @@ export class SubjectsWorkflow extends WorkflowEntrypoint<
       for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
         await step.do(
           `scrape-${subject}-year${year}`,
-          {
-            retries: {
-              limit: 3,
-              delay: "10 seconds",
-              backoff: "exponential",
-            },
-          },
+          defaultConfig,
           async () => {
             const db = createDb(this.env);
 
@@ -188,7 +182,7 @@ export class SubjectsWorkflow extends WorkflowEntrypoint<
     }
 
     // Final step: Cleanup old sessions
-    await step.do("cleanup-old-sessions", async () => {
+    await step.do("cleanup-old-sessions", defaultConfig, async () => {
       const db = createDb(this.env);
 
       // Remove sessions older than 5 hours
