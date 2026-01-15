@@ -8,10 +8,7 @@
     "deploy": "wrangler deploy",
     "check-types": "wrangler types && tsc --noEmit",
     "lint": "eslint .",
-    "db:cleanup": "bun src/cleanup.ts",
-    "scrape:courses": "bun src/main.ts",
-    "scrape:subjects": "bun src/scrape/scrapeAvailableSubjects.ts",
-    "scrape:terms": "bun src/scrape/scrapeAvailableTerms.ts"
+    "db:cleanup": "bun src/cleanup.ts"
   },
   "dependencies": {
     "cheerio": "^1.1.2",
