@@ -7,8 +7,6 @@ import { getError } from "../scrape/utils.js";
 import { COURSE_REGISTRY_URL } from "./constants.js";
 
 const MAX_RETRIES_FOR_ICSID = 5;
-const FIRST_YEAR = 1;
-const LAST_YEAR = 6;
 
 /**
  * Get search results for a specific subject and year
@@ -131,6 +129,3 @@ export async function handleScraping(
 
   return ok(results);
 }
-
-// Export constants for use in workflows
-export { FIRST_YEAR, LAST_YEAR };
