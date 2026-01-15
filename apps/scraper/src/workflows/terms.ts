@@ -3,7 +3,7 @@ import {
   type WorkflowEvent,
   type WorkflowStep,
 } from "cloudflare:workers";
-import type { Env, TermData } from "../lib/types.js";
+import type { TermData } from "../lib/types.js";
 import type { TermInsert, SubjectInsert } from "@repo/db/types";
 import {
   getAvailableTerms,
@@ -26,7 +26,7 @@ import { createDb } from "../lib/db.js";
  * 5. Update database with subjects
  */
 export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
-  override async run(event: WorkflowEvent<void>, step: WorkflowStep) {
+  override async run(_: WorkflowEvent<void>, step: WorkflowStep) {
     // Step 1: Scrape available terms from uOttawa
     const scrapedTerms = await step.do(
       "scrape-terms",

@@ -1,5 +1,3 @@
-import type { Env } from "./lib/types.js";
-
 export { MainWorkflow } from "./workflows/main.js";
 export { TermsWorkflow } from "./workflows/terms.js";
 export { SubjectsWorkflow } from "./workflows/subjects.js";
@@ -173,18 +171,14 @@ export default {
    * Cron handler - triggered by the scheduled cron job.
    * This triggers the main workflow which orchestrates the entire scraping process.
    */
-  async scheduled(
-    event: ScheduledEvent,
-    env: Env,
-    _: ExecutionContext,
-  ): Promise<void> {
-    console.log(
-      `Cron triggered at ${new Date(event.scheduledTime).toISOString()}`,
-    );
+  async scheduled(controller: ScheduledController, env: Env): Promise<void> {
+    const startTime = new Date().toISOString();
+
+    console.log(`Cron triggered at ${startTime}`);
 
     try {
       const instance = await env.MAIN_WORKFLOW.create({
-        id: `scheduled-${event.scheduledTime}`,
+        id: `scheduled-${startTime}`,
       });
       console.log(`Triggered main workflow: ${instance.id}`);
     } catch (error) {

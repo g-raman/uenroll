@@ -3,7 +3,7 @@ import {
   type WorkflowEvent,
   type WorkflowStep,
 } from "cloudflare:workers";
-import type { Env, SubjectsWorkflowParams } from "../lib/types.js";
+import type { SubjectsWorkflowParams } from "../lib/types.js";
 import {
   getAvailableSubjects,
   upsertCourseDetails,

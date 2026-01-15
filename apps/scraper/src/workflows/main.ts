@@ -3,7 +3,6 @@ import {
   type WorkflowEvent,
   type WorkflowStep,
 } from "cloudflare:workers";
-import type { Env } from "../lib/types.js";
 import { createDb } from "../lib/db.js";
 import { getAvailableTerms } from "@repo/db/queries";
 

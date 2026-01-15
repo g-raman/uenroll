@@ -1,7 +1,6 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "@repo/db/schema";
-import type { Env } from "./types.js";
 
 /**
  * Creates a new database client for each request using Hyperdrive.
