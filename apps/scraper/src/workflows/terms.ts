@@ -2,7 +2,6 @@ import {
   WorkflowEntrypoint,
   type WorkflowEvent,
   type WorkflowStep,
-  type WorkflowStepConfig,
 } from "cloudflare:workers";
 import type { TermInsert, SubjectInsert } from "@repo/db/types";
 import {
@@ -14,14 +13,7 @@ import {
 import { scrapeAvailableTerms } from "../scrape/terms.js";
 import { scrapeAvailableSubjects } from "../scrape/subjects.js";
 import { createDb } from "../utils/db.js";
-
-const defaultConfig: WorkflowStepConfig = {
-  retries: {
-    limit: 3,
-    delay: "10 seconds",
-    backoff: "exponential",
-  },
-};
+import { defaultConfig } from "../utils/constants.js";
 
 /**
  * Workflow to scrape and update available terms and subjects.
