@@ -70,7 +70,7 @@ export class MainWorkflow extends WorkflowEntrypoint<Env, void> {
     // Step 4: Trigger subject workflows for each term (using batch for efficiency)
     await step.do("trigger-subject-workflows", async () => {
       const instances = terms.map(term => ({
-        id: `subjects-${term.value.replace(/\s+/g, "-")}-${Date.now()}`,
+        id: `subjects-${term.value.replace(/\s+/g, "-")}`,
         params: {
           term: term.value,
           termCode: term.term,
