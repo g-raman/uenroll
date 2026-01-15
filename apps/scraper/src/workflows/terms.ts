@@ -3,7 +3,6 @@ import {
   type WorkflowEvent,
   type WorkflowStep,
 } from "cloudflare:workers";
-import type { TermData } from "../lib/types.js";
 import type { TermInsert, SubjectInsert } from "@repo/db/types";
 import {
   getAvailableTerms,
@@ -60,7 +59,7 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
         );
       }
 
-      return result.value as TermData[];
+      return result.value;
     });
 
     // Step 3: Update database with new terms

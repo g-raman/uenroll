@@ -3,7 +3,6 @@ import {
   type WorkflowEvent,
   type WorkflowStep,
 } from "cloudflare:workers";
-import type { SubjectsWorkflowParams } from "../lib/types.js";
 import {
   getAvailableSubjects,
   upsertCourseDetails,
@@ -12,6 +11,11 @@ import {
 } from "@repo/db/queries";
 import { createDb } from "../lib/db.js";
 import { handleScraping, FIRST_YEAR, LAST_YEAR } from "../lib/scraper.js";
+
+export interface SubjectsWorkflowParams {
+  term: string; // e.g., "2025 Fall Term"
+  termCode: string; // e.g., "2259"
+}
 
 /**
  * Workflow to scrape all subjects for a specific term.
