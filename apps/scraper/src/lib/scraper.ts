@@ -19,9 +19,12 @@ import {
   processSessions,
   getError,
 } from "../utils/scrape.js";
+import {
+  createFetchWithCookies,
+  getICSID,
+  COURSE_REGISTRY_URL,
+} from "./cookies.js";
 
-const COURSE_REGISTRY_URL =
-  "https://uocampus.public.uottawa.ca/psc/csprpr9pub/EMPLOYEE/SA/c/UO_SR_AA_MODS.UO_PUB_CLSSRCH.GBL";
 const COURSE_CATALOGUE_URL = "https://catalogue.uottawa.ca/en/courses/";
 
 const MAX_RETRIES_FOR_ICSID = 5;
@@ -33,112 +36,15 @@ const COURSE_TITLE_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2GP$";
 const SECTION_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX3$";
 
 /**
- * Cookie store for maintaining session state across requests.
- * In Workers, we can't use fetch-cookie, so we manage cookies manually.
- */
-class CookieStore {
-  private cookies: Map<string, string> = new Map();
-
-  /**
-   * Extract cookies from a response and store them
-   */
-  extractFromResponse(response: Response): void {
-    // Use getSetCookie if available (modern browsers/runtimes), otherwise fall back to get
-    const setCookieHeaders =
-      (
-        response.headers as unknown as { getSetCookie?: () => string[] }
-      ).getSetCookie?.() ||
-      response.headers.get("set-cookie")?.split(/,(?=\s*\w+=)/) ||
-      [];
-
-    for (const cookieHeader of setCookieHeaders) {
-      const [cookiePart] = cookieHeader.split(";");
-      if (cookiePart) {
-        const [name, value] = cookiePart.split("=");
-        if (name && value) {
-          this.cookies.set(name.trim(), value.trim());
-        }
-      }
-    }
-  }
-
-  /**
-   * Get the Cookie header value for requests
-   */
-  getCookieHeader(): string {
-    return Array.from(this.cookies.entries())
-      .map(([name, value]) => `${name}=${value}`)
-      .join("; ");
-  }
-
-  /**
-   * Clear all cookies
-   */
-  clear(): void {
-    this.cookies.clear();
-  }
-}
-
-/**
- * Get ICSID token from the course registry page.
- * This token is required for making search requests.
- */
-async function getICSID(
-  cookieStore: CookieStore,
-): Promise<Result<string, Error>> {
-  const initialResponse = await ResultAsync.fromPromise(
-    fetch(COURSE_REGISTRY_URL, {
-      method: "GET",
-      headers: {
-        Cookie: cookieStore.getCookieHeader(),
-      },
-    }),
-    error => new Error(`Failed to fetch course registry HTML: ${error}`),
-  );
-
-  if (initialResponse.isErr()) {
-    return err(initialResponse.error);
-  }
-
-  // Extract cookies from response
-  cookieStore.extractFromResponse(initialResponse.value);
-
-  const initialHtml = await ResultAsync.fromPromise(
-    initialResponse.value.text(),
-    error => new Error(`Failed to parse HTML response: ${error}`),
-  );
-
-  if (initialHtml.isErr()) {
-    return err(initialHtml.error);
-  }
-
-  const icsid = Result.fromThrowable(
-    () => {
-      const $ = cheerio.load(initialHtml.value);
-      return $("input[name=ICSID]").attr("value");
-    },
-    error => new Error(`Failed to get ICSID: ${error}`),
-  )();
-
-  if (icsid.isErr()) {
-    return err(icsid.error);
-  }
-
-  if (!icsid.value) {
-    return err(new Error("ICSID not found in HTML"));
-  }
-
-  return ok(icsid.value);
-}
-
-/**
  * Scrape available terms from the course registry
  */
 export async function scrapeAvailableTerms(): Promise<
   Result<TermInsert[], Error>
 > {
+  const fetchWithCookies = createFetchWithCookies();
+
   const response = await ResultAsync.fromPromise(
-    fetch(COURSE_REGISTRY_URL),
+    fetchWithCookies(COURSE_REGISTRY_URL),
     error => new Error(`Failed to fetch course registry: ${error}`),
   );
 
@@ -154,6 +60,8 @@ export async function scrapeAvailableTerms(): Promise<
   if (html.isErr()) {
     return err(html.error);
   }
+
+  console.log(html.value);
 
   const $ = cheerio.load(html.value);
   const terms: TermInsert[] = [];
@@ -259,7 +167,8 @@ export async function getSubjectByYear(
   english: boolean = true,
   french: boolean = true,
 ): Promise<Result<string, Error>> {
-  const cookieStore = new CookieStore();
+  // Create a cookie-aware fetch that maintains session across requests
+  const fetchWithCookies = createFetchWithCookies();
 
   // Get ICSID token with retry logic
   let icsid: string | undefined;
@@ -270,8 +179,8 @@ export async function getSubjectByYear(
       return err(new Error("Failed to get ICSID after max retries"));
     }
 
-    const icsidResult = await getICSID(cookieStore);
-    if (icsidResult.isOk()) {
+    const icsidResult = await getICSID(fetchWithCookies);
+    if (icsidResult.isOk() && icsidResult.value) {
       icsid = icsidResult.value;
     }
 
@@ -305,12 +214,12 @@ export async function getSubjectByYear(
 
   const body = new URLSearchParams(params);
 
+  // Use the same cookie-aware fetch for the POST request
   const response = await ResultAsync.fromPromise(
-    fetch(COURSE_REGISTRY_URL, {
+    fetchWithCookies(COURSE_REGISTRY_URL, {
       method: "POST",
       body,
       headers: {
-        Cookie: cookieStore.getCookieHeader(),
         "Content-Type": "application/x-www-form-urlencoded",
       },
     }),
