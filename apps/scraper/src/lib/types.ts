@@ -29,14 +29,3 @@ export interface SubjectData {
 export interface WorkflowInstanceInfo {
   id: string;
 }
-
-// Re-export types that will be needed across the codebase
-export type {
-  CourseDetailsInsert,
-  CourseInsert,
-  CourseComponentInsert,
-  SessionInsert,
-  TermInsert,
-  SubjectInsert,
-  Term,
-} from "@repo/db/types";
