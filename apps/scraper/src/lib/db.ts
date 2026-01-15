@@ -3,12 +3,6 @@ import postgres from "postgres";
 import * as schema from "@repo/db/schema";
 import type { Env } from "./types.js";
 
-// Re-export everything from @repo/db
-export * from "@repo/db/schema";
-export * from "@repo/db/types";
-export * from "@repo/db/queries";
-export type { Database } from "@repo/db";
-
 /**
  * Creates a new database client for each request using Hyperdrive.
  * IMPORTANT: In Cloudflare Workers, you must create a new client per request.

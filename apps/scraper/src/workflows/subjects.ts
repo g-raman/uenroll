@@ -5,12 +5,12 @@ import {
 } from "cloudflare:workers";
 import type { Env, SubjectsWorkflowParams } from "../lib/types.js";
 import {
-  createDb,
   getAvailableSubjects,
   upsertCourseDetails,
   removeOldSessions,
   removeCoursesWithNoSessions,
-} from "../lib/db.js";
+} from "@repo/db/queries";
+import { createDb } from "../lib/db.js";
 import { handleScraping, FIRST_YEAR, LAST_YEAR } from "../lib/scraper.js";
 
 /**

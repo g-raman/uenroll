@@ -4,7 +4,8 @@ import {
   type WorkflowStep,
 } from "cloudflare:workers";
 import type { Env } from "../lib/types.js";
-import { createDb, getAvailableTerms } from "../lib/db.js";
+import { createDb } from "../lib/db.js";
+import { getAvailableTerms } from "@repo/db/queries";
 
 /**
  * Main orchestrator workflow that coordinates the scraping process.

@@ -6,14 +6,14 @@ import {
 import type { Env, TermData } from "../lib/types.js";
 import type { TermInsert, SubjectInsert } from "@repo/db/types";
 import {
-  createDb,
   getAvailableTerms,
   updateAvailableTerms,
   deleteTerms,
   updateAvailableSubjects,
-} from "../lib/db.js";
+} from "@repo/db/queries";
 import { scrapeAvailableTerms } from "../scrape/terms.js";
 import { scrapeAvailableSubjects } from "../scrape/subjects.js";
+import { createDb } from "../lib/db.js";
 
 /**
  * Workflow to scrape and update available terms and subjects.
