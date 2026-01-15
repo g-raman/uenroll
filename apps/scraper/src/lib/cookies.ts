@@ -4,26 +4,19 @@ import { COURSE_REGISTRY_URL } from "../utils/constants.js";
 
 /**
  * Cookie jar for maintaining session state across requests.
- * In Workers, we can't use fetch-cookie, so we manage cookies manually.
  */
 class CookieJar {
   private cookies: Map<string, string> = new Map();
 
-  /**
-   * Extract cookies from a response and store them
-   */
   extractFromResponse(response: Response): void {
-    // Cloudflare Workers supports getSetCookie()
-    // Cast to access the method which exists at runtime but may not be in TS types
-    const setCookieHeaders = (
-      response.headers as Headers & { getSetCookie(): string[] }
-    ).getSetCookie();
+    const setCookieHeaders = response.headers.getSetCookie();
 
     for (const cookieHeader of setCookieHeaders) {
       const [cookiePart] = cookieHeader.split(";");
       if (cookiePart) {
         const [name, ...valueParts] = cookiePart.split("=");
-        const value = valueParts.join("="); // Handle values that contain =
+        const value = valueParts.join("=");
+
         if (name && value) {
           this.cookies.set(name.trim(), value.trim());
         }
@@ -31,25 +24,16 @@ class CookieJar {
     }
   }
 
-  /**
-   * Get the Cookie header value for requests
-   */
   getCookieHeader(): string {
     return Array.from(this.cookies.entries())
       .map(([name, value]) => `${name}=${value}`)
       .join("; ");
   }
 
-  /**
-   * Check if we have any cookies
-   */
   hasCookies(): boolean {
     return this.cookies.size > 0;
   }
 
-  /**
-   * Clear all cookies
-   */
   clear(): void {
     this.cookies.clear();
   }
@@ -57,9 +41,6 @@ class CookieJar {
 
 /**
  * Creates a fetch function that maintains cookies across requests.
- * Similar to fetch-cookie but works in Cloudflare Workers.
- *
- * Key difference from native fetch: handles redirects manually to maintain cookies.
  */
 export function createFetchWithCookies() {
   const cookieJar = new CookieJar();
@@ -73,15 +54,11 @@ export function createFetchWithCookies() {
       throw new Error("Too many redirects");
     }
 
-    // Build headers properly
     const headers = new Headers(init?.headers);
 
-    // Add default headers
     headers.set(
       "User-Agent",
-      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) " +
-        "AppleWebKit/537.36 (KHTML, like Gecko) " +
-        "Chrome/120.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     );
     headers.set(
       "Accept",
@@ -90,7 +67,6 @@ export function createFetchWithCookies() {
     headers.set("Accept-Language", "en-US,en;q=0.9");
     headers.set("Cache-Control", "no-cache");
 
-    // Add cookies from the jar
     const existingCookies = cookieJar.getCookieHeader();
     if (existingCookies) {
       headers.set("Cookie", existingCookies);
@@ -105,7 +81,7 @@ export function createFetchWithCookies() {
     const response = await fetch(url, {
       ...init,
       headers,
-      redirect: "manual", // Handle redirects manually to maintain cookies
+      redirect: "manual",
     });
 
     // Extract cookies from the response
