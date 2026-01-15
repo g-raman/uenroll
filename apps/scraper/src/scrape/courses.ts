@@ -10,7 +10,7 @@ import {
   getTimings,
   getTotalSections,
   processSessions,
-} from "../utils/scrape.js";
+} from "./utils.js";
 import * as cheerio from "cheerio";
 
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";

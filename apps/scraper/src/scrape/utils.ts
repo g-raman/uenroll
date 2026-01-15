@@ -58,7 +58,7 @@ export const getSectionDetail = (
 };
 
 /*
- * Gets total numer of search results
+ * Gets total number of search results
  */
 export const getTotalSections = ($: cheerio.CheerioAPI) => {
   const TOTAL_SEARCH_RESULTS_FOUND_LABEL_SELECTOR = ".PSGROUPBOXLABEL";
@@ -95,7 +95,7 @@ export const getCourseCodeAndCourseTitle = (
  * Original Structure:
  * M00-LEC<br>FullSess.
  *
- * We discard the last part as that's unecessary
+ * We discard the last part as that's unnecessary
  * We return the sub section and the component type
  */
 export const getSectionAndType = (
@@ -206,7 +206,7 @@ export const getStatus = (
 };
 
 /*
- * A course may have mutliple sessions. Example:
+ * A course may have multiple sessions. Example:
  * Tu 16:00 - 17:20
  * Th 14:30 - 15:50
  */
