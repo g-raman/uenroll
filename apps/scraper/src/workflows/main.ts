@@ -5,6 +5,7 @@ import {
 } from "cloudflare:workers";
 import { createDb } from "../utils/db.js";
 import { getAvailableTerms } from "@repo/db/queries";
+import { defaultConfig } from "../utils/constants.js";
 
 /**
  * Main orchestrator workflow that coordinates the scraping process.
@@ -68,7 +69,7 @@ export class MainWorkflow extends WorkflowEntrypoint<Env, void> {
     console.log(`Found ${terms.length} terms to process`);
 
     // Step 4: Trigger subject workflows for each term (using batch for efficiency)
-    await step.do("trigger-subject-workflows", async () => {
+    await step.do("trigger-subject-workflows", defaultConfig, async () => {
       const instances = terms.map(term => ({
         params: {
           term: term.value,
@@ -76,10 +77,10 @@ export class MainWorkflow extends WorkflowEntrypoint<Env, void> {
         },
       }));
 
-      const workflows = await this.env.SUBJECTS_WORKFLOW.createBatch(instances);
+      await this.env.SUBJECTS_WORKFLOW.createBatch(instances);
 
       console.log(`Triggered ${instances.length} subject workflows`);
-      return { triggeredTerms: terms.length, workflows };
+      return { triggeredTerms: terms.length };
     });
 
     console.log(
