@@ -63,31 +63,39 @@ export class SubjectsWorkflow extends WorkflowEntrypoint<
       batches.push(subjects.slice(i, i + BATCH_SIZE));
     }
 
-    console.log(`Split into ${batches.length} batches of up to ${BATCH_SIZE} subjects each`);
+    console.log(
+      `Split into ${batches.length} batches of up to ${BATCH_SIZE} subjects each`,
+    );
 
     // Step 3: Trigger SubjectBatchWorkflow for each batch
-    const batchIds = await step.do("trigger-batch-workflows", async () => {
-      const ids: string[] = [];
+    const batchIds = await step.do(
+      "trigger-batch-workflows",
+      defaultConfig,
+      async () => {
+        const ids: string[] = [];
 
-      for (let i = 0; i < batches.length; i++) {
-        const batch = batches[i];
-        if (!batch) continue;
+        for (let i = 0; i < batches.length; i++) {
+          const batch = batches[i];
+          if (!batch) continue;
 
-        const instance = await this.env.SUBJECT_BATCH_WORKFLOW.create({
-          id: `batch-${termCode}-${i}-${Date.now()}`,
-          params: {
-            term,
-            termCode,
-            subjects: batch,
-          },
-        });
+          const instance = await this.env.SUBJECT_BATCH_WORKFLOW.create({
+            id: `batch-${termCode}-${i}-${Date.now()}`,
+            params: {
+              term,
+              termCode,
+              subjects: batch,
+            },
+          });
 
-        ids.push(instance.id);
-        console.log(`Triggered batch ${i + 1}/${batches.length}: ${instance.id} with ${batch.length} subjects`);
-      }
+          ids.push(instance.id);
+          console.log(
+            `Triggered batch ${i + 1}/${batches.length}: ${instance.id} with ${batch.length} subjects`,
+          );
+        }
 
-      return ids;
-    });
+        return ids;
+      },
+    );
 
     // Step 4: Wait for all batch workflows to complete
     for (let i = 0; i < batchIds.length; i++) {
