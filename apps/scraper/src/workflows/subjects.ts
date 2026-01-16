@@ -79,7 +79,6 @@ export class SubjectsWorkflow extends WorkflowEntrypoint<
           if (!batch) continue;
 
           const instance = await this.env.SUBJECT_BATCH_WORKFLOW.create({
-            id: `b-${termCode}-${i}-${Date.now() % 1e8}`,
             params: {
               term,
               termCode,
