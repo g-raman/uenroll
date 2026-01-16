@@ -1,6 +1,7 @@
 export { MainWorkflow } from "./workflows/main.js";
 export { TermsWorkflow } from "./workflows/terms.js";
 export { SubjectsWorkflow } from "./workflows/subjects.js";
+export { SubjectBatchWorkflow } from "./workflows/subject-batch.js";
 
 export default {
   /**

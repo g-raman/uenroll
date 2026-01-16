@@ -22,6 +22,11 @@
       "name": "subjects-workflow",
       "binding": "SUBJECTS_WORKFLOW",
       "class_name": "SubjectsWorkflow"
+    },
+    {
+      "name": "subject-batch-workflow",
+      "binding": "SUBJECT_BATCH_WORKFLOW",
+      "class_name": "SubjectBatchWorkflow"
     }
   ],
   // Hyperdrive database connection
