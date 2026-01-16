@@ -70,7 +70,6 @@ export class MainWorkflow extends WorkflowEntrypoint<Env, void> {
     // Step 4: Trigger subject workflows for each term (using batch for efficiency)
     await step.do("trigger-subject-workflows", async () => {
       const instances = terms.map(term => ({
-        id: `subjects-${term.value.replace(/\s+/g, "-")}`,
         params: {
           term: term.value,
           termCode: term.term,
@@ -78,10 +77,9 @@ export class MainWorkflow extends WorkflowEntrypoint<Env, void> {
       }));
 
       const workflows = await this.env.SUBJECTS_WORKFLOW.createBatch(instances);
-      const ids = workflows.map(workflow => workflow.id);
 
       console.log(`Triggered ${instances.length} subject workflows`);
-      return { triggeredTerms: terms.length, ids };
+      return { triggeredTerms: terms.length, workflows };
     });
 
     console.log(
