@@ -6,7 +6,7 @@ import { scrapeSearchResults } from "../scrape/courses.js";
 import { getError } from "../scrape/utils.js";
 import { COURSE_REGISTRY_URL } from "./constants.js";
 
-const MAX_RETRIES_FOR_ICSID = 5;
+const MAX_RETRIES_FOR_ICSID = 8;
 
 /**
  * Get search results for a specific subject and year
