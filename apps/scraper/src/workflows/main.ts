@@ -77,10 +77,11 @@ export class MainWorkflow extends WorkflowEntrypoint<Env, void> {
         },
       }));
 
-      await this.env.SUBJECTS_WORKFLOW.createBatch(instances);
+      const workflows = await this.env.SUBJECTS_WORKFLOW.createBatch(instances);
+      const ids = workflows.map(workflow => workflow.id);
 
       console.log(`Triggered ${instances.length} subject workflows`);
-      return { triggeredTerms: terms.length };
+      return { triggeredTerms: terms.length, ids };
     });
 
     console.log(
