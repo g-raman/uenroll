@@ -6,7 +6,7 @@ import {
 import { upsertCourseDetails } from "@repo/db/queries";
 import { createDb } from "../utils/db.js";
 import { handleScrapingWithSession } from "../utils/scraper.js";
-import { getSession, type SessionData } from "../utils/cookies.js";
+import { getSession } from "../utils/cookies.js";
 import { defaultConfig, FIRST_YEAR, LAST_YEAR } from "../utils/constants.js";
 
 export interface SubjectBatchWorkflowParams {
