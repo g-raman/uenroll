@@ -184,6 +184,8 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
             }
           },
         );
+
+        await step.sleep("sleep", "1 second");
       }
     }
 
