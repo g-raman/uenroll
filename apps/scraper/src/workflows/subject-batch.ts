@@ -151,6 +151,11 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
                 success: true,
                 split: true,
               };
+            } else if (
+              bothLanguages.isErr() &&
+              bothLanguages.error.message === "Error with cookies"
+            ) {
+              throw new Error(bothLanguages.error.message);
             } else if (bothLanguages.isErr()) {
               // Other error (no results, etc.) - log but don't fail
               console.log(

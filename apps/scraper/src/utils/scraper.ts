@@ -242,6 +242,14 @@ export async function handleScrapingWithSession(
     results.courseComponents.length === 0 ||
     results.sessions.length === 0
   ) {
+    const requestIssue = parser(
+      'p:contains("You must have cookies enabled")',
+    ).text();
+
+    if (requestIssue && requestIssue.length >= 0) {
+      return err(new Error("Error with cookies"));
+    }
+
     return err(new Error("No search results found."));
   }
 
