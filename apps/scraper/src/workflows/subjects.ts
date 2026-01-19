@@ -16,7 +16,7 @@ export interface SubjectsWorkflowParams {
   termCode: string; // e.g., "2259"
 }
 
-const BATCH_SIZE = 30;
+const BATCH_SIZE = 20;
 
 /**
  * Workflow to scrape all subjects for a specific term.
