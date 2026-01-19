@@ -7,6 +7,10 @@
   // Cron trigger: Every 2 days at 8 AM EST (13:00 UTC)
   "triggers": { "crons": ["0 13 */2 * *"] },
   // Workflow bindings
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
   "workflows": [
     {
       "name": "main-workflow",
