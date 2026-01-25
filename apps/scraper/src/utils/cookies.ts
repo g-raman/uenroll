@@ -94,11 +94,6 @@ export function createFetchWithCookies() {
       headers.set("Cookie", existingCookies);
     }
 
-    // console.log(`[${redirectCount}] Fetching: ${url}`);
-    // console.log(
-    //   `[${redirectCount}] Sending cookies: ${existingCookies || "(none)"}`,
-    // );
-
     // Make the request - disable automatic redirects so we can handle cookies
     const response = await fetch(url, {
       ...init,
@@ -108,10 +103,6 @@ export function createFetchWithCookies() {
 
     // Extract cookies from the response
     cookieJar.extractFromResponse(response);
-    // console.log(
-    //   `[${redirectCount}] Received cookies: ${cookieJar.getCookieHeader()}`,
-    // );
-    // console.log(`[${redirectCount}] Response status: ${response.status}`);
 
     // Handle redirects manually
     if (response.status >= 300 && response.status < 400) {
@@ -120,7 +111,6 @@ export function createFetchWithCookies() {
         await response.body?.cancel();
         // Resolve relative URLs
         const redirectUrl = new URL(location, url).toString();
-        // console.log(`[${redirectCount}] Redirecting to: ${redirectUrl}`);
 
         // For 303 or POST->GET redirect, change method to GET
         const newInit = { ...init };
