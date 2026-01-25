@@ -5,8 +5,7 @@ import {
 } from "cloudflare:workers";
 import { upsertCourseDetails } from "@repo/db/queries";
 import { createDb } from "../utils/db.js";
-import { getSession } from "../utils/cookies.js";
-import { defaultConfig, FIRST_YEAR, LAST_YEAR } from "../utils/constants.js";
+import { FIRST_YEAR, LAST_YEAR } from "../utils/constants.js";
 import { handleScraping } from "../utils/scraper.js";
 
 export interface SubjectBatchWorkflowParams {
@@ -43,123 +42,140 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
     // Step 2-N: Scrape each subject and year combination using the session
     for (const subject of subjects) {
       for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
-        await step.do(
-          `scrape-${subject}-year${year}`,
-          defaultConfig,
-          async () => {
-            const db = createDb(this.env);
+        try {
+          await step.do(
+            `scrape-${subject}-year-${year}`,
+            {
+              retries: {
+                limit: 4,
+                backoff: "linear",
+                delay: "3 seconds",
+              },
+            },
+            async () => {
+              const db = createDb(this.env);
 
-            // First try with both languages
-            const bothLanguages = await handleScraping(
-              termObj,
-              year,
-              subject,
-              true,
-              true,
-            );
-
-            if (
-              bothLanguages.isErr() &&
-              bothLanguages.error.message === "Search results exceed 300 items."
-            ) {
-              // Split into English and French queries
-              console.log(
-                `Splitting ${subject} year ${year} into separate language queries`,
-              );
-
-              // English only
-              const english = await handleScraping(
+              // First try with both languages
+              const bothLanguages = await handleScraping(
                 termObj,
                 year,
                 subject,
                 true,
-                false,
-              );
-
-              if (english.isOk()) {
-                const result = await upsertCourseDetails(english.value, db);
-                if (result.isErr()) {
-                  console.error(
-                    `Failed to upsert English courses for ${subject}: ${result.error}`,
-                  );
-                } else {
-                  console.log(
-                    `Updated ${english.value.courses.length} English courses for ${subject}`,
-                  );
-                }
-              } else {
-                console.error(
-                  `Failed to scrape English ${subject}: ${english.error.message}`,
-                );
-              }
-
-              // French only
-              const french = await handleScraping(
-                termObj,
-                year,
-                subject,
-                false,
                 true,
               );
 
-              if (french.isOk()) {
-                const result = await upsertCourseDetails(french.value, db);
-                if (result.isErr()) {
-                  console.error(
-                    `Failed to upsert French courses for ${subject}: ${result.error}`,
-                  );
-                } else {
-                  console.log(
-                    `Updated ${french.value.courses.length} French courses for ${subject}`,
-                  );
-                }
-              } else {
-                console.error(
-                  `Failed to scrape French ${subject}: ${french.error.message}`,
-                );
-              }
-
-              return {
-                subject,
-                year,
-                success: true,
-                split: true,
-              };
-            } else if (bothLanguages.isErr()) {
-              // Other error (no results, etc.) - log but don't fail
-              console.log(
-                `No results for ${subject} year ${year}: ${bothLanguages.error.message}`,
-              );
-              return {
-                subject,
-                year,
-                success: false,
-                error: bothLanguages.error.message,
-              };
-            } else {
-              // Success with both languages
-              const result = await upsertCourseDetails(bothLanguages.value, db);
-              if (result.isErr()) {
-                console.error(
-                  `Failed to upsert courses for ${subject}: ${result.error}`,
-                );
-              } else {
+              if (
+                bothLanguages.isErr() &&
+                bothLanguages.error.message ===
+                  "Search results exceed 300 items."
+              ) {
+                // Split into English and French queries
                 console.log(
-                  `Updated ${bothLanguages.value.courses.length} courses for ${subject}`,
+                  `Splitting ${subject} year ${year} into separate language queries`,
                 );
+
+                // English only
+                const english = await handleScraping(
+                  termObj,
+                  year,
+                  subject,
+                  true,
+                  false,
+                );
+
+                if (english.isOk()) {
+                  const result = await upsertCourseDetails(english.value, db);
+                  if (result.isErr()) {
+                    console.error(
+                      `Failed to upsert English courses for ${subject}: ${result.error}`,
+                    );
+                  } else {
+                    console.log(
+                      `Updated ${english.value.courses.length} English courses for ${subject}`,
+                    );
+                  }
+                } else {
+                  console.error(
+                    `Failed to scrape English ${subject}: ${english.error.message}`,
+                  );
+                }
+
+                // French only
+                const french = await handleScraping(
+                  termObj,
+                  year,
+                  subject,
+                  false,
+                  true,
+                );
+
+                if (french.isOk()) {
+                  const result = await upsertCourseDetails(french.value, db);
+                  if (result.isErr()) {
+                    console.error(
+                      `Failed to upsert French courses for ${subject}: ${result.error}`,
+                    );
+                  } else {
+                    console.log(
+                      `Updated ${french.value.courses.length} French courses for ${subject}`,
+                    );
+                  }
+                } else {
+                  console.error(
+                    `Failed to scrape French ${subject}: ${french.error.message}`,
+                  );
+                }
+
+                return {
+                  subject,
+                  year,
+                  success: true,
+                  split: true,
+                };
+              } else if (
+                bothLanguages.isErr() &&
+                bothLanguages.error.message === "No search results found."
+              ) {
+                throw new Error(bothLanguages.error.message);
+              } else if (bothLanguages.isErr()) {
+                // Other error (no results, etc.) - log but don't fail
+                console.log(
+                  `No results for ${subject} year ${year}: ${bothLanguages.error.message}`,
+                );
+                return {
+                  subject,
+                  year,
+                  success: false,
+                  error: bothLanguages.error.message,
+                };
+              } else {
+                // Success with both languages
+                const result = await upsertCourseDetails(
+                  bothLanguages.value,
+                  db,
+                );
+                if (result.isErr()) {
+                  console.error(
+                    `Failed to upsert courses for ${subject}: ${result.error}`,
+                  );
+                } else {
+                  console.log(
+                    `Updated ${bothLanguages.value.courses.length} courses for ${subject}`,
+                  );
+                }
+
+                return {
+                  subject,
+                  year,
+                  success: true,
+                  coursesUpdated: bothLanguages.value.courses.length,
+                };
               }
-
-              return {
-                subject,
-                year,
-                success: true,
-                coursesUpdated: bothLanguages.value.courses.length,
-              };
-            }
-          },
-        );
-
-        await step.sleep("sleep", "1 second");
+            },
+          );
+        } catch {
+          continue;
+        }
       }
     }
 
