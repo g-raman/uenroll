@@ -10,7 +10,7 @@ import { err, ok, Result } from "neverthrow";
  * 2. Your search will exceed the maximum limit of 300 sections. Specify additional criteria to continue.
  */
 export const getError = ($: cheerio.CheerioAPI) => {
-  const ERROR_SELECTOR = "[id='win0divDERIVED_CLSMSG_ERROR_TEXT']";
+  const ERROR_SELECTOR = "[id='DERIVED_CLSMSG_ERROR_TEXT']";
 
   const error = $(ERROR_SELECTOR).text();
   if (error.includes("exceed")) {
