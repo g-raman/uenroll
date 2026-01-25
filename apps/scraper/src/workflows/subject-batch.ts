@@ -190,7 +190,7 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
           },
         );
 
-        await step.sleep("sleep", "1 second");
+        await step.sleep("sleep", "2 seconds");
       }
     }
 
