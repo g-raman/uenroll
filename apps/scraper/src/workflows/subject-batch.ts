@@ -5,9 +5,9 @@ import {
 } from "cloudflare:workers";
 import { upsertCourseDetails } from "@repo/db/queries";
 import { createDb } from "../utils/db.js";
-import { handleScrapingWithSession } from "../utils/scraper.js";
 import { getSession } from "../utils/cookies.js";
 import { defaultConfig, FIRST_YEAR, LAST_YEAR } from "../utils/constants.js";
+import { handleScraping } from "../utils/scraper.js";
 
 export interface SubjectBatchWorkflowParams {
   term: string; // e.g., "2025 Fall Term"
@@ -43,29 +43,6 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
     // Step 2-N: Scrape each subject and year combination using the session
     for (const subject of subjects) {
       for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
-        // Step 1: Get session (ICSID + cookies) once for the entire batch
-        const session = await step.do(
-          "get-session",
-          {
-            retries: {
-              limit: 8,
-              delay: "5 seconds",
-              backoff: "exponential",
-            },
-          },
-          async () => {
-            const sessionResult = await getSession();
-
-            if (sessionResult.isErr()) {
-              throw new Error(
-                `Failed to get session: ${sessionResult.error.message}`,
-              );
-            }
-
-            return sessionResult.value;
-          },
-        );
-
         await step.do(
           `scrape-${subject}-year${year}`,
           defaultConfig,
@@ -73,8 +50,7 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
             const db = createDb(this.env);
 
             // First try with both languages
-            const bothLanguages = await handleScrapingWithSession(
-              session,
+            const bothLanguages = await handleScraping(
               termObj,
               year,
               subject,
@@ -92,8 +68,7 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
               );
 
               // English only
-              const english = await handleScrapingWithSession(
-                session,
+              const english = await handleScraping(
                 termObj,
                 year,
                 subject,
@@ -119,8 +94,7 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
               }
 
               // French only
-              const french = await handleScrapingWithSession(
-                session,
+              const french = await handleScraping(
                 termObj,
                 year,
                 subject,
