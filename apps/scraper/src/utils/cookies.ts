@@ -117,6 +117,7 @@ export function createFetchWithCookies() {
     if (response.status >= 300 && response.status < 400) {
       const location = response.headers.get("Location");
       if (location) {
+        await response.body?.cancel();
         // Resolve relative URLs
         const redirectUrl = new URL(location, url).toString();
         // console.log(`[${redirectCount}] Redirecting to: ${redirectUrl}`);
@@ -216,6 +217,7 @@ export async function getSession(): Promise<Result<SessionData, Error>> {
       });
 
       cookieJar.extractFromResponse(response);
+      let html = await response.text();
 
       // Handle redirects manually to collect all cookies
       let currentResponse = response;
@@ -243,10 +245,10 @@ export async function getSession(): Promise<Result<SessionData, Error>> {
         });
 
         cookieJar.extractFromResponse(currentResponse);
+        html = await currentResponse.text();
         redirectCount++;
       }
 
-      const html = await currentResponse.text();
       const $ = cheerio.load(html);
       const icsid = $("input[name=ICSID]").attr("value");
 
@@ -310,11 +312,14 @@ export function createFetchWithSession(session: SessionData) {
     });
 
     cookieJar.extractFromResponse(response);
+    let html = await response.text();
 
     // Handle redirects manually
     if (response.status >= 300 && response.status < 400) {
       const location = response.headers.get("Location");
       if (location) {
+        html = await response.text();
+
         const redirectUrl = new URL(location, url).toString();
 
         const newInit = { ...init };
@@ -330,7 +335,10 @@ export function createFetchWithSession(session: SessionData) {
       }
     }
 
-    return response;
+    return new Response(html, {
+      status: response.status,
+      headers: response.headers,
+    });
   };
 
   return {
