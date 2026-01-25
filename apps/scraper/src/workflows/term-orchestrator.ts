@@ -11,7 +11,7 @@ import {
 import { createDb } from "../utils/db.js";
 import { defaultConfig } from "../utils/constants.js";
 
-export interface SubjectsWorkflowParams {
+export interface TermOrchestratorWorkflowParams {
   term: string; // e.g., "2025 Fall Term"
   termCode: string; // e.g., "2259"
 }
@@ -31,12 +31,12 @@ const BATCH_SIZE = 15;
  * 4. Wait for all batches to complete
  * 5. Cleanup old sessions
  */
-export class SubjectsWorkflow extends WorkflowEntrypoint<
+export class TermOrchestratorWorkflow extends WorkflowEntrypoint<
   Env,
-  SubjectsWorkflowParams
+  TermOrchestratorWorkflowParams
 > {
   override async run(
-    event: WorkflowEvent<SubjectsWorkflowParams>,
+    event: WorkflowEvent<TermOrchestratorWorkflowParams>,
     step: WorkflowStep,
   ) {
     const { term, termCode } = event.payload;

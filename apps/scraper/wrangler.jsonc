@@ -23,9 +23,9 @@
       "class_name": "TermsWorkflow"
     },
     {
-      "name": "subjects-workflow",
-      "binding": "SUBJECTS_WORKFLOW",
-      "class_name": "SubjectsWorkflow"
+      "name": "term-orchestrator-workflow",
+      "binding": "TERM_ORCHESTRATOR_WORKFLOW",
+      "class_name": "TermOrchestratorWorkflow"
     },
     {
       "name": "subject-batch-workflow",
