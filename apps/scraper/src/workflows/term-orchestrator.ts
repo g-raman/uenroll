@@ -3,11 +3,7 @@ import {
   type WorkflowEvent,
   type WorkflowStep,
 } from "cloudflare:workers";
-import {
-  getAvailableSubjects,
-  removeOldSessions,
-  removeCoursesWithNoSessions,
-} from "@repo/db/queries";
+import { getAvailableSubjects } from "@repo/db/queries";
 import { createDb } from "../utils/db.js";
 import { defaultConfig } from "../utils/constants.js";
 
@@ -28,8 +24,8 @@ const BATCH_SIZE = 15;
  * 1. Fetch all subjects from database
  * 2. Split subjects into batches for parallelization
  * 3. Trigger workflow for each batch
- * 4. Wait for all batches to complete
- * 5. Cleanup outdated sessions
+ *
+ * Note: The parent orchestrator workflow waits for completion and handles cleanup.
  */
 export class TermOrchestratorWorkflow extends WorkflowEntrypoint<
   Env,
@@ -57,95 +53,23 @@ export class TermOrchestratorWorkflow extends WorkflowEntrypoint<
       batches.push(subjects.slice(i, i + BATCH_SIZE));
     }
 
-    const batchIds = await step.do(
-      "trigger-batch-workflows",
-      defaultConfig,
-      async () => {
-        const ids: string[] = [];
+    await step.do("trigger-batch-workflows", defaultConfig, async () => {
+      for (let i = 0; i < batches.length; i++) {
+        const batch = batches[i];
+        if (!batch) continue;
 
-        for (let i = 0; i < batches.length; i++) {
-          const batch = batches[i];
-          if (!batch) continue;
-
-          const instance = await this.env.SUBJECTS_SCRAPER_WORKFLOW.create({
-            params: {
-              term,
-              termCode,
-              subjects: batch,
-            },
-          });
-
-          ids.push(instance.id);
-          console.log(
-            `Triggered batch ${i + 1}/${batches.length}: ${instance.id} with ${batch.length} subjects`,
-          );
-        }
-
-        return ids;
-      },
-    );
-
-    for (let i = 0; i < batchIds.length; i++) {
-      const batchId = batchIds[i];
-      if (!batchId) continue;
-
-      await step.do(
-        `wait-for-batch-${i}`,
-        {
-          retries: {
-            limit: 120, // Allow up to 120 retries (60 minutes with 30s delays)
-            delay: "30 seconds",
+        const instance = await this.env.SUBJECTS_SCRAPER_WORKFLOW.create({
+          params: {
+            term,
+            termCode,
+            subjects: batch,
           },
-        },
-        async () => {
-          const instance =
-            await this.env.SUBJECTS_SCRAPER_WORKFLOW.get(batchId);
-          const status = await instance.status();
+        });
 
-          if (status.status === "running" || status.status === "queued") {
-            throw new Error(`Batch ${i + 1} still ${status.status}`);
-          }
-
-          if (status.status === "errored") {
-            console.error(`Batch ${i + 1} errored: ${status.error}`);
-          }
-
-          return { batchId, status: status.status };
-        },
-      );
-    }
-
-    await step.do("cleanup-old-sessions", defaultConfig, async () => {
-      const db = createDb(this.env);
-
-      // Remove sessions older than 5 hours
-      const removeSessionsResult = await removeOldSessions(
-        5 * 60 * 60 * 1000,
-        db,
-      );
-
-      if (removeSessionsResult.isErr()) {
-        console.error(
-          `Failed to remove old sessions: ${removeSessionsResult.error.message}`,
+        console.log(
+          `Triggered batch ${i + 1}/${batches.length}: ${instance.id} with ${batch.length} subjects`,
         );
-      } else {
-        console.log("Removed old sessions");
       }
-
-      // Remove courses with no sessions
-      const removeCoursesResult = await removeCoursesWithNoSessions(db);
-
-      if (removeCoursesResult.isErr()) {
-        console.error(
-          `Failed to remove courses with no sessions: ${removeCoursesResult.error.message}`,
-        );
-      } else {
-        console.log("Removed courses with no sessions");
-      }
-
-      return { cleanup: true };
     });
-
-    console.log(`Subjects workflow completed for term: ${term}`);
   }
 }
