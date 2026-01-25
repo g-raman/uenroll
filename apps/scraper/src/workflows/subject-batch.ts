@@ -14,6 +14,15 @@ export interface SubjectBatchWorkflowParams {
   subjects: string[]; // Array of subject codes (max 30)
 }
 
+export interface ScrapeStepResults {
+  subject: string;
+  year: number;
+  success: boolean;
+  error: string | null;
+  coursesUpdated: number;
+  needsSplit: boolean;
+}
+
 /**
  * Workflow to scrape a batch of subjects for a specific term.
  *
@@ -43,15 +52,9 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
     for (const subject of subjects) {
       for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
         try {
-          await step.do(
+          const result: ScrapeStepResults = await step.do(
             `scrape-${subject}-year-${year}`,
-            {
-              retries: {
-                limit: 4,
-                backoff: "linear",
-                delay: "3 seconds",
-              },
-            },
+            { retries: { limit: 4, backoff: "linear", delay: "3 seconds" } },
             async () => {
               const db = createDb(this.env);
 
@@ -69,68 +72,14 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
                 bothLanguages.error.message ===
                   "Search results exceed 300 items."
               ) {
-                // Split into English and French queries
-                console.log(
-                  `Splitting ${subject} year ${year} into separate language queries`,
-                );
-
-                // English only
-                const english = await handleScraping(
-                  termObj,
-                  year,
-                  subject,
-                  true,
-                  false,
-                );
-
-                if (english.isOk()) {
-                  const result = await upsertCourseDetails(english.value, db);
-                  if (result.isErr()) {
-                    console.error(
-                      `Failed to upsert English courses for ${subject}: ${result.error}`,
-                    );
-                  } else {
-                    console.log(
-                      `Updated ${english.value.courses.length} English courses for ${subject}`,
-                    );
-                  }
-                } else {
-                  console.error(
-                    `Failed to scrape English ${subject}: ${english.error.message}`,
-                  );
-                }
-
-                // French only
-                const french = await handleScraping(
-                  termObj,
-                  year,
-                  subject,
-                  false,
-                  true,
-                );
-
-                if (french.isOk()) {
-                  const result = await upsertCourseDetails(french.value, db);
-                  if (result.isErr()) {
-                    console.error(
-                      `Failed to upsert French courses for ${subject}: ${result.error}`,
-                    );
-                  } else {
-                    console.log(
-                      `Updated ${french.value.courses.length} French courses for ${subject}`,
-                    );
-                  }
-                } else {
-                  console.error(
-                    `Failed to scrape French ${subject}: ${french.error.message}`,
-                  );
-                }
-
+                // Signal that we need to split into separate language queries
                 return {
                   subject,
                   year,
-                  success: true,
-                  split: true,
+                  success: false,
+                  coursesUpdated: 0,
+                  needsSplit: true,
+                  error: null,
                 };
               } else if (
                 bothLanguages.isErr() &&
@@ -146,6 +95,8 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
                   subject,
                   year,
                   success: false,
+                  needsSplit: false,
+                  coursesUpdated: 0,
                   error: bothLanguages.error.message,
                 };
               } else {
@@ -169,8 +120,96 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
                   year,
                   success: true,
                   coursesUpdated: bothLanguages.value.courses.length,
+                  needsSplit: false,
+                  error: null,
                 };
               }
+            },
+          );
+
+          if (!result.needsSplit) continue;
+
+          // English only step with retry logic
+          await step.do(
+            `scrape-${subject}-year-${year}-english`,
+            { retries: { limit: 4, backoff: "linear", delay: "3 seconds" } },
+            async () => {
+              const db = createDb(this.env);
+
+              const english = await handleScraping(
+                termObj,
+                year,
+                subject,
+                true,
+                false,
+              );
+
+              if (english.isErr()) {
+                throw new Error(
+                  `Failed to scrape English ${subject}: ${english.error.message}`,
+                );
+              }
+
+              const upsertResult = await upsertCourseDetails(english.value, db);
+              if (upsertResult.isErr()) {
+                throw new Error(
+                  `Failed to upsert English courses for ${subject}: ${upsertResult.error}`,
+                );
+              }
+
+              console.log(
+                `Updated ${english.value.courses.length} English courses for ${subject}`,
+              );
+
+              return {
+                subject,
+                year,
+                language: "english",
+                success: true,
+                coursesUpdated: english.value.courses.length,
+              };
+            },
+          );
+
+          // French only step with retry logic
+          await step.do(
+            `scrape-${subject}-year-${year}-french`,
+            { retries: { limit: 4, backoff: "linear", delay: "3 seconds" } },
+            async () => {
+              const db = createDb(this.env);
+
+              const french = await handleScraping(
+                termObj,
+                year,
+                subject,
+                false,
+                true,
+              );
+
+              if (french.isErr()) {
+                throw new Error(
+                  `Failed to scrape French ${subject}: ${french.error.message}`,
+                );
+              }
+
+              const upsertResult = await upsertCourseDetails(french.value, db);
+              if (upsertResult.isErr()) {
+                throw new Error(
+                  `Failed to upsert French courses for ${subject}: ${upsertResult.error}`,
+                );
+              }
+
+              console.log(
+                `Updated ${french.value.courses.length} French courses for ${subject}`,
+              );
+
+              return {
+                subject,
+                year,
+                language: "french",
+                success: true,
+                coursesUpdated: french.value.courses.length,
+              };
             },
           );
         } catch {
