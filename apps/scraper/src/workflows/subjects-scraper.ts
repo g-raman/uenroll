@@ -8,7 +8,7 @@ import { createDb } from "../utils/db.js";
 import { FIRST_YEAR, LAST_YEAR } from "../utils/constants.js";
 import { handleScraping } from "../utils/scraper.js";
 
-export interface SubjectBatchWorkflowParams {
+export interface SubjectsScraperWorkflowParams {
   term: string; // e.g., "2025 Fall Term"
   termCode: string; // e.g., "2259"
   subjects: string[]; // Array of subject codes (max 30)
@@ -31,12 +31,12 @@ export interface ScrapeStepResults {
  * 2. For each subject and year (1-5), scrape course data using that session
  * 3. Handle the 300-result limit by splitting into English/French queries
  */
-export class SubjectBatchWorkflow extends WorkflowEntrypoint<
+export class SubjectsScraperWorkflow extends WorkflowEntrypoint<
   Env,
-  SubjectBatchWorkflowParams
+  SubjectsScraperWorkflowParams
 > {
   override async run(
-    event: WorkflowEvent<SubjectBatchWorkflowParams>,
+    event: WorkflowEvent<SubjectsScraperWorkflowParams>,
     step: WorkflowStep,
   ) {
     const { term, termCode, subjects } = event.payload;

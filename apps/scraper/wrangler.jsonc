@@ -28,9 +28,9 @@
       "class_name": "TermOrchestratorWorkflow"
     },
     {
-      "name": "subject-batch-workflow",
-      "binding": "SUBJECT_BATCH_WORKFLOW",
-      "class_name": "SubjectBatchWorkflow"
+      "name": "subjects-scraper-workflow",
+      "binding": "SUBJECTS_SCRAPER_WORKFLOW",
+      "class_name": "SubjectsScraperWorkflow"
     }
   ],
   // Hyperdrive database connection
