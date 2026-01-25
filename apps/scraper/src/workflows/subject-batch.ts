@@ -37,35 +37,35 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
       `Starting batch workflow for ${subjects.length} subjects in term: ${term}`,
     );
 
-    // Step 1: Get session (ICSID + cookies) once for the entire batch
-    const session = await step.do(
-      "get-session",
-      {
-        retries: {
-          limit: 8,
-          delay: "5 seconds",
-          backoff: "exponential",
-        },
-      },
-      async () => {
-        const sessionResult = await getSession();
-
-        if (sessionResult.isErr()) {
-          throw new Error(
-            `Failed to get session: ${sessionResult.error.message}`,
-          );
-        }
-
-        return sessionResult.value;
-      },
-    );
-
     // Create term object for scraping functions
     const termObj = { term: termCode, value: term };
 
     // Step 2-N: Scrape each subject and year combination using the session
     for (const subject of subjects) {
       for (let year = FIRST_YEAR; year < LAST_YEAR; year++) {
+        // Step 1: Get session (ICSID + cookies) once for the entire batch
+        const session = await step.do(
+          "get-session",
+          {
+            retries: {
+              limit: 8,
+              delay: "5 seconds",
+              backoff: "exponential",
+            },
+          },
+          async () => {
+            const sessionResult = await getSession();
+
+            if (sessionResult.isErr()) {
+              throw new Error(
+                `Failed to get session: ${sessionResult.error.message}`,
+              );
+            }
+
+            return sessionResult.value;
+          },
+        );
+
         await step.do(
           `scrape-${subject}-year${year}`,
           defaultConfig,
@@ -151,11 +151,6 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
                 success: true,
                 split: true,
               };
-            } else if (
-              bothLanguages.isErr() &&
-              bothLanguages.error.message === "Error with cookies"
-            ) {
-              throw new Error(bothLanguages.error.message);
             } else if (bothLanguages.isErr()) {
               // Other error (no results, etc.) - log but don't fail
               console.log(
@@ -190,7 +185,7 @@ export class SubjectBatchWorkflow extends WorkflowEntrypoint<
           },
         );
 
-        await step.sleep("sleep", "2 seconds");
+        await step.sleep("sleep", "1 second");
       }
     }
 
