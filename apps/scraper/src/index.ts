@@ -1,5 +1,5 @@
 export { OrchestratorWorkflow } from "./workflows/orchestrator.js";
-export { TermsWorkflow } from "./workflows/terms.js";
+export { TermsAndSubjectsScraperWorkflow } from "./workflows/terms-and-subjects-scraper.js";
 export { TermOrchestratorWorkflow } from "./workflows/term-orchestrator.js";
 export { SubjectBatchWorkflow } from "./workflows/subject-batch.js";
 

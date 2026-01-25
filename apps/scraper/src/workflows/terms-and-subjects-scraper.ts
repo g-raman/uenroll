@@ -25,9 +25,11 @@ import { defaultConfig } from "../utils/constants.js";
  * 4. Scrape available subjects from uOttawa course catalogue
  * 5. Update database with subjects
  */
-export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
+export class TermsAndSubjectsScraperWorkflow extends WorkflowEntrypoint<
+  Env,
+  void
+> {
   override async run(_: WorkflowEvent<void>, step: WorkflowStep) {
-    // Step 1: Scrape available terms from uOttawa
     const scrapedTerms = await step.do(
       "scrape-terms",
       defaultConfig,
@@ -43,7 +45,6 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
       },
     );
 
-    // Step 2: Get current terms from database (for comparison)
     const currentTerms = await step.do(
       "get-current-terms",
       defaultConfig,
@@ -61,7 +62,6 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
       },
     );
 
-    // Step 3: Update database with new terms
     await step.do("update-terms", defaultConfig, async () => {
       const db = createDb(this.env);
       const result = await updateAvailableTerms(scrapedTerms, db);
@@ -74,7 +74,6 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
       return { updated: true };
     });
 
-    // Step 4: Delete outdated terms
     await step.do("delete-outdated-terms", defaultConfig, async () => {
       const termsToDelete = currentTerms.filter(
         currentTerm =>
@@ -100,7 +99,6 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
       return { deleted: termsToDelete.length };
     });
 
-    // Step 5: Scrape available subjects
     const scrapedSubjects = await step.do(
       "scrape-subjects",
       defaultConfig,
@@ -116,7 +114,6 @@ export class TermsWorkflow extends WorkflowEntrypoint<Env, void> {
       },
     );
 
-    // Step 6: Update database with subjects
     await step.do("update-subjects-db", defaultConfig, async () => {
       const db = createDb(this.env);
       const result = await updateAvailableSubjects(scrapedSubjects, db);

@@ -18,9 +18,9 @@
       "class_name": "OrchestratorWorkflow"
     },
     {
-      "name": "terms-workflow",
-      "binding": "TERMS_WORKFLOW",
-      "class_name": "TermsWorkflow"
+      "name": "terms-and-subjects-scraper",
+      "binding": "TERMS_AND_SUBJECTS_SCRAPER_WORKFLOW",
+      "class_name": "TermsAndSubjectsScraperWorkflow"
     },
     {
       "name": "term-orchestrator-workflow",

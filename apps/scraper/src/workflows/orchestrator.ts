@@ -19,7 +19,8 @@ import { defaultConfig } from "../utils/constants.js";
 export class OrchestratorWorkflow extends WorkflowEntrypoint<Env, void> {
   override async run(_: WorkflowEvent<void>, step: WorkflowStep) {
     const termsInstance = await step.do("trigger-terms-workflow", async () => {
-      const instance = await this.env.TERMS_WORKFLOW.create();
+      const instance =
+        await this.env.TERMS_AND_SUBJECTS_SCRAPER_WORKFLOW.create();
       return { id: instance.id };
     });
 
@@ -28,7 +29,9 @@ export class OrchestratorWorkflow extends WorkflowEntrypoint<Env, void> {
       // Max 5 minutes of waiting
       { retries: { limit: 30, delay: "10 seconds", backoff: "constant" } },
       async () => {
-        const instance = await this.env.TERMS_WORKFLOW.get(termsInstance.id);
+        const instance = await this.env.TERMS_AND_SUBJECTS_SCRAPER_WORKFLOW.get(
+          termsInstance.id,
+        );
         const status = await instance.status();
 
         if (status.status === "errored") {
