@@ -1,4 +1,4 @@
-export { MainWorkflow } from "./workflows/main.js";
+export { OrchestratorWorkflow } from "./workflows/orchestrator.js";
 export { TermsWorkflow } from "./workflows/terms.js";
 export { SubjectsWorkflow } from "./workflows/subjects.js";
 export { SubjectBatchWorkflow } from "./workflows/subject-batch.js";
@@ -29,13 +29,13 @@ export default {
     // Trigger main workflow
     if (url.pathname === "/trigger" && request.method === "POST") {
       try {
-        const instance = await env.MAIN_WORKFLOW.create({
+        const instance = await env.ORCHESTRATOR_WORKFLOW.create({
           id: `manual-${Date.now()}`,
         });
         return Response.json({
           id: instance.id,
           status: "triggered",
-          message: "Main workflow triggered successfully",
+          message: "Orchestrator workflow triggered successfully",
         });
       } catch (error) {
         return Response.json(
@@ -132,7 +132,7 @@ export default {
             instance = await env.SUBJECTS_WORKFLOW.get(id);
             break;
           default:
-            instance = await env.MAIN_WORKFLOW.get(id);
+            instance = await env.ORCHESTRATOR_WORKFLOW.get(id);
         }
 
         const status = await instance.status();
@@ -178,7 +178,7 @@ export default {
     console.log(`Cron triggered at ${startTime}`);
 
     try {
-      const instance = await env.MAIN_WORKFLOW.create();
+      const instance = await env.ORCHESTRATOR_WORKFLOW.create();
       console.log(`Triggered main workflow: ${instance.id}`);
     } catch (error) {
       console.error(

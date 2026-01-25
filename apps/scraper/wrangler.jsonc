@@ -13,9 +13,9 @@
   },
   "workflows": [
     {
-      "name": "main-workflow",
-      "binding": "MAIN_WORKFLOW",
-      "class_name": "MainWorkflow"
+      "name": "orchestrator-workflow",
+      "binding": "ORCHESTRATOR_WORKFLOW",
+      "class_name": "OrchestratorWorkflow"
     },
     {
       "name": "terms-workflow",

@@ -16,7 +16,7 @@ import { defaultConfig } from "../utils/constants.js";
  * 3. Fetch available terms from the database
  * 4. Trigger SubjectsWorkflow for each term (in parallel)
  */
-export class MainWorkflow extends WorkflowEntrypoint<Env, void> {
+export class OrchestratorWorkflow extends WorkflowEntrypoint<Env, void> {
   override async run(_: WorkflowEvent<void>, step: WorkflowStep) {
     // Step 1: Trigger terms scraping workflow
     const termsInstance = await step.do("trigger-terms-workflow", async () => {
