@@ -228,12 +228,14 @@ export async function handleScrapingWithSession(
     return err(new Error("HTML didn't load"));
   }
 
-  const parser = cheerio.load(html.value);
-  const error = getError(parser);
+  const errorParser = cheerio.load(html.value);
+  const error = getError(errorParser);
 
   if (error != null) {
     return err(new Error(error));
   }
+
+  const parser = cheerio.load(html.value);
 
   const results = scrapeSearchResults(parser, term);
 
@@ -242,14 +244,6 @@ export async function handleScrapingWithSession(
     results.courseComponents.length === 0 ||
     results.sessions.length === 0
   ) {
-    const requestIssue = parser(
-      'p:contains("You must have cookies enabled")',
-    ).text();
-
-    if (requestIssue && requestIssue.length >= 0) {
-      return err(new Error("Error with cookies"));
-    }
-
     return err(new Error("No search results found."));
   }
 
