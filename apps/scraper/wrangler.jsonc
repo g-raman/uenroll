@@ -9,41 +9,36 @@
   // Workflow bindings
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 1
+    "head_sampling_rate": 1,
   },
   "workflows": [
     {
       "name": "orchestrator-workflow",
       "binding": "ORCHESTRATOR_WORKFLOW",
-      "class_name": "OrchestratorWorkflow"
+      "class_name": "OrchestratorWorkflow",
     },
     {
       "name": "terms-and-subjects-scraper",
       "binding": "TERMS_AND_SUBJECTS_SCRAPER_WORKFLOW",
-      "class_name": "TermsAndSubjectsScraperWorkflow"
+      "class_name": "TermsAndSubjectsScraperWorkflow",
     },
     {
       "name": "term-orchestrator-workflow",
       "binding": "TERM_ORCHESTRATOR_WORKFLOW",
-      "class_name": "TermOrchestratorWorkflow"
+      "class_name": "TermOrchestratorWorkflow",
     },
     {
       "name": "subjects-scraper-workflow",
       "binding": "SUBJECTS_SCRAPER_WORKFLOW",
-      "class_name": "SubjectsScraperWorkflow"
+      "class_name": "SubjectsScraperWorkflow",
     },
-    {
-      "name": "too-many-results-workflow",
-      "binding": "TOO_MANY_RESULTS_WORKFLOW",
-      "class_name": "TooManyResultsWorkflow"
-    }
   ],
   // Hyperdrive database connection
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
       "id": "a24d5ae3a33047c2acdf27cc18526246",
-      "localConnectionString": "postgresql://postgres:postgres@localhost:5432/postgres"
-    }
+      "localConnectionString": "postgresql://postgres:postgres@localhost:5432/postgres",
+    },
   ],
 }

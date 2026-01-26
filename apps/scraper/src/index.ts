@@ -2,7 +2,6 @@ export { OrchestratorWorkflow } from "./workflows/orchestrator.js";
 export { TermsAndSubjectsScraperWorkflow } from "./workflows/terms-and-subjects-scraper.js";
 export { TermOrchestratorWorkflow } from "./workflows/term-orchestrator.js";
 export { SubjectsScraperWorkflow } from "./workflows/subjects-scraper.js";
-export { TooManyResultsWorkflow } from "./workflows/too-many-results-workflow.js";
 
 export default {
   async fetch(): Promise<Response> {
