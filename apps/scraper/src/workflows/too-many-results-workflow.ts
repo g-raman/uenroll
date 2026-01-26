@@ -45,7 +45,7 @@ export class TooManyResultsWorkflow extends WorkflowEntrypoint<
 
     for (const component of components) {
       await step.do(
-        "get-unique-courses",
+        `get-unique-courses-${component}`,
         { retries: { limit: 4, delay: "3 seconds", backoff: "linear" } },
         async () => {
           const results = await handleScraping(
@@ -81,7 +81,7 @@ export class TooManyResultsWorkflow extends WorkflowEntrypoint<
     for (const course of uniqueCoursesArray) {
       let number = null;
       try {
-        number = Number.parseInt(course.substring(4));
+        number = Number.parseInt(course.substring(3));
       } catch {
         continue;
       }
