@@ -57,8 +57,16 @@ export class TooManyResultsWorkflow extends WorkflowEntrypoint<
             component,
           );
 
-          if (results.isErr()) {
+          if (
+            results.isErr() &&
+            results.error.message === "No search results found."
+          ) {
             throw new Error(results.error.message);
+          }
+
+          if (results.isErr()) {
+            console.log(results.error.message);
+            return;
           }
 
           results.value.courses.forEach(course =>
