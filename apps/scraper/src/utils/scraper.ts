@@ -69,6 +69,12 @@ export async function getSubjectByYear(
     params["SR_CLSRCH_WRK_SSR_COMPONENT$0"] = component;
   }
 
+  if (exactCourse !== null) {
+    delete params["SR_CLSRCH_WRK_SSR_COMPONENT$0"];
+    params["SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$0"] = "E";
+    params["SSR_CLSRCH_WRK_CATALOG_NBR$0"] = exactCourse.toString();
+  }
+
   const body = new URLSearchParams(params);
 
   // Use the same cookie-aware fetch for the POST request
@@ -106,7 +112,7 @@ export async function handleScraping(
   english = true,
   french = true,
   component = "",
-  exactCourse = "",
+  exactCourse: number | null = null,
 ): Promise<Result<CourseDetailsInsert, Error>> {
   const html = await getSubjectByYear(
     term,
