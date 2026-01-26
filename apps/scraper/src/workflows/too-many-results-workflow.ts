@@ -106,7 +106,9 @@ export class TooManyResultsWorkflow extends WorkflowEntrypoint<
 
           if (
             courseDetails.isErr() &&
-            courseDetails.error.message === "Search results exceed 300 items."
+            (courseDetails.error.message ===
+              "Search results exceed 300 items." ||
+              courseDetails.error.message === "No classes found.")
           ) {
             throw new NonRetryableError(courseDetails.error.message);
           } else if (
