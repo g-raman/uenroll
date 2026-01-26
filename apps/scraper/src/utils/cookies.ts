@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { err, ok, Result, ResultAsync } from "neverthrow";
+import { err, Result, ResultAsync } from "neverthrow";
 import { COURSE_REGISTRY_URL } from "./constants.js";
 
 /**
@@ -9,8 +9,6 @@ export interface SessionData {
   icsid: string;
   cookies: Record<string, string>;
 }
-
-const MAX_RETRIES_FOR_SESSION = 8;
 
 /**
  * Cookie jar for maintaining session state across requests.
