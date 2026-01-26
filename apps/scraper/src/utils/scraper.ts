@@ -58,16 +58,13 @@ export async function getSubjectByYear(
     SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$0: "G",
     SSR_CLSRCH_WRK_CATALOG_NBR$0: "0",
     SSR_CLSRCH_WRK_SSR_OPEN_ONLY$chk$0: "N",
+    SSR_CLSRCH_WRK_SSR_COMPONENT$0: component,
     UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_01$chk$0: year === 1 ? "Y" : "N",
     UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_02$chk$0: year === 2 ? "Y" : "N",
     UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_03$chk$0: year === 3 ? "Y" : "N",
     UO_PUB_SRCH_WRK_SSR_RPTCK_OPT_04$chk$0: year === 4 ? "Y" : "N",
     UO_PUB_SRCH_WRK_GRADUATED_TBL_CD$chk$0: year === 5 ? "Y" : "N",
   };
-
-  if (component !== "") {
-    params["SSR_CLSRCH_WRK_SSR_COMPONENT$0"] = component;
-  }
 
   if (exactCourse !== null) {
     delete params["SSR_CLSRCH_WRK_SSR_COMPONENT$0"];
