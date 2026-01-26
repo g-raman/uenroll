@@ -16,3 +16,22 @@ export const defaultConfig: WorkflowStepConfig = {
     backoff: "exponential",
   },
 };
+
+export const SCRAPING_RETRY_CONFIG: WorkflowStepConfig = {
+  retries: { limit: 4, delay: "3 seconds", backoff: "linear" },
+};
+
+export const COURSE_COMPONENTS = [
+  "ADM",
+  "TST",
+  "DGD",
+  "LAB",
+  "LEC",
+  "MTR",
+  "PRA",
+  "REC",
+  "SEM",
+  "TLB",
+  "TUT",
+  "STG",
+];
