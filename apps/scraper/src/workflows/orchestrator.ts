@@ -67,17 +67,19 @@ export class OrchestratorWorkflow extends WorkflowEntrypoint<Env, void> {
       "trigger-term-orchestrator-workflows",
       defaultConfig,
       async () => {
-        const instances = terms.map(term => ({
-          params: {
-            term: term.value,
-            termCode: term.term,
-          },
-        }));
+        const ids: string[] = [];
+        terms.forEach(async term => {
+          const instance = await this.env.TERM_ORCHESTRATOR_WORKFLOW.create({
+            params: {
+              term: term.value,
+              termCode: term.term,
+            },
+          });
 
-        const workflows =
-          await this.env.TERM_ORCHESTRATOR_WORKFLOW.createBatch(instances);
+          ids.push(instance.id);
+        });
 
-        return workflows.map(workflow => workflow.id);
+        return ids;
       },
     );
 
