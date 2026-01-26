@@ -17,6 +17,7 @@ export async function getSubjectByYear(
   subject: string,
   english: boolean = true,
   french: boolean = true,
+  component = "",
 ): Promise<Result<string, Error>> {
   // Create a cookie-aware fetch that maintains session across requests
   const fetchWithCookies = createFetchWithCookies();
@@ -63,6 +64,10 @@ export async function getSubjectByYear(
     UO_PUB_SRCH_WRK_GRADUATED_TBL_CD$chk$0: year === 5 ? "Y" : "N",
   };
 
+  if (component !== "") {
+    params["SR_CLSRCH_WRK_SSR_COMPONENT$0"] = component;
+  }
+
   const body = new URLSearchParams(params);
 
   // Use the same cookie-aware fetch for the POST request
@@ -99,8 +104,16 @@ export async function handleScraping(
   subject: string,
   english = true,
   french = true,
+  component = "",
 ): Promise<Result<CourseDetailsInsert, Error>> {
-  const html = await getSubjectByYear(term, year, subject, english, french);
+  const html = await getSubjectByYear(
+    term,
+    year,
+    subject,
+    english,
+    french,
+    component,
+  );
 
   if (html.isErr()) {
     return err(html.error);
