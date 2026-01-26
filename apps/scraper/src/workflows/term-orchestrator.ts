@@ -53,23 +53,59 @@ export class TermOrchestratorWorkflow extends WorkflowEntrypoint<
       batches.push(subjects.slice(i, i + BATCH_SIZE));
     }
 
-    await step.do("trigger-batch-workflows", defaultConfig, async () => {
-      for (let i = 0; i < batches.length; i++) {
-        const batch = batches[i];
-        if (!batch) continue;
+    const batchWorkflowIds = await step.do(
+      "trigger-batch-workflows",
+      defaultConfig,
+      async () => {
+        const ids: string[] = [];
 
-        const instance = await this.env.SUBJECTS_SCRAPER_WORKFLOW.create({
-          params: {
-            term,
-            termCode,
-            subjects: batch,
-          },
-        });
+        for (let i = 0; i < batches.length; i++) {
+          const batch = batches[i];
+          if (!batch) continue;
 
-        console.log(
-          `Triggered batch ${i + 1}/${batches.length}: ${instance.id} with ${batch.length} subjects`,
-        );
-      }
-    });
+          const instance = await this.env.SUBJECTS_SCRAPER_WORKFLOW.create({
+            params: {
+              term,
+              termCode,
+              subjects: batch,
+            },
+          });
+
+          console.log(
+            `Triggered batch ${i + 1}/${batches.length}: ${instance.id} with ${batch.length} subjects`,
+          );
+
+          ids.push(instance.id);
+        }
+
+        return ids;
+      },
+    );
+
+    for (let i = 0; i < batchWorkflowIds.length; i++) {
+      const workflowId = batchWorkflowIds[i];
+      if (!workflowId) continue;
+
+      await step.do(
+        `wait-for-batch-${i}`,
+        // Allow up to 10 retries (20 minutes max per batch)
+        { retries: { limit: 10, delay: "2 minutes", backoff: "constant" } },
+        async () => {
+          const instance =
+            await this.env.SUBJECTS_SCRAPER_WORKFLOW.get(workflowId);
+          const status = await instance.status();
+
+          if (status.status === "running" || status.status === "queued") {
+            throw new Error(`Batch workflow ${i + 1} still ${status.status}`);
+          }
+
+          if (status.status === "errored") {
+            console.error(`Batch workflow ${i + 1} errored: ${status.error}`);
+          }
+
+          return { workflowId, status: status.status };
+        },
+      );
+    }
   }
 }
