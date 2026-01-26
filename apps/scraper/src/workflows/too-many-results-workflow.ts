@@ -26,7 +26,7 @@ export class TooManyResultsWorkflow extends WorkflowEntrypoint<
     step: WorkflowStep,
   ) {
     const { term, termCode, subject, year, english, french } = event.payload;
-    const termObj = { term, value: termCode };
+    const termObj = { term: termCode, value: term };
     const uniqueCourses = new Set<string>();
     const components = [
       "ADM",
