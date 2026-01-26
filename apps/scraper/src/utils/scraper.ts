@@ -18,6 +18,7 @@ export async function getSubjectByYear(
   english: boolean = true,
   french: boolean = true,
   component = "",
+  exactCourse: number | null = null,
 ): Promise<Result<string, Error>> {
   // Create a cookie-aware fetch that maintains session across requests
   const fetchWithCookies = createFetchWithCookies();
@@ -105,6 +106,7 @@ export async function handleScraping(
   english = true,
   french = true,
   component = "",
+  exactCourse = "",
 ): Promise<Result<CourseDetailsInsert, Error>> {
   const html = await getSubjectByYear(
     term,
@@ -113,6 +115,7 @@ export async function handleScraping(
     english,
     french,
     component,
+    exactCourse,
   );
 
   if (html.isErr()) {

@@ -16,6 +16,7 @@
     "Hyperdrive",
     "ICAJAX",
     "ICNAVTYPEDROPDOWN",
-    "RPTCK"
+    "RPTCK",
+    "Retryable"
   ]
 }
