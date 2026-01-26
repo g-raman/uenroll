@@ -18,7 +18,7 @@ export const defaultConfig: WorkflowStepConfig = {
 };
 
 export const SCRAPING_RETRY_CONFIG: WorkflowStepConfig = {
-  retries: { limit: 4, delay: "3 seconds", backoff: "linear" },
+  retries: { limit: 5, delay: "3 seconds", backoff: "linear" },
 };
 
 export const COURSE_COMPONENTS = [
