@@ -46,7 +46,7 @@ export class TooManyResultsWorkflow extends WorkflowEntrypoint<
     for (const component of components) {
       await step.do(
         "get-unique-courses",
-        { retries: { limit: 4, delay: "3 seconds", backoff: "constant" } },
+        { retries: { limit: 4, delay: "3 seconds", backoff: "linear" } },
         async () => {
           const results = await handleScraping(
             termObj,
