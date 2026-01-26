@@ -7,6 +7,7 @@ import { upsertCourseDetails } from "@repo/db/queries";
 import { createDb } from "../utils/db.js";
 import { FIRST_YEAR, LAST_YEAR } from "../utils/constants.js";
 import { handleScraping } from "../utils/scraper.js";
+import { NonRetryableError } from "cloudflare:workflows";
 
 export interface SubjectsScraperWorkflowParams {
   term: string; // e.g., "2025 Fall Term"
@@ -144,6 +145,23 @@ export class SubjectsScraperWorkflow extends WorkflowEntrypoint<
                 false,
               );
 
+              if (
+                english.isErr() &&
+                english.error.message === "Search results exceed 300 items."
+              ) {
+                await this.env.TOO_MANY_RESULTS_WORKFLOW.create({
+                  params: {
+                    term,
+                    termCode,
+                    subject,
+                    year,
+                    english: true,
+                    french: false,
+                  },
+                });
+                throw new NonRetryableError(english.error.message);
+              }
+
               if (english.isErr()) {
                 throw new Error(
                   `Failed to scrape English ${subject}: ${english.error.message}`,
@@ -185,6 +203,23 @@ export class SubjectsScraperWorkflow extends WorkflowEntrypoint<
                 false,
                 true,
               );
+
+              if (
+                french.isErr() &&
+                french.error.message === "Search results exceed 300 items."
+              ) {
+                await this.env.TOO_MANY_RESULTS_WORKFLOW.create({
+                  params: {
+                    term,
+                    termCode,
+                    subject,
+                    year,
+                    english: false,
+                    french: true,
+                  },
+                });
+                throw new NonRetryableError(french.error.message);
+              }
 
               if (french.isErr()) {
                 throw new Error(
