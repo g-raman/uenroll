@@ -66,11 +66,11 @@ export async function getSubjectByYear(
   };
 
   if (component !== "") {
-    params["SR_CLSRCH_WRK_SSR_COMPONENT$0"] = component;
+    params["SSR_CLSRCH_WRK_SSR_COMPONENT$0"] = component;
   }
 
   if (exactCourse !== null) {
-    delete params["SR_CLSRCH_WRK_SSR_COMPONENT$0"];
+    delete params["SSR_CLSRCH_WRK_SSR_COMPONENT$0"];
     params["SSR_CLSRCH_WRK_SSR_EXACT_MATCH1$0"] = "E";
     params["SSR_CLSRCH_WRK_CATALOG_NBR$0"] = exactCourse.toString();
   }
