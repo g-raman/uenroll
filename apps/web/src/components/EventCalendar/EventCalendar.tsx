@@ -712,6 +712,10 @@ function EventBlock({ event, onClick, renderEvent }: EventBlockProps) {
   const defaultBackgroundColor = "bg-blue-200 border-l-blue-500";
   const backgroundClasses = event.backgroundColour || defaultBackgroundColor;
 
+  // Extract additional event data
+  const subSection = event.subSection as string | undefined;
+  const type = event.type as string | undefined;
+
   return (
     <div
       className="absolute cursor-pointer overflow-hidden px-0.5"
@@ -727,10 +731,16 @@ function EventBlock({ event, onClick, renderEvent }: EventBlockProps) {
         renderEvent(event)
       ) : (
         <div
-          className={`h-full rounded-sm border-l-4 p-1 text-xs ${backgroundClasses}`}
+          className={`h-full rounded-md border-l-4 px-1 py-2 text-xs ${backgroundClasses}`}
         >
-          <p className="truncate font-semibold">{event.title}</p>
-          <p className="truncate text-[10px]">
+          <p className="truncate leading-tight">
+            <span className="font-semibold">{event.title}</span>&nbsp;
+            <span className="font-semibold">
+              - {subSection} ({type})
+            </span>
+          </p>
+
+          <p className="truncate leading-tight font-light">
             {formatTime(event.start)} - {formatTime(event.end)}
           </p>
         </div>
