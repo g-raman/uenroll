@@ -12,8 +12,8 @@
     "outDir": "dist",
     "sourceMap": true,
     // Cloudflare Workers types
-    "types": ["./worker-configuration.d.ts", "node"],
+    "types": ["./worker-configuration.d.ts", "./service-bindings.d.ts"],
     "lib": ["ES2022"]
   },
-  "include": ["src"]
+  "include": ["./src/**/*.ts", "./worker-configuration.d.ts", "./service-bindings.d.ts"]
 }
