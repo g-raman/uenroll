@@ -12,12 +12,9 @@ export function EventBlock({ event, onClick, renderEvent }: EventBlockProps) {
     onClick?.(event);
   };
 
-  const defaultBackgroundColor = "bg-blue-200 border-l-blue-500";
-  const backgroundClasses = event.backgroundColour || defaultBackgroundColor;
-
-  // Extract additional event data
-  const subSection = event.subSection as string | undefined;
-  const type = event.type as string | undefined;
+  const backgroundClasses = event.courseDetails.backgroundColour;
+  const subSection = event.courseDetails.subSection;
+  const type = event.courseDetails.type;
 
   return (
     <div

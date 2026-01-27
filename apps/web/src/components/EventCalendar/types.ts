@@ -1,13 +1,12 @@
+import { SelectedSession } from "@/types/Types";
 import { Temporal } from "temporal-polyfill";
 
-export interface CalendarEvent {
+export interface CalendarEvent extends SelectedSession {
   id: string | number;
   title: string;
   start: Temporal.ZonedDateTime;
   end: Temporal.ZonedDateTime;
   rrule?: string;
-  backgroundColour?: string;
-  [key: string]: unknown;
 }
 
 export interface EventCalendarConfig {
