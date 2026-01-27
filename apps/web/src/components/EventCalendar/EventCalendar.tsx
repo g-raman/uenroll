@@ -226,9 +226,12 @@ export function EventCalendar({
       {/* Calendar Grid */}
       <div className="flex flex-1 overflow-auto">
         {/* Time labels column */}
-        <div className="bg-muted/30 w-16 flex-shrink-0 border-r pt-2">
+        <div className="w-16 flex-shrink-0 border-r">
           {/* Hour labels */}
-          <div className="relative" style={{ height: gridHeight }}>
+          <div
+            className="bg-muted/30 relative pt-2"
+            style={{ height: gridHeight }}
+          >
             {hourLabels.map(({ hour, label }) => (
               <div
                 key={hour}
