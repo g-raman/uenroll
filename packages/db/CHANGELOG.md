@@ -1,5 +1,13 @@
 # @repo/db
 
+## 0.6.2
+
+### Patch Changes
+
+- [#146](https://github.com/g-raman/uenroll/pull/146) [`fe81598`](https://github.com/g-raman/uenroll/commit/fe815982bda4ff5f6a733c8ba42a4fcf5a62d1d2) Thanks [@g-raman](https://github.com/g-raman)! - Update dependencies
+
+- [`4ccdbc9`](https://github.com/g-raman/uenroll/commit/4ccdbc97a63cb0a82bd050590087e3b64a07967b) Thanks [@g-raman](https://github.com/g-raman)! - Add docker file for local setup
+
 ## 0.6.1
 
 ### Patch Changes
