@@ -10,7 +10,6 @@ export interface DayColumnProps {
   dayEndHour: number;
   currentTimePosition: number | null;
   onEventClick?: (event: CalendarEvent) => void;
-  renderEvent?: (event: CalendarEvent) => React.ReactNode;
 }
 
 export function DayColumnComponent({
@@ -22,7 +21,6 @@ export function DayColumnComponent({
   dayEndHour,
   currentTimePosition,
   onEventClick,
-  renderEvent,
 }: DayColumnProps) {
   const totalHours = dayEndHour - dayStartHour + 1;
   const contentHeight = totalHours * hourHeight;
@@ -32,7 +30,6 @@ export function DayColumnComponent({
       className="relative flex-1 border-r last:border-r-0"
       style={{ height: gridHeight }}
     >
-      {/* Hour grid lines - offset by padding */}
       {Array.from({ length: totalHours + 1 }, (_, i) => (
         <div
           key={i}
@@ -41,7 +38,6 @@ export function DayColumnComponent({
         />
       ))}
 
-      {/* Current time indicator */}
       {currentTimePosition !== null && (
         <div
           className="pointer-events-none absolute right-0 left-0 flex items-center"
@@ -54,18 +50,12 @@ export function DayColumnComponent({
         </div>
       )}
 
-      {/* Events container - offset by padding */}
       <div
         className="absolute right-0 left-0"
         style={{ top: paddingHeight, height: contentHeight }}
       >
         {column.events.map(event => (
-          <EventBlock
-            key={event.id}
-            event={event}
-            onClick={onEventClick}
-            renderEvent={renderEvent}
-          />
+          <EventBlock key={event.id} event={event} onClick={onEventClick} />
         ))}
       </div>
     </div>

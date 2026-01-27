@@ -345,9 +345,6 @@ export function expandRecurringEvents(
             id: `${event.id}-${instanceStart.epochMilliseconds}`,
             start: instanceStart,
             end: instanceEnd,
-            // Keep reference to original event
-            _originalId: event.id,
-            _isRecurrenceInstance: true,
           });
         }
       }
