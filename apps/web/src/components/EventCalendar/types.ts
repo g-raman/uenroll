@@ -1,13 +1,7 @@
-import { SelectedSession } from "@/types/Types";
+import { coursesToCalendarAppEvents } from "@/utils/mappers/calendar";
 import { Temporal } from "temporal-polyfill";
 
-export interface CalendarEvent extends SelectedSession {
-  id: string | number;
-  title: string;
-  start: Temporal.ZonedDateTime;
-  end: Temporal.ZonedDateTime;
-  rrule?: string;
-}
+export type CalendarEvent = ReturnType<typeof coursesToCalendarAppEvents>[0];
 
 export interface EventCalendarConfig {
   timezone?: string;

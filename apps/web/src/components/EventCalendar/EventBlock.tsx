@@ -12,9 +12,9 @@ export function EventBlock({ event, onClick, renderEvent }: EventBlockProps) {
     onClick?.(event);
   };
 
-  const backgroundClasses = event.courseDetails.backgroundColour;
-  const subSection = event.courseDetails.subSection;
-  const type = event.courseDetails.type;
+  const backgroundClasses = event.backgroundColour;
+  const subSection = event.subSection;
+  const type = event.type;
 
   return (
     <div
