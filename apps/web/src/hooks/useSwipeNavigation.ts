@@ -20,7 +20,7 @@ export const useSwipeNavigation = (
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const containerWidthRef = useRef(0);
+  const [containerWidth, setContainerWidth] = useState(0);
   const touchStartRef = useRef<TouchStartData | null>(null);
 
   const handleTouchStart = useCallback(
@@ -30,7 +30,8 @@ export const useSwipeNavigation = (
       if (!touch) return;
 
       const container = e.currentTarget;
-      containerWidthRef.current = container.getBoundingClientRect().width - 64;
+      const width = container.getBoundingClientRect().width - 64;
+      setContainerWidth(width);
 
       touchStartRef.current = {
         x: touch.clientX,
@@ -83,13 +84,12 @@ export const useSwipeNavigation = (
       const touch = e.changedTouches[0];
       if (!touch) return;
 
-      const containerWidth = containerWidthRef.current || 300;
       const deltaX = touch.clientX - touchStartRef.current.x;
       const deltaTime = Date.now() - touchStartRef.current.lastTime;
       const velocityX =
         (touch.clientX - touchStartRef.current.lastX) / Math.max(deltaTime, 1);
 
-      const dragPercentage = Math.abs(deltaX) / containerWidth;
+      const dragPercentage = Math.abs(deltaX) / Math.max(containerWidth, 300);
 
       const shouldCommit =
         dragPercentage > SWIPE_COMMIT_THRESHOLD ||
@@ -121,14 +121,16 @@ export const useSwipeNavigation = (
 
       touchStartRef.current = null;
     },
-    [isDragging, onNavigate],
+    [isDragging, onNavigate, containerWidth],
   );
 
   return {
     dragOffset,
     isDragging,
     isAnimating,
-    containerWidthRef,
+    containerWidth,
+    prevOffset: -containerWidth + dragOffset,
+    nextOffset: containerWidth + dragOffset,
     handlers: enabled
       ? {
           onTouchStart: handleTouchStart,

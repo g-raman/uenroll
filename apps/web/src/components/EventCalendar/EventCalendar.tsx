@@ -2,9 +2,7 @@
 
 import { Temporal } from "temporal-polyfill";
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
-import { Switch } from "@repo/ui/components/switch";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import {
@@ -19,6 +17,7 @@ import { DayColumnComponent } from "./DayColumn";
 import { EventCalendarProps, DayColumn } from "./types";
 import { SlidingContainer } from "./SlidingContainer";
 import { DayHeader } from "./DayHeader";
+import { DesktopControls } from "./DesktopControls";
 
 const DEFAULT_TIMEZONE = "America/Toronto";
 const DEFAULT_DAY_START = 7;
@@ -56,7 +55,6 @@ export function EventCalendar({
 
   const [weekendsHidden, setWeekendsHidden] = useState(hideWeekends);
 
-  // Determine view mode based on screen size
   const isDesktop = width !== null && width >= TABLET_BREAKPOINT;
   const isTablet =
     width !== null && width >= MOBILE_BREAKPOINT && width < TABLET_BREAKPOINT;
@@ -64,7 +62,6 @@ export function EventCalendar({
   const visibleDays = isDesktop ? (weekendsHidden ? 5 : 7) : isTablet ? 3 : 2;
   const navigationDays = isDesktop ? 7 : visibleDays;
 
-  // Navigation handler for swipe
   const handleSwipeNavigation = useCallback(
     (direction: "next" | "previous") => {
       const newDate =
@@ -77,11 +74,15 @@ export function EventCalendar({
     [currentDate, navigationDays, onDateChange],
   );
 
-  // Swipe gesture handling
-  const { dragOffset, isDragging, isAnimating, containerWidthRef, handlers } =
-    useSwipeNavigation(handleSwipeNavigation, !isDesktop);
+  const {
+    dragOffset,
+    isDragging,
+    isAnimating,
+    prevOffset,
+    nextOffset,
+    handlers,
+  } = useSwipeNavigation(handleSwipeNavigation, !isDesktop);
 
-  // Calculate week start from current date
   const weekStart = useMemo(() => getWeekStart(currentDate), [currentDate]);
 
   const dayColumns = useMemo(() => {
@@ -117,56 +118,46 @@ export function EventCalendar({
     visibleDays,
   ]);
 
-  const nextDayColumns = useMemo(() => {
-    if (isDesktop) return null;
-    const nextDate = currentDate.add({ days: visibleDays });
-    return buildDayColumns(
+  const getAdjacentDayColumns = useCallback(
+    (daysOffset: number) => {
+      if (isDesktop) return null;
+      const targetDate = currentDate.add({ days: daysOffset });
+      return buildDayColumns(
+        events,
+        targetDate,
+        timezone,
+        dayStartHour,
+        dayEndHour,
+        false,
+        visibleDays,
+      );
+    },
+    [
+      currentDate,
       events,
-      nextDate,
       timezone,
       dayStartHour,
       dayEndHour,
-      false,
       visibleDays,
-    );
-  }, [
-    currentDate,
-    events,
-    timezone,
-    dayStartHour,
-    dayEndHour,
-    visibleDays,
-    isDesktop,
-  ]);
+      isDesktop,
+    ],
+  );
 
-  const prevDayColumns = useMemo(() => {
-    if (isDesktop) return null;
-    const prevDate = currentDate.subtract({ days: visibleDays });
-    return buildDayColumns(
-      events,
-      prevDate,
-      timezone,
-      dayStartHour,
-      dayEndHour,
-      false,
-      visibleDays,
-    );
-  }, [
-    currentDate,
-    events,
-    timezone,
-    dayStartHour,
-    dayEndHour,
-    visibleDays,
-    isDesktop,
-  ]);
+  const nextDayColumns = useMemo(
+    () => getAdjacentDayColumns(visibleDays),
+    [getAdjacentDayColumns, visibleDays],
+  );
+
+  const prevDayColumns = useMemo(
+    () => getAdjacentDayColumns(-visibleDays),
+    [getAdjacentDayColumns, visibleDays],
+  );
 
   const hourLabels = useMemo(
     () => generateHourLabels(dayStartHour, dayEndHour),
     [dayStartHour, dayEndHour],
   );
 
-  // Update current time indicator
   useEffect(() => {
     if (!showCurrentTime) return;
 
@@ -182,20 +173,13 @@ export function EventCalendar({
     return () => clearInterval(interval);
   }, [timezone, dayStartHour, dayEndHour, showCurrentTime]);
 
-  // Navigation handlers
-  const goToPrevious = useCallback(() => {
-    if (isAnimating) return;
-    const newDate = currentDate.subtract({ days: navigationDays });
-    setCurrentDate(newDate);
-    onDateChange?.(newDate);
-  }, [isAnimating, currentDate, navigationDays, onDateChange]);
-
-  const goToNext = useCallback(() => {
-    if (isAnimating) return;
-    const newDate = currentDate.add({ days: navigationDays });
-    setCurrentDate(newDate);
-    onDateChange?.(newDate);
-  }, [isAnimating, currentDate, navigationDays, onDateChange]);
+  const navigate = useCallback(
+    (direction: "next" | "previous") => {
+      if (isAnimating) return;
+      handleSwipeNavigation(direction);
+    },
+    [isAnimating, handleSwipeNavigation],
+  );
 
   const goToToday = useCallback(() => {
     const today = getToday(timezone);
@@ -207,12 +191,21 @@ export function EventCalendar({
   const paddingHeight = hourHeight;
   const gridHeight = totalHours * hourHeight + paddingHeight;
 
-  // Helper: Render sliding columns
+  const dayColumnProps = {
+    hourHeight,
+    gridHeight,
+    paddingHeight,
+    dayStartHour,
+    dayEndHour,
+    onEventClick,
+    renderEvent,
+  };
+
   const renderSlidingColumns = (
     columns: DayColumn[] | null,
     offset: number,
     keyPrefix: string,
-    renderContent: (column: DayColumn) => React.ReactNode,
+    renderContent: (column: DayColumn, key: string) => React.ReactNode,
   ) =>
     columns &&
     (isDragging || isAnimating) && (
@@ -221,9 +214,9 @@ export function EventCalendar({
         isAnimating={isAnimating}
         className="absolute top-0 flex w-full"
       >
-        {columns.map(column => (
-          <div key={`${keyPrefix}-${column.date}`}>{renderContent(column)}</div>
-        ))}
+        {columns.map(column =>
+          renderContent(column, `${keyPrefix}-${column.date}`),
+        )}
       </SlidingContainer>
     );
 
@@ -240,40 +233,27 @@ export function EventCalendar({
           </h2>
         </div>
         {isDesktop && (
-          <div className="flex items-center gap-4">
-            <label className="flex cursor-pointer items-center gap-2 text-sm">
-              <Switch
-                checked={weekendsHidden}
-                onCheckedChange={setWeekendsHidden}
-              />
-              <span className="text-muted-foreground">Hide weekends</span>
-            </label>
-            <div className="flex items-center">
-              <Button variant="ghost" size="icon" onClick={goToPrevious}>
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="icon" onClick={goToNext}>
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
+          <DesktopControls
+            weekendsHidden={weekendsHidden}
+            onWeekendsToggle={setWeekendsHidden}
+            onPrevious={() => navigate("previous")}
+            onNext={() => navigate("next")}
+          />
         )}
       </div>
 
       {/* Day Headers Row */}
       <div className="flex overflow-hidden border-b">
-        <div className="w-16 flex-shrink-0 border-r"></div>
+        <div className="w-16 flex-shrink-0 border-r" />
         <div className="relative flex-1 overflow-hidden">
-          {/* Previous day headers */}
           {renderSlidingColumns(
             prevDayColumns,
-            -(containerWidthRef.current || 0) + dragOffset,
+            prevOffset,
             "header-prev",
-            column => (
-              <DayHeader column={column} />
+            (column, key) => (
+              <DayHeader key={key} column={column} />
             ),
           )}
-          {/* Current day headers */}
           <SlidingContainer
             offset={dragOffset}
             isAnimating={isAnimating}
@@ -283,13 +263,12 @@ export function EventCalendar({
               <DayHeader key={`header-${column.date}`} column={column} />
             ))}
           </SlidingContainer>
-          {/* Next day headers */}
           {renderSlidingColumns(
             nextDayColumns,
-            (containerWidthRef.current || 0) + dragOffset,
+            nextOffset,
             "header-next",
-            column => (
-              <DayHeader column={column} />
+            (column, key) => (
+              <DayHeader key={key} column={column} />
             ),
           )}
         </div>
@@ -297,7 +276,6 @@ export function EventCalendar({
 
       {/* Calendar Grid */}
       <div className="flex flex-1 overflow-auto" {...handlers}>
-        {/* Time labels column */}
         <div
           className="bg-background sticky left-0 z-30 w-16 flex-shrink-0 border-r"
           style={{ height: gridHeight }}
@@ -315,30 +293,22 @@ export function EventCalendar({
           ))}
         </div>
 
-        {/* Days grid container */}
         <div className="relative flex-1">
-          {/* Previous days */}
           {renderSlidingColumns(
             prevDayColumns,
-            -(containerWidthRef.current || 0) + dragOffset,
+            prevOffset,
             "prev",
-            column => (
+            (column, key) => (
               <DayColumnComponent
+                key={key}
                 column={column}
-                hourHeight={hourHeight}
-                gridHeight={gridHeight}
-                paddingHeight={paddingHeight}
-                dayStartHour={dayStartHour}
-                dayEndHour={dayEndHour}
+                {...dayColumnProps}
                 currentTimePosition={
                   column.isToday ? currentTimePosition : null
                 }
-                onEventClick={onEventClick}
-                renderEvent={renderEvent}
               />
             ),
           )}
-          {/* Current days */}
           <SlidingContainer
             offset={dragOffset}
             isAnimating={isAnimating}
@@ -349,37 +319,25 @@ export function EventCalendar({
               <DayColumnComponent
                 key={column.date.toString()}
                 column={column}
-                hourHeight={hourHeight}
-                gridHeight={gridHeight}
-                paddingHeight={paddingHeight}
-                dayStartHour={dayStartHour}
-                dayEndHour={dayEndHour}
+                {...dayColumnProps}
                 currentTimePosition={
                   column.isToday ? currentTimePosition : null
                 }
-                onEventClick={onEventClick}
-                renderEvent={renderEvent}
               />
             ))}
           </SlidingContainer>
-          {/* Next days */}
           {renderSlidingColumns(
             nextDayColumns,
-            (containerWidthRef.current || 0) + dragOffset,
+            nextOffset,
             "next",
-            column => (
+            (column, key) => (
               <DayColumnComponent
+                key={key}
                 column={column}
-                hourHeight={hourHeight}
-                gridHeight={gridHeight}
-                paddingHeight={paddingHeight}
-                dayStartHour={dayStartHour}
-                dayEndHour={dayEndHour}
+                {...dayColumnProps}
                 currentTimePosition={
                   column.isToday ? currentTimePosition : null
                 }
-                onEventClick={onEventClick}
-                renderEvent={renderEvent}
               />
             ),
           )}
