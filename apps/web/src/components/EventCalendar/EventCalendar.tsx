@@ -1,7 +1,7 @@
 "use client";
 
 import { Temporal } from "temporal-polyfill";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { Switch } from "@repo/ui/components/switch";
@@ -21,6 +21,10 @@ import {
   formatWeekRange,
   formatTime,
 } from "./utils";
+
+// Touch/swipe gesture configuration
+const SWIPE_THRESHOLD = 50; // Minimum distance for a swipe
+const SWIPE_VELOCITY_THRESHOLD = 0.3; // Minimum velocity (px/ms) for a quick swipe
 
 const DEFAULT_TIMEZONE = "America/Toronto";
 const DEFAULT_DAY_START = 6;
@@ -133,23 +137,27 @@ export function EventCalendar({
   // Navigation handlers - move by week on desktop, by visible days on mobile/tablet
   const navigationDays = isDesktop ? 7 : visibleDays;
 
-  const goToPrevious = () => {
-    const newDate = currentDate.subtract({ days: navigationDays });
-    setCurrentDate(newDate);
-    onDateChange?.(newDate);
-  };
+  const goToPrevious = useCallback(() => {
+    setCurrentDate(prev => {
+      const newDate = prev.subtract({ days: navigationDays });
+      onDateChange?.(newDate);
+      return newDate;
+    });
+  }, [navigationDays, onDateChange]);
 
-  const goToNext = () => {
-    const newDate = currentDate.add({ days: navigationDays });
-    setCurrentDate(newDate);
-    onDateChange?.(newDate);
-  };
+  const goToNext = useCallback(() => {
+    setCurrentDate(prev => {
+      const newDate = prev.add({ days: navigationDays });
+      onDateChange?.(newDate);
+      return newDate;
+    });
+  }, [navigationDays, onDateChange]);
 
-  const goToToday = () => {
+  const goToToday = useCallback(() => {
     const today = getToday(timezone);
     setCurrentDate(today);
     onDateChange?.(today);
-  };
+  }, [timezone, onDateChange]);
 
   // Set date programmatically
   const setDate = (date: Temporal.PlainDate) => {
@@ -160,6 +168,63 @@ export function EventCalendar({
   const totalHours = dayEndHour - dayStartHour + 1;
   const paddingHeight = hourHeight; // Full cell padding above
   const gridHeight = totalHours * hourHeight + paddingHeight;
+
+  // Touch/swipe gesture handling for mobile and tablet
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(
+    null,
+  );
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    if (!touch) return;
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now(),
+    };
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (!touchStartRef.current) return;
+
+      const touch = e.changedTouches[0];
+      if (!touch) return;
+
+      const deltaX = touch.clientX - touchStartRef.current.x;
+      const deltaY = touch.clientY - touchStartRef.current.y;
+      const deltaTime = Date.now() - touchStartRef.current.time;
+
+      // Calculate velocity
+      const velocityX = Math.abs(deltaX) / deltaTime;
+
+      // Check if horizontal swipe is more dominant than vertical
+      const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
+
+      // Check if swipe meets threshold (either distance or velocity)
+      const meetsDistanceThreshold = Math.abs(deltaX) > SWIPE_THRESHOLD;
+      const meetsVelocityThreshold = velocityX > SWIPE_VELOCITY_THRESHOLD;
+
+      if (
+        isHorizontalSwipe &&
+        (meetsDistanceThreshold || meetsVelocityThreshold)
+      ) {
+        if (deltaX > 0) {
+          // Swipe right -> go to previous
+          goToPrevious();
+        } else {
+          // Swipe left -> go to next
+          goToNext();
+        }
+      }
+
+      touchStartRef.current = null;
+    },
+    [goToPrevious, goToNext],
+  );
+
+  // Only enable swipe on mobile and tablet
+  const swipeEnabled = !isDesktop;
 
   return (
     <div className="bg-background flex h-full flex-col overflow-hidden rounded-lg border">
@@ -225,7 +290,11 @@ export function EventCalendar({
       </div>
 
       {/* Calendar Grid */}
-      <div className="flex flex-1 overflow-auto">
+      <div
+        className="flex flex-1 overflow-auto"
+        onTouchStart={swipeEnabled ? handleTouchStart : undefined}
+        onTouchEnd={swipeEnabled ? handleTouchEnd : undefined}
+      >
         {/* Time labels column */}
         <div className="w-16 flex-shrink-0 border-r">
           {/* Hour labels */}
