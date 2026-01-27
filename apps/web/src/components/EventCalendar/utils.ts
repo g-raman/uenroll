@@ -297,9 +297,13 @@ export function expandRecurringEvents(
       const dtstart = new Date(event.start.epochMilliseconds);
 
       // Parse the RRULE options from the string
-      const rule = RRule.fromString(`RRULE:${event.rrule}`);
+      // The rrule string may already include "RRULE:" prefix or may include DTSTART
+      const rruleString = event.rrule.includes("RRULE:")
+        ? event.rrule
+        : `RRULE:${event.rrule}`;
+      const rule = RRule.fromString(rruleString);
 
-      // Create a new rule with the dtstart included
+      // Create a new rule with the dtstart from the event (override any DTSTART in the rrule)
       const ruleWithStart = new RRule({
         ...rule.origOptions,
         dtstart,
