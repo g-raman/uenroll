@@ -7,7 +7,7 @@ import { NuqsAdapter } from "nuqs/adapters/next";
 import { ThemeProvider } from "next-themes";
 import { Suspense } from "react";
 import Provider from "./_trpc/Provider";
-import { envClient } from "@repo/env";
+import { envClient } from "@repo/env/client";
 
 const font = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],

@@ -8,7 +8,7 @@ import { useMode } from "@/stores/modeStore";
 import { scheduleToSelected } from "@/utils/mappers/schedule";
 import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { envClient } from "@repo/env";
+import { envClient } from "@repo/env/client";
 import { Button } from "@repo/ui/components/button";
 import {
   Tooltip,
