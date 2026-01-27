@@ -162,13 +162,13 @@ export function EventCalendar({
       {/* Calendar Grid */}
       <div className="flex flex-1 overflow-auto">
         {/* Time labels column */}
-        <div className="bg-muted/30 w-16 flex-shrink-0 border-r">
+        <div className="bg-muted/30 w-16 flex-shrink-0 border-r pt-2">
           {/* Hour labels */}
           <div className="relative" style={{ height: gridHeight }}>
             {hourLabels.map(({ hour, label }) => (
               <div
                 key={hour}
-                className="text-muted-foreground absolute right-2 -translate-y-1/2 text-xs"
+                className="text-muted-foreground absolute right-2 text-xs"
                 style={{ top: (hour - dayStartHour) * hourHeight }}
               >
                 {label}

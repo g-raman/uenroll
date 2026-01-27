@@ -276,9 +276,9 @@ export default function CalendarDemoPage() {
           events={demoEvents}
           config={{
             timezone: TIMEZONE,
-            dayStartHour: 8,
-            dayEndHour: 18,
-            hourHeight: 80,
+            dayStartHour: 7,
+            dayEndHour: 23,
+            hourHeight: 60,
             showCurrentTime: true,
           }}
           onEventClick={handleEventClick}
