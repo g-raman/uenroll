@@ -2,6 +2,7 @@
 
 import { Temporal } from "temporal-polyfill";
 import { useState } from "react";
+import Link from "next/link";
 import { EventCalendar, CalendarEvent } from "@/components/EventCalendar";
 import { TIMEZONE } from "@/utils/constants";
 
@@ -202,12 +203,12 @@ export default function CalendarDemoPage() {
             A custom week view calendar component with demo course data
           </p>
         </div>
-        <a
+        <Link
           href="/"
           className="rounded-md bg-white/10 px-4 py-2 text-sm text-white transition hover:bg-white/20"
         >
           Back to App
-        </a>
+        </Link>
       </div>
 
       {/* Calendar Container */}

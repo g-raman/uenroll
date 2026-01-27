@@ -78,7 +78,6 @@ export function EventCalendar({
   const isDesktop = width !== null && width >= TABLET_BREAKPOINT;
   const isTablet =
     width !== null && width >= MOBILE_BREAKPOINT && width < TABLET_BREAKPOINT;
-  const isMobile = width !== null && width < MOBILE_BREAKPOINT;
 
   // Number of days to show based on screen size
   const visibleDays = isDesktop ? (weekendsHidden ? 5 : 7) : isTablet ? 3 : 2;
@@ -211,12 +210,6 @@ export function EventCalendar({
     setCurrentDate(today);
     onDateChange?.(today);
   }, [timezone, onDateChange]);
-
-  // Set date programmatically
-  const setDate = (date: Temporal.PlainDate) => {
-    setCurrentDate(date);
-    onDateChange?.(date);
-  };
 
   const totalHours = dayEndHour - dayStartHour + 1;
   const paddingHeight = hourHeight; // Full cell padding above

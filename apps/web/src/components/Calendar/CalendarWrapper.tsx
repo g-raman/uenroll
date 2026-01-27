@@ -11,10 +11,8 @@ import {
 } from "@/utils/mappers/calendar";
 import { useMode } from "@/stores/modeStore";
 import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
-import { Calendar } from "@/components/Calendar/Calendar";
 import { GenerationHeader } from "./GenerationHeader";
-import { CalendarMobile } from "./CalendarMobile";
-import { useScreenSize } from "@/hooks/useScreenSize";
+import { EventCalendar } from "@/components/EventCalendar";
 
 export function CalendarWrapper() {
   const [selectedTerm] = useTermParam();
@@ -29,7 +27,6 @@ export function CalendarWrapper() {
   const schedules = useSchedules();
   const selectedSchedule = useSelectedSchedule();
   const isGenerationMode = useMode();
-  const size = useScreenSize();
 
   const courseSearchResults = courseQueries
     .filter(query => query.isSuccess)
@@ -44,12 +41,8 @@ export function CalendarWrapper() {
   return (
     <div className="flex h-full flex-col gap-2 bg-black md:gap-4">
       <GenerationHeader />
-      <div className="h-full overflow-y-scroll rounded-t-md">
-        {size.width && size.width <= 1024 ? (
-          <CalendarMobile events={events} />
-        ) : (
-          <Calendar events={events} />
-        )}
+      <div className="h-full overflow-hidden rounded-t-md">
+        <EventCalendar events={events} />
       </div>
     </div>
   );
