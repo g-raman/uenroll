@@ -408,9 +408,9 @@ export function EventCalendar({
                     {column.dayOfWeek}
                   </span>
                   <span
-                    className={`text-sm font-medium ${
+                    className={`flex h-6 w-6 items-center justify-center text-sm font-medium ${
                       column.isToday
-                        ? "bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-full"
+                        ? "bg-primary text-primary-foreground rounded-full"
                         : ""
                     }`}
                   >
@@ -446,9 +446,9 @@ export function EventCalendar({
                   {column.dayOfWeek}
                 </span>
                 <span
-                  className={`text-sm font-medium ${
+                  className={`flex h-6 w-6 items-center justify-center text-sm font-medium ${
                     column.isToday
-                      ? "bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-full"
+                      ? "bg-primary text-primary-foreground rounded-full"
                       : ""
                   }`}
                 >
@@ -481,9 +481,9 @@ export function EventCalendar({
                     {column.dayOfWeek}
                   </span>
                   <span
-                    className={`text-sm font-medium ${
+                    className={`flex h-6 w-6 items-center justify-center text-sm font-medium ${
                       column.isToday
-                        ? "bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-full"
+                        ? "bg-primary text-primary-foreground rounded-full"
                         : ""
                     }`}
                   >
