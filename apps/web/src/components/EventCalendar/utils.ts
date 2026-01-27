@@ -248,19 +248,33 @@ function getEventsForDay(
 
 /**
  * Build day columns with positioned events
+ * @param startDate - The date to start from (week start for desktop, current date for mobile)
+ * @param numDays - Optional number of days to show (defaults to 7 or 5 if hideWeekends)
  */
 export function buildDayColumns(
   events: CalendarEvent[],
-  weekStart: Temporal.PlainDate,
+  startDate: Temporal.PlainDate,
   timezone: string,
   dayStartHour: number,
   dayEndHour: number,
   hideWeekends: boolean = false,
+  numDays?: number,
 ): DayColumn[] {
   const today = getToday(timezone);
-  const weekDays = getWeekDays(weekStart, timezone, hideWeekends);
 
-  return weekDays.map(date => {
+  // Generate days starting from startDate
+  let days: Temporal.PlainDate[];
+  if (numDays !== undefined) {
+    // Generate exactly numDays starting from startDate
+    days = Array.from({ length: numDays }, (_, i) =>
+      startDate.add({ days: i }),
+    );
+  } else {
+    // Use the week days logic (7 days or 5 if hiding weekends)
+    days = getWeekDays(startDate, timezone, hideWeekends);
+  }
+
+  return days.map(date => {
     const dayEvents = getEventsForDay(events, date);
     const positionedEvents = layoutOverlappingEvents(
       dayEvents,

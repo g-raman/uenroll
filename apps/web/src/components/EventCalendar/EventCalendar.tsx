@@ -73,51 +73,40 @@ export function EventCalendar({
   const weekStart = useMemo(() => getWeekStart(currentDate), [currentDate]);
 
   // Build day columns with events
-  const allDayColumns = useMemo(
-    () =>
-      buildDayColumns(
+  const dayColumns = useMemo(() => {
+    if (isDesktop) {
+      // Desktop: show full week starting from Monday
+      return buildDayColumns(
         events,
         weekStart,
         timezone,
         dayStartHour,
         dayEndHour,
-        isDesktop ? weekendsHidden : false,
-      ),
-    [
+        weekendsHidden,
+      );
+    }
+
+    // Tablet/Mobile: show N days starting from current date
+    return buildDayColumns(
       events,
-      weekStart,
+      currentDate, // Start from current date, not week start
       timezone,
       dayStartHour,
       dayEndHour,
-      weekendsHidden,
-      isDesktop,
-    ],
-  );
-
-  // For tablet/mobile, slice the columns to show only visible days starting from current date
-  const dayColumns = useMemo(() => {
-    if (isDesktop) {
-      return allDayColumns;
-    }
-
-    // Find the index of the current date in the week
-    const currentDayIndex = allDayColumns.findIndex(
-      col => Temporal.PlainDate.compare(col.date, currentDate) === 0,
+      false,
+      visibleDays, // Limit to visible days
     );
-
-    // Start from current date, or beginning of week if current date not found
-    const startIndex = currentDayIndex >= 0 ? currentDayIndex : 0;
-
-    // Get visible days, wrapping if necessary
-    const result: DayColumn[] = [];
-    for (let i = 0; i < visibleDays; i++) {
-      const index = startIndex + i;
-      if (index < allDayColumns.length) {
-        result.push(allDayColumns[index]!);
-      }
-    }
-    return result;
-  }, [allDayColumns, currentDate, isDesktop, visibleDays]);
+  }, [
+    events,
+    weekStart,
+    currentDate,
+    timezone,
+    dayStartHour,
+    dayEndHour,
+    weekendsHidden,
+    isDesktop,
+    visibleDays,
+  ]);
 
   // Generate hour labels
   const hourLabels = useMemo(
