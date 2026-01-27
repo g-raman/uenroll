@@ -129,12 +129,40 @@ export function EventCalendar({
         <h2 className="text-lg font-semibold">{formatWeekRange(weekStart)}</h2>
       </div>
 
+      {/* Day Headers Row */}
+      <div className="flex border-b">
+        {/* Empty space for time labels column */}
+        <div className="w-16 flex-shrink-0 border-r" />
+        {/* Day headers */}
+        <div className="flex flex-1">
+          {dayColumns.map(column => (
+            <div
+              key={`header-${column.date.toString()}`}
+              className={`flex min-w-[120px] flex-1 flex-col items-center justify-center border-r py-2 last:border-r-0 ${
+                column.isToday ? "bg-primary/10" : ""
+              }`}
+            >
+              <span className="text-muted-foreground text-xs">
+                {column.dayOfWeek}
+              </span>
+              <span
+                className={`text-sm font-medium ${
+                  column.isToday
+                    ? "bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-full"
+                    : ""
+                }`}
+              >
+                {column.dayNumber}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Calendar Grid */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-auto">
         {/* Time labels column */}
         <div className="bg-muted/30 w-16 flex-shrink-0 border-r">
-          {/* Empty space for day headers */}
-          <div className="h-12 border-b" />
           {/* Hour labels */}
           <div className="relative" style={{ height: gridHeight }}>
             {hourLabels.map(({ hour, label }) => (
@@ -150,7 +178,7 @@ export function EventCalendar({
         </div>
 
         {/* Days grid */}
-        <div className="flex flex-1 overflow-x-auto">
+        <div className="flex flex-1">
           {dayColumns.map(column => (
             <DayColumnComponent
               key={column.date.toString()}
@@ -194,60 +222,40 @@ function DayColumnComponent({
   const totalHours = dayEndHour - dayStartHour + 1;
 
   return (
-    <div className="flex min-w-[120px] flex-1 flex-col border-r last:border-r-0">
-      {/* Day header */}
-      <div
-        className={`flex h-12 flex-col items-center justify-center border-b ${
-          column.isToday ? "bg-primary/10" : ""
-        }`}
-      >
-        <span className="text-muted-foreground text-xs">
-          {column.dayOfWeek}
-        </span>
-        <span
-          className={`text-sm font-medium ${
-            column.isToday
-              ? "bg-primary text-primary-foreground flex h-6 w-6 items-center justify-center rounded-full"
-              : ""
-          }`}
-        >
-          {column.dayNumber}
-        </span>
-      </div>
+    <div
+      className="relative min-w-[120px] flex-1 border-r last:border-r-0"
+      style={{ height: gridHeight }}
+    >
+      {/* Hour grid lines */}
+      {Array.from({ length: totalHours }, (_, i) => (
+        <div
+          key={i}
+          className="border-border/50 absolute right-0 left-0 border-b"
+          style={{ top: i * hourHeight }}
+        />
+      ))}
 
-      {/* Events grid */}
-      <div className="relative" style={{ height: gridHeight }}>
-        {/* Hour grid lines */}
-        {Array.from({ length: totalHours }, (_, i) => (
-          <div
-            key={i}
-            className="border-border/50 absolute right-0 left-0 border-b"
-            style={{ top: i * hourHeight }}
+      {/* Current time indicator */}
+      {currentTimePosition !== null && (
+        <div
+          className="absolute right-0 left-0 z-20 flex items-center"
+          style={{ top: `${currentTimePosition}%` }}
+        >
+          <div className="h-2 w-2 rounded-full bg-red-500" />
+          <div className="h-[2px] flex-1 bg-red-500" />
+        </div>
+      )}
+
+      {/* Events */}
+      <div className="absolute inset-0">
+        {column.events.map(event => (
+          <EventBlock
+            key={event.id}
+            event={event}
+            onClick={onEventClick}
+            renderEvent={renderEvent}
           />
         ))}
-
-        {/* Current time indicator */}
-        {currentTimePosition !== null && (
-          <div
-            className="absolute right-0 left-0 z-20 flex items-center"
-            style={{ top: `${currentTimePosition}%` }}
-          >
-            <div className="h-2 w-2 rounded-full bg-red-500" />
-            <div className="h-[2px] flex-1 bg-red-500" />
-          </div>
-        )}
-
-        {/* Events */}
-        <div className="absolute inset-0">
-          {column.events.map(event => (
-            <EventBlock
-              key={event.id}
-              event={event}
-              onClick={onEventClick}
-              renderEvent={renderEvent}
-            />
-          ))}
-        </div>
       </div>
     </div>
   );
