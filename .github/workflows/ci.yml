@@ -16,7 +16,7 @@ jobs:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
       NEXT_PUBLIC_POSTHOG_HOST: $${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
-      NEXT_PUBLIC_POSTHOG_KEY: $${{ secrest.NEXT_PUBLIC_POSTHOG_KEY }}
+      NEXT_PUBLIC_POSTHOG_KEY: $${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
