@@ -4,36 +4,7 @@
   "main": "src/index.ts",
   "compatibility_date": "2024-10-22",
   "compatibility_flags": ["nodejs_compat"],
-  // Cron trigger: Every 2 days at 8 AM EST (13:00 UTC)
-  "triggers": { "crons": ["0 13 */2 * *"] },
-  // Workflow bindings
-  "observability": {
-    "enabled": true,
-    "head_sampling_rate": 1,
-  },
-  "workflows": [
-    {
-      "name": "orchestrator-workflow",
-      "binding": "ORCHESTRATOR_WORKFLOW",
-      "class_name": "OrchestratorWorkflow",
-    },
-    {
-      "name": "terms-and-subjects-scraper",
-      "binding": "TERMS_AND_SUBJECTS_SCRAPER_WORKFLOW",
-      "class_name": "TermsAndSubjectsScraperWorkflow",
-    },
-    {
-      "name": "term-orchestrator-workflow",
-      "binding": "TERM_ORCHESTRATOR_WORKFLOW",
-      "class_name": "TermOrchestratorWorkflow",
-    },
-    {
-      "name": "subjects-scraper-workflow",
-      "binding": "SUBJECTS_SCRAPER_WORKFLOW",
-      "class_name": "SubjectsScraperWorkflow",
-    },
-  ],
-  // Hyperdrive database connection
+  "observability": { "enabled": true, "head_sampling_rate": 1 },
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
@@ -41,4 +12,58 @@
       "localConnectionString": "postgresql://postgres:postgres@localhost:5432/postgres",
     },
   ],
+  "env": {
+    "dev": {
+      "name": "uenroll-scraper-dev",
+      "workflows": [
+        {
+          "name": "orchestrator-workflow-dev",
+          "binding": "ORCHESTRATOR_WORKFLOW",
+          "class_name": "OrchestratorWorkflow",
+        },
+        {
+          "name": "terms-and-subjects-scraper-dev",
+          "binding": "TERMS_AND_SUBJECTS_SCRAPER_WORKFLOW",
+          "class_name": "TermsAndSubjectsScraperWorkflow",
+        },
+        {
+          "name": "term-orchestrator-workflow-dev",
+          "binding": "TERM_ORCHESTRATOR_WORKFLOW",
+          "class_name": "TermOrchestratorWorkflow",
+        },
+        {
+          "name": "subjects-scraper-workflow-dev",
+          "binding": "SUBJECTS_SCRAPER_WORKFLOW",
+          "class_name": "SubjectsScraperWorkflow",
+        },
+      ],
+    },
+    "prod": {
+      "name": "uenroll-scraper",
+      // Cron trigger: Every 2 days at 8 AM EST (13:00 UTC)
+      "triggers": { "crons": ["0 13 */2 * *"] },
+      "workflows": [
+        {
+          "name": "orchestrator-workflow",
+          "binding": "ORCHESTRATOR_WORKFLOW",
+          "class_name": "OrchestratorWorkflow",
+        },
+        {
+          "name": "terms-and-subjects-scraper",
+          "binding": "TERMS_AND_SUBJECTS_SCRAPER_WORKFLOW",
+          "class_name": "TermsAndSubjectsScraperWorkflow",
+        },
+        {
+          "name": "term-orchestrator-workflow",
+          "binding": "TERM_ORCHESTRATOR_WORKFLOW",
+          "class_name": "TermOrchestratorWorkflow",
+        },
+        {
+          "name": "subjects-scraper-workflow",
+          "binding": "SUBJECTS_SCRAPER_WORKFLOW",
+          "class_name": "SubjectsScraperWorkflow",
+        },
+      ],
+    },
+  },
 }
