@@ -61,7 +61,10 @@ export async function getAvailableCoursesByTerm(
   );
 }
 
-export async function deleteTerms(terms: Term[], database: Database = defaultDb) {
+export async function deleteTerms(
+  terms: Term[],
+  database: Database = defaultDb,
+) {
   if (terms.length === 0) {
     ResultAsync.fromPromise(
       Promise.reject(),

@@ -59,6 +59,7 @@ The scraper follows this data flow:
 ### Data Model
 
 The scraper produces three entity types (defined in `@repo/db/types`):
+
 - **Course** - courseCode, courseTitle, term
 - **CourseComponent** - section details (e.g., LEC, DGD, LAB)
 - **Session** - individual meeting times with instructor, day, time, dates
@@ -66,6 +67,7 @@ The scraper produces three entity types (defined in `@repo/db/types`):
 ### CSS Selectors
 
 HTML parsing relies on PeopleSoft's predictable ID patterns:
+
 - `win0divSSR_CLSRSLT_WRK_GROUPBOX2$N` - Course containers
 - `win0divSSR_CLSRSLT_WRK_GROUPBOX3$N` - Section containers
 - Helper functions `getIdSelector()` and `getIdStartsWithSelector()` build these selectors

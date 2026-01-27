@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with: 
+        with:
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Setup Bun
