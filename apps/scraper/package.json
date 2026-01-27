@@ -1,6 +1,6 @@
 {
   "name": "uenroll-scraper",
-  "version": "1.6.1",
+  "version": "2.0.0",
   "description": "A modern scraper for the uOttawa public course registry - Cloudflare Workers edition",
   "type": "module",
   "scripts": {
