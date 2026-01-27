@@ -8,6 +8,8 @@
   "env": {
     "dev": {
       "name": "uenroll-scraper-dev",
+      // Cron trigger: Every 4 days at 9 AM EST (14:00 UTC)
+      "triggers": { "crons": ["0 14 */4 * *"] },
       // Hyperdrive database connection for dev
       "hyperdrive": [
         {
@@ -41,8 +43,8 @@
     },
     "prod": {
       "name": "uenroll-scraper",
-      // Cron trigger: Every 2 days at 8 AM EST (13:00 UTC)
-      "triggers": { "crons": ["0 13 */2 * *"] },
+      // Cron trigger: Every day at 8 AM EST (13:00 UTC)
+      "triggers": { "crons": ["0 13 * * *"] },
       "hyperdrive": [
         {
           "binding": "HYPERDRIVE",
