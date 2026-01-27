@@ -17,6 +17,8 @@
     "ICAJAX",
     "ICNAVTYPEDROPDOWN",
     "RPTCK",
-    "Retryable"
+    "Retryable",
+    "rrule",
+    "Colour"
   ]
 }
