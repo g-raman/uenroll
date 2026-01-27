@@ -5,6 +5,7 @@ import { useState, useMemo, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { Switch } from "@repo/ui/components/switch";
+import { useScreenSize } from "@/hooks/useScreenSize";
 import {
   CalendarEvent,
   EventCalendarProps,
@@ -26,6 +27,10 @@ const DEFAULT_DAY_START = 6;
 const DEFAULT_DAY_END = 23;
 const DEFAULT_HOUR_HEIGHT = 60;
 
+// Breakpoints
+const MOBILE_BREAKPOINT = 640;
+const TABLET_BREAKPOINT = 1024;
+
 export function EventCalendar({
   events,
   config = {},
@@ -43,6 +48,8 @@ export function EventCalendar({
     hideWeekends = false,
   } = config;
 
+  const { width } = useScreenSize();
+
   const [currentDate, setCurrentDate] = useState<Temporal.PlainDate>(() => {
     return initialDate ?? getToday(timezone);
   });
@@ -53,11 +60,20 @@ export function EventCalendar({
 
   const [weekendsHidden, setWeekendsHidden] = useState(hideWeekends);
 
+  // Determine view mode based on screen size
+  const isDesktop = width !== null && width >= TABLET_BREAKPOINT;
+  const isTablet =
+    width !== null && width >= MOBILE_BREAKPOINT && width < TABLET_BREAKPOINT;
+  const isMobile = width !== null && width < MOBILE_BREAKPOINT;
+
+  // Number of days to show based on screen size
+  const visibleDays = isDesktop ? (weekendsHidden ? 5 : 7) : isTablet ? 3 : 2;
+
   // Calculate week start from current date
   const weekStart = useMemo(() => getWeekStart(currentDate), [currentDate]);
 
   // Build day columns with events
-  const dayColumns = useMemo(
+  const allDayColumns = useMemo(
     () =>
       buildDayColumns(
         events,
@@ -65,10 +81,43 @@ export function EventCalendar({
         timezone,
         dayStartHour,
         dayEndHour,
-        weekendsHidden,
+        isDesktop ? weekendsHidden : false,
       ),
-    [events, weekStart, timezone, dayStartHour, dayEndHour, weekendsHidden],
+    [
+      events,
+      weekStart,
+      timezone,
+      dayStartHour,
+      dayEndHour,
+      weekendsHidden,
+      isDesktop,
+    ],
   );
+
+  // For tablet/mobile, slice the columns to show only visible days starting from current date
+  const dayColumns = useMemo(() => {
+    if (isDesktop) {
+      return allDayColumns;
+    }
+
+    // Find the index of the current date in the week
+    const currentDayIndex = allDayColumns.findIndex(
+      col => Temporal.PlainDate.compare(col.date, currentDate) === 0,
+    );
+
+    // Start from current date, or beginning of week if current date not found
+    const startIndex = currentDayIndex >= 0 ? currentDayIndex : 0;
+
+    // Get visible days, wrapping if necessary
+    const result: DayColumn[] = [];
+    for (let i = 0; i < visibleDays; i++) {
+      const index = startIndex + i;
+      if (index < allDayColumns.length) {
+        result.push(allDayColumns[index]!);
+      }
+    }
+    return result;
+  }, [allDayColumns, currentDate, isDesktop, visibleDays]);
 
   // Generate hour labels
   const hourLabels = useMemo(
@@ -92,15 +141,17 @@ export function EventCalendar({
     return () => clearInterval(interval);
   }, [timezone, dayStartHour, dayEndHour, showCurrentTime]);
 
-  // Navigation handlers
-  const goToPreviousWeek = () => {
-    const newDate = currentDate.subtract({ weeks: 1 });
+  // Navigation handlers - move by week on desktop, by visible days on mobile/tablet
+  const navigationDays = isDesktop ? 7 : visibleDays;
+
+  const goToPrevious = () => {
+    const newDate = currentDate.subtract({ days: navigationDays });
     setCurrentDate(newDate);
     onDateChange?.(newDate);
   };
 
-  const goToNextWeek = () => {
-    const newDate = currentDate.add({ weeks: 1 });
+  const goToNext = () => {
+    const newDate = currentDate.add({ days: navigationDays });
     setCurrentDate(newDate);
     onDateChange?.(newDate);
   };
@@ -129,22 +180,24 @@ export function EventCalendar({
             Today
           </Button>
           <div className="flex items-center">
-            <Button variant="ghost" size="icon" onClick={goToPreviousWeek}>
+            <Button variant="ghost" size="icon" onClick={goToPrevious}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={goToNextWeek}>
+            <Button variant="ghost" size="icon" onClick={goToNext}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <label className="flex cursor-pointer items-center gap-2 text-sm">
-            <Switch
-              checked={weekendsHidden}
-              onCheckedChange={setWeekendsHidden}
-            />
-            <span className="text-muted-foreground">Hide weekends</span>
-          </label>
+          {isDesktop && (
+            <label className="flex cursor-pointer items-center gap-2 text-sm">
+              <Switch
+                checked={weekendsHidden}
+                onCheckedChange={setWeekendsHidden}
+              />
+              <span className="text-muted-foreground">Hide weekends</span>
+            </label>
+          )}
           <h2 className="text-lg font-semibold">
             {formatWeekRange(weekStart)}
           </h2>
@@ -160,7 +213,7 @@ export function EventCalendar({
           {dayColumns.map(column => (
             <div
               key={`header-${column.date.toString()}`}
-              className={`flex min-w-[120px] flex-1 flex-col items-center justify-center border-r py-2 last:border-r-0 ${
+              className={`flex flex-1 flex-col items-center justify-center border-r py-2 last:border-r-0 ${
                 column.isToday ? "bg-primary/10" : ""
               }`}
             >
@@ -245,7 +298,7 @@ function DayColumnComponent({
 
   return (
     <div
-      className="relative min-w-[120px] flex-1 border-r last:border-r-0"
+      className="relative flex-1 border-r last:border-r-0"
       style={{ height: gridHeight }}
     >
       {/* Hour grid lines */}
