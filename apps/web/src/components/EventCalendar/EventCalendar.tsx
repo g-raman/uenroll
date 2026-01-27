@@ -7,20 +7,15 @@ import { Button } from "@repo/ui/components/button";
 import { Switch } from "@repo/ui/components/switch";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import {
-  CalendarEvent,
-  EventCalendarProps,
-  DayColumn,
-  PositionedEvent,
-} from "./types";
-import {
   getWeekStart,
   getToday,
   buildDayColumns,
   generateHourLabels,
   getCurrentTimePosition,
   formatWeekRange,
-  formatTime,
 } from "./utils";
+import { DayColumnComponent } from "./DayColumn";
+import { EventCalendarProps } from "./types";
 
 // Touch/swipe gesture configuration
 const SWIPE_COMMIT_THRESHOLD = 0.3; // Percentage of width to commit navigation
@@ -65,10 +60,12 @@ export function EventCalendar({
 
   const [weekendsHidden, setWeekendsHidden] = useState(hideWeekends);
 
-  // Swipe/drag state for interactive sliding
-  // dragOffset: current drag position in pixels (negative = dragging left, positive = dragging right)
-  // isDragging: whether user is currently touching/dragging
-  // isAnimating: whether we're animating to final position after release
+  /* Swipe/drag state for interactive sliding
+   *
+   * dragOffset: current drag position in pixels (negative = dragging left, positive = dragging right)
+   * isDragging: whether user is currently touching/dragging
+   * isAnimating: whether we're animating to final position after release
+   */
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -85,10 +82,8 @@ export function EventCalendar({
   // Calculate week start from current date
   const weekStart = useMemo(() => getWeekStart(currentDate), [currentDate]);
 
-  // Build day columns with events
   const dayColumns = useMemo(() => {
     if (isDesktop) {
-      // Desktop: show full week starting from Monday
       return buildDayColumns(
         events,
         weekStart,
@@ -102,12 +97,12 @@ export function EventCalendar({
     // Tablet/Mobile: show N days starting from current date
     return buildDayColumns(
       events,
-      currentDate, // Start from current date, not week start
+      currentDate,
       timezone,
       dayStartHour,
       dayEndHour,
       false,
-      visibleDays, // Limit to visible days
+      visibleDays,
     );
   }, [
     events,
@@ -623,128 +618,6 @@ export function EventCalendar({
           )}
         </div>
       </div>
-    </div>
-  );
-}
-
-interface DayColumnProps {
-  column: DayColumn;
-  hourHeight: number;
-  gridHeight: number;
-  paddingHeight: number;
-  dayStartHour: number;
-  dayEndHour: number;
-  currentTimePosition: number | null;
-  onEventClick?: (event: CalendarEvent) => void;
-  renderEvent?: (event: CalendarEvent) => React.ReactNode;
-}
-
-function DayColumnComponent({
-  column,
-  hourHeight,
-  gridHeight,
-  paddingHeight,
-  dayStartHour,
-  dayEndHour,
-  currentTimePosition,
-  onEventClick,
-  renderEvent,
-}: DayColumnProps) {
-  const totalHours = dayEndHour - dayStartHour + 1;
-  const contentHeight = totalHours * hourHeight;
-
-  return (
-    <div
-      className="relative flex-1 border-r last:border-r-0"
-      style={{ height: gridHeight }}
-    >
-      {/* Hour grid lines - offset by padding */}
-      {Array.from({ length: totalHours + 1 }, (_, i) => (
-        <div
-          key={i}
-          className="border-border/50 absolute right-0 left-0 border-b"
-          style={{ top: paddingHeight + i * hourHeight }}
-        />
-      ))}
-
-      {/* Current time indicator */}
-      {currentTimePosition !== null && (
-        <div
-          className="pointer-events-none absolute right-0 left-0 flex items-center"
-          style={{
-            top: paddingHeight + (currentTimePosition / 100) * contentHeight,
-          }}
-        >
-          <div className="h-2 w-2 rounded-full bg-red-500" />
-          <div className="h-[2px] flex-1 bg-red-500" />
-        </div>
-      )}
-
-      {/* Events container - offset by padding */}
-      <div
-        className="absolute right-0 left-0"
-        style={{ top: paddingHeight, height: contentHeight }}
-      >
-        {column.events.map(event => (
-          <EventBlock
-            key={event.id}
-            event={event}
-            onClick={onEventClick}
-            renderEvent={renderEvent}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-interface EventBlockProps {
-  event: PositionedEvent;
-  onClick?: (event: CalendarEvent) => void;
-  renderEvent?: (event: CalendarEvent) => React.ReactNode;
-}
-
-function EventBlock({ event, onClick, renderEvent }: EventBlockProps) {
-  const handleClick = () => {
-    onClick?.(event);
-  };
-
-  const defaultBackgroundColor = "bg-blue-200 border-l-blue-500";
-  const backgroundClasses = event.backgroundColour || defaultBackgroundColor;
-
-  // Extract additional event data
-  const subSection = event.subSection as string | undefined;
-  const type = event.type as string | undefined;
-
-  return (
-    <div
-      className="absolute cursor-pointer overflow-hidden px-0.5"
-      style={{
-        top: `${event.top}%`,
-        height: `${event.height}%`,
-        left: `${event.left}%`,
-        width: `${event.width}%`,
-      }}
-      onClick={handleClick}
-    >
-      {renderEvent ? (
-        renderEvent(event)
-      ) : (
-        <div
-          className={`h-full space-y-1 rounded-md border-l-4 px-1 py-2 text-xs ${backgroundClasses}`}
-        >
-          <p className="truncate leading-tight">
-            <span className="font-semibold">{event.title}</span>&nbsp;
-            <span className="font-normal">
-              - {subSection} ({type})
-            </span>
-          </p>
-
-          <p className="truncate leading-tight font-light">
-            {formatTime(event.start)} - {formatTime(event.end)}
-          </p>
-        </div>
-      )}
     </div>
   );
 }
