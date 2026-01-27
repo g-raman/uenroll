@@ -26,8 +26,9 @@ const DEFAULT_HOUR_HEIGHT = 38;
 const MOBILE_BREAKPOINT = 640;
 const TABLET_BREAKPOINT = 1024;
 
-export function EventCalendar({ events, config = {} }: EventCalendarProps) {
+export function EventCalendar({ events, config }: EventCalendarProps) {
   const {
+    termStart,
     timezone = DEFAULT_TIMEZONE,
     dayStartHour = DEFAULT_DAY_START,
     dayEndHour = DEFAULT_DAY_END,
@@ -174,10 +175,9 @@ export function EventCalendar({ events, config = {} }: EventCalendarProps) {
     [isAnimating, handleSwipeNavigation],
   );
 
-  const goToToday = useCallback(() => {
-    const today = getToday(timezone);
-    setCurrentDate(today);
-  }, [timezone]);
+  const goToTermStart = useCallback(() => {
+    setCurrentDate(termStart);
+  }, [termStart]);
 
   const totalHours = dayEndHour - dayStartHour + 1;
   const paddingHeight = hourHeight;
@@ -215,8 +215,8 @@ export function EventCalendar({ events, config = {} }: EventCalendarProps) {
       {/* Header */}
       <div className="flex items-center justify-between border-b px-4 py-3">
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={goToToday}>
-            Today
+          <Button variant="outline" size="sm" onClick={goToTermStart}>
+            Term Start
           </Button>
           <h2 className="text-lg font-semibold">
             {formatWeekRange(weekStart)}

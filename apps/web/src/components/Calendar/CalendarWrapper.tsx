@@ -67,6 +67,12 @@ export function CalendarWrapper() {
     return termStart ? Temporal.PlainDate.from(termStart) : undefined;
   }, [events, selectedTerm]);
 
+  if (!selectedTerm) return;
+
+  const termStart = Temporal.PlainDate.from(
+    TERM_START_DATES[selectedTerm] as string,
+  );
+
   return (
     <div className="flex h-full flex-col gap-2 bg-black md:gap-4">
       <GenerationHeader />
@@ -74,7 +80,7 @@ export function CalendarWrapper() {
         <EventCalendar
           key={initialDate?.toString() ?? "default"}
           events={events}
-          config={{ initialDate }}
+          config={{ initialDate, termStart }}
         />
       </div>
     </div>

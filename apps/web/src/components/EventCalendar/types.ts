@@ -4,6 +4,7 @@ import { Temporal } from "temporal-polyfill";
 export type CalendarEvent = ReturnType<typeof coursesToCalendarAppEvents>[0];
 
 export interface EventCalendarConfig {
+  termStart: Temporal.PlainDate;
   timezone?: string;
   dayStartHour?: number;
   dayEndHour?: number;
@@ -15,9 +16,7 @@ export interface EventCalendarConfig {
 
 export interface EventCalendarProps {
   events: CalendarEvent[];
-  config?: EventCalendarConfig;
-  onEventClick?: (event: CalendarEvent) => void;
-  onDateChange?: (date: Temporal.PlainDate) => void;
+  config: EventCalendarConfig;
 }
 
 export interface PositionedEvent extends CalendarEvent {
