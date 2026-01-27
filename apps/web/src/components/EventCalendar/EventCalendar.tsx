@@ -531,12 +531,13 @@ export function EventCalendar({
         </div>
 
         {/* Days grid container - slides during swipe */}
-        <div className="relative flex-1 overflow-hidden">
+        <div className="relative flex-1">
           {/* Previous days (shown when dragging right) */}
           {prevDayColumns && (isDragging || isAnimating) && (
             <div
-              className="absolute top-0 flex h-full w-full"
+              className="absolute top-0 flex w-full"
               style={{
+                height: gridHeight,
                 transitionProperty: isAnimating ? "transform" : "none",
                 transitionDuration: isAnimating
                   ? `${ANIMATION_DURATION}ms`
@@ -565,8 +566,9 @@ export function EventCalendar({
           )}
           {/* Current days */}
           <div
-            className="flex h-full w-full"
+            className="flex w-full"
             style={{
+              height: gridHeight,
               transitionProperty: isAnimating ? "transform" : "none",
               transitionDuration: isAnimating
                 ? `${ANIMATION_DURATION}ms`
@@ -598,8 +600,9 @@ export function EventCalendar({
           {/* Next days (shown when dragging left) */}
           {nextDayColumns && (isDragging || isAnimating) && (
             <div
-              className="absolute top-0 flex h-full w-full"
+              className="absolute top-0 flex w-full"
               style={{
+                height: gridHeight,
                 transitionProperty: isAnimating ? "transform" : "none",
                 transitionDuration: isAnimating
                   ? `${ANIMATION_DURATION}ms`
