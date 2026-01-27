@@ -4,13 +4,13 @@
   "description": "A modern scraper for the uOttawa public course registry - Cloudflare Workers edition",
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev --env dev",
+    "check-types": "wrangler types && tsc --noEmit",
+    "db:cleanup": "bun src/cleanup.ts",
     "deploy": "wrangler deploy --env dev && wrangler deploy --env prod",
     "deploy:dev": "wrangler deploy --env dev",
     "deploy:prod": "wrangler deploy --env prod",
-    "check-types": "wrangler types && tsc --noEmit",
-    "lint": "eslint .",
-    "db:cleanup": "bun src/cleanup.ts"
+    "dev": "wrangler dev --env dev",
+    "lint": "eslint ."
   },
   "dependencies": {
     "cheerio": "^1.1.2",
