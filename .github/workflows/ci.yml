@@ -15,8 +15,8 @@ jobs:
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-      NEXT_PUBLIC_POSTHOG_HOST: $${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
-      NEXT_PUBLIC_POSTHOG_KEY: $${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
+      NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
+      NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
         run: bun run ci:format:packagejson
 
       - name: Build
-        run: bunx turbo build
+        run: bun run build
 
       - name: Check Types
-        run: bunx turbo check-types
+        run: bun run check-types
