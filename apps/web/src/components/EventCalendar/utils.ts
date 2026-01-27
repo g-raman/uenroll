@@ -2,21 +2,22 @@ import { Temporal } from "temporal-polyfill";
 import { CalendarEvent, DayColumn, PositionedEvent } from "./types";
 
 const DAYS_OF_WEEK: Record<number, string> = {
-  0: "Sun",
   1: "Mon",
   2: "Tue",
   3: "Wed",
   4: "Thu",
   5: "Fri",
   6: "Sat",
+  7: "Sun",
 };
 
 /**
- * Get the start of the week (Sunday) for a given date
+ * Get the start of the week (Monday) for a given date
  */
 export function getWeekStart(date: Temporal.PlainDate): Temporal.PlainDate {
-  const dayOfWeek = date.dayOfWeek === 7 ? 0 : date.dayOfWeek; // Convert ISO (1-7, Mon-Sun) to 0-6 (Sun-Sat)
-  return date.subtract({ days: dayOfWeek });
+  // Temporal uses ISO weekday: 1 = Monday, 7 = Sunday
+  const dayOfWeek = date.dayOfWeek;
+  return date.subtract({ days: dayOfWeek - 1 });
 }
 
 /**
@@ -258,11 +259,10 @@ export function buildDayColumns(
       dayStartHour,
       dayEndHour,
     );
-    const dayOfWeekIndex = date.dayOfWeek === 7 ? 0 : date.dayOfWeek;
 
     return {
       date,
-      dayOfWeek: DAYS_OF_WEEK[dayOfWeekIndex] ?? "Sun",
+      dayOfWeek: DAYS_OF_WEEK[date.dayOfWeek] ?? "Mon",
       dayNumber: date.day,
       isToday: isSameDay(date, today),
       events: positionedEvents,
