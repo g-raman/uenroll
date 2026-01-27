@@ -14,7 +14,7 @@ import {
 import { useMode } from "@/stores/modeStore";
 import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
 import { GenerationHeader } from "./GenerationHeader";
-import { EventCalendar } from "@/components/EventCalendar";
+import { EventCalendar } from "@/components/EventCalendar/EventCalendar";
 
 // Map term codes to their start dates
 const TERM_START_DATES: Record<string, string> = {
