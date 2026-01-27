@@ -10,18 +10,20 @@ import {
   getTimings,
   getTotalSections,
   processSessions,
-} from "../utils/scrape.js";
+} from "./utils.js";
 import * as cheerio from "cheerio";
-import { logger } from "../utils/logger.js";
 
 const COURSE_CONTAINER_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2$";
 const COURSE_TITLE_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX2GP$";
 const SECTION_SELECTOR = "win0divSSR_CLSRSLT_WRK_GROUPBOX3$";
 
-export default (
+/**
+ * Parse search results HTML into course details
+ */
+export function scrapeSearchResults(
   $: cheerio.CheerioAPI,
   term: Omit<Term, "isDeleted">,
-): CourseDetailsInsert => {
+): CourseDetailsInsert {
   const totalSections = getTotalSections($);
   let sectionNumber = 0;
 
@@ -38,6 +40,7 @@ export default (
 
   const allCourseTitleSelector = getIdStartsWithSelector(COURSE_TITLE_SELECTOR);
   const courses = allCourses.find(allCourseTitleSelector);
+
   courses.each(function (this, courseNumber) {
     const courseContainerSelector = getIdSelector(
       COURSE_CONTAINER_SELECTOR,
@@ -45,46 +48,51 @@ export default (
     );
     const courseContainer = $(courseContainerSelector);
     const parsedCourseHeader = getCourseCodeAndCourseTitle($(this));
+
     if (parsedCourseHeader.isErr()) {
-      logger.error(parsedCourseHeader.error);
+      console.error(parsedCourseHeader.error);
       return false;
     }
+
     const [courseCode, courseTitle] = parsedCourseHeader.value;
 
     const sectionSelector = getIdStartsWithSelector(SECTION_SELECTOR);
     const sectionDetails = courseContainer.find(sectionSelector);
 
     let currentSection = "";
+
     sectionDetails.each(function (this) {
       const section = $(this);
       const parsedSubsectionDetails = getSectionAndType(section, sectionNumber);
+
       if (parsedSubsectionDetails.isErr()) {
-        logger.error(parsedSubsectionDetails.error);
+        console.error(parsedSubsectionDetails.error);
         return false;
       }
+
       const [subSection, type] = parsedSubsectionDetails.value;
 
       const instructors = getInstructors(section, sectionNumber);
       if (instructors.isErr()) {
-        logger.error(instructors.error);
+        console.error(instructors.error);
         return false;
       }
 
       const dates = getDates(section, sectionNumber);
       if (dates.isErr()) {
-        logger.error(dates.error);
+        console.error(dates.error);
         return false;
       }
 
       const timings = getTimings(section, sectionNumber);
       if (timings.isErr()) {
-        logger.error(timings.error);
+        console.error(timings.error);
         return false;
       }
 
       const status = getStatus(section, sectionNumber);
       if (status.isErr()) {
-        logger.error(status.error);
+        console.error(status.error);
         return false;
       }
 
@@ -113,6 +121,7 @@ export default (
         isOpen: status.value,
         isDeleted: false,
       });
+
       sectionNumber++;
 
       if (sectionNumber >= totalSections) {
@@ -129,4 +138,4 @@ export default (
   });
 
   return details;
-};
+}

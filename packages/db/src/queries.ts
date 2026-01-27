@@ -1,5 +1,5 @@
 import { eq, and, asc, sql, lt, notInArray, inArray } from "drizzle-orm";
-import { db } from "./index.js";
+import { db as defaultDb, type Database } from "./index.js";
 import {
   availableSubjectsTable,
   availableTermsTable,
@@ -20,9 +20,9 @@ import type {
 } from "./types.js";
 import { err, ok, Result, ResultAsync } from "neverthrow";
 
-export async function getAvailableTerms() {
+export async function getAvailableTerms(database: Database = defaultDb) {
   return ResultAsync.fromPromise(
-    db
+    database
       .select({
         term: availableTermsTable.term,
         value: availableTermsTable.value,
@@ -33,19 +33,22 @@ export async function getAvailableTerms() {
   );
 }
 
-export const getAvailableSubjects = async () => {
+export async function getAvailableSubjects(database: Database = defaultDb) {
   return ResultAsync.fromPromise(
-    db
+    database
       .select({ subject: availableSubjectsTable.subject })
       .from(availableSubjectsTable)
       .orderBy(asc(availableSubjectsTable.subject)),
     error => new Error(`Failed to fetch available subjects: ${error}`),
   ).map(result => result.map(subject => subject.subject));
-};
+}
 
-export async function getAvailableCoursesByTerm(term: string) {
+export async function getAvailableCoursesByTerm(
+  term: string,
+  database: Database = defaultDb,
+) {
   return ResultAsync.fromPromise(
-    db
+    database
       .select({
         courseCode: coursesTable.courseCode,
         courseTitle: coursesTable.courseTitle,
@@ -58,7 +61,7 @@ export async function getAvailableCoursesByTerm(term: string) {
   );
 }
 
-export async function deleteTerms(terms: Term[]) {
+export async function deleteTerms(terms: Term[], database: Database = defaultDb) {
   if (terms.length === 0) {
     ResultAsync.fromPromise(
       Promise.reject(),
@@ -68,16 +71,19 @@ export async function deleteTerms(terms: Term[]) {
 
   const termsToDelete = terms.map(term => term.value);
   return ResultAsync.fromPromise(
-    db
+    database
       .delete(availableTermsTable)
       .where(inArray(availableTermsTable.value, termsToDelete)),
     error => new Error(`Failed to delete outdated terms: ${error}`),
   );
 }
 
-export const updateCourses = async (courses: CourseInsert[]) => {
+export async function updateCourses(
+  courses: CourseInsert[],
+  database: Database = defaultDb,
+) {
   return ResultAsync.fromPromise(
-    db
+    database
       .insert(coursesTable)
       .values(courses)
       .onConflictDoUpdate({
@@ -88,13 +94,14 @@ export const updateCourses = async (courses: CourseInsert[]) => {
       }),
     error => new Error(`Failed to update courses: ${error}`),
   );
-};
+}
 
-export const updateCourseComponents = async (
+export async function updateCourseComponents(
   courseComponents: CourseComponentInsert[],
-) => {
+  database: Database = defaultDb,
+) {
   return ResultAsync.fromPromise(
-    db
+    database
       .insert(courseComponentsTable)
       .values(courseComponents)
       .onConflictDoUpdate({
@@ -110,19 +117,23 @@ export const updateCourseComponents = async (
       }),
     error => new Error(`Failed to update course components: ${error}`),
   );
-};
+}
 
-export const updateSessions = async (sessions: SessionInsert[]) => {
+export async function updateSessions(
+  sessions: SessionInsert[],
+  database: Database = defaultDb,
+) {
   return ResultAsync.fromPromise(
-    db.insert(sessionsTable).values(sessions),
+    database.insert(sessionsTable).values(sessions),
     error => new Error(`Failed to update sessions: ${error}`),
   );
-};
+}
 
-export const upsertCourseDetails = async (
+export async function upsertCourseDetails(
   details: CourseDetailsInsert,
-): Promise<Result<undefined, Error[]>> => {
-  const coursesUpdated = await updateCourses(details.courses);
+  database: Database = defaultDb,
+): Promise<Result<undefined, Error[]>> {
+  const coursesUpdated = await updateCourses(details.courses, database);
   const errors = [];
   if (coursesUpdated.isErr()) {
     errors.push(coursesUpdated.error);
@@ -130,22 +141,26 @@ export const upsertCourseDetails = async (
 
   const courseComponentsUpdated = await updateCourseComponents(
     details.courseComponents,
+    database,
   );
   if (courseComponentsUpdated.isErr()) {
     errors.push(courseComponentsUpdated.error);
   }
 
-  const sessionsUpdated = await updateSessions(details.sessions);
+  const sessionsUpdated = await updateSessions(details.sessions, database);
   if (sessionsUpdated.isErr()) {
     errors.push(sessionsUpdated.error);
   }
 
   return errors.length > 0 ? err(errors) : ok(undefined);
-};
+}
 
-export const updateAvailableTerms = async (terms: TermInsert[]) => {
+export async function updateAvailableTerms(
+  terms: TermInsert[],
+  database: Database = defaultDb,
+) {
   return ResultAsync.fromPromise(
-    db
+    database
       .insert(availableTermsTable)
       .values(terms)
       .onConflictDoUpdate({
@@ -156,42 +171,57 @@ export const updateAvailableTerms = async (terms: TermInsert[]) => {
       }),
     error => new Error(`Failed to update available terms: ${error}`),
   );
-};
+}
 
-export const updateAvailableSubjects = async (subjects: SubjectInsert[]) => {
+export async function updateAvailableSubjects(
+  subjects: SubjectInsert[],
+  database: Database = defaultDb,
+) {
   return ResultAsync.fromPromise(
-    db.insert(availableSubjectsTable).values(subjects).onConflictDoNothing(),
+    database
+      .insert(availableSubjectsTable)
+      .values(subjects)
+      .onConflictDoNothing(),
     error => new Error(`Failed to update available subjects: ${error}`),
   );
-};
+}
 
-export const removeOldSessions = async (milliseconds: number) => {
+export async function removeOldSessions(
+  milliseconds: number,
+  database: Database = defaultDb,
+) {
   return ResultAsync.fromPromise(
-    db
+    database
       .delete(sessionsTable)
       .where(
         lt(sessionsTable.last_updated, new Date(Date.now() - milliseconds)),
       ),
     error => new Error(`Failed to remove outdated sessions: ${error}`),
   );
-};
+}
 
-export const removeCoursesWithNoSessions = async () => {
-  const coursesWithSessions = db
+export async function removeCoursesWithNoSessions(
+  database: Database = defaultDb,
+) {
+  const coursesWithSessions = database
     .selectDistinct({ courseCode: sessionsTable.courseCode })
     .from(sessionsTable);
 
   return ResultAsync.fromPromise(
-    db
+    database
       .delete(coursesTable)
       .where(notInArray(coursesTable.courseCode, coursesWithSessions)),
     error => new Error(`Failed to remove courses with no sessions: ${error}`),
   );
-};
+}
 
-export const getCourse = async (term: string, courseCode: string) => {
+export async function getCourse(
+  term: string,
+  courseCode: string,
+  database: Database = defaultDb,
+) {
   return await ResultAsync.fromPromise(
-    db.query.coursesTable.findFirst({
+    database.query.coursesTable.findFirst({
       where: and(
         eq(coursesTable.term, term),
         eq(coursesTable.courseCode, courseCode),
@@ -254,7 +284,7 @@ export const getCourse = async (term: string, courseCode: string) => {
     error =>
       new Error(`Failed to fetch course ${courseCode} in ${term}: ${error}`),
   );
-};
+}
 
 export const parseCourse = (course: GetCourseResultOkValue) => {
   const parsedSections = course.courseComponents.reduce(

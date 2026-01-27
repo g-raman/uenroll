@@ -1,13 +1,150 @@
 import * as cheerio from "cheerio";
-import { COURSE_REGISTRY_URL } from "./constants.js";
-import makeFetchCookie from "fetch-cookie";
 import { err, Result, ResultAsync } from "neverthrow";
+import { COURSE_REGISTRY_URL } from "./constants.js";
 
-export const fetchCookie = makeFetchCookie(fetch);
+/**
+ * Serializable session data that can be passed between workflow steps.
+ */
+export interface SessionData {
+  icsid: string;
+  cookies: Record<string, string>;
+}
 
-export const getICSID = async () => {
+/**
+ * Cookie jar for maintaining session state across requests.
+ */
+class CookieJar {
+  private cookies: Map<string, string> = new Map();
+
+  extractFromResponse(response: Response): void {
+    const setCookieHeaders = response.headers.getSetCookie();
+
+    for (const cookieHeader of setCookieHeaders) {
+      const [cookiePart] = cookieHeader.split(";");
+      if (cookiePart) {
+        const [name, ...valueParts] = cookiePart.split("=");
+        const value = valueParts.join("=");
+
+        if (name && value) {
+          this.cookies.set(name.trim(), value.trim());
+        }
+      }
+    }
+  }
+
+  getCookieHeader(): string {
+    return Array.from(this.cookies.entries())
+      .map(([name, value]) => `${name}=${value}`)
+      .join("; ");
+  }
+
+  hasCookies(): boolean {
+    return this.cookies.size > 0;
+  }
+
+  clear(): void {
+    this.cookies.clear();
+  }
+
+  toObject(): Record<string, string> {
+    return Object.fromEntries(this.cookies.entries());
+  }
+
+  static fromObject(cookies: Record<string, string>): CookieJar {
+    const jar = new CookieJar();
+    for (const [name, value] of Object.entries(cookies)) {
+      jar.cookies.set(name, value);
+    }
+    return jar;
+  }
+}
+
+/**
+ * Creates a fetch function that maintains cookies across requests.
+ */
+export function createFetchWithCookies() {
+  const cookieJar = new CookieJar();
+
+  const doFetch = async (
+    url: string,
+    init?: RequestInit,
+    redirectCount = 0,
+  ): Promise<Response> => {
+    if (redirectCount > 10) {
+      throw new Error("Too many redirects");
+    }
+
+    const headers = new Headers(init?.headers);
+
+    headers.set(
+      "User-Agent",
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    );
+    headers.set(
+      "Accept",
+      "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    );
+    headers.set("Accept-Language", "en-US,en;q=0.9");
+    headers.set("Cache-Control", "no-cache");
+
+    const existingCookies = cookieJar.getCookieHeader();
+    if (existingCookies) {
+      headers.set("Cookie", existingCookies);
+    }
+
+    // Make the request - disable automatic redirects so we can handle cookies
+    const response = await fetch(url, {
+      ...init,
+      headers,
+      redirect: "manual",
+    });
+
+    // Extract cookies from the response
+    cookieJar.extractFromResponse(response);
+
+    // Handle redirects manually
+    if (response.status >= 300 && response.status < 400) {
+      const location = response.headers.get("Location");
+      if (location) {
+        await response.body?.cancel();
+        // Resolve relative URLs
+        const redirectUrl = new URL(location, url).toString();
+
+        // For 303 or POST->GET redirect, change method to GET
+        const newInit = { ...init };
+        if (
+          response.status === 303 ||
+          (response.status === 302 && init?.method === "POST")
+        ) {
+          newInit.method = "GET";
+          newInit.body = undefined;
+        }
+
+        return doFetch(redirectUrl, newInit, redirectCount + 1);
+      }
+    }
+
+    return response;
+  };
+
+  return async (
+    input: RequestInfo | URL,
+    init?: RequestInit,
+  ): Promise<Response> => {
+    const url = typeof input === "string" ? input : input.toString();
+    return doFetch(url, init);
+  };
+}
+
+/**
+ * Get ICSID token from the course registry page.
+ * Uses the provided fetch function (should be cookie-aware).
+ */
+export async function getICSID(
+  fetchFn: typeof fetch,
+): Promise<Result<string | undefined, Error>> {
   const initialResponse = await ResultAsync.fromPromise(
-    fetchCookie(COURSE_REGISTRY_URL, {
+    fetchFn(COURSE_REGISTRY_URL, {
       method: "GET",
     }),
     error => new Error(`Failed to fetch course registry HTML: ${error}`),
@@ -35,4 +172,4 @@ export const getICSID = async () => {
   )();
 
   return icsid;
-};
+}

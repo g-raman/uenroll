@@ -1,0 +1,78 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "uenroll-scraper",
+  "main": "src/index.ts",
+  "compatibility_date": "2024-10-22",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true, "head_sampling_rate": 1 },
+  "env": {
+    "dev": {
+      "name": "uenroll-scraper-dev",
+      // Cron trigger: Every 4 days at 9 AM EST (14:00 UTC)
+      "triggers": { "crons": ["0 14 */4 * *"] },
+      // Hyperdrive database connection for dev
+      "hyperdrive": [
+        {
+          "binding": "HYPERDRIVE",
+          "id": "a24d5ae3a33047c2acdf27cc18526246",
+          "localConnectionString": "postgresql://postgres:postgres@localhost:5432/postgres",
+        },
+      ],
+      "workflows": [
+        {
+          "name": "orchestrator-workflow-dev",
+          "binding": "ORCHESTRATOR_WORKFLOW",
+          "class_name": "OrchestratorWorkflow",
+        },
+        {
+          "name": "terms-and-subjects-scraper-dev",
+          "binding": "TERMS_AND_SUBJECTS_SCRAPER_WORKFLOW",
+          "class_name": "TermsAndSubjectsScraperWorkflow",
+        },
+        {
+          "name": "term-orchestrator-workflow-dev",
+          "binding": "TERM_ORCHESTRATOR_WORKFLOW",
+          "class_name": "TermOrchestratorWorkflow",
+        },
+        {
+          "name": "subjects-scraper-workflow-dev",
+          "binding": "SUBJECTS_SCRAPER_WORKFLOW",
+          "class_name": "SubjectsScraperWorkflow",
+        },
+      ],
+    },
+    "prod": {
+      "name": "uenroll-scraper",
+      // Cron trigger: Every day at 8 AM EST (13:00 UTC)
+      "triggers": { "crons": ["0 13 * * *"] },
+      "hyperdrive": [
+        {
+          "binding": "HYPERDRIVE",
+          "id": "f9afc98dc02e403ebd7fdfea4a013373",
+        },
+      ],
+      "workflows": [
+        {
+          "name": "orchestrator-workflow",
+          "binding": "ORCHESTRATOR_WORKFLOW",
+          "class_name": "OrchestratorWorkflow",
+        },
+        {
+          "name": "terms-and-subjects-scraper",
+          "binding": "TERMS_AND_SUBJECTS_SCRAPER_WORKFLOW",
+          "class_name": "TermsAndSubjectsScraperWorkflow",
+        },
+        {
+          "name": "term-orchestrator-workflow",
+          "binding": "TERM_ORCHESTRATOR_WORKFLOW",
+          "class_name": "TermOrchestratorWorkflow",
+        },
+        {
+          "name": "subjects-scraper-workflow",
+          "binding": "SUBJECTS_SCRAPER_WORKFLOW",
+          "class_name": "SubjectsScraperWorkflow",
+        },
+      ],
+    },
+  },
+}
