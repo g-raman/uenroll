@@ -21,13 +21,20 @@ export function getWeekStart(date: Temporal.PlainDate): Temporal.PlainDate {
 }
 
 /**
- * Get an array of 7 days starting from the week start
+ * Get an array of days starting from the week start
+ * @param hideWeekends - If true, returns only Mon-Fri (5 days)
  */
 export function getWeekDays(
   weekStart: Temporal.PlainDate,
   timezone: string,
+  hideWeekends: boolean = false,
 ): Temporal.PlainDate[] {
-  return Array.from({ length: 7 }, (_, i) => weekStart.add({ days: i }));
+  const days = Array.from({ length: 7 }, (_, i) => weekStart.add({ days: i }));
+  if (hideWeekends) {
+    // Filter out Saturday (6) and Sunday (7)
+    return days.filter(d => d.dayOfWeek <= 5);
+  }
+  return days;
 }
 
 /**
@@ -248,9 +255,10 @@ export function buildDayColumns(
   timezone: string,
   dayStartHour: number,
   dayEndHour: number,
+  hideWeekends: boolean = false,
 ): DayColumn[] {
   const today = getToday(timezone);
-  const weekDays = getWeekDays(weekStart, timezone);
+  const weekDays = getWeekDays(weekStart, timezone, hideWeekends);
 
   return weekDays.map(date => {
     const dayEvents = getEventsForDay(events, date);

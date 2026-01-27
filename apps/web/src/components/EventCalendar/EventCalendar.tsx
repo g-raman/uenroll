@@ -4,6 +4,7 @@ import { Temporal } from "temporal-polyfill";
 import { useState, useMemo, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
+import { Switch } from "@repo/ui/components/switch";
 import {
   CalendarEvent,
   EventCalendarProps,
@@ -39,6 +40,7 @@ export function EventCalendar({
     hourHeight = DEFAULT_HOUR_HEIGHT,
     showCurrentTime = true,
     initialDate,
+    hideWeekends = false,
   } = config;
 
   const [currentDate, setCurrentDate] = useState<Temporal.PlainDate>(() => {
@@ -49,14 +51,23 @@ export function EventCalendar({
     null,
   );
 
+  const [weekendsHidden, setWeekendsHidden] = useState(hideWeekends);
+
   // Calculate week start from current date
   const weekStart = useMemo(() => getWeekStart(currentDate), [currentDate]);
 
   // Build day columns with events
   const dayColumns = useMemo(
     () =>
-      buildDayColumns(events, weekStart, timezone, dayStartHour, dayEndHour),
-    [events, weekStart, timezone, dayStartHour, dayEndHour],
+      buildDayColumns(
+        events,
+        weekStart,
+        timezone,
+        dayStartHour,
+        dayEndHour,
+        weekendsHidden,
+      ),
+    [events, weekStart, timezone, dayStartHour, dayEndHour, weekendsHidden],
   );
 
   // Generate hour labels
@@ -126,7 +137,18 @@ export function EventCalendar({
             </Button>
           </div>
         </div>
-        <h2 className="text-lg font-semibold">{formatWeekRange(weekStart)}</h2>
+        <div className="flex items-center gap-4">
+          <label className="flex cursor-pointer items-center gap-2 text-sm">
+            <Switch
+              checked={weekendsHidden}
+              onCheckedChange={setWeekendsHidden}
+            />
+            <span className="text-muted-foreground">Hide weekends</span>
+          </label>
+          <h2 className="text-lg font-semibold">
+            {formatWeekRange(weekStart)}
+          </h2>
+        </div>
       </div>
 
       {/* Day Headers Row */}

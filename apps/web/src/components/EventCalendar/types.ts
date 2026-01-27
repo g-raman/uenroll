@@ -32,6 +32,8 @@ export interface EventCalendarConfig {
   showCurrentTime?: boolean;
   /** Custom date to display (default: today) */
   initialDate?: Temporal.PlainDate;
+  /** Hide weekends (Saturday and Sunday) (default: false) */
+  hideWeekends?: boolean;
 }
 
 /**
