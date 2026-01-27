@@ -5,54 +5,60 @@ import { useState } from "react";
 import { EventCalendar, CalendarEvent } from "@/components/EventCalendar";
 import { TIMEZONE } from "@/utils/constants";
 
-// Helper to create events for the current week
+// Helper to get the Monday of the current week
+function getWeekStartMonday(timezone: string): Temporal.PlainDate {
+  const today = Temporal.Now.zonedDateTimeISO(timezone).toPlainDate();
+  // Temporal uses ISO weekday: 1 = Monday, 7 = Sunday
+  const dayOfWeek = today.dayOfWeek;
+  return today.subtract({ days: dayOfWeek - 1 });
+}
+
+// Helper to create demo events with recurring rules
 function createDemoEvents(): CalendarEvent[] {
-  const today = Temporal.Now.zonedDateTimeISO(TIMEZONE).toPlainDate();
-  // Get the start of the current week (Sunday)
-  const dayOfWeek = today.dayOfWeek === 7 ? 0 : today.dayOfWeek;
-  const weekStart = today.subtract({ days: dayOfWeek });
+  // Get the Monday of the current week as term start
+  const termStart = getWeekStartMonday(TIMEZONE);
+
+  // Calculate end date (4 months from now)
+  const termEnd = termStart.add({ months: 4 });
+  const untilDate = `${termEnd.year}${String(termEnd.month).padStart(2, "0")}${String(termEnd.day).padStart(2, "0")}T235959Z`;
 
   const events: CalendarEvent[] = [
-    // Monday events
+    // CS 101 - Monday, Wednesday, Friday at 9:00 AM
     {
-      id: "cs101-mon",
+      id: "cs101-lec",
       title: "CS 101",
-      start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 1 })}T09:00[${TIMEZONE}]`,
-      ),
-      end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 1 })}T10:30[${TIMEZONE}]`,
-      ),
+      start: Temporal.ZonedDateTime.from(`${termStart}T09:00[${TIMEZONE}]`),
+      end: Temporal.ZonedDateTime.from(`${termStart}T10:30[${TIMEZONE}]`),
+      // Recurs every Monday, Wednesday, Friday
+      rrule: `FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=${untilDate}`,
       backgroundColour: "text-black border-l-red-400 bg-red-300",
       courseCode: "CS 101",
       courseTitle: "Introduction to Computer Science",
       instructor: "Dr. Smith",
       type: "LEC",
     },
+
+    // MATH 201 - Monday, Wednesday at 11:00 AM
     {
-      id: "math201-mon",
+      id: "math201-lec",
       title: "MATH 201",
-      start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 1 })}T11:00[${TIMEZONE}]`,
-      ),
-      end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 1 })}T12:30[${TIMEZONE}]`,
-      ),
+      start: Temporal.ZonedDateTime.from(`${termStart}T11:00[${TIMEZONE}]`),
+      end: Temporal.ZonedDateTime.from(`${termStart}T12:30[${TIMEZONE}]`),
+      rrule: `FREQ=WEEKLY;BYDAY=MO,WE;UNTIL=${untilDate}`,
       backgroundColour: "text-black border-l-sky-500 bg-sky-300",
       courseCode: "MATH 201",
       courseTitle: "Linear Algebra",
       instructor: "Dr. Johnson",
       type: "LEC",
     },
+
+    // PHYS 150 - Monday, Friday at 2:00 PM
     {
-      id: "phys150-mon",
+      id: "phys150-lec",
       title: "PHYS 150",
-      start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 1 })}T14:00[${TIMEZONE}]`,
-      ),
-      end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 1 })}T15:30[${TIMEZONE}]`,
-      ),
+      start: Temporal.ZonedDateTime.from(`${termStart}T14:00[${TIMEZONE}]`),
+      end: Temporal.ZonedDateTime.from(`${termStart}T15:30[${TIMEZONE}]`),
+      rrule: `FREQ=WEEKLY;BYDAY=MO,FR;UNTIL=${untilDate}`,
       backgroundColour: "text-black border-l-lime-400 bg-lime-200",
       courseCode: "PHYS 150",
       courseTitle: "Mechanics",
@@ -60,47 +66,53 @@ function createDemoEvents(): CalendarEvent[] {
       type: "LEC",
     },
 
-    // Tuesday events
+    // CS 101 Tutorial - Tuesday at 10:00 AM
     {
-      id: "cs101-tut-tue",
-      title: "CS 101",
+      id: "cs101-tut",
+      title: "CS 101 TUT",
       start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 2 })}T10:00[${TIMEZONE}]`,
+        `${termStart.add({ days: 1 })}T10:00[${TIMEZONE}]`,
       ),
       end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 2 })}T11:00[${TIMEZONE}]`,
+        `${termStart.add({ days: 1 })}T11:00[${TIMEZONE}]`,
       ),
-      backgroundColour: "text-black border-l-red-400 bg-red-300",
+      rrule: `FREQ=WEEKLY;BYDAY=TU;UNTIL=${untilDate}`,
+      backgroundColour: "text-black border-l-red-400 bg-red-200",
       courseCode: "CS 101",
-      courseTitle: "Introduction to Computer Science",
+      courseTitle: "Introduction to Computer Science - Tutorial",
       instructor: "TA: Alice",
       type: "TUT",
     },
+
+    // ENG 102 - Tuesday, Thursday at 1:00 PM
     {
-      id: "eng102-tue",
+      id: "eng102-lec",
       title: "ENG 102",
       start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 2 })}T13:00[${TIMEZONE}]`,
+        `${termStart.add({ days: 1 })}T13:00[${TIMEZONE}]`,
       ),
       end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 2 })}T14:30[${TIMEZONE}]`,
+        `${termStart.add({ days: 1 })}T14:30[${TIMEZONE}]`,
       ),
+      rrule: `FREQ=WEEKLY;BYDAY=TU,TH;UNTIL=${untilDate}`,
       backgroundColour: "text-black border-l-yellow-400 bg-yellow-200",
       courseCode: "ENG 102",
       courseTitle: "Technical Writing",
       instructor: "Prof. Brown",
       type: "LEC",
     },
-    // Overlapping event on Tuesday
+
+    // CS Club - Tuesday at 1:30 PM (overlaps with ENG 102)
     {
-      id: "club-meeting-tue",
+      id: "cs-club",
       title: "CS Club",
       start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 2 })}T13:30[${TIMEZONE}]`,
+        `${termStart.add({ days: 1 })}T13:30[${TIMEZONE}]`,
       ),
       end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 2 })}T14:30[${TIMEZONE}]`,
+        `${termStart.add({ days: 1 })}T14:30[${TIMEZONE}]`,
       ),
+      rrule: `FREQ=WEEKLY;BYDAY=TU;UNTIL=${untilDate}`,
       backgroundColour: "text-black border-l-purple-400 bg-purple-300",
       courseCode: "CLUB",
       courseTitle: "Computer Science Club Meeting",
@@ -108,130 +120,58 @@ function createDemoEvents(): CalendarEvent[] {
       type: "MTG",
     },
 
-    // Wednesday events
+    // PHYS 150 Lab - Wednesday at 2:00 PM (3 hours)
     {
-      id: "cs101-wed",
-      title: "CS 101",
+      id: "phys150-lab",
+      title: "PHYS 150 LAB",
       start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 3 })}T09:00[${TIMEZONE}]`,
+        `${termStart.add({ days: 2 })}T14:00[${TIMEZONE}]`,
       ),
       end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 3 })}T10:30[${TIMEZONE}]`,
+        `${termStart.add({ days: 2 })}T17:00[${TIMEZONE}]`,
       ),
-      backgroundColour: "text-black border-l-red-400 bg-red-300",
-      courseCode: "CS 101",
-      courseTitle: "Introduction to Computer Science",
-      instructor: "Dr. Smith",
-      type: "LEC",
-    },
-    {
-      id: "math201-wed",
-      title: "MATH 201",
-      start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 3 })}T11:00[${TIMEZONE}]`,
-      ),
-      end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 3 })}T12:30[${TIMEZONE}]`,
-      ),
-      backgroundColour: "text-black border-l-sky-500 bg-sky-300",
-      courseCode: "MATH 201",
-      courseTitle: "Linear Algebra",
-      instructor: "Dr. Johnson",
-      type: "LEC",
-    },
-    {
-      id: "phys150-lab-wed",
-      title: "PHYS 150",
-      start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 3 })}T14:00[${TIMEZONE}]`,
-      ),
-      end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 3 })}T17:00[${TIMEZONE}]`,
-      ),
-      backgroundColour: "text-black border-l-lime-400 bg-lime-200",
+      rrule: `FREQ=WEEKLY;BYDAY=WE;UNTIL=${untilDate}`,
+      backgroundColour: "text-black border-l-lime-400 bg-lime-100",
       courseCode: "PHYS 150",
       courseTitle: "Mechanics Lab",
       instructor: "TA: Bob",
       type: "LAB",
     },
 
-    // Thursday events
+    // MATH 201 Tutorial - Thursday at 9:00 AM
     {
-      id: "math201-tut-thu",
-      title: "MATH 201",
+      id: "math201-tut",
+      title: "MATH 201 TUT",
       start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 4 })}T09:00[${TIMEZONE}]`,
+        `${termStart.add({ days: 3 })}T09:00[${TIMEZONE}]`,
       ),
       end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 4 })}T10:00[${TIMEZONE}]`,
+        `${termStart.add({ days: 3 })}T10:00[${TIMEZONE}]`,
       ),
-      backgroundColour: "text-black border-l-sky-500 bg-sky-300",
+      rrule: `FREQ=WEEKLY;BYDAY=TH;UNTIL=${untilDate}`,
+      backgroundColour: "text-black border-l-sky-500 bg-sky-200",
       courseCode: "MATH 201",
       courseTitle: "Linear Algebra Tutorial",
       instructor: "TA: Carol",
       type: "TUT",
     },
+
+    // Office Hours - Thursday at 3:00 PM
     {
-      id: "eng102-thu",
-      title: "ENG 102",
-      start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 4 })}T13:00[${TIMEZONE}]`,
-      ),
-      end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 4 })}T14:30[${TIMEZONE}]`,
-      ),
-      backgroundColour: "text-black border-l-yellow-400 bg-yellow-200",
-      courseCode: "ENG 102",
-      courseTitle: "Technical Writing",
-      instructor: "Prof. Brown",
-      type: "LEC",
-    },
-    {
-      id: "office-hours-thu",
+      id: "office-hours",
       title: "Office Hours",
       start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 4 })}T15:00[${TIMEZONE}]`,
+        `${termStart.add({ days: 3 })}T15:00[${TIMEZONE}]`,
       ),
       end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 4 })}T16:00[${TIMEZONE}]`,
+        `${termStart.add({ days: 3 })}T16:00[${TIMEZONE}]`,
       ),
+      rrule: `FREQ=WEEKLY;BYDAY=TH;UNTIL=${untilDate}`,
       backgroundColour: "text-black border-l-emerald-800 bg-emerald-400",
       courseCode: "CS 101",
       courseTitle: "Office Hours with Dr. Smith",
       instructor: "Dr. Smith",
       type: "OH",
-    },
-
-    // Friday events
-    {
-      id: "cs101-fri",
-      title: "CS 101",
-      start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 5 })}T09:00[${TIMEZONE}]`,
-      ),
-      end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 5 })}T10:30[${TIMEZONE}]`,
-      ),
-      backgroundColour: "text-black border-l-red-400 bg-red-300",
-      courseCode: "CS 101",
-      courseTitle: "Introduction to Computer Science",
-      instructor: "Dr. Smith",
-      type: "LEC",
-    },
-    {
-      id: "phys150-fri",
-      title: "PHYS 150",
-      start: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 5 })}T14:00[${TIMEZONE}]`,
-      ),
-      end: Temporal.ZonedDateTime.from(
-        `${weekStart.add({ days: 5 })}T15:30[${TIMEZONE}]`,
-      ),
-      backgroundColour: "text-black border-l-lime-400 bg-lime-200",
-      courseCode: "PHYS 150",
-      courseTitle: "Mechanics",
-      instructor: "Dr. Williams",
-      type: "LEC",
     },
   ];
 

@@ -13,4 +13,5 @@ export {
   formatHour,
   formatWeekRange,
   formatMonthYear,
+  expandRecurringEvents,
 } from "./utils";

@@ -1,4 +1,5 @@
 import { Temporal } from "temporal-polyfill";
+import { RRule } from "rrule";
 import { CalendarEvent, DayColumn, PositionedEvent } from "./types";
 
 const DAYS_OF_WEEK: Record<number, string> = {
@@ -247,6 +248,122 @@ function getEventsForDay(
 }
 
 /**
+ * Expand recurring events into individual event instances for a date range
+ * @param events - Array of events, some of which may have rrule
+ * @param rangeStart - Start of the date range to expand into
+ * @param rangeEnd - End of the date range to expand into
+ * @param timezone - Timezone for the events
+ * @returns Array of expanded events (recurring events become multiple instances)
+ */
+export function expandRecurringEvents(
+  events: CalendarEvent[],
+  rangeStart: Temporal.PlainDate,
+  rangeEnd: Temporal.PlainDate,
+  timezone: string,
+): CalendarEvent[] {
+  const expandedEvents: CalendarEvent[] = [];
+
+  for (const event of events) {
+    if (!event.rrule) {
+      // Non-recurring event - check if it falls within the range
+      const eventDate = event.start.toPlainDate();
+      if (
+        Temporal.PlainDate.compare(eventDate, rangeStart) >= 0 &&
+        Temporal.PlainDate.compare(eventDate, rangeEnd) <= 0
+      ) {
+        expandedEvents.push(event);
+      }
+      continue;
+    }
+
+    // Parse the RRULE and expand occurrences
+    try {
+      // Calculate event duration for creating instances
+      const durationMs =
+        event.end.epochMilliseconds - event.start.epochMilliseconds;
+
+      // Create range boundaries as Date objects for rrule
+      // Expand range by 1 day on each side to handle timezone edge cases
+      const rangeStartDate = new Date(
+        rangeStart.subtract({ days: 1 }).toZonedDateTime(timezone)
+          .epochMilliseconds,
+      );
+      const rangeEndDate = new Date(
+        rangeEnd.add({ days: 1 }).toZonedDateTime(timezone).epochMilliseconds,
+      );
+
+      // Parse RRULE - use the rrule library's RRule constructor
+      // Convert the event start to a JS Date for the dtstart
+      const dtstart = new Date(event.start.epochMilliseconds);
+
+      // Parse the RRULE options from the string
+      const rule = RRule.fromString(`RRULE:${event.rrule}`);
+
+      // Create a new rule with the dtstart included
+      const ruleWithStart = new RRule({
+        ...rule.origOptions,
+        dtstart,
+      });
+
+      // Get all occurrences within the range
+      const occurrences = ruleWithStart.between(
+        rangeStartDate,
+        rangeEndDate,
+        true,
+      );
+
+      for (const occurrence of occurrences) {
+        // Convert occurrence date to Temporal
+        const occurrenceInstant = Temporal.Instant.fromEpochMilliseconds(
+          occurrence.getTime(),
+        );
+        const occurrenceZdt = occurrenceInstant.toZonedDateTimeISO(timezone);
+
+        // Create a new event instance at this occurrence time
+        // Preserve the original time of day from the event
+        const instanceStart = occurrenceZdt.toPlainDate().toZonedDateTime({
+          timeZone: timezone,
+          plainTime: event.start.toPlainTime(),
+        });
+
+        const instanceEnd = Temporal.Instant.fromEpochMilliseconds(
+          instanceStart.epochMilliseconds + durationMs,
+        ).toZonedDateTimeISO(timezone);
+
+        // Only include if the instance actually falls within our range
+        const instanceDate = instanceStart.toPlainDate();
+        if (
+          Temporal.PlainDate.compare(instanceDate, rangeStart) >= 0 &&
+          Temporal.PlainDate.compare(instanceDate, rangeEnd) <= 0
+        ) {
+          expandedEvents.push({
+            ...event,
+            id: `${event.id}-${instanceStart.epochMilliseconds}`,
+            start: instanceStart,
+            end: instanceEnd,
+            // Keep reference to original event
+            _originalId: event.id,
+            _isRecurrenceInstance: true,
+          });
+        }
+      }
+    } catch (error) {
+      // If RRULE parsing fails, treat as non-recurring event
+      console.warn(`Failed to parse RRULE for event ${event.id}:`, error);
+      const eventDate = event.start.toPlainDate();
+      if (
+        Temporal.PlainDate.compare(eventDate, rangeStart) >= 0 &&
+        Temporal.PlainDate.compare(eventDate, rangeEnd) <= 0
+      ) {
+        expandedEvents.push(event);
+      }
+    }
+  }
+
+  return expandedEvents;
+}
+
+/**
  * Build day columns with positioned events
  * @param startDate - The date to start from (week start for desktop, current date for mobile)
  * @param numDays - Optional number of days to show (defaults to 7 or 5 if hideWeekends)
@@ -274,8 +391,20 @@ export function buildDayColumns(
     days = getWeekDays(startDate, timezone, hideWeekends);
   }
 
+  // Calculate the date range for expanding recurring events
+  const rangeStart = days[0] ?? startDate;
+  const rangeEnd = days[days.length - 1] ?? startDate;
+
+  // Expand recurring events for this date range
+  const expandedEvents = expandRecurringEvents(
+    events,
+    rangeStart,
+    rangeEnd,
+    timezone,
+  );
+
   return days.map(date => {
-    const dayEvents = getEventsForDay(events, date);
+    const dayEvents = getEventsForDay(expandedEvents, date);
     const positionedEvents = layoutOverlappingEvents(
       dayEvents,
       dayStartHour,
