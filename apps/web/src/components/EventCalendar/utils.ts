@@ -104,6 +104,96 @@ function eventsOverlap(a: CalendarEvent, b: CalendarEvent): boolean {
 }
 
 /**
+ * Find all events that overlap with a given event (directly or transitively)
+ */
+function findOverlapCluster(
+  event: CalendarEvent,
+  allEvents: CalendarEvent[],
+): CalendarEvent[] {
+  const cluster: CalendarEvent[] = [event];
+  const checked = new Set<string | number>([event.id]);
+
+  let i = 0;
+  while (i < cluster.length) {
+    const current = cluster[i];
+    for (const other of allEvents) {
+      if (!checked.has(other.id) && current && eventsOverlap(current, other)) {
+        cluster.push(other);
+        checked.add(other.id);
+      }
+    }
+    i++;
+  }
+
+  return cluster;
+}
+
+/**
+ * Layout a cluster of overlapping events into columns
+ */
+function layoutCluster(
+  cluster: CalendarEvent[],
+  dayStartHour: number,
+  dayEndHour: number,
+): PositionedEvent[] {
+  if (cluster.length === 0) return [];
+
+  // Sort by start time, then by duration (longer first)
+  const sorted = [...cluster].sort((a, b) => {
+    const startCompare = Temporal.ZonedDateTime.compare(a.start, b.start);
+    if (startCompare !== 0) return startCompare;
+    const aDuration = a.end.epochMilliseconds - a.start.epochMilliseconds;
+    const bDuration = b.end.epochMilliseconds - b.start.epochMilliseconds;
+    return bDuration - aDuration;
+  });
+
+  const columns: CalendarEvent[][] = [];
+  const eventToColumn = new Map<string | number, number>();
+
+  for (const event of sorted) {
+    // Find first column where event doesn't overlap with any event in that column
+    let placedInColumn = -1;
+    for (let colIdx = 0; colIdx < columns.length; colIdx++) {
+      const column = columns[colIdx];
+      const hasOverlap = column?.some(e => eventsOverlap(e, event));
+      if (!hasOverlap) {
+        column?.push(event);
+        placedInColumn = colIdx;
+        break;
+      }
+    }
+
+    if (placedInColumn === -1) {
+      columns.push([event]);
+      placedInColumn = columns.length - 1;
+    }
+
+    eventToColumn.set(event.id, placedInColumn);
+  }
+
+  const totalColumns = columns.length;
+
+  return sorted.map(event => {
+    const { top, height } = calculateEventPosition(
+      event,
+      dayStartHour,
+      dayEndHour,
+    );
+    const column = eventToColumn.get(event.id) ?? 0;
+
+    return {
+      ...event,
+      top,
+      height,
+      left: (column / totalColumns) * 100,
+      width: 100 / totalColumns,
+      column,
+      totalColumns,
+    };
+  });
+}
+
+/**
  * Layout overlapping events into columns
  */
 function layoutOverlappingEvents(
@@ -113,71 +203,23 @@ function layoutOverlappingEvents(
 ): PositionedEvent[] {
   if (events.length === 0) return [];
 
-  // Sort events by start time, then by duration (longer first)
-  const sortedEvents = [...events].sort((a, b) => {
-    const startCompare = Temporal.ZonedDateTime.compare(a.start, b.start);
-    if (startCompare !== 0) return startCompare;
-    // Longer events first
-    const aDuration = a.end.epochMilliseconds - a.start.epochMilliseconds;
-    const bDuration = b.end.epochMilliseconds - b.start.epochMilliseconds;
-    return bDuration - aDuration;
-  });
-
   const positioned: PositionedEvent[] = [];
-  const columns: CalendarEvent[][] = [];
+  const processed = new Set<string | number>();
 
-  for (const event of sortedEvents) {
-    // Find a column where this event doesn't overlap with the last event
-    let placed = false;
-    for (let i = 0; i < columns.length; i++) {
-      const column = columns[i];
-      const lastInColumn = column?.[column.length - 1];
-      if (lastInColumn && !eventsOverlap(event, lastInColumn)) {
-        column.push(event);
-        const { top, height } = calculateEventPosition(
-          event,
-          dayStartHour,
-          dayEndHour,
-        );
-        positioned.push({
-          ...event,
-          top,
-          height,
-          left: 0,
-          width: 100,
-          column: i,
-          totalColumns: 0,
-        });
-        placed = true;
-        break;
-      }
+  for (const event of events) {
+    if (processed.has(event.id)) continue;
+
+    // Find all events in this overlap cluster
+    const cluster = findOverlapCluster(event, events);
+
+    // Mark all as processed
+    for (const e of cluster) {
+      processed.add(e.id);
     }
 
-    if (!placed) {
-      columns.push([event]);
-      const { top, height } = calculateEventPosition(
-        event,
-        dayStartHour,
-        dayEndHour,
-      );
-      positioned.push({
-        ...event,
-        top,
-        height,
-        left: 0,
-        width: 100,
-        column: columns.length - 1,
-        totalColumns: 0,
-      });
-    }
-  }
-
-  // Calculate widths and positions for overlapping events
-  const totalColumns = columns.length;
-  for (const pos of positioned) {
-    pos.totalColumns = totalColumns;
-    pos.width = 100 / totalColumns;
-    pos.left = pos.column * pos.width;
+    // Layout the cluster
+    const layouted = layoutCluster(cluster, dayStartHour, dayEndHour);
+    positioned.push(...layouted);
   }
 
   return positioned;
