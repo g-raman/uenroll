@@ -76,7 +76,9 @@ function calculateEventPosition(
   dayStartHour: number,
   dayEndHour: number,
 ): { top: number; height: number } {
-  const totalMinutes = (dayEndHour - dayStartHour) * 60;
+  // Total hours displayed (inclusive), e.g., 8-18 = 11 hours
+  const totalHours = dayEndHour - dayStartHour + 1;
+  const totalMinutes = totalHours * 60;
 
   const startMinutes =
     (event.start.hour - dayStartHour) * 60 + event.start.minute;
@@ -251,7 +253,7 @@ export function getCurrentTimePosition(
   const now = Temporal.Now.zonedDateTimeISO(timezone);
   const currentMinutes = now.hour * 60 + now.minute;
   const startMinutes = dayStartHour * 60;
-  const endMinutes = dayEndHour * 60;
+  const endMinutes = (dayEndHour + 1) * 60; // +1 because grid is inclusive
 
   if (currentMinutes < startMinutes || currentMinutes > endMinutes) {
     return null;
