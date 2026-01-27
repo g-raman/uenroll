@@ -214,11 +214,11 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
     <div className="bg-background flex h-full flex-col overflow-hidden rounded-lg border">
       {/* Header */}
       <div className="flex items-center justify-between border-b px-4 py-3">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" onClick={goToTermStart}>
             Term Start
           </Button>
-          <h2 className="text-lg font-semibold">
+          <h2 className="text-base font-semibold">
             {formatWeekRange(weekStart)}
           </h2>
         </div>
