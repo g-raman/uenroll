@@ -28,9 +28,9 @@ const SWIPE_VELOCITY_THRESHOLD = 0.5; // Velocity (px/ms) to commit navigation
 const ANIMATION_DURATION = 200; // Animation duration in ms
 
 const DEFAULT_TIMEZONE = "America/Toronto";
-const DEFAULT_DAY_START = 6;
-const DEFAULT_DAY_END = 23;
-const DEFAULT_HOUR_HEIGHT = 60;
+const DEFAULT_DAY_START = 7;
+const DEFAULT_DAY_END = 22;
+const DEFAULT_HOUR_HEIGHT = 38;
 
 // Breakpoints
 const MOBILE_BREAKPOINT = 640;

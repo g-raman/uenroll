@@ -54,41 +54,27 @@ export function CalendarWrapper() {
     data,
   ]);
 
-  // Calculate initial date: use latest event's start date, or term start date
+  // Get initial date: latest event's start date, or fall back to term start date
   const initialDate = useMemo(() => {
-    // If we have events, use the latest one's start date
     if (events.length > 0) {
-      const sortedEvents = [...events].sort((a, b) =>
+      const sorted = [...events].sort((a, b) =>
         Temporal.ZonedDateTime.compare(a.start, b.start),
       );
-      const latestEvent = sortedEvents.at(-1);
-      if (latestEvent) {
-        return latestEvent.start.toPlainDate();
-      }
+      return sorted.at(-1)!.start.toPlainDate();
     }
 
-    // Fall back to term start date if available
-    if (selectedTerm && TERM_START_DATES[selectedTerm]) {
-      return Temporal.PlainDate.from(TERM_START_DATES[selectedTerm]);
-    }
-
-    // Default to today
-    return undefined;
+    const termStart = selectedTerm ? TERM_START_DATES[selectedTerm] : undefined;
+    return termStart ? Temporal.PlainDate.from(termStart) : undefined;
   }, [events, selectedTerm]);
-
-  // Create a key based on the initial date to force remount when events load
-  const calendarKey = initialDate?.toString() ?? "default";
 
   return (
     <div className="flex h-full flex-col gap-2 bg-black md:gap-4">
       <GenerationHeader />
       <div className="h-full overflow-hidden rounded-t-md">
         <EventCalendar
-          key={calendarKey}
+          key={initialDate?.toString() ?? "default"}
           events={events}
-          config={{
-            initialDate,
-          }}
+          config={{ initialDate }}
         />
       </div>
     </div>
