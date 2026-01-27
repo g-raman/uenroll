@@ -5,16 +5,17 @@
   "compatibility_date": "2024-10-22",
   "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true, "head_sampling_rate": 1 },
-  "hyperdrive": [
-    {
-      "binding": "HYPERDRIVE",
-      "id": "a24d5ae3a33047c2acdf27cc18526246",
-      "localConnectionString": "postgresql://postgres:postgres@localhost:5432/postgres",
-    },
-  ],
   "env": {
     "dev": {
       "name": "uenroll-scraper-dev",
+      // Hyperdrive database connection for dev
+      "hyperdrive": [
+        {
+          "binding": "HYPERDRIVE",
+          "id": "a24d5ae3a33047c2acdf27cc18526246",
+          "localConnectionString": "postgresql://postgres:postgres@localhost:5432/postgres",
+        },
+      ],
       "workflows": [
         {
           "name": "orchestrator-workflow-dev",
@@ -42,6 +43,12 @@
       "name": "uenroll-scraper",
       // Cron trigger: Every 2 days at 8 AM EST (13:00 UTC)
       "triggers": { "crons": ["0 13 */2 * *"] },
+      "hyperdrive": [
+        {
+          "binding": "HYPERDRIVE",
+          "id": "f9afc98dc02e403ebd7fdfea4a013373",
+        },
+      ],
       "workflows": [
         {
           "name": "orchestrator-workflow",
