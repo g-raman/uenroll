@@ -1,16 +1,11 @@
-import { CalendarEvent, PositionedEvent } from "./types";
+import { PositionedEvent } from "./types";
 import { formatTime } from "./utils";
 
 export interface EventBlockProps {
   event: PositionedEvent;
-  onClick?: (event: CalendarEvent) => void;
 }
 
-export function EventBlock({ event, onClick }: EventBlockProps) {
-  const handleClick = () => {
-    onClick?.(event);
-  };
-
+export function EventBlock({ event }: EventBlockProps) {
   const backgroundClasses = event.backgroundColour;
   const subSection = event.subSection;
   const type = event.type;
@@ -24,7 +19,6 @@ export function EventBlock({ event, onClick }: EventBlockProps) {
         left: `${event.left}%`,
         width: `${event.width}%`,
       }}
-      onClick={handleClick}
     >
       <div
         className={`h-full space-y-1 rounded-md border-l-4 px-1 py-2 text-xs ${backgroundClasses}`}

@@ -1,5 +1,5 @@
 import { EventBlock } from "./EventBlock";
-import { CalendarEvent, DayColumn } from "./types";
+import { DayColumn } from "./types";
 
 export interface DayColumnProps {
   column: DayColumn;
@@ -9,7 +9,6 @@ export interface DayColumnProps {
   dayStartHour: number;
   dayEndHour: number;
   currentTimePosition: number | null;
-  onEventClick?: (event: CalendarEvent) => void;
 }
 
 export function DayColumnComponent({
@@ -20,7 +19,6 @@ export function DayColumnComponent({
   dayStartHour,
   dayEndHour,
   currentTimePosition,
-  onEventClick,
 }: DayColumnProps) {
   const totalHours = dayEndHour - dayStartHour + 1;
   const contentHeight = totalHours * hourHeight;
@@ -55,7 +53,7 @@ export function DayColumnComponent({
         style={{ top: paddingHeight, height: contentHeight }}
       >
         {column.events.map(event => (
-          <EventBlock key={event.id} event={event} onClick={onEventClick} />
+          <EventBlock key={event.id} event={event} />
         ))}
       </div>
     </div>

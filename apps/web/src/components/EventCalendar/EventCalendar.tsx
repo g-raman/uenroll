@@ -26,13 +26,7 @@ const DEFAULT_HOUR_HEIGHT = 38;
 const MOBILE_BREAKPOINT = 640;
 const TABLET_BREAKPOINT = 1024;
 
-export function EventCalendar({
-  events,
-  config = {},
-  onEventClick,
-  renderEvent,
-  onDateChange,
-}: EventCalendarProps) {
+export function EventCalendar({ events, config = {} }: EventCalendarProps) {
   const {
     timezone = DEFAULT_TIMEZONE,
     dayStartHour = DEFAULT_DAY_START,
@@ -69,9 +63,8 @@ export function EventCalendar({
           ? currentDate.add({ days: navigationDays })
           : currentDate.subtract({ days: navigationDays });
       setCurrentDate(newDate);
-      onDateChange?.(newDate);
     },
-    [currentDate, navigationDays, onDateChange],
+    [currentDate, navigationDays],
   );
 
   const {
@@ -184,8 +177,7 @@ export function EventCalendar({
   const goToToday = useCallback(() => {
     const today = getToday(timezone);
     setCurrentDate(today);
-    onDateChange?.(today);
-  }, [timezone, onDateChange]);
+  }, [timezone]);
 
   const totalHours = dayEndHour - dayStartHour + 1;
   const paddingHeight = hourHeight;
@@ -197,8 +189,6 @@ export function EventCalendar({
     paddingHeight,
     dayStartHour,
     dayEndHour,
-    onEventClick,
-    renderEvent,
   };
 
   const renderSlidingColumns = (

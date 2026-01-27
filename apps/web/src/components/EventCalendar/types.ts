@@ -17,7 +17,6 @@ export interface EventCalendarProps {
   events: CalendarEvent[];
   config?: EventCalendarConfig;
   onEventClick?: (event: CalendarEvent) => void;
-  renderEvent?: (event: CalendarEvent) => React.ReactNode;
   onDateChange?: (date: Temporal.PlainDate) => void;
 }
 
