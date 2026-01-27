@@ -513,3 +513,12 @@ export function formatWeekRange(weekStart: Temporal.PlainDate): string {
 
   return `${startMonth} ${weekStart.day}, ${weekStart.year} - ${endMonth} ${weekEnd.day}, ${weekEnd.year}`;
 }
+
+const ANIMATION_DURATION = 200;
+// Helper: Get transform style for sliding animations
+export const getTransformStyle = (offset: number, isAnimating: boolean) => ({
+  transitionProperty: isAnimating ? "transform" : "none",
+  transitionDuration: isAnimating ? `${ANIMATION_DURATION}ms` : "0ms",
+  transitionTimingFunction: "ease-out",
+  transform: `translateX(${offset}px)`,
+});

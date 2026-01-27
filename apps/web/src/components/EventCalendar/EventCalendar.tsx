@@ -1,11 +1,12 @@
 "use client";
 
 import { Temporal } from "temporal-polyfill";
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { Switch } from "@repo/ui/components/switch";
 import { useScreenSize } from "@/hooks/useScreenSize";
+import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
 import {
   getWeekStart,
   getToday,
@@ -15,19 +16,14 @@ import {
   formatWeekRange,
 } from "./utils";
 import { DayColumnComponent } from "./DayColumn";
-import { EventCalendarProps } from "./types";
-
-// Touch/swipe gesture configuration
-const SWIPE_COMMIT_THRESHOLD = 0.3; // Percentage of width to commit navigation
-const SWIPE_VELOCITY_THRESHOLD = 0.5; // Velocity (px/ms) to commit navigation
-const ANIMATION_DURATION = 200; // Animation duration in ms
+import { EventCalendarProps, DayColumn } from "./types";
+import { SlidingContainer } from "./SlidingContainer";
+import { DayHeader } from "./DayHeader";
 
 const DEFAULT_TIMEZONE = "America/Toronto";
 const DEFAULT_DAY_START = 7;
 const DEFAULT_DAY_END = 22;
 const DEFAULT_HOUR_HEIGHT = 38;
-
-// Breakpoints
 const MOBILE_BREAKPOINT = 640;
 const TABLET_BREAKPOINT = 1024;
 
@@ -60,24 +56,30 @@ export function EventCalendar({
 
   const [weekendsHidden, setWeekendsHidden] = useState(hideWeekends);
 
-  /* Swipe/drag state for interactive sliding
-   *
-   * dragOffset: current drag position in pixels (negative = dragging left, positive = dragging right)
-   * isDragging: whether user is currently touching/dragging
-   * isAnimating: whether we're animating to final position after release
-   */
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const containerWidthRef = useRef(0);
-
   // Determine view mode based on screen size
   const isDesktop = width !== null && width >= TABLET_BREAKPOINT;
   const isTablet =
     width !== null && width >= MOBILE_BREAKPOINT && width < TABLET_BREAKPOINT;
 
-  // Number of days to show based on screen size
   const visibleDays = isDesktop ? (weekendsHidden ? 5 : 7) : isTablet ? 3 : 2;
+  const navigationDays = isDesktop ? 7 : visibleDays;
+
+  // Navigation handler for swipe
+  const handleSwipeNavigation = useCallback(
+    (direction: "next" | "previous") => {
+      const newDate =
+        direction === "next"
+          ? currentDate.add({ days: navigationDays })
+          : currentDate.subtract({ days: navigationDays });
+      setCurrentDate(newDate);
+      onDateChange?.(newDate);
+    },
+    [currentDate, navigationDays, onDateChange],
+  );
+
+  // Swipe gesture handling
+  const { dragOffset, isDragging, isAnimating, containerWidthRef, handlers } =
+    useSwipeNavigation(handleSwipeNavigation, !isDesktop);
 
   // Calculate week start from current date
   const weekStart = useMemo(() => getWeekStart(currentDate), [currentDate]);
@@ -94,7 +96,6 @@ export function EventCalendar({
       );
     }
 
-    // Tablet/Mobile: show N days starting from current date
     return buildDayColumns(
       events,
       currentDate,
@@ -116,7 +117,6 @@ export function EventCalendar({
     visibleDays,
   ]);
 
-  // Build day columns for next and previous dates (for swipe preview)
   const nextDayColumns = useMemo(() => {
     if (isDesktop) return null;
     const nextDate = currentDate.add({ days: visibleDays });
@@ -161,7 +161,6 @@ export function EventCalendar({
     isDesktop,
   ]);
 
-  // Generate hour labels
   const hourLabels = useMemo(
     () => generateHourLabels(dayStartHour, dayEndHour),
     [dayStartHour, dayEndHour],
@@ -178,14 +177,12 @@ export function EventCalendar({
     };
 
     updateTime();
-    const interval = setInterval(updateTime, 60000); // Update every minute
+    const interval = setInterval(updateTime, 60000);
 
     return () => clearInterval(interval);
   }, [timezone, dayStartHour, dayEndHour, showCurrentTime]);
 
-  // Navigation handlers - move by week on desktop, by visible days on mobile/tablet
-  const navigationDays = isDesktop ? 7 : visibleDays;
-
+  // Navigation handlers
   const goToPrevious = useCallback(() => {
     if (isAnimating) return;
     const newDate = currentDate.subtract({ days: navigationDays });
@@ -207,138 +204,28 @@ export function EventCalendar({
   }, [timezone, onDateChange]);
 
   const totalHours = dayEndHour - dayStartHour + 1;
-  const paddingHeight = hourHeight; // Full cell padding above
+  const paddingHeight = hourHeight;
   const gridHeight = totalHours * hourHeight + paddingHeight;
 
-  // Touch/swipe gesture handling for mobile and tablet
-  const touchStartRef = useRef<{
-    x: number;
-    y: number;
-    time: number;
-    lastX: number;
-    lastTime: number;
-    isHorizontal: boolean | null;
-  } | null>(null);
-
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      if (isAnimating) return;
-      const touch = e.touches[0];
-      if (!touch) return;
-
-      // Store the container width for percentage calculations
-      const container = e.currentTarget;
-      containerWidthRef.current = container.getBoundingClientRect().width - 64; // Subtract time column width
-
-      touchStartRef.current = {
-        x: touch.clientX,
-        y: touch.clientY,
-        time: Date.now(),
-        lastX: touch.clientX,
-        lastTime: Date.now(),
-        isHorizontal: null, // Will be determined on first move
-      };
-    },
-    [isAnimating],
-  );
-
-  const handleTouchMove = useCallback(
-    (e: React.TouchEvent) => {
-      if (!touchStartRef.current || isAnimating) return;
-
-      const touch = e.touches[0];
-      if (!touch) return;
-
-      const deltaX = touch.clientX - touchStartRef.current.x;
-      const deltaY = touch.clientY - touchStartRef.current.y;
-
-      // Determine scroll direction on first significant move
-      if (touchStartRef.current.isHorizontal === null) {
-        const absX = Math.abs(deltaX);
-        const absY = Math.abs(deltaY);
-        if (absX > 10 || absY > 10) {
-          touchStartRef.current.isHorizontal = absX > absY;
-        }
-      }
-
-      // Only handle horizontal swipes
-      if (touchStartRef.current.isHorizontal) {
-        setIsDragging(true);
-        setDragOffset(deltaX);
-
-        // Update velocity tracking
-        touchStartRef.current.lastX = touch.clientX;
-        touchStartRef.current.lastTime = Date.now();
-      }
-    },
-    [isAnimating],
-  );
-
-  const handleTouchEnd = useCallback(
-    (e: React.TouchEvent) => {
-      if (!touchStartRef.current || !isDragging) {
-        touchStartRef.current = null;
-        return;
-      }
-
-      const touch = e.changedTouches[0];
-      if (!touch) return;
-
-      const containerWidth = containerWidthRef.current || 300;
-      const deltaX = touch.clientX - touchStartRef.current.x;
-      const deltaTime = Date.now() - touchStartRef.current.lastTime;
-      const velocityX =
-        (touch.clientX - touchStartRef.current.lastX) / Math.max(deltaTime, 1);
-
-      // Calculate percentage of container width dragged
-      const dragPercentage = Math.abs(deltaX) / containerWidth;
-
-      // Determine if we should commit the navigation
-      const shouldCommit =
-        dragPercentage > SWIPE_COMMIT_THRESHOLD ||
-        Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD;
-
-      if (shouldCommit) {
-        // Animate to complete position and update date
-        setIsAnimating(true);
-        const direction = deltaX > 0 ? "previous" : "next";
-        const targetOffset =
-          direction === "next" ? -containerWidth : containerWidth;
-
-        setDragOffset(targetOffset);
-
-        setTimeout(() => {
-          // Update the date
-          const newDate =
-            direction === "next"
-              ? currentDate.add({ days: navigationDays })
-              : currentDate.subtract({ days: navigationDays });
-          setCurrentDate(newDate);
-          onDateChange?.(newDate);
-
-          // Reset state
-          setDragOffset(0);
-          setIsDragging(false);
-          setIsAnimating(false);
-        }, ANIMATION_DURATION);
-      } else {
-        // Animate back to original position
-        setIsAnimating(true);
-        setDragOffset(0);
-
-        setTimeout(() => {
-          setIsDragging(false);
-          setIsAnimating(false);
-        }, ANIMATION_DURATION);
-      }
-
-      touchStartRef.current = null;
-    },
-    [isDragging, currentDate, navigationDays, onDateChange],
-  );
-
-  // Only enable swipe on mobile and tablet
-  const swipeEnabled = !isDesktop;
+  // Helper: Render sliding columns
+  const renderSlidingColumns = (
+    columns: DayColumn[] | null,
+    offset: number,
+    keyPrefix: string,
+    renderContent: (column: DayColumn) => React.ReactNode,
+  ) =>
+    columns &&
+    (isDragging || isAnimating) && (
+      <SlidingContainer
+        offset={offset}
+        isAnimating={isAnimating}
+        className="absolute top-0 flex w-full"
+      >
+        {columns.map(column => (
+          <div key={`${keyPrefix}-${column.date}`}>{renderContent(column)}</div>
+        ))}
+      </SlidingContainer>
+    );
 
   return (
     <div className="bg-background flex h-full flex-col overflow-hidden rounded-lg border">
@@ -375,135 +262,46 @@ export function EventCalendar({
 
       {/* Day Headers Row */}
       <div className="flex overflow-hidden border-b">
-        {/* Empty space for time labels column */}
-        <div className="w-16 flex-shrink-0 border-r" />
-        {/* Day headers container - slides during swipe */}
+        <div className="w-16 flex-shrink-0 border-r"></div>
         <div className="relative flex-1 overflow-hidden">
-          {/* Previous day headers (shown when dragging right) */}
-          {prevDayColumns && (isDragging || isAnimating) && (
-            <div
-              className="absolute top-0 flex w-full"
-              style={{
-                transitionProperty: isAnimating ? "transform" : "none",
-                transitionDuration: isAnimating
-                  ? `${ANIMATION_DURATION}ms`
-                  : "0ms",
-                transitionTimingFunction: "ease-out",
-                transform: `translateX(calc(-100% + ${dragOffset}px))`,
-              }}
-            >
-              {prevDayColumns.map(column => (
-                <div
-                  key={`header-prev-${column.date.toString()}`}
-                  className={`flex flex-1 flex-col items-center justify-center border-r py-2 last:border-r-0 ${
-                    column.isToday ? "bg-primary/10" : ""
-                  }`}
-                >
-                  <span className="text-muted-foreground text-xs">
-                    {column.dayOfWeek}
-                  </span>
-                  <span
-                    className={`flex h-6 w-6 items-center justify-center text-sm font-medium ${
-                      column.isToday
-                        ? "bg-primary text-primary-foreground rounded-full"
-                        : ""
-                    }`}
-                  >
-                    {column.dayNumber}
-                  </span>
-                </div>
-              ))}
-            </div>
+          {/* Previous day headers */}
+          {renderSlidingColumns(
+            prevDayColumns,
+            -(containerWidthRef.current || 0) + dragOffset,
+            "header-prev",
+            column => (
+              <DayHeader column={column} />
+            ),
           )}
           {/* Current day headers */}
-          <div
+          <SlidingContainer
+            offset={dragOffset}
+            isAnimating={isAnimating}
             className="flex w-full"
-            style={{
-              transitionProperty: isAnimating ? "transform" : "none",
-              transitionDuration: isAnimating
-                ? `${ANIMATION_DURATION}ms`
-                : "0ms",
-              transitionTimingFunction: "ease-out",
-              transform:
-                isDragging || isAnimating
-                  ? `translateX(${dragOffset}px)`
-                  : "translateX(0)",
-            }}
           >
             {dayColumns.map(column => (
-              <div
-                key={`header-${column.date.toString()}`}
-                className={`flex flex-1 flex-col items-center justify-center border-r py-2 last:border-r-0 ${
-                  column.isToday ? "bg-primary/10" : ""
-                }`}
-              >
-                <span className="text-muted-foreground text-xs">
-                  {column.dayOfWeek}
-                </span>
-                <span
-                  className={`flex h-6 w-6 items-center justify-center text-sm font-medium ${
-                    column.isToday
-                      ? "bg-primary text-primary-foreground rounded-full"
-                      : ""
-                  }`}
-                >
-                  {column.dayNumber}
-                </span>
-              </div>
+              <DayHeader key={`header-${column.date}`} column={column} />
             ))}
-          </div>
-          {/* Next day headers (shown when dragging left) */}
-          {nextDayColumns && (isDragging || isAnimating) && (
-            <div
-              className="absolute top-0 flex w-full"
-              style={{
-                transitionProperty: isAnimating ? "transform" : "none",
-                transitionDuration: isAnimating
-                  ? `${ANIMATION_DURATION}ms`
-                  : "0ms",
-                transitionTimingFunction: "ease-out",
-                transform: `translateX(calc(100% + ${dragOffset}px))`,
-              }}
-            >
-              {nextDayColumns.map(column => (
-                <div
-                  key={`header-next-${column.date.toString()}`}
-                  className={`flex flex-1 flex-col items-center justify-center border-r py-2 last:border-r-0 ${
-                    column.isToday ? "bg-primary/10" : ""
-                  }`}
-                >
-                  <span className="text-muted-foreground text-xs">
-                    {column.dayOfWeek}
-                  </span>
-                  <span
-                    className={`flex h-6 w-6 items-center justify-center text-sm font-medium ${
-                      column.isToday
-                        ? "bg-primary text-primary-foreground rounded-full"
-                        : ""
-                    }`}
-                  >
-                    {column.dayNumber}
-                  </span>
-                </div>
-              ))}
-            </div>
+          </SlidingContainer>
+          {/* Next day headers */}
+          {renderSlidingColumns(
+            nextDayColumns,
+            (containerWidthRef.current || 0) + dragOffset,
+            "header-next",
+            column => (
+              <DayHeader column={column} />
+            ),
           )}
         </div>
       </div>
 
       {/* Calendar Grid */}
-      <div
-        className="flex flex-1 overflow-auto"
-        onTouchStart={swipeEnabled ? handleTouchStart : undefined}
-        onTouchMove={swipeEnabled ? handleTouchMove : undefined}
-        onTouchEnd={swipeEnabled ? handleTouchEnd : undefined}
-      >
+      <div className="flex flex-1 overflow-auto" {...handlers}>
         {/* Time labels column */}
         <div
           className="bg-background sticky left-0 z-30 w-16 flex-shrink-0 border-r"
           style={{ height: gridHeight }}
         >
-          {/* Hour labels */}
           {hourLabels.map(({ hour, label }) => (
             <div
               key={hour}
@@ -517,55 +315,35 @@ export function EventCalendar({
           ))}
         </div>
 
-        {/* Days grid container - slides during swipe */}
+        {/* Days grid container */}
         <div className="relative flex-1">
-          {/* Previous days (shown when dragging right) */}
-          {prevDayColumns && (isDragging || isAnimating) && (
-            <div
-              className="absolute top-0 flex w-full"
-              style={{
-                height: gridHeight,
-                transitionProperty: isAnimating ? "transform" : "none",
-                transitionDuration: isAnimating
-                  ? `${ANIMATION_DURATION}ms`
-                  : "0ms",
-                transitionTimingFunction: "ease-out",
-                transform: `translateX(calc(-100% + ${dragOffset}px))`,
-              }}
-            >
-              {prevDayColumns.map(column => (
-                <DayColumnComponent
-                  key={`prev-${column.date.toString()}`}
-                  column={column}
-                  hourHeight={hourHeight}
-                  gridHeight={gridHeight}
-                  paddingHeight={paddingHeight}
-                  dayStartHour={dayStartHour}
-                  dayEndHour={dayEndHour}
-                  currentTimePosition={
-                    column.isToday ? currentTimePosition : null
-                  }
-                  onEventClick={onEventClick}
-                  renderEvent={renderEvent}
-                />
-              ))}
-            </div>
+          {/* Previous days */}
+          {renderSlidingColumns(
+            prevDayColumns,
+            -(containerWidthRef.current || 0) + dragOffset,
+            "prev",
+            column => (
+              <DayColumnComponent
+                column={column}
+                hourHeight={hourHeight}
+                gridHeight={gridHeight}
+                paddingHeight={paddingHeight}
+                dayStartHour={dayStartHour}
+                dayEndHour={dayEndHour}
+                currentTimePosition={
+                  column.isToday ? currentTimePosition : null
+                }
+                onEventClick={onEventClick}
+                renderEvent={renderEvent}
+              />
+            ),
           )}
           {/* Current days */}
-          <div
+          <SlidingContainer
+            offset={dragOffset}
+            isAnimating={isAnimating}
             className="flex w-full"
-            style={{
-              height: gridHeight,
-              transitionProperty: isAnimating ? "transform" : "none",
-              transitionDuration: isAnimating
-                ? `${ANIMATION_DURATION}ms`
-                : "0ms",
-              transitionTimingFunction: "ease-out",
-              transform:
-                isDragging || isAnimating
-                  ? `translateX(${dragOffset}px)`
-                  : "translateX(0)",
-            }}
+            style={{ height: gridHeight }}
           >
             {dayColumns.map(column => (
               <DayColumnComponent
@@ -583,38 +361,27 @@ export function EventCalendar({
                 renderEvent={renderEvent}
               />
             ))}
-          </div>
-          {/* Next days (shown when dragging left) */}
-          {nextDayColumns && (isDragging || isAnimating) && (
-            <div
-              className="absolute top-0 flex w-full"
-              style={{
-                height: gridHeight,
-                transitionProperty: isAnimating ? "transform" : "none",
-                transitionDuration: isAnimating
-                  ? `${ANIMATION_DURATION}ms`
-                  : "0ms",
-                transitionTimingFunction: "ease-out",
-                transform: `translateX(calc(100% + ${dragOffset}px))`,
-              }}
-            >
-              {nextDayColumns.map(column => (
-                <DayColumnComponent
-                  key={`next-${column.date.toString()}`}
-                  column={column}
-                  hourHeight={hourHeight}
-                  gridHeight={gridHeight}
-                  paddingHeight={paddingHeight}
-                  dayStartHour={dayStartHour}
-                  dayEndHour={dayEndHour}
-                  currentTimePosition={
-                    column.isToday ? currentTimePosition : null
-                  }
-                  onEventClick={onEventClick}
-                  renderEvent={renderEvent}
-                />
-              ))}
-            </div>
+          </SlidingContainer>
+          {/* Next days */}
+          {renderSlidingColumns(
+            nextDayColumns,
+            (containerWidthRef.current || 0) + dragOffset,
+            "next",
+            column => (
+              <DayColumnComponent
+                column={column}
+                hourHeight={hourHeight}
+                gridHeight={gridHeight}
+                paddingHeight={paddingHeight}
+                dayStartHour={dayStartHour}
+                dayEndHour={dayEndHour}
+                currentTimePosition={
+                  column.isToday ? currentTimePosition : null
+                }
+                onEventClick={onEventClick}
+                renderEvent={renderEvent}
+              />
+            ),
           )}
         </div>
       </div>
