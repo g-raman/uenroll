@@ -353,7 +353,19 @@ export function EventCalendar({
           <Button variant="outline" size="sm" onClick={goToToday}>
             Today
           </Button>
-          {isDesktop && (
+          <h2 className="text-lg font-semibold">
+            {formatWeekRange(weekStart)}
+          </h2>
+        </div>
+        {isDesktop && (
+          <div className="flex items-center gap-4">
+            <label className="flex cursor-pointer items-center gap-2 text-sm">
+              <Switch
+                checked={weekendsHidden}
+                onCheckedChange={setWeekendsHidden}
+              />
+              <span className="text-muted-foreground">Hide weekends</span>
+            </label>
             <div className="flex items-center">
               <Button variant="ghost" size="icon" onClick={goToPrevious}>
                 <ChevronLeft className="h-4 w-4" />
@@ -362,22 +374,8 @@ export function EventCalendar({
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
-          )}
-        </div>
-        <div className="flex items-center gap-4">
-          {isDesktop && (
-            <label className="flex cursor-pointer items-center gap-2 text-sm">
-              <Switch
-                checked={weekendsHidden}
-                onCheckedChange={setWeekendsHidden}
-              />
-              <span className="text-muted-foreground">Hide weekends</span>
-            </label>
-          )}
-          <h2 className="text-lg font-semibold">
-            {formatWeekRange(weekStart)}
-          </h2>
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Day Headers Row */}
