@@ -360,14 +360,16 @@ export function EventCalendar({
           <Button variant="outline" size="sm" onClick={goToToday}>
             Today
           </Button>
-          <div className="flex items-center">
-            <Button variant="ghost" size="icon" onClick={goToPrevious}>
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={goToNext}>
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
+          {isDesktop && (
+            <div className="flex items-center">
+              <Button variant="ghost" size="icon" onClick={goToPrevious}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={goToNext}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-4">
           {isDesktop && (
