@@ -504,21 +504,22 @@ export function EventCalendar({
         onTouchEnd={swipeEnabled ? handleTouchEnd : undefined}
       >
         {/* Time labels column */}
-        <div className="w-16 flex-shrink-0 border-r">
+        <div
+          className="bg-background sticky left-0 z-30 w-16 flex-shrink-0 border-r"
+          style={{ height: gridHeight }}
+        >
           {/* Hour labels */}
-          <div className="bg-muted/30 relative" style={{ height: gridHeight }}>
-            {hourLabels.map(({ hour, label }) => (
-              <div
-                key={hour}
-                className="text-muted-foreground absolute right-2 text-xs"
-                style={{
-                  top: paddingHeight + (hour - dayStartHour) * hourHeight,
-                }}
-              >
-                {label}
-              </div>
-            ))}
-          </div>
+          {hourLabels.map(({ hour, label }) => (
+            <div
+              key={hour}
+              className="text-muted-foreground absolute right-2 text-xs"
+              style={{
+                top: paddingHeight + (hour - dayStartHour) * hourHeight,
+              }}
+            >
+              {label}
+            </div>
+          ))}
         </div>
 
         {/* Days grid container - slides during swipe */}
@@ -669,7 +670,7 @@ function DayColumnComponent({
       {/* Current time indicator */}
       {currentTimePosition !== null && (
         <div
-          className="absolute right-0 left-0 z-20 flex items-center"
+          className="pointer-events-none absolute right-0 left-0 flex items-center"
           style={{
             top: paddingHeight + (currentTimePosition / 100) * contentHeight,
           }}
@@ -713,7 +714,7 @@ function EventBlock({ event, onClick, renderEvent }: EventBlockProps) {
 
   return (
     <div
-      className="absolute z-10 cursor-pointer overflow-hidden px-0.5"
+      className="absolute cursor-pointer overflow-hidden px-0.5"
       style={{
         top: `${event.top}%`,
         height: `${event.height}%`,
