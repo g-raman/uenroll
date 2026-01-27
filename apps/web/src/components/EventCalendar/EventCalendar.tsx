@@ -158,7 +158,8 @@ export function EventCalendar({
   };
 
   const totalHours = dayEndHour - dayStartHour + 1;
-  const gridHeight = totalHours * hourHeight;
+  const paddingHeight = hourHeight; // Full cell padding above
+  const gridHeight = totalHours * hourHeight + paddingHeight;
 
   return (
     <div className="bg-background flex h-full flex-col overflow-hidden rounded-lg border">
@@ -228,15 +229,14 @@ export function EventCalendar({
         {/* Time labels column */}
         <div className="w-16 flex-shrink-0 border-r">
           {/* Hour labels */}
-          <div
-            className="bg-muted/30 relative pt-2"
-            style={{ height: gridHeight }}
-          >
+          <div className="bg-muted/30 relative" style={{ height: gridHeight }}>
             {hourLabels.map(({ hour, label }) => (
               <div
                 key={hour}
                 className="text-muted-foreground absolute right-2 text-xs"
-                style={{ top: (hour - dayStartHour) * hourHeight }}
+                style={{
+                  top: paddingHeight + (hour - dayStartHour) * hourHeight,
+                }}
               >
                 {label}
               </div>
@@ -252,6 +252,7 @@ export function EventCalendar({
               column={column}
               hourHeight={hourHeight}
               gridHeight={gridHeight}
+              paddingHeight={paddingHeight}
               dayStartHour={dayStartHour}
               dayEndHour={dayEndHour}
               currentTimePosition={column.isToday ? currentTimePosition : null}
@@ -269,6 +270,7 @@ interface DayColumnProps {
   column: DayColumn;
   hourHeight: number;
   gridHeight: number;
+  paddingHeight: number;
   dayStartHour: number;
   dayEndHour: number;
   currentTimePosition: number | null;
@@ -280,6 +282,7 @@ function DayColumnComponent({
   column,
   hourHeight,
   gridHeight,
+  paddingHeight,
   dayStartHour,
   dayEndHour,
   currentTimePosition,
@@ -287,18 +290,19 @@ function DayColumnComponent({
   renderEvent,
 }: DayColumnProps) {
   const totalHours = dayEndHour - dayStartHour + 1;
+  const contentHeight = totalHours * hourHeight;
 
   return (
     <div
       className="relative flex-1 border-r last:border-r-0"
       style={{ height: gridHeight }}
     >
-      {/* Hour grid lines */}
-      {Array.from({ length: totalHours }, (_, i) => (
+      {/* Hour grid lines - offset by padding */}
+      {Array.from({ length: totalHours + 1 }, (_, i) => (
         <div
           key={i}
           className="border-border/50 absolute right-0 left-0 border-b"
-          style={{ top: i * hourHeight }}
+          style={{ top: paddingHeight + i * hourHeight }}
         />
       ))}
 
@@ -306,15 +310,20 @@ function DayColumnComponent({
       {currentTimePosition !== null && (
         <div
           className="absolute right-0 left-0 z-20 flex items-center"
-          style={{ top: `${currentTimePosition}%` }}
+          style={{
+            top: paddingHeight + (currentTimePosition / 100) * contentHeight,
+          }}
         >
           <div className="h-2 w-2 rounded-full bg-red-500" />
           <div className="h-[2px] flex-1 bg-red-500" />
         </div>
       )}
 
-      {/* Events */}
-      <div className="absolute inset-0">
+      {/* Events container - offset by padding */}
+      <div
+        className="absolute right-0 left-0"
+        style={{ top: paddingHeight, height: contentHeight }}
+      >
         {column.events.map(event => (
           <EventBlock
             key={event.id}

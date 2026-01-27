@@ -277,8 +277,8 @@ export default function CalendarDemoPage() {
           config={{
             timezone: TIMEZONE,
             dayStartHour: 7,
-            dayEndHour: 23,
-            hourHeight: 60,
+            dayEndHour: 22,
+            hourHeight: 48,
             showCurrentTime: true,
           }}
           onEventClick={handleEventClick}
