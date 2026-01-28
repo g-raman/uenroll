@@ -5,6 +5,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import DownloadCalendarButton from "../Buttons/DownloadCalendarButton/DownloadCalendarButton";
 import { CopyLinkButton } from "../Buttons/CopyLinkButton/CopyLinkButton";
 import { formatWeekRange } from "./dateUtils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 
 interface CalendarHeaderProps {
   weekStart: Temporal.PlainDate;
@@ -53,23 +58,35 @@ export function CalendarHeader({
         </div>
 
         <div className="hidden items-center lg:flex">
-          <Button
-            className="cursor-pointer"
-            variant="ghost"
-            size="icon-lg"
-            onClick={() => onNavigate("previous")}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button
+                className="cursor-pointer"
+                variant="ghost"
+                size="icon-lg"
+                onClick={() => onNavigate("previous")}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
 
-          <Button
-            className="cursor-pointer"
-            variant="ghost"
-            size="icon-lg"
-            onClick={() => onNavigate("next")}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+            <TooltipContent>Previous week</TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger>
+              <Button
+                className="cursor-pointer"
+                variant="ghost"
+                size="icon-lg"
+                onClick={() => onNavigate("next")}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+
+            <TooltipContent>Next week</TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </div>
