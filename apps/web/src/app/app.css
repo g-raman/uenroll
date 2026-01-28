@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @source "../**/*.{ts,tsx}";
 
-@custom-variant dark (&:is(.dark *));
-
 @layer base {
   button:not(:disabled),
   [role="button"]:not(:disabled) {
