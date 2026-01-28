@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@repo/ui/components/button";
@@ -12,24 +13,35 @@ import {
 
 export function ThemeSwitchingButton() {
   const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // Only run once and state isn't used elsewhere
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   const toggleTheme = () => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
+  const Icon = mounted && resolvedTheme === "dark" ? Sun : Moon;
+
   return (
     <Tooltip>
-      <TooltipTrigger>
-        <Button
-          className="size-10 cursor-pointer"
-          variant="outline"
-          size="icon"
-          onClick={toggleTheme}
-        >
-          {resolvedTheme === "dark" ? <Sun /> : <Moon />}
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={
+          <Button
+            className="size-10"
+            variant="outline"
+            size="icon"
+            onClick={toggleTheme}
+          >
+            <Icon />
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+        }
+      />
 
       <TooltipContent>
         Change to {resolvedTheme === "dark" ? "Light mode" : "Dark mode"}

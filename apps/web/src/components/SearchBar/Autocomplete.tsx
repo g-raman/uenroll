@@ -1,175 +1,237 @@
+"use client";
+
 import { trpc } from "@/app/_trpc/client";
-import { useCourseQuery } from "@/hooks/useCourseQuery";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
-import { MAX_RESULTS_ALLOWED } from "@/utils/constants";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@repo/ui/components/command";
+import { MAX_RESULTS_ALLOWED, GC_TIME, STALE_TIME } from "@/utils/constants";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@repo/ui/components/popover";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@repo/ui/components/input-group";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useQuery } from "@tanstack/react-query";
-import Fuse from "fuse.js";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import Fuse, { type IFuseOptions } from "fuse.js";
+import {
+  useDeferredValue,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+  type KeyboardEvent,
+} from "react";
 import { toast } from "sonner";
+import { SearchIcon, LoaderCircleIcon } from "lucide-react";
 
-// Remove spaces only when searching by course code
-// ADM 1100 -> becomes ADM1100
-// Introduction to Business -> remains untouched
-const normalizeCourseCode = (str: string) => {
-  const pattern = /^([A-Za-z]{3})\s+(\d.*)$/;
-  if (pattern.test(str)) {
-    return str.replace(/\s+/g, "");
-  }
-  return str;
+interface CourseMatch {
+  courseCode: string;
+  courseTitle: string;
+}
+
+const MAX_VISIBLE_RESULTS = 7;
+
+const FUSE_OPTIONS: IFuseOptions<CourseMatch> = {
+  isCaseSensitive: false,
+  keys: ["courseCode", "courseTitle"],
 };
+
+function stripSpacesFromCourseCode(input: string): string {
+  if (/^[A-Za-z]{2,4}\s+\d/.test(input)) {
+    return input.replace(/\s+/g, "");
+  }
+  return input;
+}
 
 export default function Autocomplete() {
   const [selectedTerm] = useTermParam();
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [selectedValue, setSelectedValue] = useState("");
   const [data, setData] = useDataParam();
-
+  const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
 
-  const { data: dataAllCourses } = useQuery(
+  const deferredQuery = useDeferredValue(
+    stripSpacesFromCourseCode(query.trim()),
+  );
+
+  const { data: allCourses, isLoading } = useQuery(
     trpc.getAvailableCoursesByTerm.queryOptions(
       { term: selectedTerm },
-      { staleTime: Infinity },
+      { staleTime: Infinity, enabled: !!selectedTerm },
     ),
   );
 
-  const isUnderMaxResults =
-    Object.keys(data ? data : {}).length < MAX_RESULTS_ALLOWED;
-
-  const {
-    data: courseData,
-    error,
-    isSuccess,
-    isError,
-  } = useCourseQuery(selectedValue, isUnderMaxResults);
-
-  useEffect(() => {
-    if (isError && error) {
-      toast.error(error.message);
-    }
-
-    if (isSuccess && courseData) {
-      const newSelected = data ? { ...data } : {};
-      newSelected[courseData.courseCode] = [];
-      setData(newSelected);
-    }
-
-    if (isError || isSuccess) {
-      queueMicrotask(() => {
-        setQuery("");
-        setSelectedValue("");
-      });
-    }
-  }, [isError, error, isSuccess, courseData, data, setData]);
-
-  useEffect(() => {
-    if (!isUnderMaxResults && !!selectedValue) {
-      queueMicrotask(() => {
-        setQuery("");
-        setSelectedValue("");
-        toast.error("Max Search Results Reached");
-      });
-    }
-  }, [isUnderMaxResults, selectedValue]);
-
-  useEffect(() => {
-    const cleanQuery = query.replaceAll(" ", "").trim();
-    const handler = setTimeout(() => setDebouncedQuery(cleanQuery), 200);
-    return () => clearTimeout(handler);
-  }, [query]);
-
   const fuse = useMemo(() => {
-    const toParse = dataAllCourses ?? [];
-    const parsed = toParse.map(course => ({
-      courseCode: course.courseCode,
-      courseTitle: course.courseTitle.replaceAll(/\s+/g, ""),
-      displayCourseTitle: course.courseTitle
-        .replace(/\s*\(\+1 combined\)\s*/gi, "")
-        .trim(),
+    if (!allCourses) return null;
+
+    const normalized = allCourses.map(c => ({
+      courseCode: c.courseCode,
+      courseTitle: c.courseTitle.replace(/\s*\(\+1 combined\)\s*/gi, "").trim(),
     }));
 
-    return new Fuse(parsed, {
-      isCaseSensitive: false,
-      keys: ["courseCode", "courseTitle"],
-    });
-  }, [dataAllCourses]);
+    return new Fuse(normalized, FUSE_OPTIONS);
+  }, [allCourses]);
 
-  const results = useMemo(
-    () => fuse.search(debouncedQuery),
-    [fuse, debouncedQuery],
+  const results = useMemo(() => {
+    if (!fuse || !deferredQuery) return [];
+    return fuse.search(deferredQuery, { limit: MAX_VISIBLE_RESULTS });
+  }, [fuse, deferredQuery]);
+
+  const selectedCodes = useMemo(() => new Set(Object.keys(data ?? {})), [data]);
+
+  const isAtLimit = selectedCodes.size >= MAX_RESULTS_ALLOWED;
+
+  const addCourse = useCallback(
+    async (courseCode: string) => {
+      if (selectedCodes.has(courseCode)) {
+        toast.info(`${courseCode} is already selected`);
+        return;
+      }
+
+      if (isAtLimit) {
+        toast.error(`Maximum of ${MAX_RESULTS_ALLOWED} courses allowed`);
+        return;
+      }
+
+      setIsAdding(true);
+      try {
+        await queryClient.fetchQuery(
+          trpc.getCourseByTermAndCourseCode.queryOptions(
+            { term: selectedTerm, courseCode },
+            { staleTime: STALE_TIME, gcTime: GC_TIME },
+          ),
+        );
+
+        const next = { ...(data ?? {}), [courseCode]: [] };
+        setData(next);
+      } catch (err) {
+        toast.error(
+          err instanceof Error ? err.message : "Failed to add course",
+        );
+      } finally {
+        setIsAdding(false);
+        setQuery("");
+        setOpen(false);
+        setHighlightedIndex(0);
+        requestAnimationFrame(() => inputRef.current?.focus());
+      }
+    },
+    [selectedCodes, isAtLimit, queryClient, selectedTerm, data, setData],
   );
 
-  const items = useMemo(
-    () =>
-      results.slice(0, 7).map(result => (
-        <CommandItem
-          onSelect={() => {
-            setSelectedValue(result.item.courseCode);
-            inputRef.current?.blur();
-            setOpen(false);
-          }}
-          key={`autocomplete-${result.item.courseCode}-${result.item.courseTitle}`}
-        >
-          {`${result.item.courseCode} ${result.item.displayCourseTitle}`}
-        </CommandItem>
-      )),
-    [results],
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLInputElement>) => {
+      if (!results.length) return;
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          setHighlightedIndex(i => (i + 1) % results.length);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          setHighlightedIndex(i => (i - 1 + results.length) % results.length);
+          break;
+        case "Enter":
+          e.preventDefault();
+          if (results[highlightedIndex]) {
+            addCourse(results[highlightedIndex].item.courseCode);
+          }
+          break;
+        case "Escape":
+          setOpen(false);
+          inputRef.current?.blur();
+          break;
+      }
+    },
+    [results, highlightedIndex, addCourse],
   );
-  if (!dataAllCourses) return <Skeleton className="h-8" />;
+
+  if (isLoading) {
+    return <Skeleton className="h-9 w-full rounded-md" />;
+  }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <Command>
-        <PopoverTrigger asChild>
-          <CommandInput
-            ref={inputRef}
-            value={query}
-            onValueChange={newString => {
-              setQuery(normalizeCourseCode(newString));
-              setOpen(true);
-            }}
-            placeholder="Type a course code or course name"
-          />
-        </PopoverTrigger>
+    <Popover open={open && !!deferredQuery} onOpenChange={setOpen}>
+      <PopoverTrigger
+        nativeButton={false}
+        render={
+          <InputGroup>
+            <InputGroupAddon>
+              {isAdding ? (
+                <LoaderCircleIcon className="size-4 animate-spin" />
+              ) : (
+                <SearchIcon className="size-4" />
+              )}
+            </InputGroupAddon>
+            <InputGroupInput
+              ref={inputRef}
+              value={query}
+              onChange={e => {
+                setQuery(e.target.value);
+                setHighlightedIndex(0);
+                if (e.target.value.trim()) {
+                  setOpen(true);
+                }
+              }}
+              onFocus={() => {
+                if (deferredQuery) setOpen(true);
+              }}
+              onKeyDown={handleKeyDown}
+              placeholder="Search for a course..."
+              disabled={isAdding}
+            />
+          </InputGroup>
+        }
+      />
 
-        <PopoverContent
-          onOpenAutoFocus={e => e.preventDefault()}
-          className="w-76! p-1"
-        >
-          <CommandList>
-            <CommandEmpty className="px-2 py-4 text-center text-xs">
-              {debouncedQuery.length > 0 &&
-                results.length === 0 &&
-                "No results found"}
+      <PopoverContent
+        initialFocus={false}
+        align="start"
+        className="w-(--anchor-width) p-1"
+      >
+        {results.length === 0 && (
+          <p className="text-muted-foreground px-3 py-4 text-center text-sm">
+            No courses found
+          </p>
+        )}
 
-              {debouncedQuery.length === 0 &&
-                results.length === 0 &&
-                "Type in a course code or course name"}
-            </CommandEmpty>
-
-            {results.length > 0 && (
-              <CommandGroup heading="Results">{items}</CommandGroup>
-            )}
-          </CommandList>
-        </PopoverContent>
-      </Command>
+        {results.length > 0 && (
+          <ul role="listbox" className="flex flex-col gap-0.5">
+            {results.map((result, index) => {
+              const alreadySelected = selectedCodes.has(result.item.courseCode);
+              return (
+                <li
+                  key={result.item.courseCode}
+                  role="option"
+                  aria-selected={index === highlightedIndex}
+                  aria-disabled={alreadySelected}
+                  data-highlighted={index === highlightedIndex || undefined}
+                  className="data-highlighted:bg-muted cursor-default rounded-sm px-3 py-1.5 text-sm select-none aria-disabled:opacity-50"
+                  onPointerMove={() => setHighlightedIndex(index)}
+                  onClick={() => {
+                    if (!alreadySelected) {
+                      addCourse(result.item.courseCode);
+                    }
+                  }}
+                >
+                  <span className="font-medium">{result.item.courseCode}</span>{" "}
+                  <span className="text-muted-foreground">
+                    {result.item.courseTitle}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </PopoverContent>
     </Popover>
   );
 }

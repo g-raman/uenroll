@@ -1,3 +1,5 @@
+import React from "react";
+
 import CourseResult from "./CourseResult/CourseResult";
 import { Button } from "@repo/ui/components/button";
 import { Accordion, AccordionItem } from "@repo/ui/components/accordion";
@@ -34,24 +36,25 @@ export default function SearchResults() {
 
   return (
     <div>
-      <Accordion type="multiple" onValueChange={value => setOpenResults(value)}>
+      <Accordion multiple onValueChange={value => setOpenResults(value)}>
         {courseSearchResults.map(course => {
           return (
             <div className="pb-4 text-sm" key={course.courseCode}>
               <Button
-                asChild
+                nativeButton={false}
                 variant="link"
                 className="text-foreground h-min items-baseline gap-0 !px-2 py-1"
-              >
-                <a
-                  href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Best Professors for {course.courseCode}&nbsp;
-                  <ExternalLink className="inline size-3" />
-                </a>
-              </Button>
+                render={
+                  <a
+                    href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Best Professors for {course.courseCode}&nbsp;
+                    <ExternalLink className="inline size-3" />
+                  </a>
+                }
+              />
 
               <AccordionItem value={course.courseCode}>
                 <CourseResult course={course} openResults={openResults} />

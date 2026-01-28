@@ -9,7 +9,7 @@ import { formatTime } from "./dateUtils";
 
 interface EventPopoverProps {
   event: PositionedEvent;
-  children: React.ReactNode;
+  children: React.ReactElement;
   disabled?: boolean;
 }
 
@@ -24,7 +24,7 @@ export function EventPopover({ event, children, disabled }: EventPopoverProps) {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverTrigger nativeButton={false} render={children} />
       <PopoverContent side="right" align="start" className="w-80">
         {/* Header */}
         <div className="mb-3 flex items-center gap-2">

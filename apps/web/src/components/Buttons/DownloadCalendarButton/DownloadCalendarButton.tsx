@@ -70,23 +70,24 @@ export default function DownloadCalendarButton() {
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          className="cursor-pointer"
-          variant="default"
-          size="icon-lg"
-          onClick={handleDownload}
-          disabled={
-            (isGenerationMode && schedules.length === 0) ||
-            (!isGenerationMode && !hasAnySelectedSessions)
-          }
-        >
-          <Save className="size-4" />
-          <p className="hidden text-xs min-[1440px]:inline sm:inline md:hidden">
-            Export
-          </p>
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={
+          <Button
+            variant="default"
+            size="icon-lg"
+            onClick={handleDownload}
+            disabled={
+              (isGenerationMode && schedules.length === 0) ||
+              (!isGenerationMode && !hasAnySelectedSessions)
+            }
+          >
+            <Save className="size-4" />
+            <p className="hidden text-xs min-[1440px]:inline sm:inline md:hidden">
+              Export
+            </p>
+          </Button>
+        }
+      />
       <TooltipContent>
         <p>Download and add to your favourite app</p>
       </TooltipContent>
