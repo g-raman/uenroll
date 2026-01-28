@@ -34,7 +34,7 @@ export default function SearchResults() {
 
   return (
     <div>
-      <Accordion type="multiple" onValueChange={value => setOpenResults(value)}>
+      <Accordion multiple onValueChange={value => setOpenResults(value)}>
         {courseSearchResults.map(course => {
           return (
             <div className="pb-4 text-sm" key={course.courseCode}>
