@@ -2,9 +2,6 @@ import { Temporal } from "temporal-polyfill";
 import { RRule } from "rrule";
 import { CalendarEvent } from "./types";
 
-/**
- * Check if a date falls within a range (inclusive)
- */
 function isDateInRange(
   date: Temporal.PlainDate,
   rangeStart: Temporal.PlainDate,
@@ -16,9 +13,6 @@ function isDateInRange(
   );
 }
 
-/**
- * Create an event instance at a specific occurrence time
- */
 function createEventInstance(
   event: CalendarEvent,
   occurrenceDate: Date,
@@ -48,9 +42,6 @@ function createEventInstance(
   };
 }
 
-/**
- * Expand a single recurring event into instances within a date range
- */
 function expandSingleRecurringEvent(
   event: CalendarEvent,
   rangeStart: Temporal.PlainDate,
@@ -72,20 +63,14 @@ function expandSingleRecurringEvent(
       rangeEnd.add({ days: 1 }).toZonedDateTime(timezone).epochMilliseconds,
     );
 
-    // Parse RRULE
-    const rruleString = event.rrule.includes("RRULE:")
-      ? event.rrule
-      : `RRULE:${event.rrule}`;
-    const rule = RRule.fromString(rruleString);
+    const rule = RRule.fromString(event.rrule);
 
-    // Create rule with the event's start date
     const dtstart = new Date(event.start.epochMilliseconds);
     const ruleWithStart = new RRule({
       ...rule.origOptions,
       dtstart,
     });
 
-    // Get all occurrences within the range
     const occurrences = ruleWithStart.between(
       rangeStartDate,
       rangeEndDate,
@@ -115,9 +100,6 @@ function expandSingleRecurringEvent(
   }
 }
 
-/**
- * Expand recurring events into individual event instances for a date range
- */
 export function expandRecurringEvents(
   events: CalendarEvent[],
   rangeStart: Temporal.PlainDate,
@@ -130,14 +112,13 @@ export function expandRecurringEvents(
     const eventDate = event.start.toPlainDate();
 
     if (!event.rrule) {
-      // Non-recurring event - include if it falls within the range
-      if (isDateInRange(eventDate, rangeStart, rangeEnd)) {
-        expandedEvents.push(event);
+      if (!isDateInRange(eventDate, rangeStart, rangeEnd)) {
+        continue;
       }
-      continue;
+
+      expandedEvents.push(event);
     }
 
-    // Expand recurring event
     const instances = expandSingleRecurringEvent(
       event,
       rangeStart,
