@@ -3,39 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
-  --sx-color-primary: #8f001b !important;
-}
-
 @layer base {
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
-}
-
-.shadow-sx {
-  box-shadow:
-    0 24px 38px 3px rgba(0, 0, 0, 0.14),
-    0 9px 46px 8px rgba(0, 0, 0, 0.12),
-    0 11px 15px -7px rgba(0, 0, 0, 0.2);
-}
-
-/* HACK: To hide the modal parent's border*/
-.sx__event-modal {
-  border-radius: 100%;
-  z-index: 100 !important;
-}
-
-/* HACK: To hide change colours within day picker for calendar */
-.sx__date-picker__day--selected {
-  background-color: var(--sx-color-primary) !important;
-  color: white !important;
-}
-
-.sx__calendar {
-  border-radius: 0px !important;
-  border: none !important;
 }
 
 /* Calendar week navigation animations */
