@@ -78,7 +78,11 @@ export const CopyLinkButton = () => {
           }
           onClick={handleClick}
         >
-          {isCopied ? <Check className="size-4" /> : <Link className="size-4" />}
+          {isCopied ? (
+            <Check className="size-4" />
+          ) : (
+            <Link className="size-4" />
+          )}
           <p className="hidden text-xs min-[1440px]:inline sm:inline md:hidden">
             {isCopied ? "Copied" : "Copy Link"}
           </p>
