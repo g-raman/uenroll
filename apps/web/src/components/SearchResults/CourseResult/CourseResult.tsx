@@ -1,7 +1,6 @@
 import { ColouredCourse } from "@/types/Types";
 import { SectionResult } from "../SectionResult/SectionResult";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Trash } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -69,10 +68,11 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
 
         <Tooltip>
           <TooltipTrigger asChild>
-            <FontAwesomeIcon
-              className="ml-auto !rotate-0"
+            <Trash
+              fill="#000"
+              strokeWidth={2}
+              className="ml-auto size-4 !rotate-0"
               onClick={removeCourse}
-              icon={faTrash}
             />
           </TooltipTrigger>
           <TooltipContent>

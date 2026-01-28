@@ -10,8 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { Moon, Sun } from "lucide-react";
 
 export function ThemeSwitchingButton() {
   const { setTheme } = useTheme();
@@ -20,14 +19,8 @@ export function ThemeSwitchingButton() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="size-10" variant="outline" size="icon">
-          <FontAwesomeIcon
-            className="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90"
-            icon={faMoon}
-          />
-          <FontAwesomeIcon
-            className="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"
-            icon={faSun}
-          />
+          <Moon className="scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+          <Sun className="absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>

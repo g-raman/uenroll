@@ -13,12 +13,7 @@ import {
   courseToCourseWithSectionAlternatives,
   filterExcludedSections,
 } from "@/utils/mappers/course";
-import {
-  faBuildingColumns,
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ChevronLeft, ChevronRight, Landmark } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { Switch } from "@repo/ui/components/switch";
 import { Label } from "@repo/ui/components/label";
@@ -157,10 +152,7 @@ export function GenerationHeader() {
     <div className="bg-background sticky top-0 z-10 flex items-center justify-between gap-2 rounded-b-md p-2">
       {width && width >= 1024 && (
         <div className="flex items-baseline justify-start gap-2 text-4xl">
-          <FontAwesomeIcon
-            className="text-primary size-12"
-            icon={faBuildingColumns}
-          />
+          <Landmark className="text-primary size-12" />
           <p>uEnroll</p>
         </div>
       )}
@@ -174,7 +166,7 @@ export function GenerationHeader() {
               variant="outline"
               onClick={handlePrevious}
             >
-              <FontAwesomeIcon icon={faChevronLeft} />
+              <ChevronLeft className="size-4" />
             </Button>
 
             <div className="flex h-full items-center">
@@ -203,7 +195,7 @@ export function GenerationHeader() {
               variant="outline"
               onClick={handleNext}
             >
-              <FontAwesomeIcon icon={faChevronRight} />
+              <ChevronRight className="size-4" />
             </Button>
           </div>
 

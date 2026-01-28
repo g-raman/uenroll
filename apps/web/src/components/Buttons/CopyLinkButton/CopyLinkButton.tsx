@@ -6,8 +6,7 @@ import { parseAsSelectedSessions } from "@/hooks/utils";
 import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
 import { useMode } from "@/stores/modeStore";
 import { scheduleToSelected } from "@/utils/mappers/schedule";
-import { faCheck, faLink } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Check, Link } from "lucide-react";
 import { envClient } from "@repo/env/client";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -79,10 +78,7 @@ export const CopyLinkButton = () => {
           }
           onClick={handleClick}
         >
-          <FontAwesomeIcon
-            className="size-4"
-            icon={isCopied ? faCheck : faLink}
-          />
+          {isCopied ? <Check className="size-4" /> : <Link className="size-4" />}
           <p className="hidden text-xs min-[1440px]:inline sm:inline md:hidden">
             {isCopied ? "Copied" : "Copy Link"}
           </p>

@@ -1,8 +1,7 @@
 import { useDataParam } from "@/hooks/useDataParam";
 import { useColoursActions } from "@/stores/colourStore";
 import { useGeneratorActions } from "@/stores/generatorStore";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Trash2 } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import {
   Tooltip,
@@ -33,7 +32,7 @@ export const DeleteSearchResultsButton = () => {
           onClick={handleClick}
           disabled={courseCodes.length === 0}
         >
-          <FontAwesomeIcon className="size-4" icon={faTrash} />
+          <Trash2 className="size-4" />
           <p className="text-xs">Clear Results</p>
         </Button>
       </TooltipTrigger>
