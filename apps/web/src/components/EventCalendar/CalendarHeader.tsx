@@ -27,7 +27,7 @@ export function CalendarHeader({
         <Button variant="outline" size="sm" onClick={onGoToTermStart}>
           Term Start
         </Button>
-        <h2 className="text-base font-semibold">
+        <h2 className="truncate text-base font-semibold text-nowrap">
           {formatWeekRange(weekStart)}
         </h2>
       </div>
