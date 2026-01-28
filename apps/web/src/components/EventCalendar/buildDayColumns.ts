@@ -1,7 +1,7 @@
 import { Temporal } from "temporal-polyfill";
 import { CalendarEvent, DayColumn } from "./types";
 import { DAYS_OF_WEEK } from "./constants";
-import { getWeekDays, getToday, isSameDay } from "./dateUtils";
+import { getToday, isSameDay } from "./dateUtils";
 import { layoutOverlappingEvents } from "./eventLayout";
 import { expandRecurringEvents } from "./rrule";
 
@@ -30,21 +30,18 @@ export function buildDayColumns(
   dayStartHour: number,
   dayEndHour: number,
   hideWeekends: boolean = false,
-  numDays?: number,
+  numDays: number = 7,
 ): DayColumn[] {
   const today = getToday(timezone);
 
   // Generate days starting from startDate
-  let days: Temporal.PlainDate[];
-  if (numDays !== undefined) {
-    // Generate exactly numDays starting from startDate
-    days = Array.from({ length: numDays }, (_, i) =>
-      startDate.add({ days: i }),
-    );
-  } else {
-    // Use the week days logic (7 days or 5 if hiding weekends)
-    days = getWeekDays(startDate, hideWeekends);
-  }
+  const days = Array.from({ length: numDays }, (_, i) =>
+    startDate.add({ days: i }),
+  ).filter(
+    day =>
+      (!hideWeekends && day.dayOfWeek <= 7) ||
+      (hideWeekends && day.dayOfWeek <= 5),
+  );
 
   // Calculate the date range for expanding recurring events
   const rangeStart = days[0] ?? startDate;

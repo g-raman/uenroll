@@ -11,22 +11,6 @@ export function getWeekStart(date: Temporal.PlainDate): Temporal.PlainDate {
 }
 
 /**
- * Get an array of days starting from the week start
- * @param hideWeekends - If true, returns only Mon-Fri (5 days)
- */
-export function getWeekDays(
-  weekStart: Temporal.PlainDate,
-  hideWeekends: boolean = false,
-): Temporal.PlainDate[] {
-  const days = Array.from({ length: 7 }, (_, i) => weekStart.add({ days: i }));
-  if (hideWeekends) {
-    // Filter out Saturday (6) and Sunday (7)
-    return days.filter(d => d.dayOfWeek <= 5);
-  }
-  return days;
-}
-
-/**
  * Check if two dates are the same day
  */
 export function isSameDay(
