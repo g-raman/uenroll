@@ -7,7 +7,6 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@repo/ui/components/select";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -115,11 +114,21 @@ export default function TermSelector() {
           </AlertDialog>
 
           <Select value={selectedTerm} onValueChange={handleChangeTerm}>
-            <SelectTrigger className="w-full cursor-pointer">
-              <SelectValue placeholder="Term" />
-            </SelectTrigger>
+            <SelectTrigger
+              className="w-full cursor-pointer"
+              render={
+                <span>
+                  {availableTerms.find(term => term.value === selectedTerm)
+                    ?.term ?? "Term"}
+                </span>
+              }
+            ></SelectTrigger>
 
-            <SelectContent>
+            <SelectContent
+              alignItemWithTrigger={false}
+              align="center"
+              side="bottom"
+            >
               {availableTerms.map(availableTerm => (
                 <SelectItem
                   className="cursor-pointer"
