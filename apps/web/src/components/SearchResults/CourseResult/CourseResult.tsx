@@ -62,27 +62,30 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
   return (
     <>
       <AccordionTrigger
-        className={`cursor-pointer items-center truncate p-2 font-normal ${course.colour} ${openResults.includes(course.courseCode) ? "rounded-b-none" : "rounded-b-sm"}`}
-      >
-        <p className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
+        className={`cursor-pointer items-center truncate !border-none p-2 font-normal ${course.colour} ${openResults.includes(course.courseCode) ? "rounded-b-none" : "rounded-b-sm"}`}
+        render={
+          <div>
+            <p className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
 
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <Trash
-                fill="#000"
-                strokeWidth={2}
-                className="ml-auto size-4 !rotate-0"
-                onClick={removeCourse}
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Trash
+                    fill="#000"
+                    strokeWidth={2}
+                    className="ml-auto size-4 !rotate-0"
+                    onClick={removeCourse}
+                  />
+                }
               />
-            }
-          />
 
-          <TooltipContent>
-            <p>Remove this course</p>
-          </TooltipContent>
-        </Tooltip>
-      </AccordionTrigger>
+              <TooltipContent>
+                <p>Remove this course</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        }
+      />
 
       <AccordionContent className="p-0">
         <Accordion multiple className="overflow-hidden rounded-b-sm">

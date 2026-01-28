@@ -1,3 +1,5 @@
+import React from "react";
+
 import CourseResult from "./CourseResult/CourseResult";
 import { Button } from "@repo/ui/components/button";
 import { Accordion, AccordionItem } from "@repo/ui/components/accordion";
@@ -34,32 +36,38 @@ export default function SearchResults() {
 
   return (
     <div>
-      <Accordion multiple onValueChange={value => setOpenResults(value)}>
-        {courseSearchResults.map(course => {
-          return (
-            <div className="pb-4 text-sm" key={course.courseCode}>
-              <Button
-                variant="link"
-                className="text-foreground h-min items-baseline gap-0 !px-2 py-1"
-                render={
-                  <a
-                    href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Best Professors for {course.courseCode}&nbsp;
-                    <ExternalLink className="inline size-3" />
-                  </a>
-                }
-              />
+      <Accordion
+        multiple
+        onValueChange={value => setOpenResults(value)}
+        render={
+          <>
+            {courseSearchResults.map(course => {
+              return (
+                <div className="pb-4 text-sm" key={course.courseCode}>
+                  <Button
+                    variant="link"
+                    className="text-foreground h-min items-baseline gap-0 !px-2 py-1"
+                    render={
+                      <a
+                        href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Best Professors for {course.courseCode}&nbsp;
+                        <ExternalLink className="inline size-3" />
+                      </a>
+                    }
+                  />
 
-              <AccordionItem value={course.courseCode}>
-                <CourseResult course={course} openResults={openResults} />
-              </AccordionItem>
-            </div>
-          );
-        })}
-      </Accordion>
+                  <AccordionItem value={course.courseCode}>
+                    <CourseResult course={course} openResults={openResults} />
+                  </AccordionItem>
+                </div>
+              );
+            })}
+          </>
+        }
+      />
 
       {isGenerationMode && courseQueries.length > 0 && (
         <p className="mt-2 mb-4 px-2 text-sm font-semibold">
