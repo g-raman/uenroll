@@ -120,6 +120,7 @@ export default function Autocomplete() {
         setQuery("");
         setOpen(false);
         setHighlightedIndex(0);
+        requestAnimationFrame(() => inputRef.current?.focus());
       }
     },
     [selectedCodes, isAtLimit, queryClient, selectedTerm, data, setData],
