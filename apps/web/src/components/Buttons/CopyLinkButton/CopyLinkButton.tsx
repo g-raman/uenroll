@@ -72,7 +72,7 @@ export const CopyLinkButton = () => {
         <Button
           className="cursor-pointer"
           variant="outline"
-          size="lg"
+          size="icon-lg"
           disabled={
             (isGenerationMode && schedules.length === 0) ||
             (!isGenerationMode && !hasAnySelectedSessions)

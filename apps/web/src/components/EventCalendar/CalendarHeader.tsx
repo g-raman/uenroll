@@ -32,7 +32,7 @@ export function CalendarHeader({
         </h2>
       </div>
 
-      <div className="ml-auto flex items-center gap-4">
+      <div className="ml-auto flex items-center gap-2">
         <label className="hidden cursor-pointer items-center gap-2 text-sm lg:flex">
           <Switch
             checked={weekendsHidden}
@@ -49,14 +49,14 @@ export function CalendarHeader({
         <div className="hidden items-center lg:flex">
           <Button
             variant="ghost"
-            size="icon"
+            size="icon-lg"
             onClick={() => onNavigate("previous")}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <Button
             variant="ghost"
-            size="icon"
+            size="icon-lg"
             onClick={() => onNavigate("next")}
           >
             <ChevronRight className="h-4 w-4" />

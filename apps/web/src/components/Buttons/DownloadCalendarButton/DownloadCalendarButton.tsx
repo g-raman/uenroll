@@ -75,7 +75,7 @@ export default function DownloadCalendarButton() {
         <Button
           className="cursor-pointer"
           variant="default"
-          size="lg"
+          size="icon-lg"
           onClick={handleDownload}
           disabled={
             (isGenerationMode && schedules.length === 0) ||
