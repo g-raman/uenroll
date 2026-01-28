@@ -15,13 +15,13 @@ import {
   getCurrentTimePosition,
 } from "./dateUtils";
 import { getDesktopAnimationClass } from "./animation";
-import { useCalendarNavigation } from "./useCalendarNavigation";
 import { CalendarHeader } from "./CalendarHeader";
 import { TimeColumn } from "./TimeColumn";
 import { DayHeader } from "./DayHeader";
 import { DayColumnComponent } from "./DayColumn";
 import { SlidingContainer } from "./SlidingContainer";
 import { useScreenSize } from "@/hooks/useScreenSize";
+import { useCalendarNavigation } from "@/hooks/useCalendarNavigation";
 
 export function EventCalendar({ events, config }: EventCalendarProps) {
   const {

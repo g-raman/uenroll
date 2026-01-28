@@ -2,10 +2,13 @@ import { useState, useCallback, useMemo } from "react";
 import { Temporal } from "temporal-polyfill";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { useSwipeNavigation } from "@/hooks/useSwipeNavigation";
-import { MOBILE_BREAKPOINT, TABLET_BREAKPOINT } from "./constants";
-import { getWeekStart } from "./dateUtils";
-import { buildDayColumns } from "./buildDayColumns";
-import { CalendarEvent, DayColumn } from "./types";
+import {
+  MOBILE_BREAKPOINT,
+  TABLET_BREAKPOINT,
+} from "@/components/EventCalendar/constants";
+import { CalendarEvent, DayColumn } from "@/components/EventCalendar/types";
+import { getWeekStart } from "@/components/EventCalendar/dateUtils";
+import { buildDayColumns } from "@/components/EventCalendar/buildDayColumns";
 
 type AnimationState =
   | "idle"
