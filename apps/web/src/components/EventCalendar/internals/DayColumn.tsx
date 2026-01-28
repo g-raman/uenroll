@@ -1,6 +1,6 @@
-import { EventBlock } from "./EventBlock";
+import { DayColumn } from "@/components/EventCalendar/types";
 import { CurrentTimeIndicator } from "./CurrentTimeIndicator";
-import { DayColumn } from "./types";
+import { EventBlock } from "@/components/EventCalendar/EventBlock";
 
 export interface DayColumnProps {
   column: DayColumn;

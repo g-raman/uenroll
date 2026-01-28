@@ -16,10 +16,10 @@ import {
 } from "./dateUtils";
 import { getDesktopAnimationClass } from "./animation";
 import { CalendarHeader } from "./CalendarHeader";
-import { TimeColumn } from "./TimeColumn";
-import { DayHeader } from "./DayHeader";
-import { DayColumnComponent } from "./DayColumn";
-import { SlidingContainer } from "./SlidingContainer";
+import { TimeColumn } from "@/components/EventCalendar/internals/TimeColumn";
+import { DayHeader } from "@/components/EventCalendar/internals/DayHeader";
+import { DayColumnComponent } from "@/components/EventCalendar/internals/DayColumn";
+import { SlidingContainer } from "@/components/EventCalendar/internals/SlidingContainer";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { useCalendarNavigation } from "@/hooks/useCalendarNavigation";
 import { useHideWeekends, useUserSettingsActions } from "@/stores/modeStore";

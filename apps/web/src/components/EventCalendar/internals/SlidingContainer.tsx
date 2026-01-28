@@ -1,4 +1,4 @@
-import { getTransformStyle } from "./animation";
+import { getTransformStyle } from "@/components/EventCalendar/animation";
 
 interface SlidingContainerProps {
   offset: number;

@@ -1,4 +1,4 @@
-import { DayColumn } from "./types";
+import { DayColumn } from "@/components/EventCalendar/types";
 
 export const DayHeader = ({ column }: { column: DayColumn }) => (
   <div
