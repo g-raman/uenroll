@@ -7,6 +7,7 @@ import {
   DEFAULT_DAY_START,
   DEFAULT_DAY_END,
   DEFAULT_HOUR_HEIGHT,
+  TABLET_BREAKPOINT,
 } from "./constants";
 import {
   getToday,
@@ -20,6 +21,7 @@ import { TimeColumn } from "./TimeColumn";
 import { DayHeader } from "./DayHeader";
 import { DayColumnComponent } from "./DayColumn";
 import { SlidingContainer } from "./SlidingContainer";
+import { useScreenSize } from "@/hooks/useScreenSize";
 
 export function EventCalendar({ events, config }: EventCalendarProps) {
   const {
@@ -32,6 +34,9 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
     initialDate,
     hideWeekends = false,
   } = config;
+
+  const { width } = useScreenSize();
+  const isDesktop = width !== null && width >= TABLET_BREAKPOINT;
 
   const [weekendsHidden, setWeekendsHidden] = useState(hideWeekends);
   const [currentTimePosition, setCurrentTimePosition] = useState<number | null>(
@@ -91,6 +96,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
     paddingHeight,
     dayStartHour,
     dayEndHour,
+    popoverDisabled: !isDesktop,
   };
 
   // Helper to render sliding columns (prev/next) during swipe

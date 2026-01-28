@@ -10,6 +10,7 @@ export interface DayColumnProps {
   dayStartHour: number;
   dayEndHour: number;
   currentTimePosition: number | null;
+  popoverDisabled?: boolean;
 }
 
 export function DayColumnComponent({
@@ -20,6 +21,7 @@ export function DayColumnComponent({
   dayStartHour,
   dayEndHour,
   currentTimePosition,
+  popoverDisabled,
 }: DayColumnProps) {
   const totalHours = dayEndHour - dayStartHour + 1;
   const contentHeight = totalHours * hourHeight;
@@ -53,7 +55,11 @@ export function DayColumnComponent({
         style={{ top: paddingHeight, height: contentHeight }}
       >
         {column.events.map(event => (
-          <EventBlock key={event.id} event={event} />
+          <EventBlock
+            key={event.id}
+            event={event}
+            popoverDisabled={popoverDisabled}
+          />
         ))}
       </div>
     </div>
