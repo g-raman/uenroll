@@ -17,7 +17,10 @@ import { DayColumnComponent } from "./DayColumn";
 import { EventCalendarProps, DayColumn } from "./types";
 import { SlidingContainer } from "./SlidingContainer";
 import { DayHeader } from "./DayHeader";
-import { DesktopControls } from "./DesktopControls";
+import DownloadCalendarButton from "../Buttons/DownloadCalendarButton/DownloadCalendarButton";
+import { CopyLinkButton } from "../Buttons/CopyLinkButton/CopyLinkButton";
+import { Switch } from "@repo/ui/components/switch";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const DEFAULT_TIMEZONE = "America/Toronto";
 const DEFAULT_DAY_START = 7;
@@ -213,7 +216,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
   return (
     <div className="bg-background flex h-full flex-col overflow-hidden rounded-lg border">
       {/* Header */}
-      <div className="flex items-center justify-between border-b px-4 py-3">
+      <div className="flex items-center justify-between gap-4 border-b px-4 py-3">
         <div className="flex items-center gap-4">
           <Button variant="outline" size="sm" onClick={goToTermStart}>
             Term Start
@@ -222,14 +225,42 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
             {formatWeekRange(weekStart)}
           </h2>
         </div>
-        {isDesktop && (
-          <DesktopControls
-            weekendsHidden={weekendsHidden}
-            onWeekendsToggle={setWeekendsHidden}
-            onPrevious={() => navigate("previous")}
-            onNext={() => navigate("next")}
-          />
-        )}
+
+        <div className="ml-auto flex items-center gap-4">
+          {isDesktop && (
+            <label className="flex cursor-pointer items-center gap-2 text-sm">
+              <Switch
+                checked={weekendsHidden}
+                onCheckedChange={setWeekendsHidden}
+              />
+              <span className="text-muted-foreground">Hide weekends</span>
+            </label>
+          )}
+
+          <div className="flex gap-2">
+            <DownloadCalendarButton />
+            <CopyLinkButton />
+          </div>
+
+          {isDesktop && (
+            <div className="flex items-center">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate("previous")}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate("next")}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Day Headers Row */}
