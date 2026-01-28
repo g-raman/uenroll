@@ -328,7 +328,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
         </div>
 
         {/* Days grid container */}
-        <div className="relative flex-1">
+        <div className="relative flex-1 overflow-hidden">
           {renderSlidingColumns(
             prevDayColumns,
             prevOffset,

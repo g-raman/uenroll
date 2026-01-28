@@ -74,9 +74,9 @@ export function CalendarWrapper() {
   );
 
   return (
-    <div className="flex h-full flex-col gap-2 bg-black md:gap-4">
+    <div className="flex flex-col gap-2 bg-black md:h-full md:gap-4">
       <GenerationHeader />
-      <div className="h-full overflow-hidden rounded-t-md">
+      <div className="overflow-hidden rounded-t-md md:h-full">
         <EventCalendar
           key={initialDate?.toString() ?? "default"}
           events={events}
