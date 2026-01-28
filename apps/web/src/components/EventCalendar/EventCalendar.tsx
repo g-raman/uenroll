@@ -264,8 +264,10 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
       </div>
 
       {/* Day Headers Row */}
-      <div className="flex overflow-hidden border-b">
+      <div className="flex border-b">
+        {/* Empty space for time labels column */}
         <div className="w-16 flex-shrink-0 border-r" />
+        {/* Day headers container */}
         <div className="relative flex-1 overflow-hidden">
           {renderSlidingColumns(
             prevDayColumns,
@@ -296,9 +298,10 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
       </div>
 
       {/* Calendar Grid */}
-      <div className="flex flex-1 overflow-auto" {...handlers}>
+      <div className="flex min-h-0 flex-1 overflow-auto" {...handlers}>
+        {/* Time labels column - sticky to left */}
         <div
-          className="bg-background sticky left-0 z-30 w-16 flex-shrink-0 border-r"
+          className="bg-background sticky left-0 z-10 w-16 flex-shrink-0 border-r"
           style={{ height: gridHeight }}
         >
           {hourLabels.map(({ hour, label }) => (
@@ -314,6 +317,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
           ))}
         </div>
 
+        {/* Days grid container */}
         <div className="relative flex-1">
           {renderSlidingColumns(
             prevDayColumns,
