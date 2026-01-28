@@ -26,7 +26,7 @@ If you make changes to these packages you must rebuild them.
 
 - `@repo/db` - Drizzle ORM schema, queries, PostgreSQL connection
 - `@repo/env` - Type-safe environment variables via @t3-oss/env-core (exports `/server` and `/client`)
-- `@repo/ui` - shadcn/ui components built on Radix UI
+- `@repo/ui` - shadcn/ui components built on Base UI
 
 ### State Management
 
