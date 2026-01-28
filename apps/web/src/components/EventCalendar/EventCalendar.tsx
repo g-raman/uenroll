@@ -213,8 +213,15 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
       </SlidingContainer>
     );
 
+  // On mobile, don't constrain height - let page scroll naturally
+  const isMobile = width !== null && width < MOBILE_BREAKPOINT;
+
   return (
-    <div className="bg-background flex h-full flex-col overflow-hidden rounded-lg border">
+    <div
+      className={`bg-background flex flex-col rounded-lg border ${
+        isMobile ? "" : "h-full overflow-hidden"
+      }`}
+    >
       {/* Header */}
       <div className="flex items-center justify-between gap-4 border-b px-4 py-3">
         <div className="flex items-center gap-4">
@@ -298,7 +305,10 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
       </div>
 
       {/* Calendar Grid */}
-      <div className="flex min-h-0 flex-1 overflow-auto" {...handlers}>
+      <div
+        className={`flex ${isMobile ? "" : "min-h-0 flex-1 overflow-auto"}`}
+        {...handlers}
+      >
         {/* Time labels column - sticky to left */}
         <div
           className="bg-background sticky left-0 z-10 w-16 flex-shrink-0 border-r"
