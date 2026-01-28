@@ -5,7 +5,7 @@ import Main from "@/layouts/Main/Main";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import Sidebar from "@/layouts/Sidebar/Sidebar";
 import SearchResults from "@/components/SearchResults/SearchResults";
-import { CalendarWrapper } from "@/components/Calendar/CalendarWrapper";
+import { CalendarWrapper } from "@/components/EventCalendar/CalendarWrapper";
 
 export default function Page() {
   return (
