@@ -1,18 +1,12 @@
 import { Temporal } from "temporal-polyfill";
 import { MONTH_NAMES_SHORT, MONTH_NAMES_FULL } from "./constants";
 
-/**
- * Get the start of the week (Monday) for a given date
- */
 export function getWeekStart(date: Temporal.PlainDate): Temporal.PlainDate {
   // Temporal uses ISO weekday: 1 = Monday, 7 = Sunday
   const dayOfWeek = date.dayOfWeek;
   return date.subtract({ days: dayOfWeek - 1 });
 }
 
-/**
- * Check if two dates are the same day
- */
 export function isSameDay(
   a: Temporal.PlainDate,
   b: Temporal.PlainDate,
@@ -20,16 +14,10 @@ export function isSameDay(
   return Temporal.PlainDate.compare(a, b) === 0;
 }
 
-/**
- * Get today's date in a specific timezone
- */
 export function getToday(timezone: string): Temporal.PlainDate {
   return Temporal.Now.zonedDateTimeISO(timezone).toPlainDate();
 }
 
-/**
- * Format hour for display (e.g., "9 AM", "2 PM")
- */
 export function formatHour(hour: number): string {
   if (hour === 0) return "12 AM";
   if (hour === 12) return "12 PM";
@@ -37,9 +25,6 @@ export function formatHour(hour: number): string {
   return `${hour - 12} PM`;
 }
 
-/**
- * Format time with minutes (e.g., "9:30 AM")
- */
 export function formatTime(zonedDateTime: Temporal.ZonedDateTime): string {
   const hour = zonedDateTime.hour;
   const minute = zonedDateTime.minute;
@@ -49,16 +34,10 @@ export function formatTime(zonedDateTime: Temporal.ZonedDateTime): string {
   return `${displayHour}:${displayMinute} ${period}`;
 }
 
-/**
- * Format a date for display (e.g., "January 2026")
- */
 export function formatMonthYear(date: Temporal.PlainDate): string {
   return `${MONTH_NAMES_FULL[date.month - 1]} ${date.year}`;
 }
 
-/**
- * Format a date range for display (e.g., "Jan 20 - 26, 2026")
- */
 export function formatWeekRange(weekStart: Temporal.PlainDate): string {
   const weekEnd = weekStart.add({ days: 6 });
 
@@ -76,9 +55,6 @@ export function formatWeekRange(weekStart: Temporal.PlainDate): string {
   return `${startMonth} ${weekStart.day}, ${weekStart.year} - ${endMonth} ${weekEnd.day}, ${weekEnd.year}`;
 }
 
-/**
- * Generate hour labels for the time grid
- */
 export function generateHourLabels(
   dayStartHour: number,
   dayEndHour: number,
@@ -90,9 +66,6 @@ export function generateHourLabels(
   return hours;
 }
 
-/**
- * Get the current time position as a percentage within the day grid
- */
 export function getCurrentTimePosition(
   timezone: string,
   dayStartHour: number,

@@ -16,9 +16,7 @@ import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
 import { GenerationHeader } from "./GenerationHeader";
 import { EventCalendar } from "@/components/EventCalendar/EventCalendar";
 
-// Map term codes to their start dates
 const TERM_START_DATES: Record<string, string> = {
-  "2259": "2025-09-03", // Fall 2025
   "2261": "2026-01-12", // Winter 2026
 };
 

@@ -3,15 +3,12 @@ export const DEFAULT_DAY_START = 7;
 export const DEFAULT_DAY_END = 22;
 export const DEFAULT_HOUR_HEIGHT = 38;
 
-// Breakpoints (matches Tailwind defaults)
-export const MOBILE_BREAKPOINT = 640; // sm
-export const TABLET_BREAKPOINT = 1024; // lg
+export const MOBILE_BREAKPOINT = 640;
+export const TABLET_BREAKPOINT = 1024;
 
-// Animation
 export const ANIMATION_DURATION = 200;
 
-// Time column width
-export const TIME_COLUMN_WIDTH = 64; // w-16 = 4rem = 64px
+export const TIME_COLUMN_WIDTH = 64;
 
 export const DAYS_OF_WEEK: Record<number, string> = {
   1: "Mon",

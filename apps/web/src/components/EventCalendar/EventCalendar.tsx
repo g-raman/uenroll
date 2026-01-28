@@ -66,7 +66,6 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
     [dayStartHour, dayEndHour],
   );
 
-  // Update current time position every minute
   useEffect(() => {
     if (!showCurrentTime) return;
 
@@ -77,6 +76,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
     };
 
     updateTime();
+    // Update current time position every minute
     const interval = setInterval(updateTime, 60000);
     return () => clearInterval(interval);
   }, [timezone, dayStartHour, dayEndHour, showCurrentTime]);

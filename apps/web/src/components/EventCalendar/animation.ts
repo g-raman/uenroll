@@ -1,8 +1,5 @@
 import { ANIMATION_DURATION } from "./constants";
 
-/**
- * Get transform style for sliding animations
- */
 export function getTransformStyle(offset: number, isAnimating: boolean) {
   return {
     transitionProperty: isAnimating ? "transform" : "none",
@@ -12,10 +9,6 @@ export function getTransformStyle(offset: number, isAnimating: boolean) {
   };
 }
 
-/**
- * Get desktop animation class based on animation state
- * Classes are lg-prefixed so they only apply on desktop
- */
 export function getDesktopAnimationClass(state: string): string {
   switch (state) {
     case "slide-out-left":

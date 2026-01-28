@@ -25,9 +25,6 @@ function calculateEventPosition(
   return { top, height };
 }
 
-/**
- * Check if two events overlap in time
- */
 function eventsOverlap(a: CalendarEvent, b: CalendarEvent): boolean {
   return (
     Temporal.ZonedDateTime.compare(a.start, b.end) < 0 &&
@@ -126,9 +123,6 @@ function layoutCluster(
   });
 }
 
-/**
- * Layout all events, handling overlaps by placing them in columns
- */
 export function layoutOverlappingEvents(
   events: CalendarEvent[],
   dayStartHour: number,
@@ -142,15 +136,12 @@ export function layoutOverlappingEvents(
   for (const event of events) {
     if (processed.has(event.id)) continue;
 
-    // Find all events in this overlap cluster
     const cluster = findOverlapCluster(event, events);
 
-    // Mark all as processed
     for (const e of cluster) {
       processed.add(e.id);
     }
 
-    // Layout the cluster
     const layouted = layoutCluster(cluster, dayStartHour, dayEndHour);
     positioned.push(...layouted);
   }

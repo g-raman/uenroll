@@ -45,7 +45,6 @@ export function useCalendarNavigation({
 
   const weekStart = useMemo(() => getWeekStart(currentDate), [currentDate]);
 
-  // Handle navigation (called by swipe or button click)
   const handleSwipeNavigation = useCallback(
     (direction: "next" | "previous") => {
       const newDate =
@@ -57,10 +56,8 @@ export function useCalendarNavigation({
     [currentDate, navigationDays],
   );
 
-  // Swipe navigation (only enabled on mobile/tablet)
   const swipe = useSwipeNavigation(handleSwipeNavigation, !isDesktop);
 
-  // Desktop navigation with animation
   const navigateDesktop = useCallback(
     (direction: "next" | "previous") => {
       if (swipe.isAnimating || animationState !== "idle") return;
@@ -86,7 +83,6 @@ export function useCalendarNavigation({
     [swipe.isAnimating, animationState, handleSwipeNavigation],
   );
 
-  // Build day columns for current view
   const dayColumns = useMemo(() => {
     if (isDesktop) {
       return buildDayColumns(
@@ -120,7 +116,6 @@ export function useCalendarNavigation({
     visibleDays,
   ]);
 
-  // Build adjacent day columns for swipe preview (mobile/tablet only)
   const getAdjacentDayColumns = useCallback(
     (daysOffset: number): DayColumn[] | null => {
       if (isDesktop) return null;
