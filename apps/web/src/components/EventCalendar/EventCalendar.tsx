@@ -29,6 +29,22 @@ const DEFAULT_HOUR_HEIGHT = 38;
 const MOBILE_BREAKPOINT = 640;
 const TABLET_BREAKPOINT = 1024;
 
+// Helper function for desktop animation classes
+function getDesktopAnimationClass(state: string): string {
+  switch (state) {
+    case "slide-out-left":
+      return "animate-slide-out-left";
+    case "slide-out-right":
+      return "animate-slide-out-right";
+    case "slide-in-left":
+      return "animate-slide-in-left";
+    case "slide-in-right":
+      return "animate-slide-in-right";
+    default:
+      return "";
+  }
+}
+
 export function EventCalendar({ events, config }: EventCalendarProps) {
   const {
     termStart,
@@ -52,6 +68,9 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
   );
 
   const [weekendsHidden, setWeekendsHidden] = useState(hideWeekends);
+
+  // Desktop animation state: 'idle' | 'slide-out-left' | 'slide-out-right' | 'slide-in-left' | 'slide-in-right'
+  const [animationState, setAnimationState] = useState<string>("idle");
 
   const isDesktop = width !== null && width >= TABLET_BREAKPOINT;
   const isTablet =
@@ -172,10 +191,27 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
 
   const navigate = useCallback(
     (direction: "next" | "previous") => {
-      if (isAnimating) return;
-      handleSwipeNavigation(direction);
+      if (isAnimating || animationState !== "idle") return;
+
+      // Phase 1: Slide out
+      setAnimationState(
+        direction === "next" ? "slide-out-left" : "slide-out-right",
+      );
+
+      // Phase 2: Update content and slide in
+      setTimeout(() => {
+        handleSwipeNavigation(direction);
+        setAnimationState(
+          direction === "next" ? "slide-in-right" : "slide-in-left",
+        );
+
+        // Phase 3: Reset to idle
+        setTimeout(() => {
+          setAnimationState("idle");
+        }, 150);
+      }, 150);
     },
-    [isAnimating, handleSwipeNavigation],
+    [isAnimating, animationState, handleSwipeNavigation],
   );
 
   const goToTermStart = useCallback(() => {
@@ -287,7 +323,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
           <SlidingContainer
             offset={dragOffset}
             isAnimating={isAnimating}
-            className="flex w-full"
+            className={`flex w-full ${isDesktop ? getDesktopAnimationClass(animationState) : ""}`}
           >
             {dayColumns.map(column => (
               <DayHeader key={`header-${column.date}`} column={column} />
@@ -347,7 +383,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
           <SlidingContainer
             offset={dragOffset}
             isAnimating={isAnimating}
-            className="flex w-full"
+            className={`flex w-full ${isDesktop ? getDesktopAnimationClass(animationState) : ""}`}
             style={{ height: gridHeight }}
           >
             {dayColumns.map(column => (

@@ -30,3 +30,64 @@
   border-radius: 0px !important;
   border: none !important;
 }
+
+/* Calendar week navigation animations */
+@keyframes slide-out-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-out-left {
+  animation: slide-out-left 150ms ease-out forwards;
+}
+
+.animate-slide-out-right {
+  animation: slide-out-right 150ms ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 150ms ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 150ms ease-out forwards;
+}
