@@ -33,7 +33,9 @@ export default function TermSelector() {
   const { resetSchedules } = useGeneratorActions();
 
   const handleChangeTerm = useCallback(
-    (term: string) => {
+    (term: string | null) => {
+      if (term === null) return;
+
       if (data === null) {
         setSelectedTerm(term);
         setData(null);
