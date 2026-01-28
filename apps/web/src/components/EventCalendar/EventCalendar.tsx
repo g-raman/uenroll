@@ -29,17 +29,17 @@ const DEFAULT_HOUR_HEIGHT = 38;
 const MOBILE_BREAKPOINT = 640;
 const TABLET_BREAKPOINT = 1024;
 
-// Helper function for desktop animation classes
+// Helper function for desktop animation classes (only applies at lg breakpoint)
 function getDesktopAnimationClass(state: string): string {
   switch (state) {
     case "slide-out-left":
-      return "animate-slide-out-left";
+      return "lg:animate-slide-out-left";
     case "slide-out-right":
-      return "animate-slide-out-right";
+      return "lg:animate-slide-out-right";
     case "slide-in-left":
-      return "animate-slide-in-left";
+      return "lg:animate-slide-in-left";
     case "slide-in-right":
-      return "animate-slide-in-right";
+      return "lg:animate-slide-in-right";
     default:
       return "";
   }
@@ -249,15 +249,8 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
       </SlidingContainer>
     );
 
-  // On mobile, don't constrain height - let page scroll naturally
-  const isMobile = width !== null && width < MOBILE_BREAKPOINT;
-
   return (
-    <div
-      className={`bg-background flex flex-col rounded-lg border ${
-        isMobile ? "" : "h-full overflow-hidden"
-      }`}
-    >
+    <div className="bg-background flex flex-col rounded-lg border sm:h-full sm:overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between gap-4 border-b px-4 py-3">
         <div className="flex items-center gap-4">
@@ -270,39 +263,35 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
         </div>
 
         <div className="ml-auto flex items-center gap-4">
-          {isDesktop && (
-            <label className="flex cursor-pointer items-center gap-2 text-sm">
-              <Switch
-                checked={weekendsHidden}
-                onCheckedChange={setWeekendsHidden}
-              />
-              <span className="text-muted-foreground">Hide weekends</span>
-            </label>
-          )}
+          <label className="hidden cursor-pointer items-center gap-2 text-sm lg:flex">
+            <Switch
+              checked={weekendsHidden}
+              onCheckedChange={setWeekendsHidden}
+            />
+            <span className="text-muted-foreground">Hide weekends</span>
+          </label>
 
           <div className="flex gap-2">
             <DownloadCalendarButton />
             <CopyLinkButton />
           </div>
 
-          {isDesktop && (
-            <div className="flex items-center">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate("previous")}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate("next")}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          )}
+          <div className="hidden items-center lg:flex">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("previous")}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("next")}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -323,7 +312,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
           <SlidingContainer
             offset={dragOffset}
             isAnimating={isAnimating}
-            className={`flex w-full ${isDesktop ? getDesktopAnimationClass(animationState) : ""}`}
+            className={`flex w-full ${getDesktopAnimationClass(animationState)}`}
           >
             {dayColumns.map(column => (
               <DayHeader key={`header-${column.date}`} column={column} />
@@ -341,10 +330,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
       </div>
 
       {/* Calendar Grid */}
-      <div
-        className={`flex ${isMobile ? "" : "min-h-0 flex-1 overflow-auto"}`}
-        {...handlers}
-      >
+      <div className="flex sm:min-h-0 sm:flex-1 sm:overflow-auto" {...handlers}>
         {/* Time labels column - sticky to left */}
         <div
           className="bg-background sticky left-0 z-10 w-16 flex-shrink-0 border-r"
@@ -383,7 +369,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
           <SlidingContainer
             offset={dragOffset}
             isAnimating={isAnimating}
-            className={`flex w-full ${isDesktop ? getDesktopAnimationClass(animationState) : ""}`}
+            className={`flex w-full ${getDesktopAnimationClass(animationState)}`}
             style={{ height: gridHeight }}
           >
             {dayColumns.map(column => (
