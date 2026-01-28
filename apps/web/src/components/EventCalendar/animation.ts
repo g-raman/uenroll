@@ -19,13 +19,13 @@ export function getTransformStyle(offset: number, isAnimating: boolean) {
 export function getDesktopAnimationClass(state: string): string {
   switch (state) {
     case "slide-out-left":
-      return "lg:animate-slide-out-left";
+      return "animate-slide-out-left";
     case "slide-out-right":
-      return "lg:animate-slide-out-right";
+      return "animate-slide-out-right";
     case "slide-in-left":
-      return "lg:animate-slide-in-left";
+      return "animate-slide-in-left";
     case "slide-in-right":
-      return "lg:animate-slide-in-right";
+      return "animate-slide-in-right";
     default:
       return "";
   }
