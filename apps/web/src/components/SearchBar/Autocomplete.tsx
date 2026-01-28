@@ -161,6 +161,7 @@ export default function Autocomplete() {
   return (
     <Popover open={open && !!deferredQuery} onOpenChange={setOpen}>
       <PopoverTrigger
+        nativeButton={false}
         render={
           <InputGroup>
             <InputGroupAddon>

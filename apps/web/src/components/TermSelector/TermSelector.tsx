@@ -115,6 +115,7 @@ export default function TermSelector() {
 
           <Select value={selectedTerm} onValueChange={handleChangeTerm}>
             <SelectTrigger
+              nativeButton={false}
               className="w-full cursor-pointer"
               render={
                 <span>

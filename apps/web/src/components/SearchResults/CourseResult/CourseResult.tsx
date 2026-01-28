@@ -62,6 +62,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
   return (
     <>
       <AccordionTrigger
+        nativeButton={false}
         className={`cursor-pointer items-center truncate !border-none p-2 font-normal ${course.colour} ${openResults.includes(course.courseCode) ? "rounded-b-none" : "rounded-b-sm"}`}
         render={
           <div>

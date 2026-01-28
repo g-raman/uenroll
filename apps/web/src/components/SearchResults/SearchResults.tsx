@@ -45,6 +45,7 @@ export default function SearchResults() {
               return (
                 <div className="pb-4 text-sm" key={course.courseCode}>
                   <Button
+                    nativeButton={false}
                     variant="link"
                     className="text-foreground h-min items-baseline gap-0 !px-2 py-1"
                     render={

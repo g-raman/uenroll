@@ -24,7 +24,7 @@ export function EventPopover({ event, children, disabled }: EventPopoverProps) {
 
   return (
     <Popover>
-      <PopoverTrigger render={children} />
+      <PopoverTrigger nativeButton={false} render={children} />
       <PopoverContent side="right" align="start" className="w-80">
         {/* Header */}
         <div className="mb-3 flex items-center gap-2">

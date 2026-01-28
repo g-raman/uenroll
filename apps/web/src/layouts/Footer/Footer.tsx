@@ -7,6 +7,7 @@ export const Footer = () => {
       <p className="inline-block">Mantained by</p>
       &nbsp;
       <Button
+        nativeButton={false}
         className="text-foreground p-0 underline hover:opacity-70"
         variant="link"
         render={
@@ -21,6 +22,7 @@ export const Footer = () => {
       />
       ,&nbsp;
       <Button
+        nativeButton={false}
         className="text-foreground p-0 underline hover:opacity-70"
         variant="link"
         render={
