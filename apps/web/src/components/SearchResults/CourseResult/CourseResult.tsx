@@ -67,14 +67,17 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
         <p className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
 
         <Tooltip>
-          <TooltipTrigger asChild>
-            <Trash
-              fill="#000"
-              strokeWidth={2}
-              className="ml-auto size-4 !rotate-0"
-              onClick={removeCourse}
-            />
-          </TooltipTrigger>
+          <TooltipTrigger
+            render={
+              <Trash
+                fill="#000"
+                strokeWidth={2}
+                className="ml-auto size-4 !rotate-0"
+                onClick={removeCourse}
+              />
+            }
+          />
+
           <TooltipContent>
             <p>Remove this course</p>
           </TooltipContent>

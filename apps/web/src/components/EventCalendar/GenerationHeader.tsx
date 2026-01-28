@@ -217,22 +217,24 @@ export function GenerationHeader() {
       )}
 
       <Tooltip>
-        <TooltipTrigger asChild>
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="generation-mode"
-              className="cursor-pointer"
-              checked={isGenerationMode}
-              onCheckedChange={handleToggle}
-            />
-            <Label
-              className="w-min cursor-pointer text-xs md:w-max lg:text-sm"
-              htmlFor="generation-mode"
-            >
-              Schedule Generation
-            </Label>
-          </div>
-        </TooltipTrigger>
+        <TooltipTrigger
+          render={
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="generation-mode"
+                className="cursor-pointer"
+                checked={isGenerationMode}
+                onCheckedChange={handleToggle}
+              />
+              <Label
+                className="w-min cursor-pointer text-xs md:w-max lg:text-sm"
+                htmlFor="generation-mode"
+              >
+                Schedule Generation
+              </Label>
+            </div>
+          }
+        />
 
         <TooltipContent>
           Turn this on to automatically generate all possible schedules

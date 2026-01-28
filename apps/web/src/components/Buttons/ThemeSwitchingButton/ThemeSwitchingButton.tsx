@@ -19,17 +19,19 @@ export function ThemeSwitchingButton() {
 
   return (
     <Tooltip>
-      <TooltipTrigger>
-        <Button
-          className="size-10 cursor-pointer"
-          variant="outline"
-          size="icon"
-          onClick={toggleTheme}
-        >
-          {resolvedTheme === "dark" ? <Sun /> : <Moon />}
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={
+          <Button
+            className="size-10 cursor-pointer"
+            variant="outline"
+            size="icon"
+            onClick={toggleTheme}
+          >
+            {resolvedTheme === "dark" ? <Sun /> : <Moon />}
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+        }
+      />
 
       <TooltipContent>
         Change to {resolvedTheme === "dark" ? "Light mode" : "Dark mode"}

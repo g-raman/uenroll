@@ -67,27 +67,29 @@ export const CopyLinkButton = () => {
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          className="cursor-pointer"
-          variant="outline"
-          size="icon-lg"
-          disabled={
-            (isGenerationMode && schedules.length === 0) ||
-            (!isGenerationMode && !hasAnySelectedSessions)
-          }
-          onClick={handleClick}
-        >
-          {isCopied ? (
-            <Check className="size-4" />
-          ) : (
-            <Link className="size-4" />
-          )}
-          <p className="hidden text-xs min-[1440px]:inline sm:inline md:hidden">
-            {isCopied ? "Copied" : "Copy Link"}
-          </p>
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={
+          <Button
+            className="cursor-pointer"
+            variant="outline"
+            size="icon-lg"
+            disabled={
+              (isGenerationMode && schedules.length === 0) ||
+              (!isGenerationMode && !hasAnySelectedSessions)
+            }
+            onClick={handleClick}
+          >
+            {isCopied ? (
+              <Check className="size-4" />
+            ) : (
+              <Link className="size-4" />
+            )}
+            <p className="hidden text-xs min-[1440px]:inline sm:inline md:hidden">
+              {isCopied ? "Copied" : "Copy Link"}
+            </p>
+          </Button>
+        }
+      />
       <TooltipContent>
         <p>Copy the link for this schedule</p>
       </TooltipContent>

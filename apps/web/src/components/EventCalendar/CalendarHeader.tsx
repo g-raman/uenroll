@@ -59,31 +59,35 @@ export function CalendarHeader({
 
         <div className="hidden items-center lg:flex">
           <Tooltip>
-            <TooltipTrigger>
-              <Button
-                className="cursor-pointer"
-                variant="ghost"
-                size="icon-lg"
-                onClick={() => onNavigate("previous")}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <Button
+                  className="cursor-pointer"
+                  variant="ghost"
+                  size="icon-lg"
+                  onClick={() => onNavigate("previous")}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+              }
+            />
 
             <TooltipContent>Previous week</TooltipContent>
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger>
-              <Button
-                className="cursor-pointer"
-                variant="ghost"
-                size="icon-lg"
-                onClick={() => onNavigate("next")}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
+            <TooltipTrigger
+              render={
+                <Button
+                  className="cursor-pointer"
+                  variant="ghost"
+                  size="icon-lg"
+                  onClick={() => onNavigate("next")}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              }
+            />
 
             <TooltipContent>Next week</TooltipContent>
           </Tooltip>

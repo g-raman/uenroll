@@ -24,18 +24,21 @@ export const DeleteSearchResultsButton = () => {
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          className="grow cursor-pointer"
-          variant="outline"
-          size="lg"
-          onClick={handleClick}
-          disabled={courseCodes.length === 0}
-        >
-          <Trash2 className="size-4" />
-          <p className="text-xs">Clear Results</p>
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={
+          <Button
+            className="grow cursor-pointer"
+            variant="outline"
+            size="lg"
+            onClick={handleClick}
+            disabled={courseCodes.length === 0}
+          >
+            <Trash2 className="size-4" />
+            <p className="text-xs">Clear Results</p>
+          </Button>
+        }
+      />
+
       <TooltipContent>
         <p>Clear all search results</p>
       </TooltipContent>
