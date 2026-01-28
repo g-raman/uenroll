@@ -1,4 +1,5 @@
 import { EventBlock } from "./EventBlock";
+import { CurrentTimeIndicator } from "./CurrentTimeIndicator";
 import { DayColumn } from "./types";
 
 export interface DayColumnProps {
@@ -28,6 +29,7 @@ export function DayColumnComponent({
       className="relative flex-1 border-r last:border-r-0"
       style={{ height: gridHeight }}
     >
+      {/* Hour grid lines */}
       {Array.from({ length: totalHours + 1 }, (_, i) => (
         <div
           key={i}
@@ -36,18 +38,16 @@ export function DayColumnComponent({
         />
       ))}
 
+      {/* Current time indicator */}
       {currentTimePosition !== null && (
-        <div
-          className="pointer-events-none absolute right-0 left-0 flex items-center"
-          style={{
-            top: paddingHeight + (currentTimePosition / 100) * contentHeight,
-          }}
-        >
-          <div className="h-2 w-2 rounded-full bg-red-500" />
-          <div className="h-[2px] flex-1 bg-red-500" />
-        </div>
+        <CurrentTimeIndicator
+          position={currentTimePosition}
+          paddingHeight={paddingHeight}
+          contentHeight={contentHeight}
+        />
       )}
 
+      {/* Events container */}
       <div
         className="absolute right-0 left-0"
         style={{ top: paddingHeight, height: contentHeight }}

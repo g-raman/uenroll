@@ -1,25 +1,29 @@
-import { getTransformStyle } from "./utils";
+import { getTransformStyle } from "./animation";
 
-export const SlidingContainer = ({
-  offset,
-  isAnimating,
-  children,
-  className = "",
-  style = {},
-}: {
+interface SlidingContainerProps {
   offset: number;
   isAnimating: boolean;
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
-}) => (
-  <div
-    className={className}
-    style={{
-      ...style,
-      ...getTransformStyle(offset, isAnimating),
-    }}
-  >
-    {children}
-  </div>
-);
+}
+
+export function SlidingContainer({
+  offset,
+  isAnimating,
+  children,
+  className = "",
+  style = {},
+}: SlidingContainerProps) {
+  return (
+    <div
+      className={className}
+      style={{
+        ...style,
+        ...getTransformStyle(offset, isAnimating),
+      }}
+    >
+      {children}
+    </div>
+  );
+}

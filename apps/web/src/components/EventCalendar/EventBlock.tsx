@@ -1,15 +1,11 @@
 import { PositionedEvent } from "./types";
-import { formatTime } from "./utils";
+import { formatTime } from "./dateUtils";
 
-export interface EventBlockProps {
+interface EventBlockProps {
   event: PositionedEvent;
 }
 
 export function EventBlock({ event }: EventBlockProps) {
-  const backgroundClasses = event.backgroundColour;
-  const subSection = event.subSection;
-  const type = event.type;
-
   return (
     <div
       className="absolute cursor-pointer overflow-hidden px-0.5"
@@ -21,12 +17,12 @@ export function EventBlock({ event }: EventBlockProps) {
       }}
     >
       <div
-        className={`h-full space-y-1 rounded-md border-l-4 px-1 py-2 text-xs ${backgroundClasses}`}
+        className={`h-full space-y-1 rounded-md border-l-4 px-1 py-2 text-xs ${event.backgroundColour}`}
       >
         <p className="truncate leading-tight">
           <span className="font-semibold">{event.title}</span>&nbsp;
           <span className="font-normal">
-            - {subSection} ({type})
+            - {event.subSection} ({event.type})
           </span>
         </p>
 
