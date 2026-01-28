@@ -113,13 +113,14 @@ export default function TermSelector() {
           </AlertDialog>
 
           <Select value={selectedTerm} onValueChange={handleChangeTerm}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full cursor-pointer">
               <SelectValue placeholder="Term" />
             </SelectTrigger>
 
             <SelectContent>
               {availableTerms.map(availableTerm => (
                 <SelectItem
+                  className="cursor-pointer"
                   key={availableTerm.value}
                   value={availableTerm.value}
                 >

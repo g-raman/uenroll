@@ -1,8 +1,7 @@
 import CourseResult from "./CourseResult/CourseResult";
 import { Button } from "@repo/ui/components/button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, AccordionItem } from "@repo/ui/components/accordion";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useTermParam } from "@/hooks/useTermParam";
@@ -50,7 +49,7 @@ export default function SearchResults() {
                   rel="noreferrer"
                 >
                   Best Professors for {course.courseCode}&nbsp;
-                  <FontAwesomeIcon size="sm" icon={faArrowUpRightFromSquare} />
+                  <ExternalLink className="inline size-3" />
                 </a>
               </Button>
 
