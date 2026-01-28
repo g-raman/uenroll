@@ -40,7 +40,7 @@ export default function SearchResults() {
         multiple
         onValueChange={value => setOpenResults(value)}
         render={
-          <>
+          <div>
             {courseSearchResults.map(course => {
               return (
                 <div className="pb-4 text-sm" key={course.courseCode}>
@@ -65,7 +65,7 @@ export default function SearchResults() {
                 </div>
               );
             })}
-          </>
+          </div>
         }
       />
 
