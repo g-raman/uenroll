@@ -110,13 +110,12 @@ export function expandRecurringEvents(
 
   for (const event of events) {
     const eventDate = event.start.toPlainDate();
-
     if (!event.rrule) {
-      if (!isDateInRange(eventDate, rangeStart, rangeEnd)) {
-        continue;
+      if (isDateInRange(eventDate, rangeStart, rangeEnd)) {
+        expandedEvents.push(event);
       }
-
-      expandedEvents.push(event);
+      continue;
+    }
     }
 
     const instances = expandSingleRecurringEvent(
