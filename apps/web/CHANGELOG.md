@@ -1,5 +1,11 @@
 # web
 
+## 2.0.0
+
+### Major Changes
+
+- [`fb7ad8e`](https://github.com/g-raman/uenroll/commit/fb7ad8e8bb629b2b9c330c0630fabe0c69ea0dc5) Thanks [@g-raman](https://github.com/g-raman)! - Add custom calendar implementation with support for mobile gestures, responsive design, and improved animations
+
 ## 1.2.1
 
 ### Patch Changes

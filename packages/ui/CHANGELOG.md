@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 0.5.4
+
+### Patch Changes
+
+- [`fb7ad8e`](https://github.com/g-raman/uenroll/commit/fb7ad8e8bb629b2b9c330c0630fabe0c69ea0dc5) Thanks [@g-raman](https://github.com/g-raman)! - Style changes
+
 ## 0.5.3
 
 ### Patch Changes
