@@ -116,7 +116,6 @@ export function expandRecurringEvents(
       }
       continue;
     }
-    }
 
     const instances = expandSingleRecurringEvent(
       event,
