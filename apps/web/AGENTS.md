@@ -1,18 +1,8 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Project Overview
 
 uEnroll is a schedule builder for University of Ottawa students. This is the `apps/web` package in a Turborepo monorepo.
 
 ## Commands
-
-**Development:**
-
-```bash
-bun dev              # Start dev server with Turbopack on port 3000
-```
 
 **Build & Lint:**
 
@@ -28,27 +18,11 @@ bun check-types      # TypeScript type checking
 bun build:wasm       # Build Rust WASM module to public/wasm/
 ```
 
-**From monorepo root:**
-
-```bash
-bun dev              # Run all apps via Turbo
-bun build            # Build all packages
-bun lint             # Lint all packages
-bun format           # Prettier format
-```
-
-**Database (from packages/db):**
-
-```bash
-bun db:generate      # Generate Drizzle migrations
-bun db:migrate       # Run migrations
-bun db:seed          # Seed database
-bun db:studio        # Open Drizzle Studio
-```
-
 ## Architecture
 
 ### Monorepo Packages
+
+If you make changes to these packages you must rebuild them.
 
 - `@repo/db` - Drizzle ORM schema, queries, PostgreSQL connection
 - `@repo/env` - Type-safe environment variables via @t3-oss/env-core (exports `/server` and `/client`)
@@ -104,5 +78,8 @@ Events use recurrence rules (RRule) for weekly patterns. Mappers in `utils/mappe
 - Tailwind CSS 4 + shadcn/ui
 - tRPC + TanStack Query
 - Zustand (state) + nuqs (URL state)
-- Schedule-X (calendar library)
 - Rust WASM module for schedule generation
+
+## Never do these things
+
+- Never make barrell export files.
