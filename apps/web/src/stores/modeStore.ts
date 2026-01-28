@@ -1,21 +1,32 @@
 import { create } from "zustand";
 
-interface ModeState {
+interface UserSettingsStore {
   isGenerationMode: boolean;
-  actions: ModeActions;
+  hideWeekends: boolean;
+  actions: UserSettingsActions;
 }
 
-interface ModeActions {
+interface UserSettingsActions {
   toggleMode: () => void;
+  toggleHideWeekends: () => void;
 }
 
-const useModeStore = create<ModeState>(set => ({
+const useUserSettingsStore = create<UserSettingsStore>(set => ({
   isGenerationMode: false,
+  hideWeekends: false,
   actions: {
     toggleMode: () =>
       set(old => ({ ...old, isGenerationMode: !old.isGenerationMode })),
+    toggleHideWeekends: () =>
+      set(old => ({ ...old, hideWeekends: !old.hideWeekends })),
   },
 }));
 
-export const useMode = () => useModeStore(state => state.isGenerationMode);
-export const useModeActions = () => useModeStore(state => state.actions);
+export const useMode = () =>
+  useUserSettingsStore(state => state.isGenerationMode);
+
+export const useHideWeekends = () =>
+  useUserSettingsStore(state => state.hideWeekends);
+
+export const useUserSettingsActions = () =>
+  useUserSettingsStore(state => state.actions);

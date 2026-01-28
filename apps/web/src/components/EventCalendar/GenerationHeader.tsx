@@ -18,7 +18,7 @@ import { Button } from "@repo/ui/components/button";
 import { Switch } from "@repo/ui/components/switch";
 import { Label } from "@repo/ui/components/label";
 import { Input } from "@repo/ui/components/input";
-import { useMode, useModeActions } from "@/stores/modeStore";
+import { useMode, useUserSettingsActions } from "@/stores/modeStore";
 import { ChangeEvent, useRef, useState } from "react";
 import { Selected } from "@/types/Types";
 import {
@@ -48,7 +48,7 @@ export function GenerationHeader() {
   );
 
   const isGenerationMode = useMode();
-  const { toggleMode } = useModeActions();
+  const { toggleMode } = useUserSettingsActions();
   const excluded = useExcluded();
 
   const schedules = useSchedules();

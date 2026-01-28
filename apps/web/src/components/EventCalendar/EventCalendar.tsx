@@ -22,6 +22,7 @@ import { DayColumnComponent } from "./DayColumn";
 import { SlidingContainer } from "./SlidingContainer";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { useCalendarNavigation } from "@/hooks/useCalendarNavigation";
+import { useHideWeekends, useUserSettingsActions } from "@/stores/modeStore";
 
 export function EventCalendar({ events, config }: EventCalendarProps) {
   const {
@@ -32,13 +33,13 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
     hourHeight = DEFAULT_HOUR_HEIGHT,
     showCurrentTime = true,
     initialDate,
-    hideWeekends = false,
   } = config;
 
   const { width } = useScreenSize();
   const isDesktop = width !== null && width >= TABLET_BREAKPOINT;
 
-  const [weekendsHidden, setWeekendsHidden] = useState(hideWeekends);
+  const weekendsHidden = useHideWeekends();
+  const { toggleHideWeekends } = useUserSettingsActions();
   const [currentTimePosition, setCurrentTimePosition] = useState<number | null>(
     null,
   );
@@ -124,7 +125,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
       <CalendarHeader
         weekStart={weekStart}
         weekendsHidden={weekendsHidden}
-        onWeekendsHiddenChange={setWeekendsHidden}
+        onWeekendsHiddenChange={toggleHideWeekends}
         onNavigate={navigateDesktop}
         onGoToTermStart={goToTermStart}
       />
