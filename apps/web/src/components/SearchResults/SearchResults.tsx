@@ -39,19 +39,19 @@ export default function SearchResults() {
           return (
             <div className="pb-4 text-sm" key={course.courseCode}>
               <Button
-                asChild
                 variant="link"
                 className="text-foreground h-min items-baseline gap-0 !px-2 py-1"
-              >
-                <a
-                  href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Best Professors for {course.courseCode}&nbsp;
-                  <ExternalLink className="inline size-3" />
-                </a>
-              </Button>
+                render={
+                  <a
+                    href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Best Professors for {course.courseCode}&nbsp;
+                    <ExternalLink className="inline size-3" />
+                  </a>
+                }
+              />
 
               <AccordionItem value={course.courseCode}>
                 <CourseResult course={course} openResults={openResults} />

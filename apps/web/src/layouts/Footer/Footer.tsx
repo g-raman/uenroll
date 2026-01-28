@@ -9,30 +9,31 @@ export const Footer = () => {
       <Button
         className="text-foreground p-0 underline hover:opacity-70"
         variant="link"
-        asChild
-      >
-        <a
-          href="https://www.linkedin.com/in/gupta-raman/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Raman Gupta
-        </a>
-      </Button>
+        render={
+          <a
+            href="https://www.linkedin.com/in/gupta-raman/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Raman Gupta
+          </a>
+        }
+      />
       ,&nbsp;
       <Button
         className="text-foreground p-0 underline hover:opacity-70"
         variant="link"
-        asChild
-      >
-        <a
-          href="https://github.com/g-raman/uenroll"
-          target="_blank"
-          rel="noreferrer"
-        >
-          GitHub
-        </a>
-      </Button>
+        render={
+          <a
+            href="https://github.com/g-raman/uenroll"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {" "}
+            GitHub{" "}
+          </a>
+        }
+      />
       &nbsp;&copy;{year}.
     </div>
   );
