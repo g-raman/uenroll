@@ -22,7 +22,7 @@ export function ThemeSwitchingButton() {
       <TooltipTrigger
         render={
           <Button
-            className="size-10 cursor-pointer"
+            className="size-10"
             variant="outline"
             size="icon"
             onClick={toggleTheme}

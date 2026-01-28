@@ -168,7 +168,7 @@ export function GenerationHeader() {
           <div className="flex items-center">
             <Button
               disabled={noSchedules}
-              className="w-6 cursor-pointer rounded-e-none border-e-[0px]"
+              className="w-6 rounded-e-none border-e-[0px]"
               variant="outline"
               onClick={handlePrevious}
             >
@@ -197,7 +197,7 @@ export function GenerationHeader() {
 
             <Button
               disabled={noSchedules}
-              className="w-6 cursor-pointer rounded-s-none border-s-[0px]"
+              className="w-6 rounded-s-none border-s-[0px]"
               variant="outline"
               onClick={handleNext}
             >
@@ -208,7 +208,7 @@ export function GenerationHeader() {
           <Button
             disabled={loading || courseSearchResults.length <= 0}
             variant="default"
-            className="cursor-pointer px-2 text-xs lg:text-sm"
+            className="px-2 text-xs lg:text-sm"
             onClick={handleGeneration}
           >
             {loading ? "Loading..." : "Generate"}

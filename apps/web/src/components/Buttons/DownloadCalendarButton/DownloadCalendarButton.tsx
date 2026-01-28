@@ -73,7 +73,6 @@ export default function DownloadCalendarButton() {
       <TooltipTrigger
         render={
           <Button
-            className="cursor-pointer"
             variant="default"
             size="icon-lg"
             onClick={handleDownload}
