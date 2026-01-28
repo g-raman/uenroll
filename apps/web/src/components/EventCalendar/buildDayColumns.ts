@@ -28,9 +28,7 @@ export function buildDayColumns(
 
   const days = Array.from({ length: numDays }, (_, i) =>
     startDate.add({ days: i }),
-  ).filter(
-    day => !hideWeekends || day.dayOfWeek <= 5
-  );
+  ).filter(day => !hideWeekends || day.dayOfWeek <= 5);
 
   const rangeStart = days[0] as Temporal.PlainDate;
   const rangeEnd = days[days.length - 1] as Temporal.PlainDate;
