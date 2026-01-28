@@ -14,7 +14,7 @@ export function ThemeSwitchingButton() {
 
   return (
     <Button
-      className="size-10"
+      className="size-10 cursor-pointer"
       variant="outline"
       size="icon"
       onClick={toggleTheme}

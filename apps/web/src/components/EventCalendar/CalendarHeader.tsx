@@ -24,7 +24,12 @@ export function CalendarHeader({
   return (
     <div className="flex items-center justify-between gap-4 border-b px-4 py-3">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="sm" onClick={onGoToTermStart}>
+        <Button
+          className="cursor-pointer"
+          variant="outline"
+          size="sm"
+          onClick={onGoToTermStart}
+        >
           Term Start
         </Button>
         <h2 className="truncate text-base font-semibold text-nowrap">
@@ -35,6 +40,7 @@ export function CalendarHeader({
       <div className="ml-auto flex items-center gap-2">
         <label className="hidden cursor-pointer items-center gap-2 text-sm lg:flex">
           <Switch
+            className="cursor-pointer"
             checked={weekendsHidden}
             onCheckedChange={onWeekendsHiddenChange}
           />
@@ -48,13 +54,16 @@ export function CalendarHeader({
 
         <div className="hidden items-center lg:flex">
           <Button
+            className="cursor-pointer"
             variant="ghost"
             size="icon-lg"
             onClick={() => onNavigate("previous")}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
+
           <Button
+            className="cursor-pointer"
             variant="ghost"
             size="icon-lg"
             onClick={() => onNavigate("next")}

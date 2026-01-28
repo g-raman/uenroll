@@ -26,7 +26,7 @@ export const DeleteSearchResultsButton = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="grow"
+          className="grow cursor-pointer"
           variant="outline"
           size="lg"
           onClick={handleClick}
