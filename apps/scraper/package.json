@@ -9,7 +9,7 @@
     "deploy": "wrangler deploy --env dev && wrangler deploy --env prod",
     "deploy:dev": "wrangler deploy --env dev",
     "deploy:prod": "wrangler deploy --env prod",
-    "dev": "wrangler dev --env dev",
+    "dev": "wrangler dev --env dev --local",
     "lint": "eslint ."
   },
   "dependencies": {

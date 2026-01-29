@@ -16,6 +16,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev:web": "bun run --filter web dev",
+    "dev:scraper": "bun run --filter uenroll-scraper dev",
     "db:up": "docker compose -f ./packages/db/docker-compose.yml up -d && bun run db:migrate",
     "db:down": "docker compose -f ./packages/db/docker-compose.yml down",
     "db:migrate": "bun run --filter @repo/db db:migrate",
