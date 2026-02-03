@@ -1,4 +1,13 @@
-import { eq, and, asc, sql, lt, notInArray, inArray } from "drizzle-orm";
+import {
+  eq,
+  and,
+  asc,
+  sql,
+  lt,
+  notInArray,
+  inArray,
+  ilike,
+} from "drizzle-orm";
 import { db as defaultDb, type Database } from "./index.js";
 import {
   availableSubjectsTable,
@@ -11,6 +20,7 @@ import type {
   CourseComponentInsert,
   CourseDetailsInsert,
   CourseInsert,
+  CourseQueryFilter,
   GetCourseResult,
   GetCourseResultOkValue,
   SessionInsert,
@@ -58,6 +68,38 @@ export async function getAvailableCoursesByTerm(
       .limit(3500),
     error =>
       new Error(`Failed to fetch available courses for the ${term}: ${error}`),
+  );
+}
+
+export async function getCoursesByFilter(
+  filter: CourseQueryFilter,
+  database: Database = defaultDb,
+) {
+  const subject = filter.subject?.trim().toUpperCase() ?? "";
+  const yearDigit = filter.year ? String(filter.year).slice(0, 1) : undefined;
+  const conditions = [eq(coursesTable.term, filter.term)];
+
+  if (subject) {
+    conditions.push(ilike(coursesTable.courseCode, `${subject}%`));
+  }
+
+  if (yearDigit) {
+    conditions.push(
+      sql`substring(${coursesTable.courseCode} from '[0-9]') = ${yearDigit}`,
+    );
+  }
+
+  return ResultAsync.fromPromise(
+    database
+      .select({
+        courseCode: coursesTable.courseCode,
+        courseTitle: coursesTable.courseTitle,
+      })
+      .from(coursesTable)
+      .where(and(...conditions))
+      .orderBy(asc(coursesTable.courseCode))
+      .limit(filter.limit ?? 200),
+    error => new Error(`Failed to fetch filtered courses: ${error}`),
   );
 }
 

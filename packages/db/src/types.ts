@@ -35,6 +35,13 @@ export type CourseDetailsInsert = {
   sessions: SessionInsert[];
 };
 
+export type CourseQueryFilter = {
+  term: string;
+  subject?: string;
+  year?: number;
+  limit?: number;
+};
+
 export type GetCourseResult = Awaited<ReturnType<typeof getCourse>>;
 export type GetCourseResultOkValue = Exclude<
   Awaited<ReturnType<typeof getCourse>> extends Result<infer T, unknown>
