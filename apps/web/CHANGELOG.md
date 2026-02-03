@@ -1,5 +1,19 @@
 # web
 
+## 2.1.0
+
+### Minor Changes
+
+- [#151](https://github.com/g-raman/uenroll/pull/151) [`f6dd067`](https://github.com/g-raman/uenroll/commit/f6dd067d32935a821f204905d01a5540cc716f7c) Thanks [@g-raman](https://github.com/g-raman)! - Add new implementation for autocomplete and address migration issues
+
+### Patch Changes
+
+- [#153](https://github.com/g-raman/uenroll/pull/153) [`cdfc647`](https://github.com/g-raman/uenroll/commit/cdfc647014b63cf2d0b8c4f1bd65a8b3c596910a) Thanks [@g-raman](https://github.com/g-raman)! - Fix course result margins and spacing
+
+- [#154](https://github.com/g-raman/uenroll/pull/154) [`1deddea`](https://github.com/g-raman/uenroll/commit/1deddea19e2a2f3ab53d0ff6110896b0f428cea4) Thanks [@g-raman](https://github.com/g-raman)! - Update documentation and agents.md files
+
+- [#155](https://github.com/g-raman/uenroll/pull/155) [`0f20b51`](https://github.com/g-raman/uenroll/commit/0f20b516aecdf8e0ef0e41cf772b016e23812b76) Thanks [@g-raman](https://github.com/g-raman)! - Fix nested accordions and overflow issue on desktop
+
 ## 2.0.0
 
 ### Major Changes

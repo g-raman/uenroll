@@ -1,5 +1,11 @@
 # @repo/db
 
+## 0.6.3
+
+### Patch Changes
+
+- [#154](https://github.com/g-raman/uenroll/pull/154) [`1deddea`](https://github.com/g-raman/uenroll/commit/1deddea19e2a2f3ab53d0ff6110896b0f428cea4) Thanks [@g-raman](https://github.com/g-raman)! - Update documentation and agents.md files
+
 ## 0.6.2
 
 ### Patch Changes
