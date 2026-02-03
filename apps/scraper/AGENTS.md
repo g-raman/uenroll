@@ -1,7 +1,3 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Project Overview
 
 This is the **scraper** app within the uenroll monorepo. It scrapes course data from the University of Ottawa public course registry and stores it in a PostgreSQL database.
@@ -76,6 +72,4 @@ HTML parsing relies on PeopleSoft's predictable ID patterns:
 
 - **@repo/db** - Shared database package with queries and types
 - **cheerio** - HTML parsing
-- **fetch-cookie** - Cookie jar for session persistence
 - **neverthrow** - Type-safe error handling
-- **pino** - Structured logging
