@@ -1,5 +1,15 @@
 # @repo/ui
 
+## 1.0.0
+
+### Major Changes
+
+- [#151](https://github.com/g-raman/uenroll/pull/151) [`f6dd067`](https://github.com/g-raman/uenroll/commit/f6dd067d32935a821f204905d01a5540cc716f7c) Thanks [@g-raman](https://github.com/g-raman)! - Migrate from Radix to Base UI
+
+### Patch Changes
+
+- [#154](https://github.com/g-raman/uenroll/pull/154) [`1deddea`](https://github.com/g-raman/uenroll/commit/1deddea19e2a2f3ab53d0ff6110896b0f428cea4) Thanks [@g-raman](https://github.com/g-raman)! - Update documentation and agents.md files
+
 ## 0.5.4
 
 ### Patch Changes
