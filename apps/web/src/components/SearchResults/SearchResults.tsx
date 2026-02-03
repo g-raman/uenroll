@@ -35,7 +35,7 @@ export default function SearchResults() {
     .map(query => query.data);
 
   return (
-    <div>
+    <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <Accordion multiple onValueChange={value => setOpenResults(value)}>
         {courseSearchResults.map(course => {
           return (
