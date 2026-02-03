@@ -60,20 +60,21 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
   ]);
 
   return (
-    <>
+    <Accordion>
       <AccordionTrigger
         nativeButton={false}
-        className={`cursor-pointer items-center truncate !border-none p-2 font-normal ${course.colour} ${openResults.includes(course.courseCode) ? "rounded-b-none" : "rounded-b-sm"}`}
+        className={`cursor-pointer items-center justify-between truncate !border-none p-2 font-normal ${course.colour} ${openResults.includes(course.courseCode) ? "rounded-b-none" : "rounded-b-sm"}`}
       >
-        <p className="truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
+        <p className="mr-2 truncate">{`${course.courseCode}: ${course.courseTitle}`}</p>
 
         <Tooltip>
           <TooltipTrigger
+            className="ml-auto"
             render={
               <Trash
                 fill="#000"
                 strokeWidth={2}
-                className="ml-auto size-4 !rotate-0"
+                className="size-4 shrink-0 !rotate-0"
                 onClick={removeCourse}
               />
             }
@@ -104,7 +105,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
           })}
         </Accordion>
       </AccordionContent>
-    </>
+    </Accordion>
   );
 };
 
