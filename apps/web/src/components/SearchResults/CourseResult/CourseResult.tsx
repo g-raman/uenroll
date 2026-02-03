@@ -60,7 +60,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
   ]);
 
   return (
-    <Accordion>
+    <>
       <AccordionTrigger
         nativeButton={false}
         className={`cursor-pointer items-center justify-between truncate !border-none p-2 font-normal ${course.colour} ${openResults.includes(course.courseCode) ? "rounded-b-none" : "rounded-b-sm"}`}
@@ -105,7 +105,7 @@ const CourseResult: React.FC<CourseResultProps> = ({ course, openResults }) => {
           })}
         </Accordion>
       </AccordionContent>
-    </Accordion>
+    </>
   );
 };
 
