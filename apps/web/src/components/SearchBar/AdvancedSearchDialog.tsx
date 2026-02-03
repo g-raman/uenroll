@@ -21,12 +21,19 @@ const YEAR_OPTIONS = [
   { label: "2nd", value: "2" },
   { label: "3rd", value: "3" },
   { label: "4th", value: "4" },
-  { label: "5th", value: "5" },
+  { label: "Grad (5+)", value: "5" },
+] as const;
+
+const LANGUAGE_OPTIONS = [
+  { label: "Any", value: "any" },
+  { label: "English", value: "english" },
+  { label: "French", value: "french" },
 ] as const;
 
 const RESULTS_LIMIT = 200;
 
 type YearValue = (typeof YEAR_OPTIONS)[number]["value"];
+type LanguageValue = (typeof LANGUAGE_OPTIONS)[number]["value"];
 
 type AdvancedSearchDialogProps = {
   open: boolean;
@@ -49,27 +56,52 @@ export function AdvancedSearchDialog({
 }: AdvancedSearchDialogProps) {
   const [subject, setSubject] = useState("");
   const [year, setYear] = useState<YearValue>("any");
+  const [language, setLanguage] = useState<LanguageValue>("any");
+  const [submittedFilters, setSubmittedFilters] = useState<{
+    subject?: string;
+    year?: number;
+    language?: "english" | "french";
+  } | null>(null);
 
   const normalizedSubject = useMemo(
     () => subject.trim().toUpperCase().replace(/[^A-Z]/g, ""),
     [subject],
   );
   const yearFilter = year === "any" ? undefined : Number(year);
-  const canSearch = Boolean(term) && (normalizedSubject.length > 0 || yearFilter);
+  const languageFilter = language === "any" ? undefined : language;
+  const canSearch =
+    Boolean(term) &&
+    (normalizedSubject.length > 0 || yearFilter || languageFilter);
+  const hasSubmitted = submittedFilters !== null;
+  const queryInput = submittedFilters
+    ? {
+        term,
+        subject: submittedFilters.subject,
+        year: submittedFilters.year,
+        language: submittedFilters.language,
+        limit: RESULTS_LIMIT,
+      }
+    : {
+        term,
+        subject: undefined,
+        year: undefined,
+        language: undefined,
+        limit: RESULTS_LIMIT,
+      };
 
   const { data: results, isLoading } = useQuery(
     trpc.getCoursesByFilter.queryOptions(
-      {
-        term,
-        subject: normalizedSubject || undefined,
-        year: yearFilter,
-        limit: RESULTS_LIMIT,
-      },
-      { enabled: canSearch, staleTime: STALE_TIME },
+      queryInput,
+      { enabled: Boolean(term) && hasSubmitted, staleTime: STALE_TIME },
     ),
   );
 
   const courses = results ?? [];
+  const statusText = hasSubmitted
+    ? `${courses.length} result${courses.length === 1 ? "" : "s"}`
+    : canSearch
+      ? "Click Search to see results."
+      : "Enter a subject, choose a year, or pick a language to search.";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -77,7 +109,7 @@ export function AdvancedSearchDialog({
         <DialogHeader>
           <DialogTitle>Advanced search</DialogTitle>
           <DialogDescription>
-            Filter by subject and year, then add courses to your playground.
+            Filter by subject, year, or language, then add courses to your playground.
           </DialogDescription>
         </DialogHeader>
 
@@ -86,17 +118,38 @@ export function AdvancedSearchDialog({
             <label className="text-sm font-medium" htmlFor="subject-filter">
               Subject
             </label>
-            <Input
-              id="subject-filter"
-              placeholder="ADM, CSI, ITI"
-              value={subject}
-              onChange={event => {
-                setSubject(
-                  event.target.value.toUpperCase().replace(/[^A-Z]/g, ""),
-                );
-              }}
-              autoComplete="off"
-            />
+            <div className="flex flex-wrap items-center gap-2">
+              <Input
+                id="subject-filter"
+                placeholder="ADM, CSI, ITI"
+                value={subject}
+                onChange={event => {
+                  setSubject(
+                    event.target.value.toUpperCase().replace(/[^A-Z]/g, ""),
+                  );
+                }}
+                autoComplete="off"
+                className="min-w-[12rem] flex-1"
+              />
+              <Button
+                size="default"
+                className="h-9"
+                disabled={!canSearch}
+                onClick={() => {
+                  if (!canSearch) {
+                    setSubmittedFilters(null);
+                    return;
+                  }
+                  setSubmittedFilters({
+                    subject: normalizedSubject || undefined,
+                    year: yearFilter,
+                    language: languageFilter,
+                  });
+                }}
+              >
+                Search
+              </Button>
+            </div>
           </div>
 
           <fieldset className="grid gap-2">
@@ -119,15 +172,33 @@ export function AdvancedSearchDialog({
               ))}
             </div>
           </fieldset>
+
+          <fieldset className="grid gap-2">
+            <legend className="text-sm font-medium">Language</legend>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+              {LANGUAGE_OPTIONS.map(option => (
+                <label key={option.value} className="cursor-pointer">
+                  <input
+                    type="radio"
+                    name="course-language"
+                    value={option.value}
+                    checked={language === option.value}
+                    onChange={() => setLanguage(option.value)}
+                    className="peer sr-only"
+                  />
+                  <span className="border-input bg-background text-muted-foreground peer-checked:text-foreground peer-checked:border-primary peer-checked:bg-primary/10 flex items-center justify-center rounded-md border px-2 py-1 text-xs font-medium">
+                    {option.label}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
         </div>
 
         <div className="grid gap-2">
           <div className="text-muted-foreground flex items-center justify-between text-xs">
-            <span>
-              {canSearch
-                ? `${courses.length} result${courses.length === 1 ? "" : "s"}`
-                : "Enter a subject or choose a year to search."}
-            </span>
+            <span>{statusText}</span>
             {isAtLimit && (
               <span className="text-destructive">
                 Max {MAX_RESULTS_ALLOWED} courses selected.
@@ -136,26 +207,28 @@ export function AdvancedSearchDialog({
           </div>
 
           <div className="border-input bg-muted/30 max-h-64 overflow-auto rounded-lg border">
-            {!canSearch && (
+            {!hasSubmitted && (
               <div className="text-muted-foreground px-4 py-6 text-center text-sm">
-                Start with a subject code or select a year to see results.
+                {canSearch
+                  ? "Click Search to see results."
+                  : "Start with a subject code, select a year, or choose a language to see results."}
               </div>
             )}
 
-            {canSearch && isLoading && (
+            {hasSubmitted && isLoading && (
               <div className="text-muted-foreground flex items-center justify-center gap-2 px-4 py-6 text-sm">
                 <LoaderCircleIcon className="size-4 animate-spin" />
                 Loading results...
               </div>
             )}
 
-            {canSearch && !isLoading && courses.length === 0 && (
+            {hasSubmitted && !isLoading && courses.length === 0 && (
               <div className="text-muted-foreground px-4 py-6 text-center text-sm">
                 No courses match those filters.
               </div>
             )}
 
-            {canSearch && !isLoading && courses.length > 0 && (
+            {hasSubmitted && !isLoading && courses.length > 0 && (
               <ul className="flex flex-col divide-y">
                 {courses.map(course => {
                   const alreadySelected = selectedCodes.has(course.courseCode);

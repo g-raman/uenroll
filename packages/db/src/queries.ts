@@ -77,15 +77,35 @@ export async function getCoursesByFilter(
 ) {
   const subject = filter.subject?.trim().toUpperCase() ?? "";
   const yearDigit = filter.year ? String(filter.year).slice(0, 1) : undefined;
+  const isGraduateLevel = filter.year !== undefined && filter.year >= 5;
+  const language = filter.language;
   const conditions = [eq(coursesTable.term, filter.term)];
 
   if (subject) {
     conditions.push(ilike(coursesTable.courseCode, `${subject}%`));
   }
 
-  if (yearDigit) {
+  if (yearDigit && !isGraduateLevel) {
     conditions.push(
       sql`substring(${coursesTable.courseCode} from '[0-9]') = ${yearDigit}`,
+    );
+  }
+
+  if (yearDigit && isGraduateLevel) {
+    conditions.push(
+      sql`substring(${coursesTable.courseCode} from '[0-9]') >= '5'`,
+    );
+  }
+
+  if (language === "english") {
+    conditions.push(
+      sql`substring(${coursesTable.courseCode} from '^[A-Za-z]+[0-9]([0-9])') between '1' and '4'`,
+    );
+  }
+
+  if (language === "french") {
+    conditions.push(
+      sql`substring(${coursesTable.courseCode} from '^[A-Za-z]+[0-9]([0-9])') between '5' and '8'`,
     );
   }
 
