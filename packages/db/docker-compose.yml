@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:18
-    container_name: postgres-local
+    container_name: uneroll-db
     ports:
       - "5432:5432"
     environment:
@@ -13,4 +13,4 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
+    command: postgres -c max_connections=300
