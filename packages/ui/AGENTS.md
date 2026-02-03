@@ -41,7 +41,7 @@ uenroll/
 
 ### Component Patterns
 
-**Base UI migration**: The project is actively migrating from Radix UI to Base UI (`@base-ui/react`). New components should use Base UI primitives.
+Components are built on Base UI (`@base-ui/react`).
 
 **Key conventions**:
 
@@ -68,7 +68,7 @@ The `components.json` configures the shadcn CLI with style `base-vega`, `neutral
 
 ### Key Dependencies
 
-- **React 19** with Base UI and some remaining Radix UI primitives
+- **React 19** with Base UI primitives
 - **Tailwind CSS 4** with CSS custom properties theming
 - **lucide-react** for icons
 - **sonner** for toast notifications
