@@ -80,12 +80,12 @@ export function AdvancedSearchResults({
 
         {/* Results list */}
         {hasSubmitted && !isLoading && courses.length > 0 && (
-          <ul className="flex flex-col divide-y">
+          <div className="flex flex-col divide-y">
             {courses.map(course => {
               const alreadySelected = selectedCodes.has(course.courseCode);
               const isDisabled = alreadySelected || isAdding || isAtLimit;
               return (
-                <li
+                <div
                   key={course.courseCode}
                   className="hover:bg-muted/40 flex items-center justify-between gap-3 px-4 py-2.5 transition-colors"
                 >
@@ -119,10 +119,10 @@ export function AdvancedSearchResults({
                       </>
                     )}
                   </Button>
-                </li>
+                </div>
               );
             })}
-          </ul>
+          </div>
         )}
       </div>
     </div>
