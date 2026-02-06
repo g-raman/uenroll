@@ -100,10 +100,7 @@ export function AdvancedSearchFilters({
             className="flex flex-wrap gap-x-4 gap-y-2"
           >
             {YEAR_OPTIONS.map(option => (
-              <label
-                key={option.value}
-                className="flex items-center gap-1.5"
-              >
+              <label key={option.value} className="flex items-center gap-1.5">
                 <RadioGroupItem value={option.value} />
                 <span className="text-xs font-medium whitespace-nowrap">
                   {option.label}
@@ -125,10 +122,7 @@ export function AdvancedSearchFilters({
           >
             {LANGUAGE_OPTIONS.map(option => {
               const radio = (
-                <label
-                  key={option.value}
-                  className="flex items-center gap-1.5"
-                >
+                <label key={option.value} className="flex items-center gap-1.5">
                   <RadioGroupItem value={option.value} />
                   <span className="text-xs font-medium whitespace-nowrap">
                     {option.label}
