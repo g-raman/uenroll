@@ -4,7 +4,7 @@ export const YEAR_OPTIONS = [
   { label: "2nd", value: "2" },
   { label: "3rd", value: "3" },
   { label: "4th", value: "4" },
-  { label: "Grad (5+)", value: "5" },
+  { label: "Grad", value: "5" },
 ] as const;
 
 export const LANGUAGE_OPTIONS = [
