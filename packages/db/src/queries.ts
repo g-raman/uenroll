@@ -1,15 +1,4 @@
-import {
-  eq,
-  and,
-  asc,
-  sql,
-  lt,
-  notInArray,
-  inArray,
-  ilike,
-  gte,
-  between,
-} from "drizzle-orm";
+import { eq, and, asc, sql, lt, notInArray, inArray, ilike } from "drizzle-orm";
 import { db as defaultDb, type Database } from "./index.js";
 import {
   availableSubjectsTable,
@@ -94,23 +83,23 @@ export async function getCoursesByFilter(
   }
 
   if (yearDigit && !isGraduateLevel) {
-    conditions.push(eq(yearLevel, yearDigit));
+    conditions.push(sql`${yearLevel} = ${yearDigit}`);
   }
 
   if (yearDigit && isGraduateLevel) {
-    conditions.push(gte(yearLevel, "5"));
+    conditions.push(sql`${yearLevel} >= '5'`);
   }
 
   if (language === "english") {
-    conditions.push(between(langCode, "1", "4"));
+    conditions.push(sql`${langCode} between '1' and '4'`);
   }
 
   if (language === "french") {
-    conditions.push(between(langCode, "5", "8"));
+    conditions.push(sql`${langCode} between '5' and '8'`);
   }
 
   if (language === "other") {
-    conditions.push(inArray(langCode, ["0", "9"]));
+    conditions.push(sql`${langCode} in ('0', '9')`);
   }
 
   return ResultAsync.fromPromise(
