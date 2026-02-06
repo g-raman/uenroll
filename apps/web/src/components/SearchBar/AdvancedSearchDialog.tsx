@@ -90,9 +90,7 @@ export function AdvancedSearchDialog({
   );
   const yearFilter = year === "any" ? undefined : Number(year);
   const languageFilter = language === "any" ? undefined : language;
-  const canSearch =
-    Boolean(term) &&
-    (normalizedSubject.length > 0 || yearFilter || languageFilter);
+  const canSearch = Boolean(term) && normalizedSubject.length > 0;
   const hasSubmitted = submittedFilters !== null;
   const hasActiveFilters =
     normalizedSubject.length > 0 || year !== "any" || language !== "any";
