@@ -1,5 +1,15 @@
 # web
 
+## 2.2.0
+
+### Minor Changes
+
+- [#162](https://github.com/g-raman/uenroll/pull/162) [`9c6d353`](https://github.com/g-raman/uenroll/commit/9c6d353fa2d3b648ea88208b23955253a13eb98f) Thanks [@g-raman](https://github.com/g-raman)! - Add advanced search
+
+### Patch Changes
+
+- [#156](https://github.com/g-raman/uenroll/pull/156) [`86326a1`](https://github.com/g-raman/uenroll/commit/86326a119dfb25564e9a89b9ea6d709c22ca0ca1) Thanks [@g-raman](https://github.com/g-raman)! - Remove labels from download and copy link button
+
 ## 2.1.0
 
 ### Minor Changes
