@@ -12,8 +12,15 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Button } from "@repo/ui/components/button";
 import { useQuery } from "@tanstack/react-query";
-import { CheckIcon, LoaderCircleIcon, PlusIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import {
+  CheckIcon,
+  LoaderCircleIcon,
+  PlusIcon,
+  SearchIcon,
+  BookOpenIcon,
+  FilterXIcon,
+} from "lucide-react";
+import { useMemo, useState, type KeyboardEvent } from "react";
 
 const YEAR_OPTIONS = [
   { label: "Any", value: "any" },
@@ -73,6 +80,10 @@ export function AdvancedSearchDialog({
     Boolean(term) &&
     (normalizedSubject.length > 0 || yearFilter || languageFilter);
   const hasSubmitted = submittedFilters !== null;
+  const hasActiveFilters =
+    normalizedSubject.length > 0 ||
+    year !== "any" ||
+    language !== "any";
   const queryInput = submittedFilters
     ? {
         term,
@@ -90,18 +101,36 @@ export function AdvancedSearchDialog({
       };
 
   const { data: results, isLoading } = useQuery(
-    trpc.getCoursesByFilter.queryOptions(
-      queryInput,
-      { enabled: Boolean(term) && hasSubmitted, staleTime: STALE_TIME },
-    ),
+    trpc.getCoursesByFilter.queryOptions(queryInput, {
+      enabled: Boolean(term) && hasSubmitted,
+      staleTime: STALE_TIME,
+    }),
   );
 
   const courses = results ?? [];
-  const statusText = hasSubmitted
-    ? `${courses.length} result${courses.length === 1 ? "" : "s"}`
-    : canSearch
-      ? "Click Search to see results."
-      : "Enter a subject, choose a year, or pick a language to search.";
+
+  const handleSearch = () => {
+    if (!canSearch) return;
+    setSubmittedFilters({
+      subject: normalizedSubject || undefined,
+      year: yearFilter,
+      language: languageFilter,
+    });
+  };
+
+  const handleClearFilters = () => {
+    setSubject("");
+    setYear("any");
+    setLanguage("any");
+    setSubmittedFilters(null);
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSearch();
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -109,152 +138,193 @@ export function AdvancedSearchDialog({
         <DialogHeader>
           <DialogTitle>Advanced search</DialogTitle>
           <DialogDescription>
-            Filter by subject, year, or language, then add courses to your playground.
+            Filter by subject, year, or language, then add courses to your
+            playground.
           </DialogDescription>
         </DialogHeader>
 
+        {/* Filters section */}
         <div className="grid gap-4">
-          <div className="grid gap-2">
-            <label className="text-sm font-medium" htmlFor="subject-filter">
-              Subject
-            </label>
-            <div className="flex flex-wrap items-center gap-2">
+          {/* Subject input with integrated search */}
+          <div className="grid gap-1.5">
+            <div className="flex items-center justify-between">
+              <label
+                className="text-sm font-medium"
+                htmlFor="subject-filter"
+              >
+                Subject code
+              </label>
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs transition-colors"
+                >
+                  <FilterXIcon className="size-3" />
+                  Clear filters
+                </button>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
               <Input
                 id="subject-filter"
-                placeholder="ADM, CSI, ITI"
+                placeholder="e.g. ADM, CSI, ITI..."
                 value={subject}
                 onChange={event => {
                   setSubject(
                     event.target.value.toUpperCase().replace(/[^A-Z]/g, ""),
                   );
                 }}
+                onKeyDown={handleKeyDown}
                 autoComplete="off"
-                className="min-w-[12rem] flex-1"
+                className="min-w-0 flex-1"
               />
               <Button
                 size="default"
-                className="h-9"
                 disabled={!canSearch}
-                onClick={() => {
-                  if (!canSearch) {
-                    setSubmittedFilters(null);
-                    return;
-                  }
-                  setSubmittedFilters({
-                    subject: normalizedSubject || undefined,
-                    year: yearFilter,
-                    language: languageFilter,
-                  });
-                }}
+                onClick={handleSearch}
               >
+                <SearchIcon className="mr-1.5 size-3.5" />
                 Search
               </Button>
             </div>
           </div>
 
-          <fieldset className="grid gap-2">
-            <legend className="text-sm font-medium">Year</legend>
-            <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-              {YEAR_OPTIONS.map(option => (
-                <label key={option.value} className="cursor-pointer">
-                  <input
-                    type="radio"
-                    name="course-year"
-                    value={option.value}
-                    checked={year === option.value}
-                    onChange={() => setYear(option.value)}
-                    className="peer sr-only"
-                  />
-                  <span className="border-input bg-background text-muted-foreground peer-checked:text-foreground peer-checked:border-primary peer-checked:bg-primary/10 flex items-center justify-center rounded-md border px-2 py-1 text-xs font-medium">
-                    {option.label}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
+          {/* Filter toggles */}
+          <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+            <fieldset className="grid gap-1.5">
+              <legend className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+                Year
+              </legend>
+              <div className="flex gap-1.5">
+                {YEAR_OPTIONS.map(option => (
+                  <label key={option.value} className="cursor-pointer">
+                    <input
+                      type="radio"
+                      name="course-year"
+                      value={option.value}
+                      checked={year === option.value}
+                      onChange={() => setYear(option.value)}
+                      className="peer sr-only"
+                    />
+                    <span className="border-input bg-background text-muted-foreground peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-foreground peer-checked:shadow-xs inline-flex items-center justify-center rounded-md border px-2 py-1 text-xs font-medium whitespace-nowrap transition-all">
+                      {option.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
 
-          <fieldset className="grid gap-2">
-            <legend className="text-sm font-medium">Language</legend>
-            <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-              {LANGUAGE_OPTIONS.map(option => (
-                <label key={option.value} className="cursor-pointer">
-                  <input
-                    type="radio"
-                    name="course-language"
-                    value={option.value}
-                    checked={language === option.value}
-                    onChange={() => setLanguage(option.value)}
-                    className="peer sr-only"
-                  />
-                  <span className="border-input bg-background text-muted-foreground peer-checked:text-foreground peer-checked:border-primary peer-checked:bg-primary/10 flex items-center justify-center rounded-md border px-2 py-1 text-xs font-medium">
-                    {option.label}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
+            <fieldset className="grid gap-1.5">
+              <legend className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+                Language
+              </legend>
+              <div className="flex gap-1.5">
+                {LANGUAGE_OPTIONS.map(option => (
+                  <label key={option.value} className="cursor-pointer">
+                    <input
+                      type="radio"
+                      name="course-language"
+                      value={option.value}
+                      checked={language === option.value}
+                      onChange={() => setLanguage(option.value)}
+                      className="peer sr-only"
+                    />
+                    <span className="border-input bg-background text-muted-foreground peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-foreground peer-checked:shadow-xs inline-flex items-center justify-center rounded-md border px-2.5 py-1 text-xs font-medium transition-all">
+                      {option.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          </div>
         </div>
 
-        <div className="grid gap-2">
+        {/* Divider */}
+        <div className="bg-border -mx-6 h-px" />
+
+        {/* Results section */}
+        <div className="-mt-2 grid gap-2">
           <div className="text-muted-foreground flex items-center justify-between text-xs">
-            <span>{statusText}</span>
+            <span>
+              {hasSubmitted
+                ? isLoading
+                  ? "Searching..."
+                  : `${courses.length} result${courses.length === 1 ? "" : "s"}${courses.length >= RESULTS_LIMIT ? ` (limited to ${RESULTS_LIMIT})` : ""}`
+                : canSearch
+                  ? "Press Search to see results."
+                  : "Set at least one filter to search."}
+            </span>
             {isAtLimit && (
-              <span className="text-destructive">
-                Max {MAX_RESULTS_ALLOWED} courses selected.
+              <span className="text-destructive font-medium">
+                Max {MAX_RESULTS_ALLOWED} courses
               </span>
             )}
           </div>
 
-          <div className="border-input bg-muted/30 max-h-64 overflow-auto rounded-lg border">
+          <div className="border-input bg-muted/20 max-h-72 overflow-auto rounded-lg border">
+            {/* Empty state — no filters submitted yet */}
             {!hasSubmitted && (
-              <div className="text-muted-foreground px-4 py-6 text-center text-sm">
-                {canSearch
-                  ? "Click Search to see results."
-                  : "Start with a subject code, select a year, or choose a language to see results."}
+              <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 px-4 py-10">
+                <BookOpenIcon className="text-muted-foreground/50 size-8" />
+                <p className="max-w-[18rem] text-center text-sm">
+                  {canSearch
+                    ? "Ready to search. Press the Search button or hit Enter."
+                    : "Enter a subject code, select a year, or choose a language to get started."}
+                </p>
               </div>
             )}
 
+            {/* Loading state */}
             {hasSubmitted && isLoading && (
-              <div className="text-muted-foreground flex items-center justify-center gap-2 px-4 py-6 text-sm">
-                <LoaderCircleIcon className="size-4 animate-spin" />
-                Loading results...
+              <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 px-4 py-10">
+                <LoaderCircleIcon className="text-primary/60 size-6 animate-spin" />
+                <p className="text-sm">Finding courses...</p>
               </div>
             )}
 
+            {/* No results */}
             {hasSubmitted && !isLoading && courses.length === 0 && (
-              <div className="text-muted-foreground px-4 py-6 text-center text-sm">
-                No courses match those filters.
+              <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 px-4 py-10">
+                <SearchIcon className="text-muted-foreground/50 size-6" />
+                <p className="text-sm">
+                  No courses match those filters.
+                </p>
               </div>
             )}
 
+            {/* Results list */}
             {hasSubmitted && !isLoading && courses.length > 0 && (
               <ul className="flex flex-col divide-y">
                 {courses.map(course => {
-                  const alreadySelected = selectedCodes.has(course.courseCode);
-                  const isDisabled = alreadySelected || isAdding || isAtLimit;
+                  const alreadySelected = selectedCodes.has(
+                    course.courseCode,
+                  );
+                  const isDisabled =
+                    alreadySelected || isAdding || isAtLimit;
                   return (
                     <li
                       key={course.courseCode}
-                      className="flex items-center justify-between gap-3 px-4 py-3"
+                      className="hover:bg-muted/40 flex items-center justify-between gap-3 px-4 py-2.5 transition-colors"
                     >
                       <div className="min-w-0">
-                        <p className="text-sm font-medium">
+                        <p className="truncate text-sm font-medium">
                           {course.courseCode}
                         </p>
-                        <p className="text-muted-foreground text-xs">
+                        <p className="text-muted-foreground truncate text-xs">
                           {course.courseTitle}
                         </p>
                       </div>
                       <Button
-                        variant="outline"
+                        variant={alreadySelected ? "ghost" : "outline"}
                         size="sm"
                         disabled={isDisabled}
                         onClick={() => onAddCourse(course.courseCode)}
+                        className="shrink-0"
                       >
                         {alreadySelected ? (
                           <>
-                            <CheckIcon className="mr-1 size-3" />
+                            <CheckIcon className="text-primary mr-1 size-3" />
                             Added
                           </>
                         ) : (
