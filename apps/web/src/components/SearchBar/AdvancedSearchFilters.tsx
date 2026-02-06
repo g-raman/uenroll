@@ -49,11 +49,14 @@ export function AdvancedSearchFilters({
   };
 
   return (
-    <div className="grid gap-4">
+    <div className="flex flex-col gap-4">
       {/* Subject input with integrated search */}
-      <div className="grid gap-1.5">
+      <div>
         <div className="flex items-center justify-between">
-          <Label htmlFor="subject-filter">Subject code</Label>
+          <Label className="mb-1.5" htmlFor="subject-filter">
+            Subject code
+          </Label>
+
           {hasActiveFilters && (
             <Button
               variant="link"
@@ -66,6 +69,7 @@ export function AdvancedSearchFilters({
             </Button>
           )}
         </div>
+
         <div className="flex items-center gap-2">
           <Input
             id="subject-filter"
@@ -80,6 +84,7 @@ export function AdvancedSearchFilters({
             autoComplete="off"
             className="min-w-0 flex-1"
           />
+
           <Button size="default" disabled={!canSearch} onClick={onSearch}>
             <SearchIcon className="mr-1.5 size-3.5" />
             Search
@@ -88,7 +93,7 @@ export function AdvancedSearchFilters({
       </div>
 
       {/* Filter toggles */}
-      <div className="grid gap-3">
+      <div className="flex flex-col gap-3">
         <div>
           <Label
             id="year-label"
@@ -96,6 +101,7 @@ export function AdvancedSearchFilters({
           >
             Year
           </Label>
+
           <RadioGroup
             aria-labelledby="year-label"
             value={year}
