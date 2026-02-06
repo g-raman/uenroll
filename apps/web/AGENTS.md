@@ -8,7 +8,7 @@ uEnroll is a schedule builder for University of Ottawa students. This is the `ap
 
 ```bash
 bun build            # Production build
-bun lint             # ESLint (zero warnings allowed)
+bun lint             # ESLint
 bun check-types      # TypeScript type checking
 ```
 
@@ -22,7 +22,11 @@ bun build:wasm       # Build Rust WASM module to public/wasm/
 
 ### Monorepo Packages
 
-If you make changes to these packages you must rebuild them.
+If you make changes to these packages you must rebuild them with the following command:
+
+```bash
+bun run build:packages
+```
 
 - `@repo/db` - Drizzle ORM schema, queries, PostgreSQL connection
 - `@repo/env` - Type-safe environment variables via @t3-oss/env-core (exports `/server` and `/client`)
@@ -80,6 +84,7 @@ Events use recurrence rules (RRule) for weekly patterns. Mappers in `utils/mappe
 - Zustand (state) + nuqs (URL state)
 - Rust WASM module for schedule generation
 
-## Never do these things
+## CRITICAL
 
 - Never make barrell export files.
+- Always use bun for installing packages and running scripts
