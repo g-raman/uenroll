@@ -88,3 +88,5 @@ Events use recurrence rules (RRule) for weekly patterns. Mappers in `utils/mappe
 
 - Never make barrell export files.
 - Always use bun for installing packages and running scripts
+- Use Shadcn components from the `@repo/ui` package when possible
+- Always run `bun run format` after code changes
