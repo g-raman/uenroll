@@ -1,6 +1,7 @@
 import {
   getAvailableCoursesByTerm,
   getAvailableTerms,
+  getCoursesByFilter,
   getCourse,
   processCourse,
 } from "@repo/db/queries";
@@ -54,6 +55,34 @@ export const appRouter = router({
       }
 
       return availableCourses.value;
+    }),
+  getCoursesByFilter: publicProcedure
+    .input(
+      z.object({
+        term: z.string(),
+        subject: z.string().trim().min(1).optional(),
+        year: z.number().int().min(1).max(9).optional(),
+        language: z.enum(["english", "french", "other"]).optional(),
+        limit: z.number().int().min(1).max(500).optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const courses = await getCoursesByFilter({
+        term: input.term,
+        subject: input.subject,
+        year: input.year,
+        language: input.language,
+        limit: input.limit,
+      });
+
+      if (courses.isErr()) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: courses.error.message,
+        });
+      }
+
+      return courses.value;
     }),
 });
 

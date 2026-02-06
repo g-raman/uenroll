@@ -1,4 +1,4 @@
-import { eq, and, asc, sql, lt, notInArray, inArray } from "drizzle-orm";
+import { eq, and, asc, sql, lt, notInArray, inArray, ilike } from "drizzle-orm";
 import { db as defaultDb, type Database } from "./index.js";
 import {
   availableSubjectsTable,
@@ -11,6 +11,7 @@ import type {
   CourseComponentInsert,
   CourseDetailsInsert,
   CourseInsert,
+  CourseQueryFilter,
   GetCourseResult,
   GetCourseResultOkValue,
   SessionInsert,
@@ -58,6 +59,60 @@ export async function getAvailableCoursesByTerm(
       .limit(3500),
     error =>
       new Error(`Failed to fetch available courses for the ${term}: ${error}`),
+  );
+}
+
+export async function getCoursesByFilter(
+  filter: CourseQueryFilter,
+  database: Database = defaultDb,
+) {
+  const subject = filter.subject?.trim().toUpperCase() ?? "";
+  const yearDigit = filter.year ? String(filter.year).slice(0, 1) : undefined;
+  const isGraduateLevel = filter.year !== undefined && filter.year >= 5;
+  const language = filter.language;
+  const conditions = [eq(coursesTable.term, filter.term)];
+
+  // e.g. "CSI2101" → "2" (first digit = year level)
+  const yearLevel = sql<string>`substring(${coursesTable.courseCode} from '[0-9]')`;
+
+  // e.g. "CSI2101" → "1" (second digit = language code: 1-4 english, 5-8 french, 0/9 bilingual)
+  const langCode = sql<string>`substring(${coursesTable.courseCode} from '^[A-Za-z]+[0-9]([0-9])')`;
+
+  if (subject) {
+    conditions.push(ilike(coursesTable.courseCode, `${subject}%`));
+  }
+
+  if (yearDigit && !isGraduateLevel) {
+    conditions.push(sql`${yearLevel} = ${yearDigit}`);
+  }
+
+  if (yearDigit && isGraduateLevel) {
+    conditions.push(sql`${yearLevel} >= '5'`);
+  }
+
+  if (language === "english") {
+    conditions.push(sql`${langCode} between '1' and '4'`);
+  }
+
+  if (language === "french") {
+    conditions.push(sql`${langCode} between '5' and '8'`);
+  }
+
+  if (language === "other") {
+    conditions.push(sql`${langCode} in ('0', '9')`);
+  }
+
+  return ResultAsync.fromPromise(
+    database
+      .select({
+        courseCode: coursesTable.courseCode,
+        courseTitle: coursesTable.courseTitle,
+      })
+      .from(coursesTable)
+      .where(and(...conditions))
+      .orderBy(asc(coursesTable.courseCode))
+      .limit(filter.limit ?? 200),
+    error => new Error(`Failed to fetch filtered courses: ${error}`),
   );
 }
 

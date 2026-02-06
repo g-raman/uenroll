@@ -12,6 +12,7 @@ import {
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupButton,
   InputGroupInput,
 } from "@repo/ui/components/input-group";
 import { Skeleton } from "@repo/ui/components/skeleton";
@@ -26,7 +27,12 @@ import {
   type KeyboardEvent,
 } from "react";
 import { toast } from "sonner";
-import { SearchIcon, LoaderCircleIcon } from "lucide-react";
+import {
+  SearchIcon,
+  LoaderCircleIcon,
+  SlidersHorizontalIcon,
+} from "lucide-react";
+import { AdvancedSearchDialog } from "./AdvancedSearchDialog";
 
 interface CourseMatch {
   courseCode: string;
@@ -52,6 +58,7 @@ export default function Autocomplete() {
   const [data, setData] = useDataParam();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -159,79 +166,109 @@ export default function Autocomplete() {
   }
 
   return (
-    <Popover open={open && !!deferredQuery} onOpenChange={setOpen}>
-      <PopoverTrigger
-        nativeButton={false}
-        render={
-          <InputGroup>
-            <InputGroupAddon>
-              {isAdding ? (
-                <LoaderCircleIcon className="size-4 animate-spin" />
-              ) : (
-                <SearchIcon className="size-4" />
-              )}
-            </InputGroupAddon>
-            <InputGroupInput
-              ref={inputRef}
-              value={query}
-              onChange={e => {
-                setQuery(e.target.value);
-                setHighlightedIndex(0);
-                if (e.target.value.trim()) {
-                  setOpen(true);
-                }
-              }}
-              onFocus={() => {
-                if (deferredQuery) setOpen(true);
-              }}
-              onKeyDown={handleKeyDown}
-              placeholder="Search for a course..."
-              disabled={isAdding}
-            />
-          </InputGroup>
-        }
+    <>
+      <AdvancedSearchDialog
+        open={isAdvancedOpen}
+        onOpenChange={setIsAdvancedOpen}
+        term={selectedTerm}
+        selectedCodes={selectedCodes}
+        isAdding={isAdding}
+        isAtLimit={isAtLimit}
+        onAddCourse={addCourse}
       />
 
-      <PopoverContent
-        initialFocus={false}
-        align="start"
-        className="w-(--anchor-width) p-1"
-      >
-        {results.length === 0 && (
-          <p className="text-muted-foreground px-3 py-4 text-center text-sm">
-            No courses found
-          </p>
-        )}
-
-        {results.length > 0 && (
-          <ul role="listbox" className="flex flex-col gap-0.5">
-            {results.map((result, index) => {
-              const alreadySelected = selectedCodes.has(result.item.courseCode);
-              return (
-                <li
-                  key={result.item.courseCode}
-                  role="option"
-                  aria-selected={index === highlightedIndex}
-                  aria-disabled={alreadySelected}
-                  data-highlighted={index === highlightedIndex || undefined}
-                  className="data-highlighted:bg-muted cursor-default rounded-sm px-3 py-1.5 text-sm select-none aria-disabled:opacity-50"
-                  onPointerMove={() => setHighlightedIndex(index)}
+      <Popover open={open && !!deferredQuery} onOpenChange={setOpen}>
+        <PopoverTrigger
+          nativeButton={false}
+          render={
+            <InputGroup>
+              <InputGroupAddon>
+                {isAdding ? (
+                  <LoaderCircleIcon className="size-4 animate-spin" />
+                ) : (
+                  <SearchIcon className="size-4" />
+                )}
+              </InputGroupAddon>
+              <InputGroupInput
+                ref={inputRef}
+                value={query}
+                onChange={e => {
+                  setQuery(e.target.value);
+                  setHighlightedIndex(0);
+                  if (e.target.value.trim()) {
+                    setOpen(true);
+                  }
+                }}
+                onFocus={() => {
+                  if (deferredQuery) setOpen(true);
+                }}
+                onKeyDown={handleKeyDown}
+                placeholder="Search for a course..."
+                disabled={isAdding}
+              />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label="Open advanced search"
+                  disabled={isAdding}
                   onClick={() => {
-                    if (!alreadySelected) {
-                      addCourse(result.item.courseCode);
-                    }
+                    setOpen(false);
+                    setIsAdvancedOpen(true);
                   }}
                 >
-                  <span className="font-medium">{result.item.courseCode}</span>{" "}
-                  <span className="text-muted-foreground">
-                    {result.item.courseTitle}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </PopoverContent>
-    </Popover>
+                  <SlidersHorizontalIcon className="size-4" />
+                </InputGroupButton>
+              </InputGroupAddon>
+            </InputGroup>
+          }
+        />
+
+        <PopoverContent
+          initialFocus={false}
+          align="start"
+          className="w-(--anchor-width) p-1"
+        >
+          {results.length === 0 && (
+            <p className="text-muted-foreground px-3 py-4 text-center text-sm">
+              No courses found
+            </p>
+          )}
+
+          {results.length > 0 && (
+            <ul role="listbox" className="flex flex-col gap-0.5">
+              {results.map((result, index) => {
+                const alreadySelected = selectedCodes.has(
+                  result.item.courseCode,
+                );
+                return (
+                  <li
+                    key={result.item.courseCode}
+                    role="option"
+                    aria-selected={index === highlightedIndex}
+                    aria-disabled={alreadySelected}
+                    data-highlighted={index === highlightedIndex || undefined}
+                    className="data-highlighted:bg-muted cursor-default rounded-sm px-3 py-1.5 text-sm select-none aria-disabled:opacity-50"
+                    onPointerMove={() => setHighlightedIndex(index)}
+                    onClick={() => {
+                      if (!alreadySelected) {
+                        addCourse(result.item.courseCode);
+                      }
+                    }}
+                  >
+                    <span className="font-medium">
+                      {result.item.courseCode}
+                    </span>{" "}
+                    <span className="text-muted-foreground">
+                      {result.item.courseTitle}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </PopoverContent>
+      </Popover>
+    </>
   );
 }
