@@ -1,5 +1,6 @@
-import { Input } from "@repo/ui/components/input";
 import { Button } from "@repo/ui/components/button";
+import { Input } from "@repo/ui/components/input";
+import { Label } from "@repo/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import {
   Tooltip,
@@ -52,18 +53,17 @@ export function AdvancedSearchFilters({
       {/* Subject input with integrated search */}
       <div className="grid gap-1.5">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium" htmlFor="subject-filter">
-            Subject code
-          </label>
+          <Label htmlFor="subject-filter">Subject code</Label>
           {hasActiveFilters && (
-            <button
-              type="button"
+            <Button
+              variant="link"
+              size="xs"
               onClick={onClearFilters}
-              className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs transition-colors"
+              className="text-muted-foreground hover:text-foreground"
             >
               <FilterXIcon className="size-3" />
               Clear filters
-            </button>
+            </Button>
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -89,45 +89,51 @@ export function AdvancedSearchFilters({
 
       {/* Filter toggles */}
       <div className="grid gap-3">
-        <fieldset>
-          <legend className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
+        <div>
+          <Label
+            id="year-label"
+            className="text-muted-foreground mb-1.5 text-xs tracking-wide uppercase"
+          >
             Year
-          </legend>
-
+          </Label>
           <RadioGroup
+            aria-labelledby="year-label"
             value={year}
             onValueChange={value => onYearChange(value as YearValue)}
             className="flex flex-wrap gap-x-4 gap-y-2"
           >
             {YEAR_OPTIONS.map(option => (
-              <label key={option.value} className="flex items-center gap-1.5">
+              <Label key={option.value} className="gap-1.5">
                 <RadioGroupItem value={option.value} />
                 <span className="text-xs font-medium whitespace-nowrap">
                   {option.label}
                 </span>
-              </label>
+              </Label>
             ))}
           </RadioGroup>
-        </fieldset>
+        </div>
 
-        <fieldset>
-          <legend className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
+        <div>
+          <Label
+            id="language-label"
+            className="text-muted-foreground mb-1.5 text-xs tracking-wide uppercase"
+          >
             Language
-          </legend>
-
+          </Label>
           <RadioGroup
+            aria-labelledby="language-label"
             value={language}
             onValueChange={value => onLanguageChange(value as LanguageValue)}
             className="flex flex-wrap gap-x-4 gap-y-2"
           >
             {LANGUAGE_OPTIONS.map(option => {
               const radio = (
-                <label key={option.value} className="flex items-center gap-1.5">
+                <Label key={option.value} className="gap-1.5">
                   <RadioGroupItem value={option.value} />
                   <span className="text-xs font-medium whitespace-nowrap">
                     {option.label}
                   </span>
-                </label>
+                </Label>
               );
 
               if (option.description) {
@@ -142,7 +148,7 @@ export function AdvancedSearchFilters({
               return radio;
             })}
           </RadioGroup>
-        </fieldset>
+        </div>
       </div>
     </div>
   );
