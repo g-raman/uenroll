@@ -1,13 +1,4 @@
-import {
-  eq,
-  and,
-  asc,
-  sql,
-  lt,
-  notInArray,
-  inArray,
-  ilike,
-} from "drizzle-orm";
+import { eq, and, asc, sql, lt, notInArray, inArray, ilike } from "drizzle-orm";
 import { db as defaultDb, type Database } from "./index.js";
 import {
   availableSubjectsTable,

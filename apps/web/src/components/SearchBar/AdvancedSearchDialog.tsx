@@ -71,7 +71,11 @@ export function AdvancedSearchDialog({
   } | null>(null);
 
   const normalizedSubject = useMemo(
-    () => subject.trim().toUpperCase().replace(/[^A-Z]/g, ""),
+    () =>
+      subject
+        .trim()
+        .toUpperCase()
+        .replace(/[^A-Z]/g, ""),
     [subject],
   );
   const yearFilter = year === "any" ? undefined : Number(year);
@@ -81,9 +85,7 @@ export function AdvancedSearchDialog({
     (normalizedSubject.length > 0 || yearFilter || languageFilter);
   const hasSubmitted = submittedFilters !== null;
   const hasActiveFilters =
-    normalizedSubject.length > 0 ||
-    year !== "any" ||
-    language !== "any";
+    normalizedSubject.length > 0 || year !== "any" || language !== "any";
   const queryInput = submittedFilters
     ? {
         term,
@@ -148,10 +150,7 @@ export function AdvancedSearchDialog({
           {/* Subject input with integrated search */}
           <div className="grid gap-1.5">
             <div className="flex items-center justify-between">
-              <label
-                className="text-sm font-medium"
-                htmlFor="subject-filter"
-              >
+              <label className="text-sm font-medium" htmlFor="subject-filter">
                 Subject code
               </label>
               {hasActiveFilters && (
@@ -193,7 +192,7 @@ export function AdvancedSearchDialog({
           {/* Filter toggles */}
           <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
             <fieldset className="grid gap-1.5">
-              <legend className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+              <legend className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
                 Year
               </legend>
               <div className="flex gap-1.5">
@@ -207,7 +206,7 @@ export function AdvancedSearchDialog({
                       onChange={() => setYear(option.value)}
                       className="peer sr-only"
                     />
-                    <span className="border-input bg-background text-muted-foreground peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-foreground peer-checked:shadow-xs inline-flex items-center justify-center rounded-md border px-2 py-1 text-xs font-medium whitespace-nowrap transition-all">
+                    <span className="border-input bg-background text-muted-foreground peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-foreground inline-flex items-center justify-center rounded-md border px-2 py-1 text-xs font-medium whitespace-nowrap transition-all peer-checked:shadow-xs">
                       {option.label}
                     </span>
                   </label>
@@ -216,7 +215,7 @@ export function AdvancedSearchDialog({
             </fieldset>
 
             <fieldset className="grid gap-1.5">
-              <legend className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+              <legend className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
                 Language
               </legend>
               <div className="flex gap-1.5">
@@ -230,7 +229,7 @@ export function AdvancedSearchDialog({
                       onChange={() => setLanguage(option.value)}
                       className="peer sr-only"
                     />
-                    <span className="border-input bg-background text-muted-foreground peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-foreground peer-checked:shadow-xs inline-flex items-center justify-center rounded-md border px-2.5 py-1 text-xs font-medium transition-all">
+                    <span className="border-input bg-background text-muted-foreground peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-foreground inline-flex items-center justify-center rounded-md border px-2.5 py-1 text-xs font-medium transition-all peer-checked:shadow-xs">
                       {option.label}
                     </span>
                   </label>
@@ -287,9 +286,7 @@ export function AdvancedSearchDialog({
             {hasSubmitted && !isLoading && courses.length === 0 && (
               <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 px-4 py-10">
                 <SearchIcon className="text-muted-foreground/50 size-6" />
-                <p className="text-sm">
-                  No courses match those filters.
-                </p>
+                <p className="text-sm">No courses match those filters.</p>
               </div>
             )}
 
@@ -297,11 +294,8 @@ export function AdvancedSearchDialog({
             {hasSubmitted && !isLoading && courses.length > 0 && (
               <ul className="flex flex-col divide-y">
                 {courses.map(course => {
-                  const alreadySelected = selectedCodes.has(
-                    course.courseCode,
-                  );
-                  const isDisabled =
-                    alreadySelected || isAdding || isAtLimit;
+                  const alreadySelected = selectedCodes.has(course.courseCode);
+                  const isDisabled = alreadySelected || isAdding || isAtLimit;
                   return (
                     <li
                       key={course.courseCode}
