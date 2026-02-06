@@ -85,7 +85,8 @@ export async function getCoursesByFilter(
 
   // e.g. "CSI2101" → "2" (first digit = year level)
   const yearLevel = sql<string>`substring(${coursesTable.courseCode} from '[0-9]')`;
-  // e.g. "CSI2101" → "1" (second digit = language code: 1-4 english, 5-8 french)
+
+  // e.g. "CSI2101" → "1" (second digit = language code: 1-4 english, 5-8 french, 0/9 bilingual)
   const langCode = sql<string>`substring(${coursesTable.courseCode} from '^[A-Za-z]+[0-9]([0-9])')`;
 
   if (subject) {
@@ -106,6 +107,10 @@ export async function getCoursesByFilter(
 
   if (language === "french") {
     conditions.push(between(langCode, "5", "8"));
+  }
+
+  if (language === "other") {
+    conditions.push(inArray(langCode, ["0", "9"]));
   }
 
   return ResultAsync.fromPromise(

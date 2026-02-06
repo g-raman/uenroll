@@ -39,7 +39,7 @@ export type CourseQueryFilter = {
   term: string;
   subject?: string;
   year?: number;
-  language?: "english" | "french";
+  language?: "english" | "french" | "other";
   limit?: number;
 };
 

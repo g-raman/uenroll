@@ -11,6 +11,11 @@ import {
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import { Button } from "@repo/ui/components/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/ui/components/tooltip";
 import { useQuery } from "@tanstack/react-query";
 import {
   CheckIcon,
@@ -32,9 +37,14 @@ const YEAR_OPTIONS = [
 ] as const;
 
 const LANGUAGE_OPTIONS = [
-  { label: "Any", value: "any" },
-  { label: "English", value: "english" },
-  { label: "French", value: "french" },
+  { label: "Any", value: "any", description: undefined },
+  { label: "English", value: "english", description: undefined },
+  { label: "French", value: "french", description: undefined },
+  {
+    label: "Other",
+    value: "other",
+    description: "Bilingual or other languages (e.g. Spanish)",
+  },
 ] as const;
 
 const RESULTS_LIMIT = 200;
@@ -67,7 +77,7 @@ export function AdvancedSearchDialog({
   const [submittedFilters, setSubmittedFilters] = useState<{
     subject?: string;
     year?: number;
-    language?: "english" | "french";
+    language?: "english" | "french" | "other";
   } | null>(null);
 
   const normalizedSubject = useMemo(
@@ -219,21 +229,34 @@ export function AdvancedSearchDialog({
                 Language
               </legend>
               <div className="flex gap-1.5">
-                {LANGUAGE_OPTIONS.map(option => (
-                  <label key={option.value} className="cursor-pointer">
-                    <input
-                      type="radio"
-                      name="course-language"
-                      value={option.value}
-                      checked={language === option.value}
-                      onChange={() => setLanguage(option.value)}
-                      className="peer sr-only"
-                    />
-                    <span className="border-input bg-background text-muted-foreground peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-foreground inline-flex items-center justify-center rounded-md border px-2.5 py-1 text-xs font-medium transition-all peer-checked:shadow-xs">
-                      {option.label}
-                    </span>
-                  </label>
-                ))}
+                {LANGUAGE_OPTIONS.map(option => {
+                  const radio = (
+                    <label key={option.value} className="cursor-pointer">
+                      <input
+                        type="radio"
+                        name="course-language"
+                        value={option.value}
+                        checked={language === option.value}
+                        onChange={() => setLanguage(option.value)}
+                        className="peer sr-only"
+                      />
+                      <span className="border-input bg-background text-muted-foreground peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-foreground inline-flex items-center justify-center rounded-md border px-2.5 py-1 text-xs font-medium transition-all peer-checked:shadow-xs">
+                        {option.label}
+                      </span>
+                    </label>
+                  );
+
+                  if (option.description) {
+                    return (
+                      <Tooltip key={option.value}>
+                        <TooltipTrigger render={radio} />
+                        <TooltipContent>{option.description}</TooltipContent>
+                      </Tooltip>
+                    );
+                  }
+
+                  return radio;
+                })}
               </div>
             </fieldset>
           </div>

@@ -62,7 +62,7 @@ export const appRouter = router({
         term: z.string(),
         subject: z.string().trim().min(1).optional(),
         year: z.number().int().min(1).max(9).optional(),
-        language: z.enum(["english", "french"]).optional(),
+        language: z.enum(["english", "french", "other"]).optional(),
         limit: z.number().int().min(1).max(500).optional(),
       }),
     )
