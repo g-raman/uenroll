@@ -106,7 +106,10 @@ export function AdvancedSearchResults({
                   >
                     {alreadySelected ? (
                       <>
-                        <CheckIcon className="text-primary mr-1 size-3" />
+                        <CheckIcon
+                          strokeWidth={3}
+                          className="mr-1 size-4 text-emerald-500"
+                        />
                         Added
                       </>
                     ) : (
