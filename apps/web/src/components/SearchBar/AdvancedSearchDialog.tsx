@@ -11,6 +11,7 @@ import {
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import { Button } from "@repo/ui/components/button";
+import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
 import {
   Tooltip,
   TooltipContent,
@@ -198,47 +199,49 @@ export function AdvancedSearchDialog({
           </div>
 
           {/* Filter toggles */}
-          <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
-            <fieldset className="grid gap-1.5">
-              <legend className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+          <div className="grid gap-3">
+            <fieldset>
+              <legend className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
                 Year
               </legend>
-              <div className="flex gap-1.5">
+
+              <RadioGroup
+                value={year}
+                onValueChange={value => setYear(value as YearValue)}
+                className="flex flex-wrap gap-x-4 gap-y-2"
+              >
                 {YEAR_OPTIONS.map(option => (
-                  <label key={option.value} className="cursor-pointer">
-                    <input
-                      type="radio"
-                      name="course-year"
-                      value={option.value}
-                      checked={year === option.value}
-                      onChange={() => setYear(option.value)}
-                      className="peer sr-only"
-                    />
-                    <span className="border-input bg-background text-muted-foreground peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-foreground inline-flex items-center justify-center rounded-md border px-2 py-1 text-xs font-medium whitespace-nowrap transition-all peer-checked:shadow-xs">
+                  <label
+                    key={option.value}
+                    className="flex items-center gap-1.5"
+                  >
+                    <RadioGroupItem value={option.value} />
+                    <span className="text-xs font-medium whitespace-nowrap">
                       {option.label}
                     </span>
                   </label>
                 ))}
-              </div>
+              </RadioGroup>
             </fieldset>
 
-            <fieldset className="grid gap-1.5">
-              <legend className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+            <fieldset>
+              <legend className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
                 Language
               </legend>
-              <div className="flex gap-1.5">
+
+              <RadioGroup
+                value={language}
+                onValueChange={value => setLanguage(value as LanguageValue)}
+                className="flex flex-wrap gap-x-4 gap-y-2"
+              >
                 {LANGUAGE_OPTIONS.map(option => {
                   const radio = (
-                    <label key={option.value} className="cursor-pointer">
-                      <input
-                        type="radio"
-                        name="course-language"
-                        value={option.value}
-                        checked={language === option.value}
-                        onChange={() => setLanguage(option.value)}
-                        className="peer sr-only"
-                      />
-                      <span className="border-input bg-background text-muted-foreground peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-foreground inline-flex items-center justify-center rounded-md border px-2.5 py-1 text-xs font-medium transition-all peer-checked:shadow-xs">
+                    <label
+                      key={option.value}
+                      className="flex items-center gap-1.5"
+                    >
+                      <RadioGroupItem value={option.value} />
+                      <span className="text-xs font-medium whitespace-nowrap">
                         {option.label}
                       </span>
                     </label>
@@ -255,7 +258,7 @@ export function AdvancedSearchDialog({
 
                   return radio;
                 })}
-              </div>
+              </RadioGroup>
             </fieldset>
           </div>
         </div>
