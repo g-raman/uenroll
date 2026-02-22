@@ -15,6 +15,7 @@ export const defaultConfig: WorkflowStepConfig = {
     delay: "10 seconds",
     backoff: "exponential",
   },
+  timeout: "10 seconds",
 };
 
 export const SCRAPING_RETRY_CONFIG: WorkflowStepConfig = {
