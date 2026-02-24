@@ -1,5 +1,11 @@
 # @repo/ui
 
+## 1.0.1
+
+### Patch Changes
+
+- [#162](https://github.com/g-raman/uenroll/pull/162) [`9c6d353`](https://github.com/g-raman/uenroll/commit/9c6d353fa2d3b648ea88208b23955253a13eb98f) Thanks [@g-raman](https://github.com/g-raman)! - Add radio group component
+
 ## 1.0.0
 
 ### Major Changes
