@@ -3,6 +3,8 @@
   "version": "0.6.3",
   "private": true,
   "type": "module",
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -25,8 +27,6 @@
       "require": "./dist/types.cjs"
     }
   },
-  "main": "./dist/index.cjs",
-  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
     "check-types": "tsc --noEmit",
