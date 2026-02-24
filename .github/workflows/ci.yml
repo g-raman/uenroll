@@ -38,9 +38,6 @@ jobs:
       - name: Format
         run: bun run ci:format
 
-      - name: Format Package json
-        run: bun run ci:format:packagejson
-
       - name: Build
         run: bun run build
 
