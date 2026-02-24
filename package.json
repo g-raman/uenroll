@@ -17,8 +17,7 @@
     "build": "turbo run build",
     "build:packages": "turbo run build --filter @repo/db --filter @repo/env --filter @repo/ui",
     "check-types": "turbo run check-types",
-    "ci:format": "prettier --check \"**/*.{js,jsx,ts,tsx,md}\"",
-    "ci:format:packagejson": "sort-package-json --check ./**/package.json --ignore ./**/node_modules --ignore ./**/wasm/",
+    "ci:format": "oxfmt --check",
     "db:down": "docker compose -f ./packages/db/docker-compose.yml down",
     "db:migrate": "turbo run --filter @repo/db db:migrate",
     "db:seed": "turbo run --filter @repo/db db:seed",
@@ -26,8 +25,7 @@
     "db:up": "docker compose -f ./packages/db/docker-compose.yml up -d && bun run db:migrate",
     "dev:scraper": "turbo run --filter uenroll-scraper dev",
     "dev:web": "turbo run --filter web dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "format:packagejson": "sort-package-json ./**/package.json --ignore ./**/node_modules --ignore ./**/wasm",
+    "format": "oxfmt --write",
     "lint": "turbo run lint"
   },
   "dependencies": {
@@ -39,9 +37,6 @@
     "@types/bun": "^1.3.4",
     "eslint": "catalog:",
     "oxfmt": "^0.35.0",
-    "prettier": "^3.7.4",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "sort-package-json": "^3.5.1",
     "tsup": "^8.5.0",
     "turbo": "^2.6.3",
     "typescript": "catalog:"
