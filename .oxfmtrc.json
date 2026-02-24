@@ -9,11 +9,17 @@
   "bracketSpacing": true,
   "endOfLine": "lf",
   "jsxSingleQuote": false,
-  "sortTailwindcss": {},
-  "sortPackageJson": false,
+  "sortTailwindcss": {
+    "stylesheet": "./apps/web/src/app/app.css",
+    "functions": ["clsx", "cn"],
+    "preserveWhitespace": true
+  },
+  "sortPackageJson": true,
   "ignorePatterns": [
     "wasm",
     ".next",
-    "worker-configuration.d.ts"
+    "worker-configuration.d.ts",
+    "dist",
+    "drizzle"
   ]
 }
