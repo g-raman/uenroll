@@ -46,7 +46,7 @@ export default function SearchResults() {
                 className="text-foreground h-min items-baseline gap-0 !px-2 py-1"
                 render={
                   <a
-                    href={`https://uo.zone/course/${course.courseCode.toLowerCase()}`}
+                    href={`https://uo.grades.zone/course/${course.courseCode.toLowerCase()}`}
                     target="_blank"
                     rel="noreferrer"
                   >
