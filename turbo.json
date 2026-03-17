@@ -19,6 +19,15 @@
     "check-types": {
       "dependsOn": ["^check-types"]
     },
+    "db:migrate": {
+      "cache": false
+    },
+    "db:seed": {
+      "cache": false
+    },
+    "db:studio": {
+      "cache": false
+    },
     "dev": {
       "persistent": true,
       "cache": false,
