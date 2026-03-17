@@ -15,10 +15,12 @@ export const defaultConfig: WorkflowStepConfig = {
     delay: "10 seconds",
     backoff: "exponential",
   },
+  timeout: "20 seconds",
 };
 
 export const SCRAPING_RETRY_CONFIG: WorkflowStepConfig = {
   retries: { limit: 5, delay: "3 seconds", backoff: "linear" },
+  timeout: "20 seconds",
 };
 
 export const COURSE_COMPONENTS = [
