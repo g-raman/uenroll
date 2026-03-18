@@ -1,5 +1,17 @@
 # @repo/db
 
+## 0.7.0
+
+### Minor Changes
+
+- [#162](https://github.com/g-raman/uenroll/pull/162) [`9c6d353`](https://github.com/g-raman/uenroll/commit/9c6d353fa2d3b648ea88208b23955253a13eb98f) Thanks [@g-raman](https://github.com/g-raman)! - Add advanced search
+
+### Patch Changes
+
+- [#165](https://github.com/g-raman/uenroll/pull/165) [`9c19924`](https://github.com/g-raman/uenroll/commit/9c19924bfa504d330ec18a2d6ae7d7eb1349e0aa) Thanks [@g-raman](https://github.com/g-raman)! - Update dependencies
+
+- [#164](https://github.com/g-raman/uenroll/pull/164) [`2e85ba0`](https://github.com/g-raman/uenroll/commit/2e85ba005bf352a80a1c25b617224f237bded484) Thanks [@g-raman](https://github.com/g-raman)! - Migrate to oxfmt and run formatter
+
 ## 0.6.3
 
 ### Patch Changes
