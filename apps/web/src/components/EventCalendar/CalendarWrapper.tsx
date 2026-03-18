@@ -18,6 +18,7 @@ import { EventCalendar } from "@/components/EventCalendar/EventCalendar";
 
 const TERM_START_DATES: Record<string, string> = {
   "2261": "2026-01-12", // Winter 2026
+  "2265": "2026-05-04",
 };
 
 export function CalendarWrapper() {
