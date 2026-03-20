@@ -16,10 +16,14 @@ import { useSchedules, useSelectedSchedule } from "@/stores/generatorStore";
 import { GenerationHeader } from "./GenerationHeader";
 import { EventCalendar } from "@/components/EventCalendar/EventCalendar";
 
-const TERM_START_DATES: Record<string, string> = {
-  "2261": "2026-01-12", // Winter 2026
-  "2265": "2026-05-04",
-};
+const TERM_START_DATES = {
+  "2261": "2026-01-12", // 2026 Winter Term
+  "2265": "2026-05-04", // 2026 Spring/Summer Term
+} as const;
+
+function isKnownTerm(term: string): term is keyof typeof TERM_START_DATES {
+  return Object.hasOwn(TERM_START_DATES, term);
+}
 
 export function CalendarWrapper() {
   const [selectedTerm] = useTermParam();
@@ -38,6 +42,11 @@ export function CalendarWrapper() {
   const courseSearchResults = courseQueries
     .filter(query => query.isSuccess)
     .map(query => query.data);
+
+  const termStartDate =
+    selectedTerm && isKnownTerm(selectedTerm)
+      ? TERM_START_DATES[selectedTerm]
+      : undefined;
 
   const events = useMemo(() => {
     return isGenerationMode
@@ -62,15 +71,20 @@ export function CalendarWrapper() {
       return sorted.at(-1)!.start.toPlainDate();
     }
 
-    const termStart = selectedTerm ? TERM_START_DATES[selectedTerm] : undefined;
-    return termStart ? Temporal.PlainDate.from(termStart) : undefined;
-  }, [events, selectedTerm]);
+    return termStartDate ? Temporal.PlainDate.from(termStartDate) : undefined;
+  }, [events, termStartDate]);
 
-  if (!selectedTerm) return;
+  if (!selectedTerm) return null;
 
-  const termStart = Temporal.PlainDate.from(
-    TERM_START_DATES[selectedTerm] as string,
-  );
+  if (!termStartDate) {
+    console.error("Missing term start date for selected term", {
+      selectedTerm,
+      knownTerms: Object.keys(TERM_START_DATES),
+    });
+    return null;
+  }
+
+  const termStart = Temporal.PlainDate.from(termStartDate);
 
   return (
     <div className="flex flex-col gap-2 bg-black md:h-full md:gap-4">

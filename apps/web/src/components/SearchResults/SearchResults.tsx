@@ -1,10 +1,9 @@
 import React from "react";
 
 import CourseResult from "./CourseResult/CourseResult";
-import { Button } from "@repo/ui/components/button";
 import { Accordion, AccordionItem } from "@repo/ui/components/accordion";
-import { ExternalLink } from "lucide-react";
 import { useState } from "react";
+import { ExternalLink } from "lucide-react";
 import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useTermParam } from "@/hooks/useTermParam";
 import { useDataParam } from "@/hooks/useDataParam";
@@ -40,22 +39,18 @@ export default function SearchResults() {
         {courseSearchResults.map(course => {
           return (
             <div className="pb-4 text-sm" key={course.courseCode}>
-              <Button
-                nativeButton={false}
-                variant="link"
-                className="text-foreground h-min items-baseline gap-0 !px-2 py-1"
-                render={
-                  <a
-                    href={`https://uo.grades.zone/course/${course.courseCode.toLowerCase()}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Best Professors for {course.courseCode}&nbsp;
-                    <ExternalLink className="inline size-3" />
-                  </a>
-                }
-              />
-
+              <div className="px-2 pb-1">
+                <a
+                  href={`https://uo.grades.zone/course/${course.courseCode.toLowerCase()}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs transition-colors"
+                  aria-label={`Open ${course.courseCode} on uo.grades.zone`}
+                >
+                  <span>Grades on uo.grades.zone</span>
+                  <ExternalLink className="size-3" aria-hidden="true" />
+                </a>
+              </div>
               <AccordionItem value={course.courseCode}>
                 <CourseResult course={course} openResults={openResults} />
               </AccordionItem>
