@@ -1,9 +1,11 @@
 import posthog from "posthog-js";
 import { envClient } from "@repo/env/client";
 
-posthog.init(envClient.NEXT_PUBLIC_POSTHOG_KEY, {
-  api_host: envClient.NEXT_PUBLIC_POSTHOG_HOST,
-  ui_host: "https://us.posthog.com",
-  defaults: "2025-05-24",
-  capture_exceptions: true,
-});
+if (envClient.NEXT_PUBLIC_POSTHOG_KEY && envClient.NEXT_PUBLIC_POSTHOG_HOST) {
+  posthog.init(envClient.NEXT_PUBLIC_POSTHOG_KEY, {
+    api_host: envClient.NEXT_PUBLIC_POSTHOG_HOST,
+    ui_host: "https://us.posthog.com",
+    defaults: "2025-05-24",
+    capture_exceptions: true,
+  });
+}
