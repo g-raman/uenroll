@@ -1,5 +1,23 @@
 # web
 
+## 2.2.0
+
+### Minor Changes
+
+- [#162](https://github.com/g-raman/uenroll/pull/162) [`9c6d353`](https://github.com/g-raman/uenroll/commit/9c6d353fa2d3b648ea88208b23955253a13eb98f) Thanks [@g-raman](https://github.com/g-raman)! - Add advanced search
+
+### Patch Changes
+
+- [#168](https://github.com/g-raman/uenroll/pull/168) [`4cba8d0`](https://github.com/g-raman/uenroll/commit/4cba8d032a7b4e794ec328971a9a09ee74e36d0b) Thanks [@yaselmo](https://github.com/yaselmo)! - Resolve rebase conflicts, remove the Best Professor label, keep the uo.grades.zone link subtle, and drop rejected old term dates.
+
+- [#167](https://github.com/g-raman/uenroll/pull/167) [`8ceccba`](https://github.com/g-raman/uenroll/commit/8ceccbad935869849e1229c51b342969cfe9c8f0) Thanks [@g-raman](https://github.com/g-raman)! - Fix uo.grades.zone external link
+
+- [#165](https://github.com/g-raman/uenroll/pull/165) [`9c19924`](https://github.com/g-raman/uenroll/commit/9c19924bfa504d330ec18a2d6ae7d7eb1349e0aa) Thanks [@g-raman](https://github.com/g-raman)! - Update dependencies
+
+- [#156](https://github.com/g-raman/uenroll/pull/156) [`86326a1`](https://github.com/g-raman/uenroll/commit/86326a119dfb25564e9a89b9ea6d709c22ca0ca1) Thanks [@g-raman](https://github.com/g-raman)! - Remove labels from download and copy link button
+
+- [#171](https://github.com/g-raman/uenroll/pull/171) [`b90aa50`](https://github.com/g-raman/uenroll/commit/b90aa50185c3e37a6956884fef70e50b1e0eb4f3) Thanks [@g-raman](https://github.com/g-raman)! - Add 2026 Spring/Summer Term date
+
 ## 2.1.0
 
 ### Minor Changes

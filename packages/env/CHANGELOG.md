@@ -1,5 +1,11 @@
 # @repo/env
 
+## 0.4.1
+
+### Patch Changes
+
+- [#164](https://github.com/g-raman/uenroll/pull/164) [`2e85ba0`](https://github.com/g-raman/uenroll/commit/2e85ba005bf352a80a1c25b617224f237bded484) Thanks [@g-raman](https://github.com/g-raman)! - Migrate to oxfmt and run formatter
+
 ## 0.4.0
 
 ### Minor Changes
