@@ -1,5 +1,11 @@
 # web
 
+## 2.2.1
+
+### Patch Changes
+
+- [#176](https://github.com/g-raman/uenroll/pull/176) [`f7da2ed`](https://github.com/g-raman/uenroll/commit/f7da2ed192b4ab1bbb92cc32f8a82f07689316ec) Thanks [@g-raman](https://github.com/g-raman)! - Remove Winter 2026
+
 ## 2.2.0
 
 ### Minor Changes
