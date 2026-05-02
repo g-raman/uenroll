@@ -17,7 +17,6 @@ import { GenerationHeader } from "./GenerationHeader";
 import { EventCalendar } from "@/components/EventCalendar/EventCalendar";
 
 const TERM_START_DATES = {
-  "2261": "2026-01-12", // 2026 Winter Term
   "2265": "2026-05-04", // 2026 Spring/Summer Term
 } as const;
 
