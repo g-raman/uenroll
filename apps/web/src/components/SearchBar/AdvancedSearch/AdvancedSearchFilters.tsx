@@ -166,6 +166,7 @@ export function AdvancedSearchFilters({
             {LANGUAGE_OPTIONS.map(option => {
               const toggle = (
                 <ToggleGroupItem
+                  key={option.value}
                   value={option.value}
                   className="aria-pressed:bg-primary/45 aria-pressed:text-primary-foreground"
                 >
@@ -182,15 +183,7 @@ export function AdvancedSearchFilters({
                 );
               }
 
-              return (
-                <ToggleGroupItem
-                  key={option.value}
-                  value={option.value}
-                  className="aria-pressed:bg-primary/45 aria-pressed:text-primary-foreground"
-                >
-                  {option.label}
-                </ToggleGroupItem>
-              );
+              return toggle;
             })}
           </ToggleGroup>
         </div>
