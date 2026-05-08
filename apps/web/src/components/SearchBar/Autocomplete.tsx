@@ -14,7 +14,6 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@repo/ui/components/input-group";
-import { Button } from "@repo/ui/components/button";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Fuse, { type IFuseOptions } from "fuse.js";
@@ -28,12 +27,8 @@ import {
   type ReactNode,
 } from "react";
 import { toast } from "sonner";
-import {
-  SearchIcon,
-  LoaderCircleIcon,
-  SlidersHorizontalIcon,
-} from "lucide-react";
-import { AdvancedSearchDialog } from "./AdvancedSearchDialog";
+import { SearchIcon, LoaderCircleIcon } from "lucide-react";
+import { AdvancedSearch } from "./AdvancedSearch";
 
 interface CourseMatch {
   courseCode: string;
@@ -63,7 +58,6 @@ export default function Autocomplete({ actions }: AutocompleteProps) {
   const [data, setData] = useDataParam();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
-  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -172,16 +166,6 @@ export default function Autocomplete({ actions }: AutocompleteProps) {
 
   return (
     <>
-      <AdvancedSearchDialog
-        open={isAdvancedOpen}
-        onOpenChange={setIsAdvancedOpen}
-        term={selectedTerm}
-        selectedCodes={selectedCodes}
-        isAdding={isAdding}
-        isAtLimit={isAtLimit}
-        onAddCourse={addCourse}
-      />
-
       <Popover open={open && !!deferredQuery} onOpenChange={setOpen}>
         <PopoverTrigger
           nativeButton={false}
@@ -262,20 +246,14 @@ export default function Autocomplete({ actions }: AutocompleteProps) {
       </Popover>
 
       <div className="flex gap-2">
-        <Button
-          type="button"
-          className="grow"
-          variant="outline"
-          size="lg"
-          disabled={isAdding}
-          onClick={() => {
-            setOpen(false);
-            setIsAdvancedOpen(true);
-          }}
-        >
-          <SlidersHorizontalIcon className="size-4" />
-          <p className="text-xs">Advanced search</p>
-        </Button>
+        <AdvancedSearch
+          term={selectedTerm}
+          selectedCodes={selectedCodes}
+          isAdding={isAdding}
+          isAtLimit={isAtLimit}
+          onAddCourse={addCourse}
+          onOpen={() => setOpen(false)}
+        />
         {actions}
       </div>
     </>
