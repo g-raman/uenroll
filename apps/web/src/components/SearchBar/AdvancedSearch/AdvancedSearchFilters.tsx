@@ -77,7 +77,6 @@ export function AdvancedSearchFilters({
             size="xs"
             onClick={onClearFilters}
             disabled={!hasActiveFilters}
-            aria-hidden={!hasActiveFilters}
             tabIndex={hasActiveFilters ? undefined : -1}
             data-active={hasActiveFilters}
             className="text-muted-foreground hover:text-primary invisible disabled:opacity-0 data-[active=true]:visible"
