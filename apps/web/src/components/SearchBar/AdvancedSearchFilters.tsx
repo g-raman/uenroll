@@ -72,17 +72,19 @@ export function AdvancedSearchFilters({
             Subject code
           </Label>
 
-          {hasActiveFilters && (
-            <Button
-              variant="link"
-              size="xs"
-              onClick={onClearFilters}
-              className="text-muted-foreground hover:text-primary"
-            >
-              <FilterXIcon className="size-3" />
-              Clear filters
-            </Button>
-          )}
+          <Button
+            variant="link"
+            size="xs"
+            onClick={onClearFilters}
+            disabled={!hasActiveFilters}
+            aria-hidden={!hasActiveFilters}
+            tabIndex={hasActiveFilters ? undefined : -1}
+            data-active={hasActiveFilters}
+            className="text-muted-foreground hover:text-primary invisible disabled:opacity-0 data-[active=true]:visible"
+          >
+            <FilterXIcon className="size-3" />
+            Clear filters
+          </Button>
         </div>
 
         <div className="flex items-center gap-2">
