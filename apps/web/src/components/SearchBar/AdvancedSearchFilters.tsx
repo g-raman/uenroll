@@ -77,7 +77,7 @@ export function AdvancedSearchFilters({
               variant="link"
               size="xs"
               onClick={onClearFilters}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-primary"
             >
               <FilterXIcon className="size-3" />
               Clear filters
@@ -130,7 +130,11 @@ export function AdvancedSearchFilters({
             className="flex-wrap"
           >
             {YEAR_OPTIONS.map(option => (
-              <ToggleGroupItem key={option.value} value={option.value}>
+              <ToggleGroupItem
+                key={option.value}
+                value={option.value}
+                className="aria-pressed:bg-primary/45 aria-pressed:text-primary-foreground"
+              >
                 {option.label}
               </ToggleGroupItem>
             ))}
@@ -160,7 +164,10 @@ export function AdvancedSearchFilters({
           >
             {LANGUAGE_OPTIONS.map(option => {
               const toggle = (
-                <ToggleGroupItem value={option.value}>
+                <ToggleGroupItem
+                  value={option.value}
+                  className="aria-pressed:bg-primary/45 aria-pressed:text-primary-foreground"
+                >
                   {option.label}
                 </ToggleGroupItem>
               );
@@ -175,7 +182,11 @@ export function AdvancedSearchFilters({
               }
 
               return (
-                <ToggleGroupItem key={option.value} value={option.value}>
+                <ToggleGroupItem
+                  key={option.value}
+                  value={option.value}
+                  className="aria-pressed:bg-primary/45 aria-pressed:text-primary-foreground"
+                >
                   {option.label}
                 </ToggleGroupItem>
               );
