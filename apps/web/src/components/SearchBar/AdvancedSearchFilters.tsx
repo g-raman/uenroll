@@ -1,7 +1,7 @@
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import {
   Tooltip,
   TooltipContent,
@@ -102,21 +102,25 @@ export function AdvancedSearchFilters({
             Year
           </Label>
 
-          <RadioGroup
+          <ToggleGroup
             aria-labelledby="year-label"
-            value={year}
-            onValueChange={value => onYearChange(value as YearValue)}
-            className="flex flex-wrap gap-x-4 gap-y-2"
+            value={[year]}
+            onValueChange={value => {
+              if (value[0]) {
+                onYearChange(value[0] as YearValue);
+              }
+            }}
+            variant="outline"
+            size="sm"
+            spacing={1}
+            className="flex-wrap"
           >
             {YEAR_OPTIONS.map(option => (
-              <Label key={option.value} className="gap-1.5">
-                <RadioGroupItem value={option.value} />
-                <span className="text-xs font-medium whitespace-nowrap">
-                  {option.label}
-                </span>
-              </Label>
+              <ToggleGroupItem key={option.value} value={option.value}>
+                {option.label}
+              </ToggleGroupItem>
             ))}
-          </RadioGroup>
+          </ToggleGroup>
         </div>
 
         <div>
@@ -126,34 +130,42 @@ export function AdvancedSearchFilters({
           >
             Language
           </Label>
-          <RadioGroup
+          <ToggleGroup
             aria-labelledby="language-label"
-            value={language}
-            onValueChange={value => onLanguageChange(value as LanguageValue)}
-            className="flex flex-wrap gap-x-4 gap-y-2"
+            value={[language]}
+            onValueChange={value => {
+              if (value[0]) {
+                onLanguageChange(value[0] as LanguageValue);
+              }
+            }}
+            variant="outline"
+            size="sm"
+            spacing={1}
+            className="flex-wrap"
           >
             {LANGUAGE_OPTIONS.map(option => {
-              const radio = (
-                <Label key={option.value} className="gap-1.5">
-                  <RadioGroupItem value={option.value} />
-                  <span className="text-xs font-medium whitespace-nowrap">
-                    {option.label}
-                  </span>
-                </Label>
+              const toggle = (
+                <ToggleGroupItem value={option.value}>
+                  {option.label}
+                </ToggleGroupItem>
               );
 
               if (option.description) {
                 return (
                   <Tooltip key={option.value}>
-                    <TooltipTrigger render={radio} />
+                    <TooltipTrigger render={toggle} />
                     <TooltipContent>{option.description}</TooltipContent>
                   </Tooltip>
                 );
               }
 
-              return radio;
+              return (
+                <ToggleGroupItem key={option.value} value={option.value}>
+                  {option.label}
+                </ToggleGroupItem>
+              );
             })}
-          </RadioGroup>
+          </ToggleGroup>
         </div>
       </div>
     </div>
