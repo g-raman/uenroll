@@ -93,7 +93,7 @@ export function AdvancedSearchFilters({
       </div>
 
       {/* Filter toggles */}
-      <div className="flex flex-col gap-3">
+      <div className="flex gap-3">
         <div>
           <Label
             id="year-label"
