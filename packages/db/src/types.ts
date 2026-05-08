@@ -38,8 +38,8 @@ export type CourseDetailsInsert = {
 export type CourseQueryFilter = {
   term: string;
   subject?: string;
-  year?: number;
-  language?: "english" | "french" | "other";
+  year?: number[];
+  language?: ("english" | "french" | "other")[];
   limit?: number;
 };
 

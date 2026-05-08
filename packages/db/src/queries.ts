@@ -1,4 +1,14 @@
-import { eq, and, asc, sql, lt, notInArray, inArray, ilike } from "drizzle-orm";
+import {
+  eq,
+  and,
+  asc,
+  sql,
+  lt,
+  notInArray,
+  inArray,
+  ilike,
+  or,
+} from "drizzle-orm";
 import { db as defaultDb, type Database } from "./index.js";
 import {
   availableSubjectsTable,
@@ -67,9 +77,8 @@ export async function getCoursesByFilter(
   database: Database = defaultDb,
 ) {
   const subject = filter.subject?.trim().toUpperCase() ?? "";
-  const yearDigit = filter.year ? String(filter.year).slice(0, 1) : undefined;
-  const isGraduateLevel = filter.year !== undefined && filter.year >= 5;
-  const language = filter.language;
+  const years = filter.year ?? [];
+  const languages = filter.language ?? [];
   const conditions = [eq(coursesTable.term, filter.term)];
 
   // e.g. "CSI2101" → "2" (first digit = year level)
@@ -82,24 +91,36 @@ export async function getCoursesByFilter(
     conditions.push(ilike(coursesTable.courseCode, `${subject}%`));
   }
 
-  if (yearDigit && !isGraduateLevel) {
-    conditions.push(sql`${yearLevel} = ${yearDigit}`);
+  if (years.length > 0) {
+    conditions.push(
+      or(
+        ...years.map(year => {
+          const yearDigit = String(year).slice(0, 1);
+
+          return year >= 5
+            ? sql`${yearLevel} >= '5'`
+            : sql`${yearLevel} = ${yearDigit}`;
+        }),
+      )!,
+    );
   }
 
-  if (yearDigit && isGraduateLevel) {
-    conditions.push(sql`${yearLevel} >= '5'`);
-  }
+  if (languages.length > 0) {
+    conditions.push(
+      or(
+        ...languages.map(language => {
+          if (language === "english") {
+            return sql`${langCode} between '1' and '4'`;
+          }
 
-  if (language === "english") {
-    conditions.push(sql`${langCode} between '1' and '4'`);
-  }
+          if (language === "french") {
+            return sql`${langCode} between '5' and '8'`;
+          }
 
-  if (language === "french") {
-    conditions.push(sql`${langCode} between '5' and '8'`);
-  }
-
-  if (language === "other") {
-    conditions.push(sql`${langCode} in ('0', '9')`);
+          return sql`${langCode} in ('0', '9')`;
+        }),
+      )!,
+    );
   }
 
   return ResultAsync.fromPromise(

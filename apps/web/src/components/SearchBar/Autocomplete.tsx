@@ -12,7 +12,6 @@ import {
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupButton,
   InputGroupInput,
 } from "@repo/ui/components/input-group";
 import { Skeleton } from "@repo/ui/components/skeleton";
@@ -27,12 +26,10 @@ import {
   type KeyboardEvent,
 } from "react";
 import { toast } from "sonner";
-import {
-  SearchIcon,
-  LoaderCircleIcon,
-  SlidersHorizontalIcon,
-} from "lucide-react";
-import { AdvancedSearchDialog } from "./AdvancedSearchDialog";
+import { SearchIcon, LoaderCircleIcon } from "lucide-react";
+import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
+import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
+import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton/ThemeSwitchingButton";
 
 interface CourseMatch {
   courseCode: string;
@@ -58,7 +55,6 @@ export default function Autocomplete() {
   const [data, setData] = useDataParam();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
-  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -167,16 +163,6 @@ export default function Autocomplete() {
 
   return (
     <>
-      <AdvancedSearchDialog
-        open={isAdvancedOpen}
-        onOpenChange={setIsAdvancedOpen}
-        term={selectedTerm}
-        selectedCodes={selectedCodes}
-        isAdding={isAdding}
-        isAtLimit={isAtLimit}
-        onAddCourse={addCourse}
-      />
-
       <Popover open={open && !!deferredQuery} onOpenChange={setOpen}>
         <PopoverTrigger
           nativeButton={false}
@@ -206,20 +192,6 @@ export default function Autocomplete() {
                 placeholder="Search for a course..."
                 disabled={isAdding}
               />
-              <InputGroupAddon align="inline-end">
-                <InputGroupButton
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label="Open advanced search"
-                  disabled={isAdding}
-                  onClick={() => {
-                    setOpen(false);
-                    setIsAdvancedOpen(true);
-                  }}
-                >
-                  <SlidersHorizontalIcon className="size-4" />
-                </InputGroupButton>
-              </InputGroupAddon>
             </InputGroup>
           }
         />
@@ -269,6 +241,20 @@ export default function Autocomplete() {
           )}
         </PopoverContent>
       </Popover>
+
+      <div className="flex gap-2">
+        <AdvancedSearch
+          term={selectedTerm}
+          selectedCodes={selectedCodes}
+          isAdding={isAdding}
+          isAtLimit={isAtLimit}
+          onAddCourse={addCourse}
+          onOpen={() => setOpen(false)}
+        />
+
+        <DeleteSearchResultsButton />
+        <ThemeSwitchingButton />
+      </div>
     </>
   );
 }

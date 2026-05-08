@@ -1,7 +1,7 @@
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
-import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import {
   Tooltip,
   TooltipContent,
@@ -19,15 +19,30 @@ import {
 type AdvancedSearchFiltersProps = {
   subject: string;
   onSubjectChange: (value: string) => void;
-  year: YearValue;
-  onYearChange: (value: YearValue) => void;
-  language: LanguageValue;
-  onLanguageChange: (value: LanguageValue) => void;
+  year: YearValue[];
+  onYearChange: (value: YearValue[]) => void;
+  language: LanguageValue[];
+  onLanguageChange: (value: LanguageValue[]) => void;
   canSearch: boolean;
   hasActiveFilters: boolean;
   onSearch: () => void;
   onClearFilters: () => void;
 };
+
+function getExclusiveAnyValues<T extends string>(
+  nextValue: string[],
+  currentValue: T[],
+) {
+  if (nextValue.length === 0) {
+    return ["any"] as T[];
+  }
+
+  if (nextValue.includes("any") && !currentValue.includes("any" as T)) {
+    return ["any"] as T[];
+  }
+
+  return nextValue.filter(value => value !== "any") as T[];
+}
 
 export function AdvancedSearchFilters({
   subject,
@@ -57,17 +72,18 @@ export function AdvancedSearchFilters({
             Subject code
           </Label>
 
-          {hasActiveFilters && (
-            <Button
-              variant="link"
-              size="xs"
-              onClick={onClearFilters}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <FilterXIcon className="size-3" />
-              Clear filters
-            </Button>
-          )}
+          <Button
+            variant="link"
+            size="xs"
+            onClick={onClearFilters}
+            disabled={!hasActiveFilters}
+            tabIndex={hasActiveFilters ? undefined : -1}
+            data-active={hasActiveFilters}
+            className="text-muted-foreground hover:text-primary invisible disabled:opacity-0 data-[active=true]:visible"
+          >
+            <FilterXIcon className="size-3" />
+            Clear filters
+          </Button>
         </div>
 
         <div className="flex items-center gap-2">
@@ -93,7 +109,7 @@ export function AdvancedSearchFilters({
       </div>
 
       {/* Filter toggles */}
-      <div className="flex flex-col gap-3">
+      <div className="flex gap-3">
         <div>
           <Label
             id="year-label"
@@ -102,21 +118,28 @@ export function AdvancedSearchFilters({
             Year
           </Label>
 
-          <RadioGroup
+          <ToggleGroup
             aria-labelledby="year-label"
+            multiple
             value={year}
-            onValueChange={value => onYearChange(value as YearValue)}
-            className="flex flex-wrap gap-x-4 gap-y-2"
+            onValueChange={value => {
+              onYearChange(getExclusiveAnyValues<YearValue>(value, year));
+            }}
+            variant="outline"
+            size="sm"
+            spacing={1}
+            className="flex-wrap"
           >
             {YEAR_OPTIONS.map(option => (
-              <Label key={option.value} className="gap-1.5">
-                <RadioGroupItem value={option.value} />
-                <span className="text-xs font-medium whitespace-nowrap">
-                  {option.label}
-                </span>
-              </Label>
+              <ToggleGroupItem
+                key={option.value}
+                value={option.value}
+                className="aria-pressed:bg-primary/45 aria-pressed:text-primary-foreground"
+              >
+                {option.label}
+              </ToggleGroupItem>
             ))}
-          </RadioGroup>
+          </ToggleGroup>
         </div>
 
         <div>
@@ -126,34 +149,43 @@ export function AdvancedSearchFilters({
           >
             Language
           </Label>
-          <RadioGroup
+          <ToggleGroup
             aria-labelledby="language-label"
+            multiple
             value={language}
-            onValueChange={value => onLanguageChange(value as LanguageValue)}
-            className="flex flex-wrap gap-x-4 gap-y-2"
+            onValueChange={value => {
+              onLanguageChange(
+                getExclusiveAnyValues<LanguageValue>(value, language),
+              );
+            }}
+            variant="outline"
+            size="sm"
+            spacing={1}
+            className="flex-wrap"
           >
             {LANGUAGE_OPTIONS.map(option => {
-              const radio = (
-                <Label key={option.value} className="gap-1.5">
-                  <RadioGroupItem value={option.value} />
-                  <span className="text-xs font-medium whitespace-nowrap">
-                    {option.label}
-                  </span>
-                </Label>
+              const toggle = (
+                <ToggleGroupItem
+                  key={option.value}
+                  value={option.value}
+                  className="aria-pressed:bg-primary/45 aria-pressed:text-primary-foreground"
+                >
+                  {option.label}
+                </ToggleGroupItem>
               );
 
               if (option.description) {
                 return (
                   <Tooltip key={option.value}>
-                    <TooltipTrigger render={radio} />
+                    <TooltipTrigger render={toggle} />
                     <TooltipContent>{option.description}</TooltipContent>
                   </Tooltip>
                 );
               }
 
-              return radio;
+              return toggle;
             })}
-          </RadioGroup>
+          </ToggleGroup>
         </div>
       </div>
     </div>
