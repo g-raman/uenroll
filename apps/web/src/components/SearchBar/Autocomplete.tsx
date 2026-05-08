@@ -28,7 +28,7 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { SearchIcon, LoaderCircleIcon } from "lucide-react";
-import { AdvancedSearch } from "./AdvancedSearch";
+import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
 
 interface CourseMatch {
   courseCode: string;
