@@ -12,9 +12,9 @@ import {
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupButton,
   InputGroupInput,
 } from "@repo/ui/components/input-group";
+import { Button } from "@repo/ui/components/button";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Fuse, { type IFuseOptions } from "fuse.js";
@@ -25,6 +25,7 @@ import {
   useState,
   useCallback,
   type KeyboardEvent,
+  type ReactNode,
 } from "react";
 import { toast } from "sonner";
 import {
@@ -46,6 +47,10 @@ const FUSE_OPTIONS: IFuseOptions<CourseMatch> = {
   keys: ["courseCode", "courseTitle"],
 };
 
+type AutocompleteProps = {
+  actions?: ReactNode;
+};
+
 function stripSpacesFromCourseCode(input: string): string {
   if (/^[A-Za-z]{2,4}\s+\d/.test(input)) {
     return input.replace(/\s+/g, "");
@@ -53,7 +58,7 @@ function stripSpacesFromCourseCode(input: string): string {
   return input;
 }
 
-export default function Autocomplete() {
+export default function Autocomplete({ actions }: AutocompleteProps) {
   const [selectedTerm] = useTermParam();
   const [data, setData] = useDataParam();
   const [query, setQuery] = useState("");
@@ -206,20 +211,6 @@ export default function Autocomplete() {
                 placeholder="Search for a course..."
                 disabled={isAdding}
               />
-              <InputGroupAddon align="inline-end">
-                <InputGroupButton
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label="Open advanced search"
-                  disabled={isAdding}
-                  onClick={() => {
-                    setOpen(false);
-                    setIsAdvancedOpen(true);
-                  }}
-                >
-                  <SlidersHorizontalIcon className="size-4" />
-                </InputGroupButton>
-              </InputGroupAddon>
             </InputGroup>
           }
         />
@@ -269,6 +260,24 @@ export default function Autocomplete() {
           )}
         </PopoverContent>
       </Popover>
+
+      <div className="flex gap-2">
+        <Button
+          type="button"
+          className="grow"
+          variant="outline"
+          size="lg"
+          disabled={isAdding}
+          onClick={() => {
+            setOpen(false);
+            setIsAdvancedOpen(true);
+          }}
+        >
+          <SlidersHorizontalIcon className="size-4" />
+          <p className="text-xs">Advanced search</p>
+        </Button>
+        {actions}
+      </div>
     </>
   );
 }
