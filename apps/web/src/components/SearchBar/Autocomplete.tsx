@@ -24,11 +24,12 @@ import {
   useState,
   useCallback,
   type KeyboardEvent,
-  type ReactNode,
 } from "react";
 import { toast } from "sonner";
 import { SearchIcon, LoaderCircleIcon } from "lucide-react";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
+import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
+import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton/ThemeSwitchingButton";
 
 interface CourseMatch {
   courseCode: string;
@@ -42,10 +43,6 @@ const FUSE_OPTIONS: IFuseOptions<CourseMatch> = {
   keys: ["courseCode", "courseTitle"],
 };
 
-type AutocompleteProps = {
-  actions?: ReactNode;
-};
-
 function stripSpacesFromCourseCode(input: string): string {
   if (/^[A-Za-z]{2,4}\s+\d/.test(input)) {
     return input.replace(/\s+/g, "");
@@ -53,7 +50,7 @@ function stripSpacesFromCourseCode(input: string): string {
   return input;
 }
 
-export default function Autocomplete({ actions }: AutocompleteProps) {
+export default function Autocomplete() {
   const [selectedTerm] = useTermParam();
   const [data, setData] = useDataParam();
   const [query, setQuery] = useState("");
@@ -254,7 +251,9 @@ export default function Autocomplete({ actions }: AutocompleteProps) {
           onAddCourse={addCourse}
           onOpen={() => setOpen(false)}
         />
-        {actions}
+
+        <DeleteSearchResultsButton />
+        <ThemeSwitchingButton />
       </div>
     </>
   );
