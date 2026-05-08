@@ -49,7 +49,7 @@ export function AdvancedSearchResults({
         )}
       </div>
 
-      <div className="border-input bg-muted/20 max-h-72 overflow-auto rounded-lg border">
+      <div className="border-input bg-muted/20 h-80 overflow-auto rounded-lg border">
         {/* Empty state — no filters submitted yet */}
         {!hasSubmitted && (
           <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 px-4 py-10">
