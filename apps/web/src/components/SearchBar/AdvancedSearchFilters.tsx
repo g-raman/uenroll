@@ -19,15 +19,30 @@ import {
 type AdvancedSearchFiltersProps = {
   subject: string;
   onSubjectChange: (value: string) => void;
-  year: YearValue;
-  onYearChange: (value: YearValue) => void;
-  language: LanguageValue;
-  onLanguageChange: (value: LanguageValue) => void;
+  year: YearValue[];
+  onYearChange: (value: YearValue[]) => void;
+  language: LanguageValue[];
+  onLanguageChange: (value: LanguageValue[]) => void;
   canSearch: boolean;
   hasActiveFilters: boolean;
   onSearch: () => void;
   onClearFilters: () => void;
 };
+
+function getExclusiveAnyValues<T extends string>(
+  nextValue: string[],
+  currentValue: T[],
+) {
+  if (nextValue.length === 0) {
+    return ["any"] as T[];
+  }
+
+  if (nextValue.includes("any") && !currentValue.includes("any" as T)) {
+    return ["any"] as T[];
+  }
+
+  return nextValue.filter(value => value !== "any") as T[];
+}
 
 export function AdvancedSearchFilters({
   subject,
@@ -104,11 +119,10 @@ export function AdvancedSearchFilters({
 
           <ToggleGroup
             aria-labelledby="year-label"
-            value={[year]}
+            multiple
+            value={year}
             onValueChange={value => {
-              if (value[0]) {
-                onYearChange(value[0] as YearValue);
-              }
+              onYearChange(getExclusiveAnyValues<YearValue>(value, year));
             }}
             variant="outline"
             size="sm"
@@ -132,11 +146,12 @@ export function AdvancedSearchFilters({
           </Label>
           <ToggleGroup
             aria-labelledby="language-label"
-            value={[language]}
+            multiple
+            value={language}
             onValueChange={value => {
-              if (value[0]) {
-                onLanguageChange(value[0] as LanguageValue);
-              }
+              onLanguageChange(
+                getExclusiveAnyValues<LanguageValue>(value, language),
+              );
             }}
             variant="outline"
             size="sm"

@@ -39,12 +39,12 @@ export function AdvancedSearchDialog({
   onAddCourse,
 }: AdvancedSearchDialogProps) {
   const [subject, setSubject] = useState("");
-  const [year, setYear] = useState<YearValue>("any");
-  const [language, setLanguage] = useState<LanguageValue>("any");
+  const [year, setYear] = useState<YearValue[]>(["any"]);
+  const [language, setLanguage] = useState<LanguageValue[]>(["any"]);
   const [submittedFilters, setSubmittedFilters] = useState<{
     subject?: string;
-    year?: number;
-    language?: "english" | "french" | "other";
+    year?: number[];
+    language?: ("english" | "french" | "other")[];
   } | null>(null);
 
   const normalizedSubject = useMemo(
@@ -55,12 +55,20 @@ export function AdvancedSearchDialog({
         .replace(/[^A-Z]/g, ""),
     [subject],
   );
-  const yearFilter = year === "any" ? undefined : Number(year);
-  const languageFilter = language === "any" ? undefined : language;
+  const selectedYears = year.filter(value => value !== "any");
+  const selectedLanguages = language.filter(value => value !== "any");
+  const yearFilter = selectedYears.length
+    ? selectedYears.map(value => Number(value))
+    : undefined;
+  const languageFilter = selectedLanguages.length
+    ? selectedLanguages.map(value => value as "english" | "french" | "other")
+    : undefined;
   const canSearch = Boolean(term) && normalizedSubject.length > 0;
   const hasSubmitted = submittedFilters !== null;
   const hasActiveFilters =
-    normalizedSubject.length > 0 || year !== "any" || language !== "any";
+    normalizedSubject.length > 0 ||
+    selectedYears.length > 0 ||
+    selectedLanguages.length > 0;
   const queryInput = submittedFilters
     ? {
         term,
@@ -97,8 +105,8 @@ export function AdvancedSearchDialog({
 
   const handleClearFilters = () => {
     setSubject("");
-    setYear("any");
-    setLanguage("any");
+    setYear(["any"]);
+    setLanguage(["any"]);
     setSubmittedFilters(null);
   };
 
