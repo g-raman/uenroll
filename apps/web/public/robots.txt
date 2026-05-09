@@ -1,0 +1,5 @@
+// public/robots.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://uenroll.ca/sitemap.xml
