@@ -1,5 +1,21 @@
-import { nextJsConfig } from "@repo/eslint-config/next-js";
+import { config as reactConfig } from "@repo/eslint-config/react-internal";
 import { globalIgnores } from "eslint/config";
 
 /** @type {import("eslint").Linter.Config} */
-export default [...nextJsConfig, globalIgnores(["./public/wasm/"])];
+export default [
+  ...reactConfig,
+  {
+    rules: {
+      "react/prop-types": "off",
+    },
+  },
+  globalIgnores([
+    "./.next/",
+    "./.output/",
+    "./.tanstack/",
+    "./.turbo/",
+    "./node_modules/",
+    "./public/wasm/",
+    "./src/routeTree.gen.ts",
+  ]),
+];
