@@ -15,30 +15,23 @@ import {
 } from "@/utils/mappers/course";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
-import { Switch } from "@repo/ui/components/switch";
-import { Label } from "@repo/ui/components/label";
 import { Input } from "@repo/ui/components/input";
-import { useMode, useUserSettingsActions } from "@/stores/modeStore";
+import { useMode } from "@/stores/modeStore";
 import { ChangeEvent, useRef, useState } from "react";
-import { Selected } from "@/types/Types";
 import {
   filterCoursesWithVirutalSessions,
   sortCoursesByNumSubSections,
 } from "@/utils/course";
 import { toast } from "sonner";
 import { useScreenSize } from "@/hooks/useScreenSize";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@repo/ui/components/tooltip";
+import { ModeSwitcherButton } from "../Buttons/ModeSwitcherButton";
 
 export function GenerationHeader() {
   const [loading, setLoading] = useState(false);
   const workerRef = useRef<Worker | null>(null);
 
   const [selectedTerm] = useTermParam();
-  const [data, setData] = useDataParam();
+  const [data] = useDataParam();
   const courseCodes = Object.keys(data ? data : {});
 
   const courseQueries = useCourseQueries(
@@ -48,7 +41,6 @@ export function GenerationHeader() {
   );
 
   const isGenerationMode = useMode();
-  const { toggleMode } = useUserSettingsActions();
   const excluded = useExcluded();
 
   const schedules = useSchedules();
@@ -56,13 +48,8 @@ export function GenerationHeader() {
   const noSchedules = schedules.length <= 0;
   const { width } = useScreenSize();
 
-  const {
-    previousSchedule,
-    nextSchedule,
-    setSelectedSchedule,
-    setSchedules,
-    resetSchedules,
-  } = useGeneratorActions();
+  const { previousSchedule, nextSchedule, setSelectedSchedule, setSchedules } =
+    useGeneratorActions();
 
   const courseSearchResults = courseQueries
     .filter(query => query.isSuccess)
@@ -139,15 +126,6 @@ export function GenerationHeader() {
     nextSchedule();
   };
 
-  const handleToggle = () => {
-    const courseCodes = Object.keys(data ? data : {});
-    const newData: Selected = {};
-    courseCodes.forEach(courseCode => (newData[courseCode] = []));
-    setData(newData);
-    resetSchedules();
-    toggleMode();
-  };
-
   return (
     <div className="bg-background sticky top-0 z-10 flex items-center justify-between gap-2 rounded-b-lg border-b p-2 lg:rounded-lg lg:border">
       {width && width >= 1024 && (
@@ -215,31 +193,7 @@ export function GenerationHeader() {
           </Button>
         </div>
       )}
-
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="generation-mode"
-                className="cursor-pointer"
-                checked={isGenerationMode}
-                onCheckedChange={handleToggle}
-              />
-              <Label
-                className="w-min cursor-pointer text-xs md:w-max lg:text-sm"
-                htmlFor="generation-mode"
-              >
-                Schedule Generation
-              </Label>
-            </div>
-          }
-        />
-
-        <TooltipContent>
-          Turn this on to automatically generate all possible schedules
-        </TooltipContent>
-      </Tooltip>
+      <ModeSwitcherButton />
     </div>
   );
 }
