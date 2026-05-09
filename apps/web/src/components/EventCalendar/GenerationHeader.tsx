@@ -146,7 +146,7 @@ export function GenerationHeader() {
           <div className="flex items-center">
             <Button
               disabled={noSchedules}
-              className="w-6 rounded-e-none border-e-[0px]"
+              className="w-6 rounded-e-none border-e-0"
               variant="outline"
               onClick={handlePrevious}
             >
@@ -156,7 +156,7 @@ export function GenerationHeader() {
             <div className="flex h-full items-center">
               <Input
                 onChange={handleInputChange}
-                className="!max-w-8 rounded-none text-center text-xs lg:!max-w-28 lg:text-sm"
+                className="max-w-8! rounded-none text-center text-xs lg:max-w-28! lg:text-sm"
                 disabled={noSchedules}
                 value={
                   noSchedules
@@ -175,7 +175,7 @@ export function GenerationHeader() {
 
             <Button
               disabled={noSchedules}
-              className="w-6 rounded-s-none border-s-[0px]"
+              className="w-6 rounded-s-none border-s-0"
               variant="outline"
               onClick={handleNext}
             >
