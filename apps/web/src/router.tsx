@@ -13,7 +13,7 @@ const getTRPCUrl = () => {
     return "/api/trpc";
   }
 
-  return `${envClient.NEXT_PUBLIC_BASE_URL}/api/trpc`;
+  return `${envClient.VITE_BASE_URL}/api/trpc`;
 };
 
 export const trpc = createTRPCOptionsProxy<AppRouter>({

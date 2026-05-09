@@ -16,7 +16,7 @@ import { PostHogInit } from "@/components/PostHogInit";
 import appCss from "./app.css?url";
 import shadcnCss from "@repo/ui/shadcn.css?url";
 
-const siteUrl = envClient.NEXT_PUBLIC_BASE_URL;
+const siteUrl = envClient.VITE_BASE_URL;
 const siteName = "uEnroll";
 const siteDescription = "A modern schedule builder for uOttawa students";
 

@@ -9,15 +9,9 @@ export default defineConfig(({ mode }) => {
 
   return {
     define: {
-      "process.env.NEXT_PUBLIC_BASE_URL": JSON.stringify(
-        env.NEXT_PUBLIC_BASE_URL,
-      ),
-      "process.env.NEXT_PUBLIC_POSTHOG_HOST": JSON.stringify(
-        env.NEXT_PUBLIC_POSTHOG_HOST,
-      ),
-      "process.env.NEXT_PUBLIC_POSTHOG_KEY": JSON.stringify(
-        env.NEXT_PUBLIC_POSTHOG_KEY,
-      ),
+      "process.env.VITE_BASE_URL": JSON.stringify(env.VITE_BASE_URL),
+      "process.env.VITE_POSTHOG_HOST": JSON.stringify(env.VITE_POSTHOG_HOST),
+      "process.env.VITE_POSTHOG_KEY": JSON.stringify(env.VITE_POSTHOG_KEY),
     },
     server: {
       port: 3000,

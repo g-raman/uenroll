@@ -51,7 +51,7 @@ export const CopyLinkButton = () => {
   const handleClick = useCallback(async () => {
     const clipboardAppendResult = await ResultAsync.fromPromise(
       navigator.clipboard.writeText(
-        `${envClient.NEXT_PUBLIC_BASE_URL}/?term=${selectedTerm}&data=${serialized}`,
+        `${envClient.VITE_BASE_URL}/?term=${selectedTerm}&data=${serialized}`,
       ),
       error => new Error(`Failed to copy url: ${error}`),
     );
