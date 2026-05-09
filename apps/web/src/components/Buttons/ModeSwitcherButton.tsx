@@ -1,5 +1,4 @@
-import { Label } from "@repo/ui/components/label";
-import { Switch } from "@repo/ui/components/switch";
+import { Button } from "@repo/ui/components/button";
 import {
   Tooltip,
   TooltipContent,
@@ -30,26 +29,28 @@ export const ModeSwitcherButton = () => {
     <Tooltip>
       <TooltipTrigger
         render={
-          <div className="flex items-center space-x-2 py-2">
-            <Label
-              className="w-min cursor-pointer text-lg md:w-max lg:text-sm"
-              htmlFor="generation-mode"
-            >
-              Schedule Generation:
-            </Label>
-
-            <Switch
-              id="generation-mode"
-              className="cursor-pointer"
-              checked={isGenerationMode}
-              onCheckedChange={handleToggle}
+          <Button
+            size="lg"
+            className="cursor-pointer gap-2 px-3"
+            variant={isGenerationMode ? "default" : "outline"}
+            aria-pressed={isGenerationMode}
+            onClick={handleToggle}
+          >
+            <span
+              className="size-2 rounded-full bg-current opacity-70"
+              aria-hidden="true"
             />
-          </div>
+            {isGenerationMode
+              ? "Schedule Generation on"
+              : "Schedule Generation off"}
+          </Button>
         }
       />
 
       <TooltipContent>
-        Turn this on to automatically generate all possible schedules
+        {isGenerationMode
+          ? "Switch back to manual section selection"
+          : "Automatically generate all possible schedules"}
       </TooltipContent>
     </Tooltip>
   );
