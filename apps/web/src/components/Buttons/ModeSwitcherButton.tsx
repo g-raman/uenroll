@@ -31,7 +31,7 @@ export const ModeSwitcherButton = () => {
         render={
           <Button
             size="lg"
-            className="cursor-pointer gap-2 px-3"
+            className="cursor-pointer gap-2 px-3 text-xs"
             variant={isGenerationMode ? "default" : "outline"}
             aria-pressed={isGenerationMode}
             onClick={handleToggle}
