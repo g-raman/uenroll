@@ -1,5 +1,4 @@
-@import "tailwindcss";
-@source "../**/*.{ts,tsx}";
+@import "@repo/ui/shadcn.css";
 
 @layer base {
   body {

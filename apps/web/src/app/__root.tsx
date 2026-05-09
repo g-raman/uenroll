@@ -14,7 +14,6 @@ import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 import { Suspense } from "react";
 import { PostHogInit } from "@/components/PostHogInit";
 import appCss from "./app.css?url";
-import shadcnCss from "@repo/ui/shadcn.css?url";
 
 const siteUrl = envClient.VITE_BASE_URL;
 const siteName = "uEnroll";
@@ -86,7 +85,6 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         href: "/favicon-dark.png",
       },
       { rel: "canonical", href: siteUrl },
-      { rel: "stylesheet", href: shadcnCss },
       { rel: "stylesheet", href: appCss },
     ],
     scripts: [
