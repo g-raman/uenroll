@@ -56,6 +56,6 @@
     "eslint": "catalog:",
     "tailwindcss": "^4.3.0",
     "typescript": "catalog:",
-    "wrangler": "^4.74.0"
+    "wrangler": "^4.90.0"
   }
 }
