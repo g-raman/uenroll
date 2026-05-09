@@ -9,7 +9,7 @@
       "packages/*"
     ],
     "catalog": {
-      "eslint": "^10.3.0",
+      "eslint": "^9.39.1",
       "typescript": "^6.0.3"
     }
   },
