@@ -1,14 +1,14 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "uenroll",
-  "compatibility_date": "2025-09-24",
+  "compatibility_date": "2026-05-09",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
   "observability": {
     "logs": {
       "enabled": false,
-      "invocation_logs": true
-    }
+      "invocation_logs": true,
+    },
   },
   "hyperdrive": [
     {
