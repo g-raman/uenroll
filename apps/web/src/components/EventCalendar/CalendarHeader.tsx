@@ -2,8 +2,8 @@ import { Temporal } from "temporal-polyfill";
 import { Button } from "@repo/ui/components/button";
 import { Switch } from "@repo/ui/components/switch";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import DownloadCalendarButton from "../Buttons/DownloadCalendarButton/DownloadCalendarButton";
-import { CopyLinkButton } from "../Buttons/CopyLinkButton/CopyLinkButton";
+import DownloadCalendarButton from "@/components/Buttons/DownloadCalendarButton";
+import { CopyLinkButton } from "@/components/Buttons/CopyLinkButton";
 import { formatWeekRange } from "./dateUtils";
 import {
   Tooltip,

@@ -28,8 +28,8 @@ import {
 import { toast } from "sonner";
 import { SearchIcon, LoaderCircleIcon } from "lucide-react";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
-import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
-import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton/ThemeSwitchingButton";
+import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton";
+import { ModeSwitcherButton } from "@/components/Buttons/ModeSwitcherButton";
 
 interface CourseMatch {
   courseCode: string;
@@ -242,7 +242,7 @@ export default function Autocomplete() {
         </PopoverContent>
       </Popover>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <AdvancedSearch
           term={selectedTerm}
           selectedCodes={selectedCodes}
@@ -252,8 +252,9 @@ export default function Autocomplete() {
           onOpen={() => setOpen(false)}
         />
 
+        <ModeSwitcherButton />
+
         <DeleteSearchResultsButton />
-        <ThemeSwitchingButton />
       </div>
     </>
   );

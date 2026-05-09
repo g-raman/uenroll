@@ -15,30 +15,23 @@ import {
 } from "@/utils/mappers/course";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
-import { Switch } from "@repo/ui/components/switch";
-import { Label } from "@repo/ui/components/label";
 import { Input } from "@repo/ui/components/input";
-import { useMode, useUserSettingsActions } from "@/stores/modeStore";
+import { useMode } from "@/stores/modeStore";
 import { ChangeEvent, useRef, useState } from "react";
-import { Selected } from "@/types/Types";
 import {
   filterCoursesWithVirutalSessions,
   sortCoursesByNumSubSections,
 } from "@/utils/course";
 import { toast } from "sonner";
 import { useScreenSize } from "@/hooks/useScreenSize";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@repo/ui/components/tooltip";
+import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton";
 
 export function GenerationHeader() {
   const [loading, setLoading] = useState(false);
   const workerRef = useRef<Worker | null>(null);
 
   const [selectedTerm] = useTermParam();
-  const [data, setData] = useDataParam();
+  const [data] = useDataParam();
   const courseCodes = Object.keys(data ? data : {});
 
   const courseQueries = useCourseQueries(
@@ -48,7 +41,6 @@ export function GenerationHeader() {
   );
 
   const isGenerationMode = useMode();
-  const { toggleMode } = useUserSettingsActions();
   const excluded = useExcluded();
 
   const schedules = useSchedules();
@@ -56,19 +48,16 @@ export function GenerationHeader() {
   const noSchedules = schedules.length <= 0;
   const { width } = useScreenSize();
 
-  const {
-    previousSchedule,
-    nextSchedule,
-    setSelectedSchedule,
-    setSchedules,
-    resetSchedules,
-  } = useGeneratorActions();
+  const { previousSchedule, nextSchedule, setSelectedSchedule, setSchedules } =
+    useGeneratorActions();
 
   const courseSearchResults = courseQueries
     .filter(query => query.isSuccess)
     .map(query => query.data);
 
   const handleGeneration = async () => {
+    if (!isGenerationMode) return;
+
     setSchedules([]);
     if (!workerRef.current) {
       workerRef.current = new Worker(
@@ -139,17 +128,8 @@ export function GenerationHeader() {
     nextSchedule();
   };
 
-  const handleToggle = () => {
-    const courseCodes = Object.keys(data ? data : {});
-    const newData: Selected = {};
-    courseCodes.forEach(courseCode => (newData[courseCode] = []));
-    setData(newData);
-    resetSchedules();
-    toggleMode();
-  };
-
   return (
-    <div className="bg-background sticky top-0 z-10 flex items-center justify-between gap-2 rounded-b-lg border-b p-2 lg:rounded-lg lg:border">
+    <div className="bg-background sticky top-0 z-10 flex items-center justify-between gap-2 rounded-b-lg border-b px-4 py-2 lg:rounded-lg lg:border">
       {width && width >= 1024 && (
         <div className="flex items-center justify-start gap-2 text-4xl">
           <svg
@@ -163,83 +143,63 @@ export function GenerationHeader() {
         </div>
       )}
 
-      {isGenerationMode && (
-        <div className="flex gap-2">
-          <div className="flex items-center">
-            <Button
-              disabled={noSchedules}
-              className="w-6 rounded-e-none border-e-[0px]"
-              variant="outline"
-              onClick={handlePrevious}
-            >
-              <ChevronLeft className="size-4" />
-            </Button>
+      <div
+        aria-hidden={!isGenerationMode}
+        className={`flex gap-2 transition-all ${isGenerationMode ? "visible opacity-100" : "invisible opacity-0"}`}
+      >
+        <div className="flex items-center">
+          <Button
+            disabled={!isGenerationMode || noSchedules}
+            className="w-6 rounded-e-none border-e-0"
+            variant="outline"
+            onClick={handlePrevious}
+          >
+            <ChevronLeft className="size-4" />
+          </Button>
 
-            <div className="flex h-full items-center">
-              <Input
-                onChange={handleInputChange}
-                className="!max-w-8 rounded-none text-center text-xs lg:!max-w-28 lg:text-sm"
-                disabled={noSchedules}
-                value={
-                  noSchedules
-                    ? `No results`
-                    : selectedSchedule !== null
-                      ? selectedSchedule + 1
-                      : ""
-                }
-              />
-              {!noSchedules && (
-                <span className="bg-muted border-input flex h-full items-center border-y px-2 text-sm text-gray-500">
-                  of {schedules.length}
-                </span>
-              )}
-            </div>
-
-            <Button
-              disabled={noSchedules}
-              className="w-6 rounded-s-none border-s-[0px]"
-              variant="outline"
-              onClick={handleNext}
-            >
-              <ChevronRight className="size-4" />
-            </Button>
+          <div className="flex h-full items-center">
+            <Input
+              onChange={handleInputChange}
+              className="max-w-8! rounded-none text-center text-xs lg:max-w-28! lg:text-sm"
+              disabled={!isGenerationMode || noSchedules}
+              value={
+                noSchedules
+                  ? `No results`
+                  : selectedSchedule !== null
+                    ? selectedSchedule + 1
+                    : ""
+              }
+            />
+            {!noSchedules && (
+              <span className="bg-muted border-input flex h-full items-center border-y px-2 text-sm text-gray-500">
+                of {schedules.length}
+              </span>
+            )}
           </div>
 
           <Button
-            disabled={loading || courseSearchResults.length <= 0}
-            variant="default"
-            className="px-2 text-xs lg:text-sm"
-            onClick={handleGeneration}
+            disabled={!isGenerationMode || noSchedules}
+            className="w-6 rounded-s-none border-s-0"
+            variant="outline"
+            onClick={handleNext}
           >
-            {loading ? "Loading..." : "Generate"}
+            <ChevronRight className="size-4" />
           </Button>
         </div>
-      )}
 
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="generation-mode"
-                className="cursor-pointer"
-                checked={isGenerationMode}
-                onCheckedChange={handleToggle}
-              />
-              <Label
-                className="w-min cursor-pointer text-xs md:w-max lg:text-sm"
-                htmlFor="generation-mode"
-              >
-                Schedule Generation
-              </Label>
-            </div>
+        <Button
+          disabled={
+            !isGenerationMode || loading || courseSearchResults.length <= 0
           }
-        />
+          variant="default"
+          className="px-2 text-xs lg:text-sm"
+          onClick={handleGeneration}
+        >
+          {loading ? "Loading..." : "Generate"}
+        </Button>
+      </div>
 
-        <TooltipContent>
-          Turn this on to automatically generate all possible schedules
-        </TooltipContent>
-      </Tooltip>
+      <ThemeSwitchingButton />
     </div>
   );
 }
