@@ -22,7 +22,7 @@
     "dev": {
       "persistent": true,
       "cache": false,
-      "env": ["ENVIRONMENT", "PUPPETEER_EXECUTABLE_PATH", "VITE_BASE_URL"]
+      "env": ["ENVIRONMENT", "VITE_BASE_URL"]
     }
   }
 }
