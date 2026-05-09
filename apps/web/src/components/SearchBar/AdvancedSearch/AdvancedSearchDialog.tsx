@@ -1,4 +1,4 @@
-import { trpc } from "@/router";
+import { useTRPC } from "@/router";
 import { STALE_TIME } from "@/utils/constants";
 import {
   Dialog,
@@ -44,6 +44,7 @@ export function AdvancedSearchDialog({
     year?: number[];
     language?: ("english" | "french" | "other")[];
   } | null>(null);
+  const trpc = useTRPC();
 
   const normalizedSubject = useMemo(
     () =>

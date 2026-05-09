@@ -1,4 +1,4 @@
-import { trpc } from "@/router";
+import { useTRPC } from "@/router";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import { MAX_RESULTS_ALLOWED, GC_TIME, STALE_TIME } from "@/utils/constants";
@@ -57,6 +57,7 @@ export default function Autocomplete() {
   const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
+  const trpc = useTRPC();
 
   const deferredQuery = useDeferredValue(
     stripSpacesFromCourseCode(query.trim()),
@@ -124,7 +125,7 @@ export default function Autocomplete() {
         requestAnimationFrame(() => inputRef.current?.focus());
       }
     },
-    [selectedCodes, isAtLimit, queryClient, selectedTerm, data, setData],
+    [selectedCodes, isAtLimit, queryClient, trpc, selectedTerm, data, setData],
   );
 
   const handleKeyDown = useCallback(
