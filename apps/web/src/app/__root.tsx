@@ -16,6 +16,10 @@ import { PostHogInit } from "@/components/PostHogInit";
 import appCss from "./app.css?url";
 import shadcnCss from "@repo/ui/shadcn.css?url";
 
+const siteUrl = envClient.NEXT_PUBLIC_BASE_URL;
+const siteName = "uEnroll";
+const siteDescription = "A modern schedule builder for uOttawa students";
+
 export interface RouterAppContext {
   queryClient: QueryClient;
   trpc: TRPCOptionsProxy<AppRouter>;
@@ -29,20 +33,36 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         name: "viewport",
         content: "width=device-width, initial-scale=1, maximum-scale=1",
       },
-      { title: "uEnroll" },
+      { title: `${siteName} - uOttawa Schedule Builder` },
+      { name: "application-name", content: siteName },
+      { name: "apple-mobile-web-app-title", content: siteName },
+      { name: "theme-color", content: "#ffffff" },
       {
         name: "description",
-        content: "A modern schedule builder for uOttawa students",
+        content: siteDescription,
       },
       {
         name: "keywords",
         content:
           "uenroll, uschedule, uozone, uottawa, university of ottawa, schedule builder, uottawa schedule builder, uottawa schedule maker, uottawa courses",
       },
+      { property: "og:site_name", content: siteName },
+      {
+        property: "og:title",
+        content: `${siteName} - uOttawa Schedule Builder`,
+      },
       {
         property: "og:description",
-        content: "A modern schedule builder for uOttawa students",
+        content: siteDescription,
       },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: siteUrl },
+      { name: "twitter:card", content: "summary" },
+      {
+        name: "twitter:title",
+        content: `${siteName} - uOttawa Schedule Builder`,
+      },
+      { name: "twitter:description", content: siteDescription },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -65,9 +85,32 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         media: "(prefers-color-scheme: dark)",
         href: "/favicon-dark.png",
       },
-      { rel: "canonical", href: envClient.NEXT_PUBLIC_BASE_URL },
+      { rel: "canonical", href: siteUrl },
       { rel: "stylesheet", href: shadcnCss },
       { rel: "stylesheet", href: appCss },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: siteName,
+          url: siteUrl,
+          description: siteDescription,
+          applicationCategory: "EducationalApplication",
+          operatingSystem: "Web",
+          audience: {
+            "@type": "EducationalAudience",
+            educationalRole: "student",
+          },
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "CAD",
+          },
+        }),
+      },
     ],
   }),
   component: RootLayout,
