@@ -17,5 +17,6 @@ export default [
     "./node_modules/",
     "./public/wasm/",
     "./src/routeTree.gen.ts",
+    "./worker-configuration.d.ts",
   ]),
 ];
