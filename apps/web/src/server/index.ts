@@ -17,8 +17,8 @@ export const appRouter = router({
         courseCode: z.string(),
       }),
     )
-    .query(async ({ input }) => {
-      const course = await getCourse(input.term, input.courseCode);
+    .query(async ({ ctx, input }) => {
+      const course = await getCourse(input.term, input.courseCode, ctx.db);
       const processedCourse = processCourse(course);
 
       if (processedCourse.isErr()) {
@@ -30,8 +30,8 @@ export const appRouter = router({
 
       return processedCourse.value;
     }),
-  getAvailableTerms: publicProcedure.query(async () => {
-    const terms = await getAvailableTerms();
+  getAvailableTerms: publicProcedure.query(async ({ ctx }) => {
+    const terms = await getAvailableTerms(ctx.db);
 
     if (terms.isErr()) {
       throw new TRPCError({
@@ -44,8 +44,11 @@ export const appRouter = router({
   }),
   getAvailableCoursesByTerm: publicProcedure
     .input(z.object({ term: z.string() }))
-    .query(async ({ input }) => {
-      const availableCourses = await getAvailableCoursesByTerm(input.term);
+    .query(async ({ ctx, input }) => {
+      const availableCourses = await getAvailableCoursesByTerm(
+        input.term,
+        ctx.db,
+      );
 
       if (availableCourses.isErr()) {
         throw new TRPCError({
@@ -66,14 +69,17 @@ export const appRouter = router({
         limit: z.number().int().min(1).max(500).optional(),
       }),
     )
-    .query(async ({ input }) => {
-      const courses = await getCoursesByFilter({
-        term: input.term,
-        subject: input.subject,
-        year: input.year,
-        language: input.language,
-        limit: input.limit,
-      });
+    .query(async ({ ctx, input }) => {
+      const courses = await getCoursesByFilter(
+        {
+          term: input.term,
+          subject: input.subject,
+          year: input.year,
+          language: input.language,
+          limit: input.limit,
+        },
+        ctx.db,
+      );
 
       if (courses.isErr()) {
         throw new TRPCError({

@@ -4,4 +4,11 @@
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "f9afc98dc02e403ebd7fdfea4a013373",
+      "localConnectionString": "postgresql://postgres:postgres@localhost:5432/postgres",
+    },
+  ],
 }
