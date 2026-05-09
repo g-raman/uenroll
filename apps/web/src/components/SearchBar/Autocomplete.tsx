@@ -28,8 +28,8 @@ import {
 import { toast } from "sonner";
 import { SearchIcon, LoaderCircleIcon } from "lucide-react";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
-import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
-import { ModeSwitcherButton } from "../Buttons/ModeSwitcherButton";
+import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton";
+import { ModeSwitcherButton } from "@/components/Buttons/ModeSwitcherButton";
 
 interface CourseMatch {
   courseCode: string;

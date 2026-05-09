@@ -24,7 +24,7 @@ import {
 } from "@/utils/course";
 import { toast } from "sonner";
 import { useScreenSize } from "@/hooks/useScreenSize";
-import { ThemeSwitchingButton } from "../Buttons/ThemeSwitchingButton/ThemeSwitchingButton";
+import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton";
 
 export function GenerationHeader() {
   const [loading, setLoading] = useState(false);
