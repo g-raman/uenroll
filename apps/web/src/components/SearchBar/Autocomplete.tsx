@@ -29,7 +29,6 @@ import { toast } from "sonner";
 import { SearchIcon, LoaderCircleIcon } from "lucide-react";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
 import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
-import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton/ThemeSwitchingButton";
 import { ModeSwitcherButton } from "../Buttons/ModeSwitcherButton";
 
 interface CourseMatch {
