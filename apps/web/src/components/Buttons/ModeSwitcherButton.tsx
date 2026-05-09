@@ -30,19 +30,20 @@ export const ModeSwitcherButton = () => {
     <Tooltip>
       <TooltipTrigger
         render={
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 py-2">
+            <Label
+              className="w-min cursor-pointer text-lg md:w-max lg:text-sm"
+              htmlFor="generation-mode"
+            >
+              Schedule Generation:
+            </Label>
+
             <Switch
               id="generation-mode"
               className="cursor-pointer"
               checked={isGenerationMode}
               onCheckedChange={handleToggle}
             />
-            <Label
-              className="w-min cursor-pointer text-xs md:w-max lg:text-sm"
-              htmlFor="generation-mode"
-            >
-              Schedule Generation
-            </Label>
           </div>
         }
       />
