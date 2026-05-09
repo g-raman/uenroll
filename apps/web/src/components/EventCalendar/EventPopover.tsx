@@ -44,7 +44,7 @@ export function EventPopover({ event, children, disabled }: EventPopoverProps) {
         <div className="space-y-2">
           {/* Course Title */}
           <div className="flex items-start gap-3">
-            <FileText className="text-muted-foreground mt-0.5 h-4 w-4 flex-shrink-0" />
+            <FileText className="mt-0.5 h-4 w-4 flex-shrink-0 text-muted-foreground" />
             <span className="text-sm">
               {event.courseTitle}
               {combinedText}
@@ -53,7 +53,7 @@ export function EventPopover({ event, children, disabled }: EventPopoverProps) {
 
           {/* Time */}
           <div className="flex items-center gap-3">
-            <Clock className="text-muted-foreground h-4 w-4 flex-shrink-0" />
+            <Clock className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
             <span className="text-sm">
               {formatTime(event.start)} - {formatTime(event.end)}
             </span>
@@ -62,7 +62,7 @@ export function EventPopover({ event, children, disabled }: EventPopoverProps) {
           {/* Instructor */}
           {event.instructor && (
             <div className="flex items-center gap-3">
-              <User className="text-muted-foreground h-4 w-4 flex-shrink-0" />
+              <User className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
               <span className="text-sm">{event.instructor}</span>
             </div>
           )}

@@ -20,13 +20,13 @@ export function TimeColumn({
 }: TimeColumnProps) {
   return (
     <div
-      className="bg-background sticky left-0 z-10 w-16 flex-shrink-0 border-r"
+      className="sticky left-0 z-10 w-16 flex-shrink-0 border-r bg-background"
       style={{ height: gridHeight }}
     >
       {hourLabels.map(({ hour, label }) => (
         <div
           key={hour}
-          className="text-muted-foreground absolute right-2 text-xs"
+          className="absolute right-2 text-xs text-muted-foreground"
           style={{
             top: paddingHeight + (hour - dayStartHour) * hourHeight,
           }}

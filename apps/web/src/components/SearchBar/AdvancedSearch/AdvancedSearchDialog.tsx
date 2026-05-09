@@ -135,7 +135,7 @@ export function AdvancedSearchDialog({
         />
 
         {/* Divider */}
-        <div className="bg-border -mx-6 h-px" />
+        <div className="-mx-6 h-px bg-border" />
 
         <AdvancedSearchResults
           hasSubmitted={hasSubmitted}

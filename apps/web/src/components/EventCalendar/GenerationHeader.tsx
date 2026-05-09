@@ -129,11 +129,11 @@ export function GenerationHeader() {
   };
 
   return (
-    <div className="bg-background sticky top-0 z-10 flex items-center justify-between gap-2 rounded-b-lg border-b px-4 py-2 lg:rounded-lg lg:border">
+    <div className="sticky top-0 z-10 flex items-center justify-between gap-2 rounded-b-lg border-b bg-background px-4 py-2 lg:rounded-lg lg:border">
       {width && width >= 1024 && (
         <div className="flex items-center justify-start gap-2 text-4xl">
           <svg
-            className="text-primary size-12 fill-current"
+            className="size-12 fill-current text-primary"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 640 640"
           >
@@ -171,7 +171,7 @@ export function GenerationHeader() {
               }
             />
             {!noSchedules && (
-              <span className="bg-muted border-input flex h-full items-center border-y px-2 text-sm text-gray-500">
+              <span className="flex h-full items-center border-y border-input bg-muted px-2 text-sm text-gray-500">
                 of {schedules.length}
               </span>
             )}

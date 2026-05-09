@@ -121,7 +121,7 @@ export function EventCalendar({ events, config }: EventCalendarProps) {
     );
 
   return (
-    <div className="bg-background flex flex-col rounded-lg border sm:h-full sm:overflow-hidden">
+    <div className="flex flex-col rounded-lg border bg-background sm:h-full sm:overflow-hidden">
       <CalendarHeader
         weekStart={weekStart}
         weekendsHidden={weekendsHidden}

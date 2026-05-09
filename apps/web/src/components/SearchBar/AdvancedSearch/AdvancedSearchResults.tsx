@@ -32,7 +32,7 @@ export function AdvancedSearchResults({
 }: AdvancedSearchResultsProps) {
   return (
     <div className="-mt-2 grid gap-2">
-      <div className="text-muted-foreground flex items-center justify-between text-xs">
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>
           {hasSubmitted
             ? isLoading
@@ -43,17 +43,17 @@ export function AdvancedSearchResults({
               : "Set at least one filter to search."}
         </span>
         {isAtLimit && (
-          <span className="text-destructive font-medium">
+          <span className="font-medium text-destructive">
             Max {MAX_RESULTS_ALLOWED} courses
           </span>
         )}
       </div>
 
-      <div className="border-input bg-muted/20 h-80 overflow-auto rounded-lg border">
+      <div className="h-80 overflow-auto rounded-lg border border-input bg-muted/20">
         {/* Empty state — no filters submitted yet */}
         {!hasSubmitted && (
-          <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 px-4 py-10">
-            <BookOpenIcon className="text-muted-foreground/50 size-8" />
+          <div className="flex flex-col items-center justify-center gap-2 px-4 py-10 text-muted-foreground">
+            <BookOpenIcon className="size-8 text-muted-foreground/50" />
             <p className="max-w-[18rem] text-center text-sm">
               {canSearch
                 ? "Ready to search. Press the Search button or hit Enter."
@@ -64,16 +64,16 @@ export function AdvancedSearchResults({
 
         {/* Loading state */}
         {hasSubmitted && isLoading && (
-          <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 px-4 py-10">
-            <LoaderCircleIcon className="text-primary/60 size-6 animate-spin" />
+          <div className="flex flex-col items-center justify-center gap-2 px-4 py-10 text-muted-foreground">
+            <LoaderCircleIcon className="size-6 animate-spin text-primary/60" />
             <p className="text-sm">Finding courses...</p>
           </div>
         )}
 
         {/* No results */}
         {hasSubmitted && !isLoading && courses.length === 0 && (
-          <div className="text-muted-foreground flex flex-col items-center justify-center gap-2 px-4 py-10">
-            <SearchIcon className="text-muted-foreground/50 size-6" />
+          <div className="flex flex-col items-center justify-center gap-2 px-4 py-10 text-muted-foreground">
+            <SearchIcon className="size-6 text-muted-foreground/50" />
             <p className="text-sm">No courses match those filters.</p>
           </div>
         )}
@@ -87,13 +87,13 @@ export function AdvancedSearchResults({
               return (
                 <div
                   key={course.courseCode}
-                  className="hover:bg-muted/40 flex items-center justify-between gap-3 px-4 py-2.5 transition-colors"
+                  className="flex items-center justify-between gap-3 px-4 py-2.5 transition-colors hover:bg-muted/40"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium">
                       {course.courseCode}
                     </p>
-                    <p className="text-muted-foreground truncate text-xs">
+                    <p className="truncate text-xs text-muted-foreground">
                       {course.courseTitle}
                     </p>
                   </div>
