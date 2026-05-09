@@ -194,9 +194,7 @@ export function GenerationHeader() {
         </Button>
       </div>
 
-      <div className="">
-        <ThemeSwitchingButton />
-      </div>
+      <ThemeSwitchingButton />
     </div>
   );
 }
