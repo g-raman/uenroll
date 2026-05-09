@@ -1,5 +1,3 @@
-"use client";
-
 import { trpc } from "@/router";
 import { STALE_TIME } from "@/utils/constants";
 import {

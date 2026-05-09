@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@repo/ui/components/button";
 import { SlidersHorizontalIcon } from "lucide-react";
 import { useState } from "react";

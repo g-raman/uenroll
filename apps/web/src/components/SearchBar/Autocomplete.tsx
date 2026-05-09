@@ -1,5 +1,3 @@
-"use client";
-
 import { trpc } from "@/router";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
