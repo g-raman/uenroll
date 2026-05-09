@@ -30,6 +30,7 @@ import { SearchIcon, LoaderCircleIcon } from "lucide-react";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
 import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton/DeleteSearchResultsButton";
 import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton/ThemeSwitchingButton";
+import { ModeSwitcherButton } from "../Buttons/ModeSwitcherButton";
 
 interface CourseMatch {
   courseCode: string;
@@ -255,6 +256,8 @@ export default function Autocomplete() {
         <DeleteSearchResultsButton />
         <ThemeSwitchingButton />
       </div>
+
+      <ModeSwitcherButton />
     </>
   );
 }

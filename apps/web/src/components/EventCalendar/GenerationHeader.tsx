@@ -24,7 +24,6 @@ import {
 } from "@/utils/course";
 import { toast } from "sonner";
 import { useScreenSize } from "@/hooks/useScreenSize";
-import { ModeSwitcherButton } from "../Buttons/ModeSwitcherButton";
 
 export function GenerationHeader() {
   const [loading, setLoading] = useState(false);
@@ -193,7 +192,6 @@ export function GenerationHeader() {
           </Button>
         </div>
       )}
-      <ModeSwitcherButton />
     </div>
   );
 }
