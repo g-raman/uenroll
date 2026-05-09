@@ -253,11 +253,10 @@ export default function Autocomplete() {
           onOpen={() => setOpen(false)}
         />
 
-        <DeleteSearchResultsButton />
-        <ThemeSwitchingButton />
-      </div>
+        <ModeSwitcherButton />
 
-      <ModeSwitcherButton />
+        <DeleteSearchResultsButton />
+      </div>
     </>
   );
 }
