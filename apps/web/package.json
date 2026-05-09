@@ -9,6 +9,7 @@
     "check-types": "tsc --noEmit",
     "cf-typegen": "wrangler types",
     "deploy": "bun run build && wrangler deploy",
+    "ci:deploy": "wrangler deploy",
     "dev": "vite dev",
     "lint": "eslint --max-warnings 0 .",
     "start": "bun .output/server/index.mjs"
