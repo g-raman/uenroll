@@ -141,60 +141,62 @@ export function GenerationHeader() {
         </div>
       )}
 
-      {isGenerationMode && (
-        <div className="flex gap-2">
-          <div className="flex items-center">
-            <Button
-              disabled={noSchedules}
-              className="w-6 rounded-e-none border-e-0"
-              variant="outline"
-              onClick={handlePrevious}
-            >
-              <ChevronLeft className="size-4" />
-            </Button>
+      <div
+        className={`flex gap-2 transition-all ${isGenerationMode ? "visible opacity-100" : "invisible opacity-0"}`}
+      >
+        <div className="flex items-center">
+          <Button
+            disabled={noSchedules}
+            className="w-6 rounded-e-none border-e-0"
+            variant="outline"
+            onClick={handlePrevious}
+          >
+            <ChevronLeft className="size-4" />
+          </Button>
 
-            <div className="flex h-full items-center">
-              <Input
-                onChange={handleInputChange}
-                className="max-w-8! rounded-none text-center text-xs lg:max-w-28! lg:text-sm"
-                disabled={noSchedules}
-                value={
-                  noSchedules
-                    ? `No results`
-                    : selectedSchedule !== null
-                      ? selectedSchedule + 1
-                      : ""
-                }
-              />
-              {!noSchedules && (
-                <span className="bg-muted border-input flex h-full items-center border-y px-2 text-sm text-gray-500">
-                  of {schedules.length}
-                </span>
-              )}
-            </div>
-
-            <Button
+          <div className="flex h-full items-center">
+            <Input
+              onChange={handleInputChange}
+              className="max-w-8! rounded-none text-center text-xs lg:max-w-28! lg:text-sm"
               disabled={noSchedules}
-              className="w-6 rounded-s-none border-s-0"
-              variant="outline"
-              onClick={handleNext}
-            >
-              <ChevronRight className="size-4" />
-            </Button>
+              value={
+                noSchedules
+                  ? `No results`
+                  : selectedSchedule !== null
+                    ? selectedSchedule + 1
+                    : ""
+              }
+            />
+            {!noSchedules && (
+              <span className="bg-muted border-input flex h-full items-center border-y px-2 text-sm text-gray-500">
+                of {schedules.length}
+              </span>
+            )}
           </div>
 
           <Button
-            disabled={loading || courseSearchResults.length <= 0}
-            variant="default"
-            className="px-2 text-xs lg:text-sm"
-            onClick={handleGeneration}
+            disabled={noSchedules}
+            className="w-6 rounded-s-none border-s-0"
+            variant="outline"
+            onClick={handleNext}
           >
-            {loading ? "Loading..." : "Generate"}
+            <ChevronRight className="size-4" />
           </Button>
         </div>
-      )}
 
-      <ThemeSwitchingButton />
+        <Button
+          disabled={loading || courseSearchResults.length <= 0}
+          variant="default"
+          className="px-2 text-xs lg:text-sm"
+          onClick={handleGeneration}
+        >
+          {loading ? "Loading..." : "Generate"}
+        </Button>
+      </div>
+
+      <div className="">
+        <ThemeSwitchingButton />
+      </div>
     </div>
   );
 }
