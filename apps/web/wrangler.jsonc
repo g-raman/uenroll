@@ -3,6 +3,7 @@
   "name": "uenroll",
   "compatibility_date": "2026-05-09",
   "compatibility_flags": ["nodejs_compat"],
+  "preview_urls": true,
   "main": "@tanstack/react-start/server-entry",
   "observability": {
     "logs": {
