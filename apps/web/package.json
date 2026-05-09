@@ -10,7 +10,7 @@
     "cf-typegen": "wrangler types",
     "deploy": "bun run build && wrangler deploy",
     "ci:deploy": "wrangler deploy",
-    "ci:deploy:preview": "wrangler versions upload --config=dist/server/wrangler.json",
+    "ci:deploy:preview": "wrangler versions upload",
     "dev": "vite dev",
     "lint": "eslint --max-warnings 0 .",
     "start": "bun .output/server/index.mjs"
