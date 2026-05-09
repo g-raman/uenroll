@@ -56,6 +56,8 @@ export function GenerationHeader() {
     .map(query => query.data);
 
   const handleGeneration = async () => {
+    if (!isGenerationMode) return;
+
     setSchedules([]);
     if (!workerRef.current) {
       workerRef.current = new Worker(
@@ -142,11 +144,12 @@ export function GenerationHeader() {
       )}
 
       <div
+        aria-hidden={!isGenerationMode}
         className={`flex gap-2 transition-all ${isGenerationMode ? "visible opacity-100" : "invisible opacity-0"}`}
       >
         <div className="flex items-center">
           <Button
-            disabled={noSchedules}
+            disabled={!isGenerationMode || noSchedules}
             className="w-6 rounded-e-none border-e-0"
             variant="outline"
             onClick={handlePrevious}
@@ -158,7 +161,7 @@ export function GenerationHeader() {
             <Input
               onChange={handleInputChange}
               className="max-w-8! rounded-none text-center text-xs lg:max-w-28! lg:text-sm"
-              disabled={noSchedules}
+              disabled={!isGenerationMode || noSchedules}
               value={
                 noSchedules
                   ? `No results`
@@ -175,7 +178,7 @@ export function GenerationHeader() {
           </div>
 
           <Button
-            disabled={noSchedules}
+            disabled={!isGenerationMode || noSchedules}
             className="w-6 rounded-s-none border-s-0"
             variant="outline"
             onClick={handleNext}
@@ -185,7 +188,9 @@ export function GenerationHeader() {
         </div>
 
         <Button
-          disabled={loading || courseSearchResults.length <= 0}
+          disabled={
+            !isGenerationMode || loading || courseSearchResults.length <= 0
+          }
           variant="default"
           className="px-2 text-xs lg:text-sm"
           onClick={handleGeneration}
