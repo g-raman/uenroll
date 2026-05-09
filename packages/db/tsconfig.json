@@ -11,7 +11,8 @@
     "noImplicitOverride": true,
     // Transpiling with TypeScript
     "outDir": "dist",
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["node"]
   },
   "include": ["src"]
 }
