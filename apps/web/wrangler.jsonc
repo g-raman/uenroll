@@ -7,7 +7,7 @@
   "main": "@tanstack/react-start/server-entry",
   "observability": {
     "logs": {
-      "enabled": false,
+      "enabled": true,
       "invocation_logs": true,
     },
   },
