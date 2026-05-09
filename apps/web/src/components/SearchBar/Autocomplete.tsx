@@ -242,7 +242,7 @@ export default function Autocomplete() {
         </PopoverContent>
       </Popover>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <AdvancedSearch
           term={selectedTerm}
           selectedCodes={selectedCodes}
