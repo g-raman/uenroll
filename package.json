@@ -17,6 +17,7 @@
     "build": "turbo run build",
     "build:packages": "turbo run build --filter @repo/db --filter @repo/env --filter @repo/ui",
     "check-types": "turbo run check-types",
+    "deploy:web": "bun --cwd=apps/web run deploy",
     "ci:deploy:web": "bun --cwd=apps/web run ci:deploy",
     "ci:deploy:web:preview": "bun --cwd=apps/web run ci:deploy:preview",
     "ci:format": "oxfmt --check",
