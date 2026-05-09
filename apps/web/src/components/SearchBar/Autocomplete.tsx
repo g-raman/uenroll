@@ -1,6 +1,6 @@
 "use client";
 
-import { trpc } from "@/app/_trpc/client";
+import { trpc } from "@/router";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import { MAX_RESULTS_ALLOWED, GC_TIME, STALE_TIME } from "@/utils/constants";

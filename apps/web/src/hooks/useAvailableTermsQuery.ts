@@ -1,4 +1,4 @@
-import { trpc } from "@/app/_trpc/client";
+import { trpc } from "@/router";
 import { GC_TIME, STALE_TIME } from "@/utils/constants";
 import { useQuery } from "@tanstack/react-query";
 

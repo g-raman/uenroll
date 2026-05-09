@@ -1,6 +1,6 @@
 "use client";
 
-import { trpc } from "@/app/_trpc/client";
+import { trpc } from "@/router";
 import { STALE_TIME } from "@/utils/constants";
 import {
   Dialog,
