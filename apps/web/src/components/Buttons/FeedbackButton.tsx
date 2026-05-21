@@ -1,4 +1,9 @@
 import { useTRPC } from "@/router";
+import {
+  feedbackTypeOptions,
+  isFeedbackType,
+  type FeedbackType,
+} from "@/utils/feedback";
 import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
@@ -11,47 +16,22 @@ import {
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
-import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import { useMutation } from "@tanstack/react-query";
-import {
-  Bug,
-  CircleHelp,
-  Info,
-  MessageSquareText,
-  SearchXIcon,
-  Send,
-} from "lucide-react";
+import { MessageSquareText, Send } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
 import { toast } from "sonner";
-
-type FeedbackType =
-  | "feedback"
-  | "bug"
-  | "incorrect_info"
-  | "missing_info"
-  | "other";
-
-const feedbackOptions = [
-  { value: "feedback", label: "Feedback", icon: MessageSquareText },
-  { value: "bug", label: "Bug", icon: Bug },
-  { value: "incorrect_info", label: "Incorrect info", icon: Info },
-  { value: "missing_info", label: "Missing  info", icon: SearchXIcon },
-  { value: "other", label: "Other", icon: CircleHelp },
-] satisfies {
-  value: FeedbackType;
-  label: string;
-  icon: typeof MessageSquareText;
-}[];
-
-function isFeedbackType(value: string | undefined): value is FeedbackType {
-  return feedbackOptions.some(option => option.value === value);
-}
 
 export function FeedbackButton() {
   const trpc = useTRPC();
@@ -124,36 +104,42 @@ export function FeedbackButton() {
           <div className="flex flex-col gap-2">
             <Label id="feedback-type-label">Type</Label>
 
-            <ToggleGroup
+            <Select
               aria-labelledby="feedback-type-label"
-              multiple
-              value={[type]}
+              value={type}
               onValueChange={value => {
-                const nextValue = value.find(item => item !== type) ?? value[0];
-                if (isFeedbackType(nextValue)) {
-                  setType(nextValue);
-                }
+                if (isFeedbackType(value)) setType(value);
               }}
-              variant="outline"
-              size="sm"
-              spacing={1}
-              className="w-full flex-wrap"
             >
-              {feedbackOptions.map(option => {
-                const Icon = option.icon;
+              <SelectTrigger
+                nativeButton={false}
+                className="w-full cursor-pointer"
+                render={
+                  <span>
+                    {
+                      feedbackTypeOptions.find(option => option.value === type)
+                        ?.label
+                    }
+                  </span>
+                }
+              />
 
-                return (
-                  <ToggleGroupItem
+              <SelectContent
+                alignItemWithTrigger={false}
+                align="center"
+                side="bottom"
+              >
+                {feedbackTypeOptions.map(option => (
+                  <SelectItem
+                    className="cursor-pointer"
                     key={option.value}
                     value={option.value}
-                    className="px-4"
                   >
-                    <Icon />
                     {option.label}
-                  </ToggleGroupItem>
-                );
-              })}
-            </ToggleGroup>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid gap-2">
