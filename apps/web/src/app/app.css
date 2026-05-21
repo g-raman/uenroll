@@ -1,7 +1,10 @@
-@import "tailwindcss";
-@source "../**/*.{ts,tsx}";
+@import "@repo/ui/shadcn.css";
 
 @layer base {
+  body {
+    font-family: "Poppins", sans-serif;
+  }
+
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;

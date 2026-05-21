@@ -35,7 +35,7 @@ export function DayColumnComponent({
       {Array.from({ length: totalHours + 1 }, (_, i) => (
         <div
           key={i}
-          className="border-border/50 absolute right-0 left-0 border-b"
+          className="absolute right-0 left-0 border-b border-border/50"
           style={{ top: paddingHeight + i * hourHeight }}
         />
       ))}

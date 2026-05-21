@@ -79,7 +79,7 @@ export function AdvancedSearchFilters({
             disabled={!hasActiveFilters}
             tabIndex={hasActiveFilters ? undefined : -1}
             data-active={hasActiveFilters}
-            className="text-muted-foreground hover:text-primary invisible disabled:opacity-0 data-[active=true]:visible"
+            className="invisible text-muted-foreground hover:text-primary disabled:opacity-0 data-[active=true]:visible"
           >
             <FilterXIcon className="size-3" />
             Clear filters
@@ -113,7 +113,7 @@ export function AdvancedSearchFilters({
         <div>
           <Label
             id="year-label"
-            className="text-muted-foreground mb-1.5 text-xs tracking-wide uppercase"
+            className="mb-1.5 text-xs tracking-wide text-muted-foreground uppercase"
           >
             Year
           </Label>
@@ -145,7 +145,7 @@ export function AdvancedSearchFilters({
         <div>
           <Label
             id="language-label"
-            className="text-muted-foreground mb-1.5 text-xs tracking-wide uppercase"
+            className="mb-1.5 text-xs tracking-wide text-muted-foreground uppercase"
           >
             Language
           </Label>

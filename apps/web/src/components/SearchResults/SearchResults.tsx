@@ -44,7 +44,7 @@ export default function SearchResults() {
                   href={`https://uo.grades.zone/course/${course.courseCode.toLowerCase()}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs transition-colors"
+                  className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
                   aria-label={`Open ${course.courseCode} on uo.grades.zone`}
                 >
                   <span>Grades on uo.grades.zone</span>

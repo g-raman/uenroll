@@ -6,10 +6,10 @@ export const DayHeader = ({ column }: { column: DayColumn }) => (
       column.isToday ? "bg-primary/10" : ""
     }`}
   >
-    <span className="text-muted-foreground text-xs">{column.dayOfWeek}</span>
+    <span className="text-xs text-muted-foreground">{column.dayOfWeek}</span>
     <span
       className={`flex h-6 w-6 items-center justify-center text-sm font-medium ${
-        column.isToday ? "bg-primary text-primary-foreground rounded-full" : ""
+        column.isToday ? "rounded-full bg-primary text-primary-foreground" : ""
       }`}
     >
       {column.dayNumber}

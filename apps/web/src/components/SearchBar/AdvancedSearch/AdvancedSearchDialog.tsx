@@ -1,6 +1,4 @@
-"use client";
-
-import { trpc } from "@/app/_trpc/client";
+import { useTRPC } from "@/router";
 import { STALE_TIME } from "@/utils/constants";
 import {
   Dialog,
@@ -46,6 +44,7 @@ export function AdvancedSearchDialog({
     year?: number[];
     language?: ("english" | "french" | "other")[];
   } | null>(null);
+  const trpc = useTRPC();
 
   const normalizedSubject = useMemo(
     () =>
@@ -135,7 +134,7 @@ export function AdvancedSearchDialog({
         />
 
         {/* Divider */}
-        <div className="bg-border -mx-6 h-px" />
+        <div className="-mx-6 h-px bg-border" />
 
         <AdvancedSearchResults
           hasSubmitted={hasSubmitted}

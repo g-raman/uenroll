@@ -1,4 +1,4 @@
-import { trpc } from "@/app/_trpc/client";
+import { useTRPC } from "@/router";
 import { useQuery } from "@tanstack/react-query";
 import { useTermParam } from "./useTermParam";
 import { GC_TIME, STALE_TIME } from "@/utils/constants";
@@ -8,6 +8,7 @@ export const useCourseQuery = (
   isUnderMaxResults: boolean,
 ) => {
   const [selectedTerm] = useTermParam();
+  const trpc = useTRPC();
 
   return useQuery(
     trpc.getCourseByTermAndCourseCode.queryOptions(

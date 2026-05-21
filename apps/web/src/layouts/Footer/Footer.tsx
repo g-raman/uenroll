@@ -8,7 +8,7 @@ export const Footer = () => {
       &nbsp;
       <Button
         nativeButton={false}
-        className="text-foreground p-0 underline hover:opacity-70"
+        className="p-0 text-foreground underline hover:opacity-70"
         variant="link"
         render={
           <a
@@ -23,7 +23,7 @@ export const Footer = () => {
       ,&nbsp;
       <Button
         nativeButton={false}
-        className="text-foreground p-0 underline hover:opacity-70"
+        className="p-0 text-foreground underline hover:opacity-70"
         variant="link"
         render={
           <a

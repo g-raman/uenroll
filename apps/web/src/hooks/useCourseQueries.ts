@@ -1,4 +1,4 @@
-import { trpc } from "@/app/_trpc/client";
+import { useTRPC } from "@/router";
 import { useColoursActions } from "@/stores/colourStore";
 import { GC_TIME, STALE_TIME } from "@/utils/constants";
 import { useQueries } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ export const useCourseQueries = (
   enabled: boolean,
 ) => {
   const { getColour } = useColoursActions();
+  const trpc = useTRPC();
   const courseQueries = useQueries({
     queries: courseCodes.map(courseCode =>
       trpc.getCourseByTermAndCourseCode.queryOptions(

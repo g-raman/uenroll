@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "uenroll",
+  "compatibility_date": "2026-05-09",
+  "compatibility_flags": ["nodejs_compat"],
+  "preview_urls": true,
+  "main": "@tanstack/react-start/server-entry",
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+    },
+  },
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "a24d5ae3a33047c2acdf27cc18526246",
+    },
+  ],
+  "workers_dev": true,
+  "routes": [
+    {
+      "custom_domain": true,
+      "pattern": "uenroll.ca",
+    },
+  ],
+}

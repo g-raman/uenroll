@@ -1,5 +1,3 @@
-"use client";
-
 import "temporal-polyfill/global";
 
 import { useMemo } from "react";

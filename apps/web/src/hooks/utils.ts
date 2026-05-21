@@ -1,6 +1,8 @@
 import { createParser } from "nuqs";
 import { Result } from "neverthrow";
-import { decompressFromBase64 } from "lz-string";
+import lzString from "lz-string";
+
+const { decompressFromBase64 } = lzString;
 
 export const parseAsSelectedSessions = createParser({
   parse: value => {

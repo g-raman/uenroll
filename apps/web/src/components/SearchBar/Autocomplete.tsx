@@ -1,6 +1,4 @@
-"use client";
-
-import { trpc } from "@/app/_trpc/client";
+import { useTRPC } from "@/router";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useTermParam } from "@/hooks/useTermParam";
 import { MAX_RESULTS_ALLOWED, GC_TIME, STALE_TIME } from "@/utils/constants";
@@ -59,6 +57,7 @@ export default function Autocomplete() {
   const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
+  const trpc = useTRPC();
 
   const deferredQuery = useDeferredValue(
     stripSpacesFromCourseCode(query.trim()),
@@ -126,7 +125,7 @@ export default function Autocomplete() {
         requestAnimationFrame(() => inputRef.current?.focus());
       }
     },
-    [selectedCodes, isAtLimit, queryClient, selectedTerm, data, setData],
+    [selectedCodes, isAtLimit, queryClient, trpc, selectedTerm, data, setData],
   );
 
   const handleKeyDown = useCallback(
@@ -202,7 +201,7 @@ export default function Autocomplete() {
           className="w-(--anchor-width) p-1"
         >
           {results.length === 0 && (
-            <p className="text-muted-foreground px-3 py-4 text-center text-sm">
+            <p className="px-3 py-4 text-center text-sm text-muted-foreground">
               No courses found
             </p>
           )}
@@ -220,7 +219,7 @@ export default function Autocomplete() {
                     aria-selected={index === highlightedIndex}
                     aria-disabled={alreadySelected}
                     data-highlighted={index === highlightedIndex || undefined}
-                    className="data-highlighted:bg-muted cursor-default rounded-sm px-3 py-1.5 text-sm select-none aria-disabled:opacity-50"
+                    className="cursor-default rounded-sm px-3 py-1.5 text-sm select-none aria-disabled:opacity-50 data-highlighted:bg-muted"
                     onPointerMove={() => setHighlightedIndex(index)}
                     onClick={() => {
                       if (!alreadySelected) {
