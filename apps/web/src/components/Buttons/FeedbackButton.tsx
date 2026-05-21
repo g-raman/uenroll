@@ -19,11 +19,39 @@ import {
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import { useMutation } from "@tanstack/react-query";
-import { Bug, MessageSquareText, Send } from "lucide-react";
+import {
+  Bug,
+  CircleHelp,
+  Info,
+  MessageSquareText,
+  SearchXIcon,
+  Send,
+} from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
 import { toast } from "sonner";
 
-type FeedbackType = "feedback" | "bug";
+type FeedbackType =
+  | "feedback"
+  | "bug"
+  | "incorrect_info"
+  | "missing_info"
+  | "other";
+
+const feedbackOptions = [
+  { value: "feedback", label: "Feedback", icon: MessageSquareText },
+  { value: "bug", label: "Bug", icon: Bug },
+  { value: "incorrect_info", label: "Incorrect info", icon: Info },
+  { value: "missing_info", label: "Missing  info", icon: SearchXIcon },
+  { value: "other", label: "Other", icon: CircleHelp },
+] satisfies {
+  value: FeedbackType;
+  label: string;
+  icon: typeof MessageSquareText;
+}[];
+
+function isFeedbackType(value: string | undefined): value is FeedbackType {
+  return feedbackOptions.some(option => option.value === value);
+}
 
 export function FeedbackButton() {
   const trpc = useTRPC();
@@ -93,31 +121,38 @@ export function FeedbackButton() {
         </DialogHeader>
 
         <form className="grid gap-4" onSubmit={handleSubmit}>
-          <div className="grid gap-2">
+          <div className="flex flex-col gap-2">
             <Label id="feedback-type-label">Type</Label>
+
             <ToggleGroup
               aria-labelledby="feedback-type-label"
               multiple
               value={[type]}
               onValueChange={value => {
                 const nextValue = value.find(item => item !== type) ?? value[0];
-                if (nextValue === "feedback" || nextValue === "bug") {
+                if (isFeedbackType(nextValue)) {
                   setType(nextValue);
                 }
               }}
               variant="outline"
               size="sm"
               spacing={1}
-              className="w-full"
+              className="w-full flex-wrap"
             >
-              <ToggleGroupItem value="feedback" className="flex-1">
-                <MessageSquareText />
-                Feedback
-              </ToggleGroupItem>
-              <ToggleGroupItem value="bug" className="flex-1">
-                <Bug />
-                Bug
-              </ToggleGroupItem>
+              {feedbackOptions.map(option => {
+                const Icon = option.icon;
+
+                return (
+                  <ToggleGroupItem
+                    key={option.value}
+                    value={option.value}
+                    className="px-4"
+                  >
+                    <Icon />
+                    {option.label}
+                  </ToggleGroupItem>
+                );
+              })}
             </ToggleGroup>
           </div>
 

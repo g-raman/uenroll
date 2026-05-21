@@ -95,7 +95,13 @@ export const appRouter = router({
   sendFeedback: publicProcedure
     .input(
       z.object({
-        type: z.enum(["feedback", "bug"]),
+        type: z.enum([
+          "feedback",
+          "bug",
+          "incorrect_info",
+          "missing_info",
+          "other",
+        ]),
         message: z.string().trim().min(10).max(5000),
         email: z.string().trim().email().max(254).optional().or(z.literal("")),
         pageUrl: z.string().trim().url().max(2048).optional(),
@@ -104,7 +110,14 @@ export const appRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const replyTo = input.email || undefined;
-      const typeLabel = input.type === "bug" ? "Bug report" : "Feedback";
+      const typeLabel =
+        {
+          feedback: "Feedback",
+          bug: "Bug report",
+          incorrect_info: "Incorrect info",
+          missing_info: "Missing info",
+          other: "Other",
+        }[input.type] ?? "Feedback";
       const submittedAt = new Date().toISOString();
       const text = [
         `${typeLabel} submitted from uEnroll`,
