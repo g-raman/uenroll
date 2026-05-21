@@ -18,6 +18,20 @@
         "typescript": "catalog:",
       },
     },
+    "apps/email": {
+      "name": "uenroll-email",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/feedback": "workspace:*",
+      },
+      "devDependencies": {
+        "@repo/eslint-config": "workspace:*",
+        "@repo/typescript-config": "workspace:*",
+        "eslint": "catalog:",
+        "typescript": "catalog:",
+        "wrangler": "^4.90.0",
+      },
+    },
     "apps/scraper": {
       "name": "uenroll-scraper",
       "version": "2.0.2",
@@ -41,6 +55,7 @@
       "name": "web",
       "version": "2.2.0",
       "dependencies": {
+        "@repo/feedback": "workspace:*",
         "@tanstack/react-query": "^5.100.9",
         "@tanstack/react-router": "^1.169.2",
         "@tanstack/react-start": "^1.167.65",
@@ -135,6 +150,19 @@
         "globals": "^17.6.0",
         "typescript": "catalog:",
         "typescript-eslint": "^8.59.2",
+      },
+    },
+    "packages/feedback": {
+      "name": "@repo/feedback",
+      "version": "0.0.0",
+      "dependencies": {
+        "zod": "^4.4.3",
+      },
+      "devDependencies": {
+        "@repo/eslint-config": "workspace:*",
+        "@repo/typescript-config": "workspace:*",
+        "eslint": "catalog:",
+        "typescript": "catalog:",
       },
     },
     "packages/typescript-config": {
@@ -639,6 +667,8 @@
     "@repo/env": ["@repo/env@workspace:packages/env"],
 
     "@repo/eslint-config": ["@repo/eslint-config@workspace:packages/eslint-config"],
+
+    "@repo/feedback": ["@repo/feedback@workspace:packages/feedback"],
 
     "@repo/typescript-config": ["@repo/typescript-config@workspace:packages/typescript-config"],
 
@@ -1677,6 +1707,8 @@
     "typescript": ["typescript@6.0.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw=="],
 
     "typescript-eslint": ["typescript-eslint@8.59.2", "", { "dependencies": { "@typescript-eslint/eslint-plugin": "8.59.2", "@typescript-eslint/parser": "8.59.2", "@typescript-eslint/typescript-estree": "8.59.2", "@typescript-eslint/utils": "8.59.2" }, "peerDependencies": { "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0", "typescript": ">=4.8.4 <6.1.0" } }, "sha512-pJw051uomb3ZeCzGTpRb8RbEqB5Y4WWet8gl/GcTlU35BSx0PVdZ86/bqkQCyKKuraVQEK7r6kBHQXF+fBhkoQ=="],
+
+    "uenroll-email": ["uenroll-email@workspace:apps/email"],
 
     "uenroll-scraper": ["uenroll-scraper@workspace:apps/scraper"],
 

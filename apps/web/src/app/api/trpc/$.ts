@@ -11,7 +11,7 @@ const handler = (req: Request) => {
     router: appRouter,
     createContext: () => ({
       db: createDb(env),
-      supportEmail: env.SUPPORT_EMAIL,
+      emailWorker: env.EMAIL_WORKER,
     }),
   });
 };

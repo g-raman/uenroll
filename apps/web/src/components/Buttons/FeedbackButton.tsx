@@ -3,7 +3,7 @@ import {
   feedbackTypeOptions,
   isFeedbackType,
   type FeedbackType,
-} from "@/utils/feedback";
+} from "@repo/feedback";
 import { Button } from "@repo/ui/components/button";
 import {
   Dialog,

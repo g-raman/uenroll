@@ -5,19 +5,10 @@ import {
   getCourse,
   processCourse,
 } from "@repo/db/queries";
-import { feedbackTypeLabels, feedbackTypeSchema } from "@/utils/feedback";
+import { feedbackPayloadSchema } from "@repo/feedback";
 import { publicProcedure, router } from "./trpc";
-import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-
-const supportEmailAddress = "support@uenroll.ca";
-
-type TargetedEmail = {
-  from: string;
-  subject: string;
-  replyTo?: string;
-  text: string;
-};
+import { z } from "zod";
 
 export const appRouter = router({
   getCourseByTermAndCourseCode: publicProcedure
@@ -101,46 +92,25 @@ export const appRouter = router({
       return courses.value;
     }),
   sendFeedback: publicProcedure
-    .input(
-      z.object({
-        type: feedbackTypeSchema,
-        message: z.string().trim().min(10).max(5000),
-        email: z.string().trim().email().max(254).optional().or(z.literal("")),
-        pageUrl: z.string().trim().url().max(2048).optional(),
-        userAgent: z.string().trim().max(500).optional(),
-      }),
-    )
+    .input(feedbackPayloadSchema)
     .mutation(async ({ ctx, input }) => {
-      const replyTo = input.email || undefined;
-      const typeLabel = feedbackTypeLabels[input.type];
-      const submittedAt = new Date().toISOString();
-      const text = [
-        `${typeLabel} submitted from uEnroll`,
-        "",
-        `Submitted at: ${submittedAt}`,
-        input.pageUrl ? `Page: ${input.pageUrl}` : null,
-        input.userAgent ? `User agent: ${input.userAgent}` : null,
-        replyTo ? `Reply to: ${replyTo}` : null,
-        "",
-        "Message:",
-        input.message,
-      ]
-        .filter((line): line is string => line !== null)
-        .join("\n");
-
       try {
-        await (
-          ctx.supportEmail.send as unknown as (
-            message: TargetedEmail,
-          ) => Promise<EmailSendResult>
-        )({
-          from: supportEmailAddress,
-          subject: `[uEnroll] ${typeLabel}`,
-          replyTo,
-          text,
+        const response = await ctx.emailWorker.fetch("https://email/feedback", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(input),
         });
+
+        if (!response.ok) {
+          console.error("Feedback email worker failed", {
+            status: response.status,
+            body: await response.text(),
+          });
+
+          throw new Error("Email worker failed");
+        }
       } catch (error) {
-        console.error("Failed to send feedback email", error);
+        console.error("Failed to forward feedback email", error);
 
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
