@@ -12,6 +12,13 @@ import { TRPCError } from "@trpc/server";
 
 const supportEmailAddress = "support@uenroll.ca";
 
+type TargetedEmail = {
+  from: string;
+  subject: string;
+  replyTo?: string;
+  text: string;
+};
+
 export const appRouter = router({
   getCourseByTermAndCourseCode: publicProcedure
     .input(
@@ -122,14 +129,19 @@ export const appRouter = router({
         .join("\n");
 
       try {
-        await ctx.supportEmail.send({
+        await (
+          ctx.supportEmail.send as unknown as (
+            message: TargetedEmail,
+          ) => Promise<EmailSendResult>
+        )({
           from: supportEmailAddress,
-          to: supportEmailAddress,
           subject: `[uEnroll] ${typeLabel}`,
           replyTo,
           text,
         });
       } catch (error) {
+        console.error("Failed to send feedback email", error);
+
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Unable to send feedback right now.",
