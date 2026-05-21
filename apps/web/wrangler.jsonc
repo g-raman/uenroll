@@ -18,4 +18,10 @@
     },
   ],
   "workers_dev": true,
+  "routes": [
+    {
+      "custom_domain": true,
+      "pattern": "uenroll.ca",
+    },
+  ],
 }
