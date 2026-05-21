@@ -97,13 +97,7 @@ export const appRouter = router({
       z.object({
         type: z.enum(["feedback", "bug"]),
         message: z.string().trim().min(10).max(5000),
-        email: z
-          .string()
-          .trim()
-          .email()
-          .max(254)
-          .optional()
-          .or(z.literal("")),
+        email: z.string().trim().email().max(254).optional().or(z.literal("")),
         pageUrl: z.string().trim().url().max(2048).optional(),
         userAgent: z.string().trim().max(500).optional(),
       }),

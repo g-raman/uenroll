@@ -1,4 +1,4 @@
-import { FeedbackButton } from "@/components/Feedback/FeedbackButton";
+import { FeedbackButton } from "@/components/Buttons/FeedbackButton";
 import { ReactNode } from "react";
 
 export default function App({ children }: Readonly<{ children: ReactNode }>) {

@@ -12,10 +12,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { Textarea } from "@repo/ui/components/textarea";
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@repo/ui/components/toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import {
   Tooltip,
   TooltipContent,
