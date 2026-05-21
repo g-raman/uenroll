@@ -9,7 +9,10 @@ const handler = (req: Request) => {
     endpoint: "/api/trpc",
     req,
     router: appRouter,
-    createContext: () => ({ db: createDb(env) }),
+    createContext: () => ({
+      db: createDb(env),
+      emailWorker: env.EMAIL_WORKER,
+    }),
   });
 };
 

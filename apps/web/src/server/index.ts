@@ -5,9 +5,10 @@ import {
   getCourse,
   processCourse,
 } from "@repo/db/queries";
+import { feedbackPayloadSchema } from "@repo/feedback";
 import { publicProcedure, router } from "./trpc";
-import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 
 export const appRouter = router({
   getCourseByTermAndCourseCode: publicProcedure
@@ -89,6 +90,36 @@ export const appRouter = router({
       }
 
       return courses.value;
+    }),
+  sendFeedback: publicProcedure
+    .input(feedbackPayloadSchema)
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const response = await ctx.emailWorker.fetch("https://email/feedback", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(input),
+        });
+
+        if (!response.ok) {
+          console.error("Feedback email worker failed", {
+            status: response.status,
+            body: await response.text(),
+          });
+
+          throw new Error("Email worker failed");
+        }
+      } catch (error) {
+        console.error("Failed to forward feedback email", error);
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Unable to send feedback right now.",
+          cause: error,
+        });
+      }
+
+      return { success: true };
     }),
 });
 

@@ -3,6 +3,7 @@ import type { Database } from "@repo/db";
 
 export type Context = {
   db: Database;
+  emailWorker: Fetcher;
 };
 
 const t = initTRPC.context<Context>().create();

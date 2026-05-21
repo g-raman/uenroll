@@ -7,6 +7,7 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"],
+      "@repo/feedback": ["../../packages/feedback/src/index.ts"],
       "@repo/ui/*": ["../../packages/ui/src/*"]
     }
   },

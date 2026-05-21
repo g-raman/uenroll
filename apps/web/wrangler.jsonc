@@ -17,6 +17,12 @@
       "id": "a24d5ae3a33047c2acdf27cc18526246",
     },
   ],
+  "services": [
+    {
+      "binding": "EMAIL_WORKER",
+      "service": "uenroll-email",
+    },
+  ],
   "workers_dev": true,
   "routes": [
     {
