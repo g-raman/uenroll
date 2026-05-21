@@ -17,6 +17,12 @@
       "id": "a24d5ae3a33047c2acdf27cc18526246",
     },
   ],
+  "send_email": [
+    {
+      "name": "SUPPORT_EMAIL",
+      "destination_address": "support@uenroll.ca",
+    },
+  ],
   "workers_dev": true,
   "routes": [
     {

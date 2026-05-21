@@ -9,6 +9,8 @@ import { publicProcedure, router } from "./trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
+const supportEmailAddress = "support@uenroll.ca";
+
 export const appRouter = router({
   getCourseByTermAndCourseCode: publicProcedure
     .input(
@@ -89,6 +91,58 @@ export const appRouter = router({
       }
 
       return courses.value;
+    }),
+  sendFeedback: publicProcedure
+    .input(
+      z.object({
+        type: z.enum(["feedback", "bug"]),
+        message: z.string().trim().min(10).max(5000),
+        email: z
+          .string()
+          .trim()
+          .email()
+          .max(254)
+          .optional()
+          .or(z.literal("")),
+        pageUrl: z.string().trim().url().max(2048).optional(),
+        userAgent: z.string().trim().max(500).optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const replyTo = input.email || undefined;
+      const typeLabel = input.type === "bug" ? "Bug report" : "Feedback";
+      const submittedAt = new Date().toISOString();
+      const text = [
+        `${typeLabel} submitted from uEnroll`,
+        "",
+        `Submitted at: ${submittedAt}`,
+        input.pageUrl ? `Page: ${input.pageUrl}` : null,
+        input.userAgent ? `User agent: ${input.userAgent}` : null,
+        replyTo ? `Reply to: ${replyTo}` : null,
+        "",
+        "Message:",
+        input.message,
+      ]
+        .filter((line): line is string => line !== null)
+        .join("\n");
+
+      try {
+        await ctx.supportEmail.send({
+          from: supportEmailAddress,
+          to: supportEmailAddress,
+          subject: `[uEnroll] ${typeLabel}`,
+          replyTo,
+          text,
+        });
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Unable to send feedback right now.",
+          cause: error,
+        });
+      }
+
+      return { success: true };
     }),
 });
 
