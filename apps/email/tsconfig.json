@@ -1,0 +1,20 @@
+{
+  "extends": "@repo/typescript-config/base.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "noImplicitOverride": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "paths": {
+      "@repo/feedback": ["../../packages/feedback/src/index.ts"]
+    },
+    "rootDir": "../..",
+    "sourceMap": true,
+    "types": ["./worker-configuration.d.ts"],
+    "lib": ["ES2022"]
+  },
+  "include": ["./src/**/*.ts", "./worker-configuration.d.ts"]
+}

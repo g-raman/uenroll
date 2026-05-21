@@ -1,0 +1,23 @@
+{
+  "name": "uenroll-email",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "wrangler deploy --dry-run --outdir dist",
+    "check-types": "wrangler types && tsc --noEmit",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev --local",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@repo/feedback": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "eslint": "catalog:",
+    "typescript": "catalog:",
+    "wrangler": "^4.90.0"
+  }
+}
