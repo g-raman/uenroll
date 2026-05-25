@@ -14,7 +14,7 @@ export const DB_QUERY_CACHE_TTL_SECONDS = {
   courseByTermAndCode: 60 * 60,
   availableTerms: 60 * 60 * 24,
   availableCoursesByTerm: 60 * 60 * 24,
-  coursesByFilter: 60 * 60 * 8,
+  coursesByFilter: 60 * 60,
 } as const;
 
 type DbQueryCacheKeyArgs = {
