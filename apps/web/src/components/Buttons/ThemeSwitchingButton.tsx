@@ -8,6 +8,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+import { useTranslation } from "react-i18next";
 
 export function ThemeSwitchingButton() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -24,6 +25,7 @@ export function ThemeSwitchingButton() {
   };
 
   const Icon = mounted && resolvedTheme === "dark" ? Sun : Moon;
+  const { t } = useTranslation();
 
   return (
     <Tooltip>
@@ -42,7 +44,9 @@ export function ThemeSwitchingButton() {
       />
 
       <TooltipContent>
-        Change to {resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
+        {resolvedTheme === "dark"
+          ? t("theme.switchToLight")
+          : t("theme.switchToDark")}
       </TooltipContent>
     </Tooltip>
   );

@@ -74,5 +74,53 @@
   },
   "grades": {
     "uoGradesZone": "Notes sur uo.grades.zone"
+  },
+  "calendar": {
+    "termStart": "Début du trimestre",
+    "hideWeekends": "Masquer les fins de semaine",
+    "generate": "Générer",
+    "days": {
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mer",
+      "thu": "Jeu",
+      "fri": "Ven",
+      "sat": "Sam",
+      "sun": "Dim"
+    },
+    "monthsShort": [
+      "janv.",
+      "févr.",
+      "mars",
+      "avr.",
+      "mai",
+      "juin",
+      "juill.",
+      "août",
+      "sept.",
+      "oct.",
+      "nov.",
+      "déc."
+    ],
+    "monthsFull": [
+      "janvier",
+      "février",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "décembre"
+    ],
+    "previousWeek": "Semaine précédente",
+    "nextWeek": "Semaine suivante"
+  },
+  "theme": {
+    "switchToLight": "Passer au mode clair",
+    "switchToDark": "Passer au mode sombre"
   }
 }

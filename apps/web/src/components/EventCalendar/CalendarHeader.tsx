@@ -10,6 +10,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+import { useTranslation } from "react-i18next";
 
 interface CalendarHeaderProps {
   weekStart: Temporal.PlainDate;
@@ -26,14 +27,19 @@ export function CalendarHeader({
   onNavigate,
   onGoToTermStart,
 }: CalendarHeaderProps) {
+  const { t } = useTranslation();
+
+  const monthNamesShort = t("calendar.monthsShort", {
+    returnObjects: true,
+  }) as string[];
   return (
     <div className="flex items-center justify-between gap-4 border-b px-4 py-3">
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" onClick={onGoToTermStart}>
-          Term Start
+          {t("calendar.termStart")}
         </Button>
         <h2 className="truncate text-base font-semibold text-nowrap">
-          {formatWeekRange(weekStart)}
+          {formatWeekRange(weekStart, monthNamesShort)}
         </h2>
       </div>
 
@@ -44,7 +50,10 @@ export function CalendarHeader({
             checked={weekendsHidden}
             onCheckedChange={onWeekendsHiddenChange}
           />
-          <span className="text-muted-foreground">Hide weekends</span>
+          <span className="text-muted-foreground">
+            {" "}
+            {t("calendar.hideWeekends")}
+          </span>
         </label>
 
         <div className="flex gap-2">
@@ -66,7 +75,7 @@ export function CalendarHeader({
               }
             />
 
-            <TooltipContent>Previous week</TooltipContent>
+            <TooltipContent>{t("calendar.previousWeek")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -82,7 +91,7 @@ export function CalendarHeader({
               }
             />
 
-            <TooltipContent>Next week</TooltipContent>
+            <TooltipContent>{t("calendar.nextWeek")}</TooltipContent>
           </Tooltip>
         </div>
       </div>

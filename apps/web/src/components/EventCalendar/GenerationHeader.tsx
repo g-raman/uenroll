@@ -23,6 +23,8 @@ import {
 import { toast } from "sonner";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton";
+import { LanguageSwitcherButton } from "../Buttons/LanguageSwitcherButton";
+import { useTranslation } from "react-i18next";
 
 export function GenerationHeader() {
   const [loading, setLoading] = useState(false);
@@ -74,7 +76,7 @@ export function GenerationHeader() {
 
       // result[0] will be empty if there are search results but all components are unchecked
       if (result.length === 0 || result[0].length === 0) {
-        toast.error("No Possible Schedules. Adjust filters or remove courses.");
+        toast.error(t("scheduleGeneration.noSchedules"));
         return;
       }
       setSchedules(result);
@@ -125,6 +127,7 @@ export function GenerationHeader() {
 
     nextSchedule();
   };
+  const { t } = useTranslation();
 
   return (
     <div className="sticky top-0 z-10 flex items-center justify-between gap-2 rounded-b-lg border-b bg-background px-4 py-2 lg:rounded-lg lg:border">
@@ -162,7 +165,7 @@ export function GenerationHeader() {
               disabled={!isGenerationMode || noSchedules}
               value={
                 noSchedules
-                  ? `No results`
+                  ? t("scheduleGeneration.noResults")
                   : selectedSchedule !== null
                     ? selectedSchedule + 1
                     : ""
@@ -170,7 +173,7 @@ export function GenerationHeader() {
             />
             {!noSchedules && (
               <span className="flex h-full items-center border-y border-input bg-muted px-2 text-sm text-gray-500">
-                of {schedules.length}
+                {t("scheduleGeneration.of")} {schedules.length}
               </span>
             )}
           </div>
@@ -193,10 +196,10 @@ export function GenerationHeader() {
           className="px-2 text-xs lg:text-sm"
           onClick={handleGeneration}
         >
-          {loading ? "Loading..." : "Generate"}
+          {loading ? t("common.loading") : t("calendar.generate")}
         </Button>
       </div>
-
+      <LanguageSwitcherButton />
       <ThemeSwitchingButton />
     </div>
   );

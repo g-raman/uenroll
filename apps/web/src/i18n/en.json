@@ -74,5 +74,53 @@
   },
   "grades": {
     "uoGradesZone": "Grades on uo.grades.zone"
+  },
+  "calendar": {
+    "termStart": "Term Start",
+    "hideWeekends": "Hide weekends",
+    "generate": "Generate",
+    "days": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    },
+    "monthsShort": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
+    "monthsFull": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "previousWeek": "Previous week",
+    "nextWeek": "Next week"
+  },
+  "theme": {
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
   }
 }
