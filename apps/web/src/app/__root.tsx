@@ -117,7 +117,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootLayout() {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

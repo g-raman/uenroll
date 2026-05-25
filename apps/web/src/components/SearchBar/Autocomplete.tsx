@@ -115,7 +115,7 @@ export default function Autocomplete() {
 
         const next = { ...(data ?? {}), [courseCode]: [] };
         setData(next);
-      } catch (err) {
+      } catch {
         toast.error(t("errors.failedToAddCourse"));
       } finally {
         setIsAdding(false);
@@ -125,7 +125,7 @@ export default function Autocomplete() {
         requestAnimationFrame(() => inputRef.current?.focus());
       }
     },
-    [selectedCodes, isAtLimit, queryClient, trpc, selectedTerm, data, setData],
+    [selectedCodes, isAtLimit, queryClient, trpc, selectedTerm, data, setData, t],
   );
 
   const handleKeyDown = useCallback(
