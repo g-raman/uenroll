@@ -2,7 +2,7 @@ import type {
   AvailableCoursesByTermInput,
   CourseByTermAndCodeInput,
   CoursesByFilterInput,
-} from ".";
+} from "./inputSchemas";
 
 const CACHE_KEY_PREFIX = "db-query:v2";
 
@@ -17,11 +17,14 @@ export const DB_QUERY_CACHE_TTL_SECONDS = {
   coursesByFilter: 60 * 60 * 8,
 } as const;
 
-type DbQueryCacheKeyType =
-  | "course-by-term-and-code"
-  | "available-terms"
-  | "available-courses-by-term"
-  | "courses-by-filter";
+type DbQueryCacheKeyArgs = {
+  "available-terms": [];
+  "course-by-term-and-code": [CourseByTermAndCodeInput];
+  "available-courses-by-term": [AvailableCoursesByTermInput];
+  "courses-by-filter": [CoursesByFilterInput];
+};
+
+type DbQueryCacheKeyType = keyof DbQueryCacheKeyArgs;
 
 type CacheOptions<T> = {
   cache: KVNamespace | undefined;
@@ -30,45 +33,29 @@ type CacheOptions<T> = {
   ttlSeconds?: number;
 };
 
-export function createDbQueryCacheKey(type: "available-terms"): string;
-export function createDbQueryCacheKey(
-  type: "course-by-term-and-code",
-  input: CourseByTermAndCodeInput,
-): string;
+const cacheKeyBuilders = {
+  "available-terms": () => `${CACHE_KEY_PREFIX}:available-terms`,
+  "course-by-term-and-code": (input: CourseByTermAndCodeInput) =>
+    `${CACHE_KEY_PREFIX}:course-by-term-and-code:${input.term}:${input.courseCode}`,
+  "available-courses-by-term": (input: AvailableCoursesByTermInput) =>
+    `${CACHE_KEY_PREFIX}:available-courses-by-term:${input.term}`,
+  "courses-by-filter": (input: CoursesByFilterInput) =>
+    `${CACHE_KEY_PREFIX}:courses-by-filter:${createCoursesByFilterKey(input)}`,
+} satisfies {
+  [KeyType in DbQueryCacheKeyType]: (
+    ...args: DbQueryCacheKeyArgs[KeyType]
+  ) => string;
+};
 
-export function createDbQueryCacheKey(
-  type: "available-courses-by-term",
-  input: AvailableCoursesByTermInput,
-): string;
-
-export function createDbQueryCacheKey(
-  type: "courses-by-filter",
-  input: CoursesByFilterInput,
-): string;
-
-export function createDbQueryCacheKey(
-  type: DbQueryCacheKeyType,
-  input?:
-    | CourseByTermAndCodeInput
-    | AvailableCoursesByTermInput
-    | CoursesByFilterInput,
+export function createDbQueryCacheKey<KeyType extends DbQueryCacheKeyType>(
+  type: KeyType,
+  ...args: DbQueryCacheKeyArgs[KeyType]
 ): string {
-  switch (type) {
-    case "available-terms":
-      return `${CACHE_KEY_PREFIX}:available-terms`;
-    case "course-by-term-and-code": {
-      const courseInput = input as CourseByTermAndCodeInput;
-      return `${CACHE_KEY_PREFIX}:course-by-term-and-code:${courseInput.term}:${courseInput.courseCode}`;
-    }
-    case "available-courses-by-term": {
-      const availableCoursesInput = input as AvailableCoursesByTermInput;
-      return `${CACHE_KEY_PREFIX}:available-courses-by-term:${availableCoursesInput.term}`;
-    }
-    case "courses-by-filter": {
-      const filterInput = input as CoursesByFilterInput;
-      return `${CACHE_KEY_PREFIX}:courses-by-filter:${createCoursesByFilterKey(filterInput)}`;
-    }
-  }
+  const createKey = cacheKeyBuilders[type] as (
+    ...args: DbQueryCacheKeyArgs[KeyType]
+  ) => string;
+
+  return createKey(...args);
 }
 
 export async function getOrSetDbQueryCache<T>({
@@ -82,16 +69,10 @@ export async function getOrSetDbQueryCache<T>({
   }
 
   try {
-    const cached = await cache.get(key);
+    const cached = await readDbQueryCache<T>(cache, key);
 
-    if (cached === null) {
-      throw new Error("Cache miss");
-    }
-
-    const envelope = JSON.parse(cached) as CacheEnvelope<T>;
-
-    if (hasCachedValue(envelope)) {
-      return envelope.value;
+    if (cached.hit) {
+      return cached.value;
     }
   } catch {
     // Cache failures should not make read queries unavailable.
@@ -100,14 +81,42 @@ export async function getOrSetDbQueryCache<T>({
   const value = await fetcher();
 
   try {
-    await cache.put(key, JSON.stringify({ value } satisfies CacheEnvelope<T>), {
-      expirationTtl: ttlSeconds,
-    });
+    await writeDbQueryCache(cache, key, value, ttlSeconds);
   } catch {
     // Ignore write failures and serve the database result.
   }
 
   return value;
+}
+
+async function readDbQueryCache<T>(
+  cache: KVNamespace,
+  key: string,
+): Promise<{ hit: true; value: T } | { hit: false }> {
+  const cached = await cache.get(key);
+
+  if (cached === null) {
+    return { hit: false };
+  }
+
+  const parsed = JSON.parse(cached) as unknown;
+
+  if (!hasCachedValue<T>(parsed)) {
+    return { hit: false };
+  }
+
+  return { hit: true, value: parsed.value };
+}
+
+async function writeDbQueryCache<T>(
+  cache: KVNamespace,
+  key: string,
+  value: T,
+  ttlSeconds: number | undefined,
+): Promise<void> {
+  await cache.put(key, JSON.stringify({ value } satisfies CacheEnvelope<T>), {
+    expirationTtl: ttlSeconds,
+  });
 }
 
 function hasCachedValue<T>(value: unknown): value is CacheEnvelope<T> {
@@ -116,10 +125,10 @@ function hasCachedValue<T>(value: unknown): value is CacheEnvelope<T> {
 
 function createCoursesByFilterKey(input: CoursesByFilterInput): string {
   return [
-    `${input.term}`,
-    input.subject ? `${input.subject}` : undefined,
+    input.term,
+    input.subject ? `subject-${input.subject}` : undefined,
     input.year?.length ? `year-${input.year.join("-")}` : undefined,
-    input.language?.length ? `${input.language.join("-")}` : undefined,
+    input.language?.length ? `language-${input.language.join("-")}` : undefined,
     input.limit ? `limit-${input.limit}` : undefined,
   ]
     .filter(Boolean)

@@ -6,36 +6,17 @@ import {
   processCourse,
 } from "@repo/db/queries";
 import { publicProcedure, router } from "./trpc";
-import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
   createDbQueryCacheKey,
   DB_QUERY_CACHE_TTL_SECONDS,
   getOrSetDbQueryCache,
 } from "./cache";
-
-const courseByTermAndCodeInputSchema = z.object({
-  term: z.string(),
-  courseCode: z.string(),
-});
-
-const availableCoursesByTermInputSchema = z.object({ term: z.string() });
-
-const coursesByFilterInputSchema = z.object({
-  term: z.string(),
-  subject: z.string().trim().min(1).optional(),
-  year: z.array(z.number().int().min(1).max(9)).optional(),
-  language: z.array(z.enum(["english", "french", "other"])).optional(),
-  limit: z.number().int().min(1).max(500).optional(),
-});
-
-export type CourseByTermAndCodeInput = z.infer<
-  typeof courseByTermAndCodeInputSchema
->;
-export type AvailableCoursesByTermInput = z.infer<
-  typeof availableCoursesByTermInputSchema
->;
-export type CoursesByFilterInput = z.infer<typeof coursesByFilterInputSchema>;
+import {
+  availableCoursesByTermInputSchema,
+  courseByTermAndCodeInputSchema,
+  coursesByFilterInputSchema,
+} from "./inputSchemas";
 
 export const appRouter = router({
   getCourseByTermAndCourseCode: publicProcedure
