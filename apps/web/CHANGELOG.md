@@ -1,5 +1,27 @@
 # web
 
+## 3.0.0
+
+### Major Changes
+
+- [#181](https://github.com/g-raman/uenroll/pull/181) [`5b421b4`](https://github.com/g-raman/uenroll/commit/5b421b41cc51b1472fd82235d4c9e504cc9e5e18) Thanks [@g-raman](https://github.com/g-raman)! - Migrated to Tanstack Start
+
+### Minor Changes
+
+- [#185](https://github.com/g-raman/uenroll/pull/185) [`4e77002`](https://github.com/g-raman/uenroll/commit/4e7700276fce992cb46af3a15982b9b6a582323c) Thanks [@g-raman](https://github.com/g-raman)! - Added Workers KV cache
+
+### Patch Changes
+
+- [#176](https://github.com/g-raman/uenroll/pull/176) [`f7da2ed`](https://github.com/g-raman/uenroll/commit/f7da2ed192b4ab1bbb92cc32f8a82f07689316ec) Thanks [@g-raman](https://github.com/g-raman)! - Remove Winter 2026
+
+- [#178](https://github.com/g-raman/uenroll/pull/178) [`4c8ba70`](https://github.com/g-raman/uenroll/commit/4c8ba70e608ffe2cc3f76f9e7bdc2d533d44c123) Thanks [@g-raman](https://github.com/g-raman)! - Made advanced search feature more visible. Added multi-select functionality for advanced search filters.
+
+- [#179](https://github.com/g-raman/uenroll/pull/179) [`a2800ba`](https://github.com/g-raman/uenroll/commit/a2800ba1f9d9711b2496723b25e3400f031bf39f) Thanks [@g-raman](https://github.com/g-raman)! - Update dependencies
+
+- [#180](https://github.com/g-raman/uenroll/pull/180) [`f574fde`](https://github.com/g-raman/uenroll/commit/f574fde4ee85332b537a0b7b14f35736925b4033) Thanks [@g-raman](https://github.com/g-raman)! - Updated action button layout and swapped positions of theme and mode switching buttons
+
+- [#179](https://github.com/g-raman/uenroll/pull/179) [`a2800ba`](https://github.com/g-raman/uenroll/commit/a2800ba1f9d9711b2496723b25e3400f031bf39f) Thanks [@g-raman](https://github.com/g-raman)! - Updated dependencies.
+
 ## 2.2.0
 
 ### Minor Changes

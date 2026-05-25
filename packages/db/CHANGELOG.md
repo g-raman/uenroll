@@ -1,5 +1,15 @@
 # @repo/db
 
+## 0.7.1
+
+### Patch Changes
+
+- [#178](https://github.com/g-raman/uenroll/pull/178) [`4c8ba70`](https://github.com/g-raman/uenroll/commit/4c8ba70e608ffe2cc3f76f9e7bdc2d533d44c123) Thanks [@g-raman](https://github.com/g-raman)! - Made advanced search feature more visible. Added multi-select functionality for advanced search filters.
+
+- [#179](https://github.com/g-raman/uenroll/pull/179) [`a2800ba`](https://github.com/g-raman/uenroll/commit/a2800ba1f9d9711b2496723b25e3400f031bf39f) Thanks [@g-raman](https://github.com/g-raman)! - Update dependencies
+
+- [#179](https://github.com/g-raman/uenroll/pull/179) [`a2800ba`](https://github.com/g-raman/uenroll/commit/a2800ba1f9d9711b2496723b25e3400f031bf39f) Thanks [@g-raman](https://github.com/g-raman)! - Updated dependencies.
+
 ## 0.7.0
 
 ### Minor Changes
