@@ -24,7 +24,7 @@ export function createDbQueryCacheKey(
   type: DbQueryCacheKeyType,
   input?: unknown,
 ): string {
-  if (input === undefined) {
+  if (input === undefined || input === null) {
     return `${CACHE_KEY_PREFIX}:${type}`;
   }
 
