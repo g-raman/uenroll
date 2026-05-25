@@ -23,7 +23,7 @@ import {
 import { toast } from "sonner";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton";
-import { LanguageSwitcherButton } from "../Buttons/LanguageSwitcherButton";
+import { LanguageSwitcherButton } from "@/components/Buttons/LanguageSwitcherButton";
 import { useTranslation } from "react-i18next";
 
 export function GenerationHeader() {

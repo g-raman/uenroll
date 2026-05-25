@@ -51,7 +51,6 @@
     "any": "Any",
     "language": "Language",
     "setFilter": "Set at least one filter to search.",
-    "emptyState": "Enter a subject code, select a year, or choose a language to get started.",
     "clearFilters": "Clear filters",
     "results": {
       "searching": "Searching...",
