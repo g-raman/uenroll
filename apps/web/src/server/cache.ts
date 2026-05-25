@@ -1,5 +1,11 @@
 const CACHE_KEY_PREFIX = "db-query:v1";
-const DEFAULT_TTL_SECONDS = 60 * 60;
+
+export const DB_QUERY_CACHE_TTL_SECONDS = {
+  courseByTermAndCode: 60 * 60,
+  availableTerms: 60 * 60 * 24,
+  availableCoursesByTerm: 60 * 60 * 24,
+  coursesByFilter: 60 * 60 * 8,
+} as const;
 
 type DbQueryCacheKeyType =
   | "course-by-term-and-code"
@@ -29,7 +35,7 @@ export async function getOrSetDbQueryCache<T>({
   cache,
   key,
   fetcher,
-  ttlSeconds = DEFAULT_TTL_SECONDS,
+  ttlSeconds,
 }: CacheOptions<T>): Promise<T> {
   if (!cache) {
     return fetcher();

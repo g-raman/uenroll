@@ -8,7 +8,11 @@ import {
 import { publicProcedure, router } from "./trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { createDbQueryCacheKey, getOrSetDbQueryCache } from "./cache";
+import {
+  createDbQueryCacheKey,
+  DB_QUERY_CACHE_TTL_SECONDS,
+  getOrSetDbQueryCache,
+} from "./cache";
 
 export const appRouter = router({
   getCourseByTermAndCourseCode: publicProcedure
@@ -22,6 +26,7 @@ export const appRouter = router({
       return getOrSetDbQueryCache({
         cache: ctx.cache,
         key: createDbQueryCacheKey("course-by-term-and-code", input),
+        ttlSeconds: DB_QUERY_CACHE_TTL_SECONDS.courseByTermAndCode,
         fetcher: async () => {
           const course = await getCourse(input.term, input.courseCode, ctx.db);
           const processedCourse = processCourse(course);
@@ -41,6 +46,7 @@ export const appRouter = router({
     return getOrSetDbQueryCache({
       cache: ctx.cache,
       key: createDbQueryCacheKey("available-terms"),
+      ttlSeconds: DB_QUERY_CACHE_TTL_SECONDS.availableTerms,
       fetcher: async () => {
         const terms = await getAvailableTerms(ctx.db);
 
@@ -61,6 +67,7 @@ export const appRouter = router({
       return getOrSetDbQueryCache({
         cache: ctx.cache,
         key: createDbQueryCacheKey("available-courses-by-term", input),
+        ttlSeconds: DB_QUERY_CACHE_TTL_SECONDS.availableCoursesByTerm,
         fetcher: async () => {
           const availableCourses = await getAvailableCoursesByTerm(
             input.term,
@@ -92,6 +99,7 @@ export const appRouter = router({
       return getOrSetDbQueryCache({
         cache: ctx.cache,
         key: createDbQueryCacheKey("courses-by-filter", input),
+        ttlSeconds: DB_QUERY_CACHE_TTL_SECONDS.coursesByFilter,
         fetcher: async () => {
           const courses = await getCoursesByFilter(
             {
