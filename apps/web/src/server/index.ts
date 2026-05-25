@@ -21,7 +21,7 @@ export const appRouter = router({
     .query(async ({ ctx, input }) => {
       return getOrSetDbQueryCache({
         cache: ctx.cache,
-        key: createDbQueryCacheKey("getCourseByTermAndCourseCode", input),
+        key: createDbQueryCacheKey("course-by-term-and-code", input),
         fetcher: async () => {
           const course = await getCourse(input.term, input.courseCode, ctx.db);
           const processedCourse = processCourse(course);
@@ -40,7 +40,7 @@ export const appRouter = router({
   getAvailableTerms: publicProcedure.query(async ({ ctx }) => {
     return getOrSetDbQueryCache({
       cache: ctx.cache,
-      key: createDbQueryCacheKey("getAvailableTerms"),
+      key: createDbQueryCacheKey("available-terms"),
       fetcher: async () => {
         const terms = await getAvailableTerms(ctx.db);
 
@@ -60,7 +60,7 @@ export const appRouter = router({
     .query(async ({ ctx, input }) => {
       return getOrSetDbQueryCache({
         cache: ctx.cache,
-        key: createDbQueryCacheKey("getAvailableCoursesByTerm", input),
+        key: createDbQueryCacheKey("available-courses-by-term", input),
         fetcher: async () => {
           const availableCourses = await getAvailableCoursesByTerm(
             input.term,
@@ -91,7 +91,7 @@ export const appRouter = router({
     .query(async ({ ctx, input }) => {
       return getOrSetDbQueryCache({
         cache: ctx.cache,
-        key: createDbQueryCacheKey("getCoursesByFilter", input),
+        key: createDbQueryCacheKey("courses-by-filter", input),
         fetcher: async () => {
           const courses = await getCoursesByFilter(
             {

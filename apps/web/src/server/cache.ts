@@ -1,6 +1,12 @@
 const CACHE_KEY_PREFIX = "db-query:v1";
 const DEFAULT_TTL_SECONDS = 60 * 60;
 
+type DbQueryCacheKeyType =
+  | "course-by-term-and-code"
+  | "available-terms"
+  | "available-courses-by-term"
+  | "courses-by-filter";
+
 type CacheOptions<T> = {
   cache: KVNamespace | undefined;
   key: string;
@@ -9,10 +15,14 @@ type CacheOptions<T> = {
 };
 
 export function createDbQueryCacheKey(
-  procedure: string,
+  type: DbQueryCacheKeyType,
   input?: unknown,
 ): string {
-  return `${CACHE_KEY_PREFIX}:${procedure}:${stableStringify(input ?? null)}`;
+  if (input === undefined) {
+    return `${CACHE_KEY_PREFIX}:${type}`;
+  }
+
+  return `${CACHE_KEY_PREFIX}:${type}:${stableStringify(input)}`;
 }
 
 export async function getOrSetDbQueryCache<T>({
