@@ -17,6 +17,12 @@
       "id": "a24d5ae3a33047c2acdf27cc18526246",
     },
   ],
+  "kv_namespaces": [
+    {
+      "binding": "DB_QUERY_CACHE",
+      "id": "9a2ab00a3df1443ab96c918800c7d36a",
+    },
+  ],
   "workers_dev": true,
   "routes": [
     {

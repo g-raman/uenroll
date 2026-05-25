@@ -8,6 +8,7 @@ import {
 import { publicProcedure, router } from "./trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { createDbQueryCacheKey, getOrSetDbQueryCache } from "./cache";
 
 export const appRouter = router({
   getCourseByTermAndCourseCode: publicProcedure
@@ -18,46 +19,64 @@ export const appRouter = router({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const course = await getCourse(input.term, input.courseCode, ctx.db);
-      const processedCourse = processCourse(course);
+      return getOrSetDbQueryCache({
+        cache: ctx.cache,
+        key: createDbQueryCacheKey("getCourseByTermAndCourseCode", input),
+        fetcher: async () => {
+          const course = await getCourse(input.term, input.courseCode, ctx.db);
+          const processedCourse = processCourse(course);
 
-      if (processedCourse.isErr()) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: processedCourse.error.message,
-        });
-      }
+          if (processedCourse.isErr()) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: processedCourse.error.message,
+            });
+          }
 
-      return processedCourse.value;
+          return processedCourse.value;
+        },
+      });
     }),
   getAvailableTerms: publicProcedure.query(async ({ ctx }) => {
-    const terms = await getAvailableTerms(ctx.db);
+    return getOrSetDbQueryCache({
+      cache: ctx.cache,
+      key: createDbQueryCacheKey("getAvailableTerms"),
+      fetcher: async () => {
+        const terms = await getAvailableTerms(ctx.db);
 
-    if (terms.isErr()) {
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: terms.error.message,
-      });
-    }
+        if (terms.isErr()) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: terms.error.message,
+          });
+        }
 
-    return terms.value;
+        return terms.value;
+      },
+    });
   }),
   getAvailableCoursesByTerm: publicProcedure
     .input(z.object({ term: z.string() }))
     .query(async ({ ctx, input }) => {
-      const availableCourses = await getAvailableCoursesByTerm(
-        input.term,
-        ctx.db,
-      );
+      return getOrSetDbQueryCache({
+        cache: ctx.cache,
+        key: createDbQueryCacheKey("getAvailableCoursesByTerm", input),
+        fetcher: async () => {
+          const availableCourses = await getAvailableCoursesByTerm(
+            input.term,
+            ctx.db,
+          );
 
-      if (availableCourses.isErr()) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: availableCourses.error.message,
-        });
-      }
+          if (availableCourses.isErr()) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: availableCourses.error.message,
+            });
+          }
 
-      return availableCourses.value;
+          return availableCourses.value;
+        },
+      });
     }),
   getCoursesByFilter: publicProcedure
     .input(
@@ -70,25 +89,31 @@ export const appRouter = router({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const courses = await getCoursesByFilter(
-        {
-          term: input.term,
-          subject: input.subject,
-          year: input.year,
-          language: input.language,
-          limit: input.limit,
+      return getOrSetDbQueryCache({
+        cache: ctx.cache,
+        key: createDbQueryCacheKey("getCoursesByFilter", input),
+        fetcher: async () => {
+          const courses = await getCoursesByFilter(
+            {
+              term: input.term,
+              subject: input.subject,
+              year: input.year,
+              language: input.language,
+              limit: input.limit,
+            },
+            ctx.db,
+          );
+
+          if (courses.isErr()) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: courses.error.message,
+            });
+          }
+
+          return courses.value;
         },
-        ctx.db,
-      );
-
-      if (courses.isErr()) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: courses.error.message,
-        });
-      }
-
-      return courses.value;
+      });
     }),
 });
 

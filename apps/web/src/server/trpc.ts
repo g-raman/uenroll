@@ -3,6 +3,7 @@ import type { Database } from "@repo/db";
 
 export type Context = {
   db: Database;
+  cache: KVNamespace | undefined;
 };
 
 const t = initTRPC.context<Context>().create();
