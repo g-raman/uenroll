@@ -4,7 +4,11 @@ import type {
   CoursesByFilterInput,
 } from ".";
 
-const CACHE_KEY_PREFIX = "db-query:v1";
+const CACHE_KEY_PREFIX = "db-query:v2";
+
+type CacheEnvelope<T> = {
+  value: T;
+};
 
 export const DB_QUERY_CACHE_TTL_SECONDS = {
   courseByTermAndCode: 60 * 60,
@@ -78,10 +82,16 @@ export async function getOrSetDbQueryCache<T>({
   }
 
   try {
-    const cached = await cache.get<T>(key, { type: "json" });
+    const cached = await cache.get(key);
 
-    if (cached !== null) {
-      return cached;
+    if (cached === null) {
+      throw new Error("Cache miss");
+    }
+
+    const envelope = JSON.parse(cached) as CacheEnvelope<T>;
+
+    if (hasCachedValue(envelope)) {
+      return envelope.value;
     }
   } catch {
     // Cache failures should not make read queries unavailable.
@@ -90,7 +100,7 @@ export async function getOrSetDbQueryCache<T>({
   const value = await fetcher();
 
   try {
-    await cache.put(key, JSON.stringify(value), {
+    await cache.put(key, JSON.stringify({ value } satisfies CacheEnvelope<T>), {
       expirationTtl: ttlSeconds,
     });
   } catch {
@@ -98,6 +108,10 @@ export async function getOrSetDbQueryCache<T>({
   }
 
   return value;
+}
+
+function hasCachedValue<T>(value: unknown): value is CacheEnvelope<T> {
+  return typeof value === "object" && value !== null && "value" in value;
 }
 
 function createCoursesByFilterKey(input: CoursesByFilterInput): string {
