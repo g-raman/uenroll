@@ -32,7 +32,9 @@
     "lint": "turbo run lint"
   },
   "dependencies": {
-    "minimatch": "^10.2.5"
+    "i18next": "^26.2.0",
+    "minimatch": "^10.2.5",
+    "react-i18next": "^17.0.8"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.7.0",
