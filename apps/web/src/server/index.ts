@@ -14,14 +14,32 @@ import {
   getOrSetDbQueryCache,
 } from "./cache";
 
+const courseByTermAndCodeInputSchema = z.object({
+  term: z.string(),
+  courseCode: z.string(),
+});
+
+const availableCoursesByTermInputSchema = z.object({ term: z.string() });
+
+const coursesByFilterInputSchema = z.object({
+  term: z.string(),
+  subject: z.string().trim().min(1).optional(),
+  year: z.array(z.number().int().min(1).max(9)).optional(),
+  language: z.array(z.enum(["english", "french", "other"])).optional(),
+  limit: z.number().int().min(1).max(500).optional(),
+});
+
+export type CourseByTermAndCodeInput = z.infer<
+  typeof courseByTermAndCodeInputSchema
+>;
+export type AvailableCoursesByTermInput = z.infer<
+  typeof availableCoursesByTermInputSchema
+>;
+export type CoursesByFilterInput = z.infer<typeof coursesByFilterInputSchema>;
+
 export const appRouter = router({
   getCourseByTermAndCourseCode: publicProcedure
-    .input(
-      z.object({
-        term: z.string(),
-        courseCode: z.string(),
-      }),
-    )
+    .input(courseByTermAndCodeInputSchema)
     .query(async ({ ctx, input }) => {
       return getOrSetDbQueryCache({
         cache: ctx.cache,
@@ -62,7 +80,7 @@ export const appRouter = router({
     });
   }),
   getAvailableCoursesByTerm: publicProcedure
-    .input(z.object({ term: z.string() }))
+    .input(availableCoursesByTermInputSchema)
     .query(async ({ ctx, input }) => {
       return getOrSetDbQueryCache({
         cache: ctx.cache,
@@ -86,15 +104,7 @@ export const appRouter = router({
       });
     }),
   getCoursesByFilter: publicProcedure
-    .input(
-      z.object({
-        term: z.string(),
-        subject: z.string().trim().min(1).optional(),
-        year: z.array(z.number().int().min(1).max(9)).optional(),
-        language: z.array(z.enum(["english", "french", "other"])).optional(),
-        limit: z.number().int().min(1).max(500).optional(),
-      }),
-    )
+    .input(coursesByFilterInputSchema)
     .query(async ({ ctx, input }) => {
       return getOrSetDbQueryCache({
         cache: ctx.cache,

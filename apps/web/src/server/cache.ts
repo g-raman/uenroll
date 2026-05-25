@@ -1,3 +1,9 @@
+import type {
+  AvailableCoursesByTermInput,
+  CourseByTermAndCodeInput,
+  CoursesByFilterInput,
+} from ".";
+
 const CACHE_KEY_PREFIX = "db-query:v1";
 
 export const DB_QUERY_CACHE_TTL_SECONDS = {
@@ -20,15 +26,45 @@ type CacheOptions<T> = {
   ttlSeconds?: number;
 };
 
+export function createDbQueryCacheKey(type: "available-terms"): string;
+export function createDbQueryCacheKey(
+  type: "course-by-term-and-code",
+  input: CourseByTermAndCodeInput,
+): string;
+
+export function createDbQueryCacheKey(
+  type: "available-courses-by-term",
+  input: AvailableCoursesByTermInput,
+): string;
+
+export function createDbQueryCacheKey(
+  type: "courses-by-filter",
+  input: CoursesByFilterInput,
+): string;
+
 export function createDbQueryCacheKey(
   type: DbQueryCacheKeyType,
-  input?: unknown,
+  input?:
+    | CourseByTermAndCodeInput
+    | AvailableCoursesByTermInput
+    | CoursesByFilterInput,
 ): string {
-  if (input === undefined || input === null) {
-    return `${CACHE_KEY_PREFIX}:${type}`;
+  switch (type) {
+    case "available-terms":
+      return `${CACHE_KEY_PREFIX}:available-terms`;
+    case "course-by-term-and-code": {
+      const courseInput = input as CourseByTermAndCodeInput;
+      return `${CACHE_KEY_PREFIX}:course-by-term-and-code:${courseInput.term}:${courseInput.courseCode}`;
+    }
+    case "available-courses-by-term": {
+      const availableCoursesInput = input as AvailableCoursesByTermInput;
+      return `${CACHE_KEY_PREFIX}:available-courses-by-term:${availableCoursesInput.term}`;
+    }
+    case "courses-by-filter": {
+      const filterInput = input as CoursesByFilterInput;
+      return `${CACHE_KEY_PREFIX}:courses-by-filter:${createCoursesByFilterKey(filterInput)}`;
+    }
   }
-
-  return `${CACHE_KEY_PREFIX}:${type}:${stableStringify(input)}`;
 }
 
 export async function getOrSetDbQueryCache<T>({
@@ -64,17 +100,14 @@ export async function getOrSetDbQueryCache<T>({
   return value;
 }
 
-function stableStringify(value: unknown): string {
-  if (Array.isArray(value)) {
-    return value.map(stableStringify).join("-");
-  }
-
-  if (value && typeof value === "object") {
-    return Object.entries(value)
-      .sort(([left], [right]) => left.localeCompare(right))
-      .map(([key, entry]) => `${key}-${stableStringify(entry)}`)
-      .join(":");
-  }
-
-  return String(value);
+function createCoursesByFilterKey(input: CoursesByFilterInput): string {
+  return [
+    `${input.term}`,
+    input.subject ? `${input.subject}` : undefined,
+    input.year?.length ? `year-${input.year.join("-")}` : undefined,
+    input.language?.length ? `${input.language.join("-")}` : undefined,
+    input.limit ? `limit-${input.limit}` : undefined,
+  ]
+    .filter(Boolean)
+    .join(":");
 }
