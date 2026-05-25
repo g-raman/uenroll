@@ -1,10 +1,12 @@
 import { Button } from "@repo/ui/components/button";
+import { useTranslation } from "react-i18next";
 
 export const Footer = () => {
   const year = new Date().getFullYear();
+  const { t } = useTranslation();
   return (
     <div className="mt-auto hidden text-center text-sm md:block">
-      <p className="inline-block">Mantained by</p>
+      <p className="inline-block">{t("footer.maintainedBy")}</p>
       &nbsp;
       <Button
         nativeButton={false}

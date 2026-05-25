@@ -9,12 +9,14 @@ import { useMode, useUserSettingsActions } from "@/stores/modeStore";
 import { Selected } from "@/types/Types";
 import { useGeneratorActions } from "@/stores/generatorStore";
 import { useDataParam } from "@/hooks/useDataParam";
+import { useTranslation } from "react-i18next";
 
 export const ModeSwitcherButton = () => {
   const isGenerationMode = useMode();
   const [data, setData] = useDataParam();
   const { resetSchedules } = useGeneratorActions();
   const { toggleMode } = useUserSettingsActions();
+  const { t } = useTranslation();
 
   const handleToggle = () => {
     const courseCodes = Object.keys(data ? data : {});
@@ -24,6 +26,7 @@ export const ModeSwitcherButton = () => {
     resetSchedules();
     toggleMode();
   };
+  
 
   return (
     <Tooltip>
@@ -41,16 +44,16 @@ export const ModeSwitcherButton = () => {
               aria-hidden="true"
             />
             {isGenerationMode
-              ? "Schedule Generation on"
-              : "Schedule Generation off"}
+              ? t("scheduleGeneration.on")
+              : t("scheduleGeneration.off")}
           </Button>
         }
       />
 
       <TooltipContent>
         {isGenerationMode
-          ? "Switch back to manual section selection"
-          : "Automatically generate all possible schedules"}
+          ? t("scheduleGeneration.tooltip.on")
+          : t("scheduleGeneration.tooltip.off")}
       </TooltipContent>
     </Tooltip>
   );

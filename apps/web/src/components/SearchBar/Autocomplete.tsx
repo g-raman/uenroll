@@ -28,6 +28,7 @@ import { SearchIcon, LoaderCircleIcon } from "lucide-react";
 import { AdvancedSearch } from "./AdvancedSearch/AdvancedSearch";
 import { DeleteSearchResultsButton } from "@/components/Buttons/DeleteSearchResultsButton";
 import { ModeSwitcherButton } from "@/components/Buttons/ModeSwitcherButton";
+import { useTranslation } from "react-i18next";
 
 interface CourseMatch {
   courseCode: string;
@@ -58,6 +59,7 @@ export default function Autocomplete() {
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const trpc = useTRPC();
+  const { t } = useTranslation();
 
   const deferredQuery = useDeferredValue(
     stripSpacesFromCourseCode(query.trim()),
@@ -93,12 +95,12 @@ export default function Autocomplete() {
   const addCourse = useCallback(
     async (courseCode: string) => {
       if (selectedCodes.has(courseCode)) {
-        toast.info(`${courseCode} is already selected`);
+        toast.info(t("errors.alreadySelected", { courseCode }));
         return;
       }
 
       if (isAtLimit) {
-        toast.error(`Maximum of ${MAX_RESULTS_ALLOWED} courses allowed`);
+        toast.error(t("errors.maxCoursesAllowed", { count: MAX_RESULTS_ALLOWED }));
         return;
       }
 
@@ -114,9 +116,7 @@ export default function Autocomplete() {
         const next = { ...(data ?? {}), [courseCode]: [] };
         setData(next);
       } catch (err) {
-        toast.error(
-          err instanceof Error ? err.message : "Failed to add course",
-        );
+        toast.error(t("errors.failedToAddCourse"));
       } finally {
         setIsAdding(false);
         setQuery("");
@@ -188,7 +188,7 @@ export default function Autocomplete() {
                   if (deferredQuery) setOpen(true);
                 }}
                 onKeyDown={handleKeyDown}
-                placeholder="Search for a course..."
+                placeholder={t("search.placeholder")}
                 disabled={isAdding}
               />
             </InputGroup>
@@ -202,7 +202,7 @@ export default function Autocomplete() {
         >
           {results.length === 0 && (
             <p className="px-3 py-4 text-center text-sm text-muted-foreground">
-              No courses found
+              {t("errors.noCourseFound")}
             </p>
           )}
 

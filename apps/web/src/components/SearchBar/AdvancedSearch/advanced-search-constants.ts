@@ -1,20 +1,20 @@
 export const YEAR_OPTIONS = [
-  { label: "Any", value: "any" },
-  { label: "1st", value: "1" },
-  { label: "2nd", value: "2" },
-  { label: "3rd", value: "3" },
-  { label: "4th", value: "4" },
-  { label: "Grad", value: "5" },
+  { labelKey: "advancedSearch.any", value: "any" },
+  { labelKey: "advancedSearch.years.first", value: "1" },
+  { labelKey: "advancedSearch.years.second", value: "2" },
+  { labelKey: "advancedSearch.years.third", value: "3" },
+  { labelKey: "advancedSearch.years.fourth", value: "4" },
+  { labelKey: "advancedSearch.years.grad", value: "5" }
 ] as const;
 
 export const LANGUAGE_OPTIONS = [
-  { label: "Any", value: "any", description: undefined },
-  { label: "English", value: "english", description: undefined },
-  { label: "French", value: "french", description: undefined },
+  { labelKey: "advancedSearch.any", value: "any", descriptionKey: undefined },
+  { labelKey: "advancedSearch.languages.english", value: "english", descriptionKey: undefined },
+  { labelKey: "advancedSearch.languages.french", value: "french", descriptionKey: undefined },
   {
-    label: "Other",
+    labelKey: "advancedSearch.languages.other",
     value: "other",
-    description: "Bilingual or other languages (e.g. Spanish)",
+    descriptionKey: "advancedSearch.languageDescriptions.other",
   },
 ] as const;
 

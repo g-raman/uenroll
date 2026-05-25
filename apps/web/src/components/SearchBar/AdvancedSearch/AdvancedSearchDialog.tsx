@@ -16,6 +16,7 @@ import {
 } from "./advanced-search-constants";
 import { AdvancedSearchFilters } from "./AdvancedSearchFilters";
 import { AdvancedSearchResults } from "./AdvancedSearchResults";
+import { useTranslation } from "react-i18next";
 
 type AdvancedSearchDialogProps = {
   open: boolean;
@@ -108,15 +109,15 @@ export function AdvancedSearchDialog({
     setLanguage(["any"]);
     setSubmittedFilters(null);
   };
+  const { t } = useTranslation();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Advanced search</DialogTitle>
+          <DialogTitle>{t("advancedSearch.title")}</DialogTitle>
           <DialogDescription>
-            Filter by subject, year, or language, then add courses to your
-            playground.
+            {t("advancedSearch.description")}
           </DialogDescription>
         </DialogHeader>
 
