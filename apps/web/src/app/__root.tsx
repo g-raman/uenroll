@@ -14,6 +14,8 @@ import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 import { Suspense } from "react";
 import { PostHogInit } from "@/components/PostHogInit";
 import appCss from "./app.css?url";
+import "@/i18n";
+import { useTranslation } from "react-i18next";
 
 const siteUrl = envClient.VITE_BASE_URL;
 const siteName = "uEnroll";
@@ -115,6 +117,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootLayout() {
+  const { t } = useTranslation(); 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -129,7 +132,7 @@ function RootLayout() {
         >
           <NuqsAdapter>
             <PostHogInit />
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div>{t("common.loading")}</div>}>
               <Outlet />
             </Suspense>
             <Toaster richColors position="top-right" />

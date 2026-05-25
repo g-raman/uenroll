@@ -1,0 +1,78 @@
+{
+    "term": {
+        "springSummer2025": "2025 Spring/Summer Term"
+    },
+    "search": {
+        "placeholder": "Search for a course..."
+    },
+    "scheduleGeneration": {
+        "off": "Schedule Generation off",
+        "on": "Schedule Generation on",
+        "tooltip": {
+            "on": "Switch back to manual section selection",
+            "off": "Automatically generate all possible schedules"
+        }
+    },
+    "clearResults": {
+        "button": "Clear Results",
+        "tooltip": "Clear all search results"
+    },
+    "footer": {
+        "maintainedBy": "Maintained by"
+    },
+    "errors": {
+        "failedToAddCourse": "Failed to add course",
+        "maxCoursesAllowed": "Maximum of {{count}} courses allowed",
+        "alreadySelected": "{{courseCode}} is already selected",
+        "missingEnvironmentVariables": "Missing environment variables",
+        "noCourseFound": "No courses found"
+    },
+    "advancedSearch": {
+        "title": "Advanced search",
+        "description": "Filter by subject, year, or language, then add courses to your playground.",
+        "subjectCode": "Subject code",
+        "search": "Search",
+        "year": "Year",
+        "years": {
+            "first": "1st",
+            "second": "2nd",
+            "third": "3rd",
+            "fourth": "4th",
+            "grad": "Grad"
+        },
+        "languages": {
+            "english": "English",
+            "french": "French",
+            "other": "Other"
+        },
+        "languageDescriptions": {
+            "other": "Bilingual or other languages (e.g. Spanish)"
+        },
+        "any": "Any",
+        "language": "Language",
+        "setFilter": "Set at least one filter to search.",
+        "emptyState": "Enter a subject code, select a year, or choose a language to get started.",
+        "clearFilters": "Clear filters",
+        "results": {
+            "searching": "Searching...",
+            "count_one": "{{count}} result",
+            "count_other": "{{count}} results",
+            "limited": "limited to {{limit}}",
+            "pressSearch": "Press Search to see results.",
+            "setFilter": "Set at least one filter to search.",
+            "maxCourses": "Max {{count}} courses",
+            "ready": "Ready to search. Press the Search button or hit Enter.",
+            "empty": "Enter a subject code, select a year, or choose a language to get started.",
+            "finding": "Finding courses...",
+            "noMatch": "No courses match those filters.",
+            "added": "Added",
+            "add": "Add"
+        }
+    },
+    "common": {
+        "loading": "Loading..."
+    },
+    "grades": {
+        "uoGradesZone": "Grades on uo.grades.zone"
+    }
+}
