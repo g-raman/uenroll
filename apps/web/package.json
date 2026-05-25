@@ -11,6 +11,7 @@
     "deploy": "bun run build && wrangler deploy",
     "ci:deploy": "wrangler deploy",
     "ci:deploy:preview": "wrangler versions upload",
+    "deploy:preview": "bun run build && wrangler version upload",
     "dev": "vite dev",
     "lint": "eslint --max-warnings 0 .",
     "start": "bun .output/server/index.mjs"
