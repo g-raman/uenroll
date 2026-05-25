@@ -4,13 +4,21 @@ export const YEAR_OPTIONS = [
   { labelKey: "advancedSearch.years.second", value: "2" },
   { labelKey: "advancedSearch.years.third", value: "3" },
   { labelKey: "advancedSearch.years.fourth", value: "4" },
-  { labelKey: "advancedSearch.years.grad", value: "5" }
+  { labelKey: "advancedSearch.years.grad", value: "5" },
 ] as const;
 
 export const LANGUAGE_OPTIONS = [
   { labelKey: "advancedSearch.any", value: "any", descriptionKey: undefined },
-  { labelKey: "advancedSearch.languages.english", value: "english", descriptionKey: undefined },
-  { labelKey: "advancedSearch.languages.french", value: "french", descriptionKey: undefined },
+  {
+    labelKey: "advancedSearch.languages.english",
+    value: "english",
+    descriptionKey: undefined,
+  },
+  {
+    labelKey: "advancedSearch.languages.french",
+    value: "french",
+    descriptionKey: undefined,
+  },
   {
     labelKey: "advancedSearch.languages.other",
     value: "other",

@@ -26,7 +26,6 @@ export const ModeSwitcherButton = () => {
     resetSchedules();
     toggleMode();
   };
-  
 
   return (
     <Tooltip>

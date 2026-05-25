@@ -100,7 +100,9 @@ export default function Autocomplete() {
       }
 
       if (isAtLimit) {
-        toast.error(t("errors.maxCoursesAllowed", { count: MAX_RESULTS_ALLOWED }));
+        toast.error(
+          t("errors.maxCoursesAllowed", { count: MAX_RESULTS_ALLOWED }),
+        );
         return;
       }
 
@@ -125,7 +127,16 @@ export default function Autocomplete() {
         requestAnimationFrame(() => inputRef.current?.focus());
       }
     },
-    [selectedCodes, isAtLimit, queryClient, trpc, selectedTerm, data, setData, t],
+    [
+      selectedCodes,
+      isAtLimit,
+      queryClient,
+      trpc,
+      selectedTerm,
+      data,
+      setData,
+      t,
+    ],
   );
 
   const handleKeyDown = useCallback(

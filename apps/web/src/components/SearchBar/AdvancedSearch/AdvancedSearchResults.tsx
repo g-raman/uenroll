@@ -39,17 +39,20 @@ export function AdvancedSearchResults({
           {hasSubmitted
             ? isLoading
               ? t("advancedSearch.results.searching")
-              : `${t("advancedSearch.results.count", { count: courses.length })}${courses.length >= RESULTS_LIMIT
-                ? ` (${t("advancedSearch.results.limited", { limit: RESULTS_LIMIT })})`
-                : ""
-              }`
+              : `${t("advancedSearch.results.count", { count: courses.length })}${
+                  courses.length >= RESULTS_LIMIT
+                    ? ` (${t("advancedSearch.results.limited", { limit: RESULTS_LIMIT })})`
+                    : ""
+                }`
             : canSearch
               ? t("advancedSearch.results.pressSearch")
               : t("advancedSearch.results.setFilter")}
         </span>
         {isAtLimit && (
           <span className="font-medium text-destructive">
-            {t("advancedSearch.results.maxCourses", { count: MAX_RESULTS_ALLOWED })}
+            {t("advancedSearch.results.maxCourses", {
+              count: MAX_RESULTS_ALLOWED,
+            })}
           </span>
         )}
       </div>

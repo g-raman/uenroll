@@ -4,7 +4,6 @@ import { useState } from "react";
 import { AdvancedSearchDialog } from "./AdvancedSearchDialog";
 import { useTranslation } from "react-i18next";
 
-
 type AdvancedSearchProps = {
   term: string;
   selectedCodes: Set<string>;

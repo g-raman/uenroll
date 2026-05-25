@@ -18,7 +18,6 @@ export const DeleteSearchResultsButton = () => {
   const { resetSchedules } = useGeneratorActions();
   const { t } = useTranslation();
 
-
   const handleClick = useCallback(() => {
     resetColours();
     setData(null);

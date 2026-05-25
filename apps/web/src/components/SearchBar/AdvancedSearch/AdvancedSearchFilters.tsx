@@ -180,7 +180,9 @@ export function AdvancedSearchFilters({
                 return (
                   <Tooltip key={option.value}>
                     <TooltipTrigger render={toggle} />
-                    <TooltipContent>{option.descriptionKey ? t(option.descriptionKey) : null}</TooltipContent>
+                    <TooltipContent>
+                      {option.descriptionKey ? t(option.descriptionKey) : null}
+                    </TooltipContent>
                   </Tooltip>
                 );
               }
