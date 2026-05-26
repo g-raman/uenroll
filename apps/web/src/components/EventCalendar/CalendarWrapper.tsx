@@ -15,11 +15,18 @@ import { GenerationHeader } from "./GenerationHeader";
 import { EventCalendar } from "@/components/EventCalendar/EventCalendar";
 
 const TERM_START_DATES = {
-  "2261": "2026-01-01", // Winter 2026
-  "2265": "2026-05-04", // 2026 Spring/Summer Term
+  "2251": "2025-01-06", // Winter 2025
+  "2255": "2025-05-05", // Spring/Summer 2025
+  "2259": "2025-09-02", // Fall 2025
+
+  "2261": "2026-01-05", // Winter 2026
+  "2265": "2026-05-04", // Spring/Summer 2026
   "2269": "2026-09-01", // Fall 2026
-  "2271": "2027-01-01", // Winter 2027
+
+  "2271": "2027-01-04", // Winter 2027
 } as const;
+
+const DEFAULT_TERM_START_DATE = "2026-05-04";
 
 function isKnownTerm(term: string): term is keyof typeof TERM_START_DATES {
   return Object.hasOwn(TERM_START_DATES, term);

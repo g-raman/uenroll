@@ -9,6 +9,8 @@
     "off": "Schedule Generation off",
     "on": "Schedule Generation on",
     "noResults": "No schedule",
+    "noSchedules": "No schedules found",
+    "of": "Schedule of ",
     "tooltip": {
       "on": "Switch back to manual section selection",
       "off": "Automatically generate all possible schedules"

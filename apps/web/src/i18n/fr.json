@@ -9,6 +9,8 @@
     "off": "Génération d’horaire désactivée",
     "on": "Génération d’horaire activée",
     "noResults": "Aucun horaire",
+    "noSchedules": "Aucun horaire trouvé",
+    "of": "Horaire de ",
     "tooltip": {
       "on": "Revenir à la sélection manuelle des sections",
       "off": "Générer automatiquement tous les horaires possibles"

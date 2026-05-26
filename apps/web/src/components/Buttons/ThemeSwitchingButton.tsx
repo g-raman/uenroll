@@ -9,14 +9,17 @@ import {
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import { useTranslation } from "react-i18next";
+import { cn } from "@repo/ui/lib/utils";
 
-export function ThemeSwitchingButton() {
+type ThemeSwitchingButtonProps = {
+  className?: string;
+};
+
+export function ThemeSwitchingButton({ className }: ThemeSwitchingButtonProps) {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Only run once and state isn't used elsewhere
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -32,7 +35,7 @@ export function ThemeSwitchingButton() {
       <TooltipTrigger
         render={
           <Button
-            className="size-10"
+            className={cn("w-full justify-center", className)}
             variant="outline"
             size="icon"
             onClick={toggleTheme}
