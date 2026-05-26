@@ -8,6 +8,7 @@
   "scheduleGeneration": {
     "off": "Génération d’horaire désactivée",
     "on": "Génération d’horaire activée",
+    "noResults": "Aucun horaire",
     "tooltip": {
       "on": "Revenir à la sélection manuelle des sections",
       "off": "Générer automatiquement tous les horaires possibles"
