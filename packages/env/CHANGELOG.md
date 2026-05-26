@@ -1,5 +1,15 @@
 # @repo/env
 
+## 0.5.0
+
+### Minor Changes
+
+- [#181](https://github.com/g-raman/uenroll/pull/181) [`5b421b4`](https://github.com/g-raman/uenroll/commit/5b421b41cc51b1472fd82235d4c9e504cc9e5e18) Thanks [@g-raman](https://github.com/g-raman)! - Switched prefix from `NEXT_PUBLIC_` to `VITE_`
+
+### Patch Changes
+
+- [#179](https://github.com/g-raman/uenroll/pull/179) [`a2800ba`](https://github.com/g-raman/uenroll/commit/a2800ba1f9d9711b2496723b25e3400f031bf39f) Thanks [@g-raman](https://github.com/g-raman)! - Updated dependencies.
+
 ## 0.4.1
 
 ### Patch Changes

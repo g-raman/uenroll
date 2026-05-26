@@ -1,5 +1,13 @@
 # scraper
 
+## 2.0.3
+
+### Patch Changes
+
+- [#179](https://github.com/g-raman/uenroll/pull/179) [`a2800ba`](https://github.com/g-raman/uenroll/commit/a2800ba1f9d9711b2496723b25e3400f031bf39f) Thanks [@g-raman](https://github.com/g-raman)! - Update dependencies
+
+- [#179](https://github.com/g-raman/uenroll/pull/179) [`a2800ba`](https://github.com/g-raman/uenroll/commit/a2800ba1f9d9711b2496723b25e3400f031bf39f) Thanks [@g-raman](https://github.com/g-raman)! - Updated dependencies.
+
 ## 2.0.2
 
 ### Patch Changes
