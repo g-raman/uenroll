@@ -199,7 +199,7 @@ export function GenerationHeader() {
           {loading ? t("common.loading") : t("calendar.generate")}
         </Button>
       </div>
-      <LanguageSwitcherButton/>
+      <LanguageSwitcherButton />
       <ThemeSwitchingButton />
     </div>
   );

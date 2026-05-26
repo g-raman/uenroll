@@ -33,18 +33,20 @@ export const ModeSwitcherButton = () => {
         render={
           <Button
             size="lg"
-            className="cursor-pointer gap-2 px-3 text-xs"
+            className="h-auto min-h-10 min-w-0 cursor-pointer gap-2 px-3 text-center text-xs leading-tight whitespace-normal"
             variant={isGenerationMode ? "default" : "outline"}
             aria-pressed={isGenerationMode}
             onClick={handleToggle}
           >
             <span
-              className="size-2 rounded-full bg-current opacity-70"
+              className="size-2 shrink-0 rounded-full bg-current opacity-70"
               aria-hidden="true"
             />
-            {isGenerationMode
-              ? t("scheduleGeneration.on")
-              : t("scheduleGeneration.off")}
+            <span className="min-w-0 text-center">
+              {isGenerationMode
+                ? t("scheduleGeneration.on")
+                : t("scheduleGeneration.off")}
+            </span>
           </Button>
         }
       />

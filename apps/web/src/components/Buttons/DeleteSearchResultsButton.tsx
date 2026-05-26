@@ -29,14 +29,16 @@ export const DeleteSearchResultsButton = () => {
       <TooltipTrigger
         render={
           <Button
-            className="grow"
+            className="h-auto min-h-10 w-full min-w-0 px-3 text-center text-xs leading-tight whitespace-normal"
             variant="outline"
             size="lg"
             onClick={handleClick}
             disabled={courseCodes.length === 0}
           >
-            <Trash2 className="size-4" />
-            <p className="text-xs">{t("clearResults.button")}</p>
+            <Trash2 className="size-4 shrink-0" />
+            <span className="min-w-0 text-center">
+              {t("clearResults.button")}
+            </span>
           </Button>
         }
       />

@@ -252,7 +252,7 @@ export default function Autocomplete() {
         </PopoverContent>
       </Popover>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 gap-2">
         <AdvancedSearch
           term={selectedTerm}
           selectedCodes={selectedCodes}
@@ -264,7 +264,9 @@ export default function Autocomplete() {
 
         <ModeSwitcherButton />
 
-        <DeleteSearchResultsButton />
+        <div className="col-span-2">
+          <DeleteSearchResultsButton />
+        </div>
       </div>
     </>
   );
