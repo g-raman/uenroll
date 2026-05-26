@@ -51,7 +51,6 @@
     "any": "Tous",
     "language": "Langue",
     "setFilter": "Sélectionnez au moins un filtre pour rechercher.",
-    "emptyState": "Entrez un code de matière, sélectionnez une année ou choisissez une langue pour commencer.",
     "clearFilters": "Effacer les filtres",
     "results": {
       "searching": "Recherche en cours...",
