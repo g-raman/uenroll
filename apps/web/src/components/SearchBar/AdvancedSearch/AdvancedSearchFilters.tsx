@@ -15,6 +15,7 @@ import {
   type YearValue,
   type LanguageValue,
 } from "./advanced-search-constants";
+import { useTranslation } from "react-i18next";
 
 type AdvancedSearchFiltersProps = {
   subject: string;
@@ -62,6 +63,7 @@ export function AdvancedSearchFilters({
       onSearch();
     }
   };
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col gap-4">
@@ -69,7 +71,7 @@ export function AdvancedSearchFilters({
       <div>
         <div className="flex items-center justify-between">
           <Label className="mb-1.5" htmlFor="subject-filter">
-            Subject code
+            {t("advancedSearch.subjectCode")}
           </Label>
 
           <Button
@@ -82,7 +84,7 @@ export function AdvancedSearchFilters({
             className="invisible text-muted-foreground hover:text-primary disabled:opacity-0 data-[active=true]:visible"
           >
             <FilterXIcon className="size-3" />
-            Clear filters
+            {t("advancedSearch.clearFilters")}
           </Button>
         </div>
 
@@ -103,7 +105,7 @@ export function AdvancedSearchFilters({
 
           <Button size="default" disabled={!canSearch} onClick={onSearch}>
             <SearchIcon className="mr-1.5 size-3.5" />
-            Search
+            {t("advancedSearch.search")}
           </Button>
         </div>
       </div>
@@ -115,7 +117,7 @@ export function AdvancedSearchFilters({
             id="year-label"
             className="mb-1.5 text-xs tracking-wide text-muted-foreground uppercase"
           >
-            Year
+            {t("advancedSearch.year")}
           </Label>
 
           <ToggleGroup
@@ -136,7 +138,7 @@ export function AdvancedSearchFilters({
                 value={option.value}
                 className="aria-pressed:bg-primary/45 aria-pressed:text-primary-foreground"
               >
-                {option.label}
+                {t(option.labelKey)}
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
@@ -147,7 +149,7 @@ export function AdvancedSearchFilters({
             id="language-label"
             className="mb-1.5 text-xs tracking-wide text-muted-foreground uppercase"
           >
-            Language
+            {t("advancedSearch.language")}
           </Label>
           <ToggleGroup
             aria-labelledby="language-label"
@@ -170,15 +172,17 @@ export function AdvancedSearchFilters({
                   value={option.value}
                   className="aria-pressed:bg-primary/45 aria-pressed:text-primary-foreground"
                 >
-                  {option.label}
+                  {t(option.labelKey)}
                 </ToggleGroupItem>
               );
 
-              if (option.description) {
+              if (option.descriptionKey ? t(option.descriptionKey) : null) {
                 return (
                   <Tooltip key={option.value}>
                     <TooltipTrigger render={toggle} />
-                    <TooltipContent>{option.description}</TooltipContent>
+                    <TooltipContent>
+                      {option.descriptionKey ? t(option.descriptionKey) : null}
+                    </TooltipContent>
                   </Tooltip>
                 );
               }

@@ -9,12 +9,14 @@ import {
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
 import React, { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 
 export const DeleteSearchResultsButton = () => {
   const { resetColours } = useColoursActions();
   const [data, setData] = useDataParam();
   const courseCodes = Object.keys(data ? data : {});
   const { resetSchedules } = useGeneratorActions();
+  const { t } = useTranslation();
 
   const handleClick = useCallback(() => {
     resetColours();
@@ -27,20 +29,22 @@ export const DeleteSearchResultsButton = () => {
       <TooltipTrigger
         render={
           <Button
-            className="grow"
+            className="h-auto min-h-10 w-full min-w-0 px-3 text-center text-xs leading-tight whitespace-normal"
             variant="outline"
             size="lg"
             onClick={handleClick}
             disabled={courseCodes.length === 0}
           >
-            <Trash2 className="size-4" />
-            <p className="text-xs">Clear Results</p>
+            <Trash2 className="size-4 shrink-0" />
+            <span className="min-w-0 text-center">
+              {t("clearResults.button")}
+            </span>
           </Button>
         }
       />
 
       <TooltipContent>
-        <p>Clear all search results</p>
+        <p>{t("clearResults.tooltip")}</p>
       </TooltipContent>
     </Tooltip>
   );

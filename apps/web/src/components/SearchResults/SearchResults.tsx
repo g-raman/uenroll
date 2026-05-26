@@ -8,11 +8,13 @@ import { useCourseQueries } from "@/hooks/useCourseQueries";
 import { useTermParam } from "@/hooks/useTermParam";
 import { useDataParam } from "@/hooks/useDataParam";
 import { useMode } from "@/stores/modeStore";
+import { useTranslation } from "react-i18next";
 
 export default function SearchResults() {
   const [data] = useDataParam();
   const [selectedTerm] = useTermParam();
   const isGenerationMode = useMode();
+  const { t } = useTranslation();
 
   const [openResults, setOpenResults] = useState<string[]>([]);
 
@@ -25,7 +27,7 @@ export default function SearchResults() {
   );
 
   if (courseQueries.some(query => query.isLoading)) {
-    return <div>Loading...</div>;
+    return <div>{t("common.loading")}</div>;
   }
 
   const courseSearchResults = courseQueries
@@ -47,7 +49,7 @@ export default function SearchResults() {
                   className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
                   aria-label={`Open ${course.courseCode} on uo.grades.zone`}
                 >
-                  <span>Grades on uo.grades.zone</span>
+                  <span>{t("grades.uoGradesZone")}</span>
                   <ExternalLink className="size-3" aria-hidden="true" />
                 </a>
               </div>

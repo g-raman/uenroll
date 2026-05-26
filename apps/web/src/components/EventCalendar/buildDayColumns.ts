@@ -50,7 +50,7 @@ export function buildDayColumns(
 
     return {
       date,
-      dayOfWeek: DAYS_OF_WEEK[date.dayOfWeek]!,
+      dayOfWeekKey: DAYS_OF_WEEK[date.dayOfWeek]!,
       dayNumber: date.day,
       isToday: isSameDay(date, today),
       events: positionedEvents,

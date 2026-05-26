@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@repo/ui/components/button";
@@ -8,29 +7,29 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+import { useTranslation } from "react-i18next";
+import { cn } from "@repo/ui/lib/utils";
 
-export function ThemeSwitchingButton() {
+type ThemeSwitchingButtonProps = {
+  className?: string;
+};
+
+export function ThemeSwitchingButton({ className }: ThemeSwitchingButtonProps) {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    // Only run once and state isn't used elsewhere
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
+  const { t } = useTranslation();
 
   const toggleTheme = () => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
-  const Icon = mounted && resolvedTheme === "dark" ? Sun : Moon;
+  const Icon = resolvedTheme === "dark" ? Sun : Moon;
 
   return (
     <Tooltip>
       <TooltipTrigger
         render={
           <Button
-            className="size-10"
+            className={cn("w-full justify-center", className)}
             variant="outline"
             size="icon"
             onClick={toggleTheme}
@@ -42,7 +41,9 @@ export function ThemeSwitchingButton() {
       />
 
       <TooltipContent>
-        Change to {resolvedTheme === "dark" ? "Light mode" : "Dark mode"}
+        {resolvedTheme === "dark"
+          ? t("theme.switchToLight")
+          : t("theme.switchToDark")}
       </TooltipContent>
     </Tooltip>
   );

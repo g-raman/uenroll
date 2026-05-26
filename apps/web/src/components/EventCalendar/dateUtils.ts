@@ -1,5 +1,4 @@
 import { Temporal } from "temporal-polyfill";
-import { MONTH_NAMES_SHORT, MONTH_NAMES_FULL } from "./constants";
 
 export function getWeekStart(date: Temporal.PlainDate): Temporal.PlainDate {
   // Temporal uses ISO weekday: 1 = Monday, 7 = Sunday
@@ -34,15 +33,21 @@ export function formatTime(zonedDateTime: Temporal.ZonedDateTime): string {
   return `${displayHour}:${displayMinute} ${period}`;
 }
 
-export function formatMonthYear(date: Temporal.PlainDate): string {
-  return `${MONTH_NAMES_FULL[date.month - 1]} ${date.year}`;
+export function formatMonthYear(
+  date: Temporal.PlainDate,
+  monthNamesFull: string[],
+): string {
+  return `${monthNamesFull[date.month - 1]} ${date.year}`;
 }
 
-export function formatWeekRange(weekStart: Temporal.PlainDate): string {
+export function formatWeekRange(
+  weekStart: Temporal.PlainDate,
+  monthNamesShort: string[],
+): string {
   const weekEnd = weekStart.add({ days: 6 });
 
-  const startMonth = MONTH_NAMES_SHORT[weekStart.month - 1];
-  const endMonth = MONTH_NAMES_SHORT[weekEnd.month - 1];
+  const startMonth = monthNamesShort[weekStart.month - 1];
+  const endMonth = monthNamesShort[weekEnd.month - 1];
 
   if (weekStart.month === weekEnd.month) {
     return `${startMonth} ${weekStart.day} - ${weekEnd.day}, ${weekStart.year}`;

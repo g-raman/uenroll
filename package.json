@@ -22,17 +22,14 @@
     "ci:deploy:web:preview": "bun --cwd=apps/web run ci:deploy:preview",
     "ci:format": "oxfmt --check",
     "db:down": "docker compose -f ./packages/db/docker-compose.yml down",
-    "db:migrate": "turbo run --filter @repo/db db:migrate",
-    "db:seed": "turbo run --filter @repo/db db:seed",
+    "db:migrate": "bun --cwd=packages/db run db:migrate",
+    "db:seed": "bun --cwd=packages/db run db:seed",
     "db:studio": "turbo run --filter @repo/db db:studio",
     "db:up": "docker compose -f ./packages/db/docker-compose.yml up -d && bun run db:migrate",
     "dev:scraper": "turbo run --filter uenroll-scraper dev",
-    "dev:web": "turbo run --filter web dev",
+    "dev:web": "bun --cwd=apps/web run dev",
     "format": "oxfmt --write",
     "lint": "turbo run lint"
-  },
-  "dependencies": {
-    "minimatch": "^10.2.5"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.7.0",

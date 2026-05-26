@@ -2,6 +2,7 @@ import { Button } from "@repo/ui/components/button";
 import { SlidersHorizontalIcon } from "lucide-react";
 import { useState } from "react";
 import { AdvancedSearchDialog } from "./AdvancedSearchDialog";
+import { useTranslation } from "react-i18next";
 
 type AdvancedSearchProps = {
   term: string;
@@ -21,7 +22,7 @@ export function AdvancedSearch({
   onOpen,
 }: AdvancedSearchProps) {
   const [open, setOpen] = useState(false);
-
+  const { t } = useTranslation();
   return (
     <>
       <AdvancedSearchDialog
@@ -46,7 +47,7 @@ export function AdvancedSearch({
         }}
       >
         <SlidersHorizontalIcon className="size-4" />
-        <p className="text-xs">Advanced search</p>
+        <p className="text-xs">{t("advancedSearch.title")}</p>
       </Button>
     </>
   );

@@ -23,6 +23,8 @@ import {
 import { toast } from "sonner";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcherButton } from "../Buttons/LanguageSwitcherButton";
 
 export function GenerationHeader() {
   const [loading, setLoading] = useState(false);
@@ -74,7 +76,7 @@ export function GenerationHeader() {
 
       // result[0] will be empty if there are search results but all components are unchecked
       if (result.length === 0 || result[0].length === 0) {
-        toast.error("No Possible Schedules. Adjust filters or remove courses.");
+        toast.error(t("scheduleGeneration.noSchedules"));
         return;
       }
       setSchedules(result);
@@ -125,11 +127,12 @@ export function GenerationHeader() {
 
     nextSchedule();
   };
+  const { t } = useTranslation();
 
   return (
-    <div className="sticky top-0 z-10 flex items-center justify-between gap-2 rounded-b-lg border-b bg-background px-4 py-2 lg:rounded-lg lg:border">
+    <div className="sticky top-0 z-10 flex w-full min-w-0 items-center justify-between gap-4 rounded-b-lg border-b bg-background px-4 py-3 lg:rounded-lg lg:border">
       {width && width >= 1024 && (
-        <div className="flex items-center justify-start gap-2 text-4xl">
+        <div className="flex shrink-0 items-center justify-start gap-2 text-4xl">
           <svg
             className="size-12 fill-current text-primary"
             xmlns="http://www.w3.org/2000/svg"
@@ -141,63 +144,71 @@ export function GenerationHeader() {
         </div>
       )}
 
-      <div
-        aria-hidden={!isGenerationMode}
-        className={`flex gap-2 transition-all ${isGenerationMode ? "visible opacity-100" : "invisible opacity-0"}`}
-      >
-        <div className="flex items-center">
-          <Button
-            disabled={!isGenerationMode || noSchedules}
-            className="w-6 rounded-e-none border-e-0"
-            variant="outline"
-            onClick={handlePrevious}
-          >
-            <ChevronLeft className="size-4" />
-          </Button>
-
-          <div className="flex h-full items-center">
-            <Input
-              onChange={handleInputChange}
-              className="max-w-8! rounded-none text-center text-xs lg:max-w-28! lg:text-sm"
+      <div className="flex min-w-0 flex-1 justify-center">
+        <div
+          aria-hidden={!isGenerationMode}
+          className={`flex shrink-0 items-center gap-3 transition-all ${
+            isGenerationMode ? "visible opacity-100" : "invisible opacity-0"
+          }`}
+        >
+          <div className="flex h-11 items-center overflow-hidden rounded-md border bg-background shadow-sm">
+            <Button
               disabled={!isGenerationMode || noSchedules}
-              value={
-                noSchedules
-                  ? `No results`
-                  : selectedSchedule !== null
-                    ? selectedSchedule + 1
-                    : ""
-              }
-            />
-            {!noSchedules && (
-              <span className="flex h-full items-center border-y border-input bg-muted px-2 text-sm text-gray-500">
-                of {schedules.length}
-              </span>
-            )}
+              className="h-11 w-9 shrink-0 rounded-none border-0 border-r px-0"
+              variant="ghost"
+              onClick={handlePrevious}
+            >
+              <ChevronLeft className="size-4" />
+            </Button>
+
+            <div className="flex h-11 items-center">
+              <Input
+                onChange={handleInputChange}
+                className="h-11 w-[140px] rounded-none border-0 text-center text-sm"
+                disabled={!isGenerationMode || noSchedules}
+                value={
+                  noSchedules
+                    ? t("scheduleGeneration.noResults")
+                    : selectedSchedule !== null
+                      ? selectedSchedule + 1
+                      : ""
+                }
+              />
+
+              {!noSchedules && (
+                <span className="flex h-11 items-center border-l px-3 text-sm text-muted-foreground">
+                  {t("scheduleGeneration.of")} {schedules.length}
+                </span>
+              )}
+            </div>
+
+            <Button
+              disabled={!isGenerationMode || noSchedules}
+              className="h-11 w-9 shrink-0 rounded-none border-0 border-l px-0"
+              variant="ghost"
+              onClick={handleNext}
+            >
+              <ChevronRight className="size-4" />
+            </Button>
           </div>
 
           <Button
-            disabled={!isGenerationMode || noSchedules}
-            className="w-6 rounded-s-none border-s-0"
-            variant="outline"
-            onClick={handleNext}
+            disabled={
+              !isGenerationMode || loading || courseSearchResults.length <= 0
+            }
+            variant="default"
+            className="h-11 shrink-0 rounded-md px-5 text-base font-semibold"
+            onClick={handleGeneration}
           >
-            <ChevronRight className="size-4" />
+            {loading ? t("common.loading") : t("calendar.generate")}
           </Button>
         </div>
-
-        <Button
-          disabled={
-            !isGenerationMode || loading || courseSearchResults.length <= 0
-          }
-          variant="default"
-          className="px-2 text-xs lg:text-sm"
-          onClick={handleGeneration}
-        >
-          {loading ? "Loading..." : "Generate"}
-        </Button>
       </div>
 
-      <ThemeSwitchingButton />
+      <div className="grid grid-cols-2 gap-2">
+        <LanguageSwitcherButton className="h-12 w-full" />
+        <ThemeSwitchingButton className="h-12 w-full" />
+      </div>
     </div>
   );
 }

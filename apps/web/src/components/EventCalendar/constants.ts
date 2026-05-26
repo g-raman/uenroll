@@ -11,41 +11,11 @@ export const ANIMATION_DURATION = 200;
 export const TIME_COLUMN_WIDTH = 64;
 
 export const DAYS_OF_WEEK: Record<number, string> = {
-  1: "Mon",
-  2: "Tue",
-  3: "Wed",
-  4: "Thu",
-  5: "Fri",
-  6: "Sat",
-  7: "Sun",
+  1: "calendar.days.mon",
+  2: "calendar.days.tue",
+  3: "calendar.days.wed",
+  4: "calendar.days.thu",
+  5: "calendar.days.fri",
+  6: "calendar.days.sat",
+  7: "calendar.days.sun",
 };
-
-export const MONTH_NAMES_SHORT = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-export const MONTH_NAMES_FULL = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];

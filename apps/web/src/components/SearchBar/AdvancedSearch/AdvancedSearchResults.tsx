@@ -8,6 +8,7 @@ import {
   BookOpenIcon,
 } from "lucide-react";
 import { RESULTS_LIMIT } from "./advanced-search-constants";
+import { useTranslation } from "react-i18next";
 
 type AdvancedSearchResultsProps = {
   hasSubmitted: boolean;
@@ -30,21 +31,28 @@ export function AdvancedSearchResults({
   isAtLimit,
   onAddCourse,
 }: AdvancedSearchResultsProps) {
+  const { t } = useTranslation();
   return (
     <div className="-mt-2 grid gap-2">
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>
           {hasSubmitted
             ? isLoading
-              ? "Searching..."
-              : `${courses.length} result${courses.length === 1 ? "" : "s"}${courses.length >= RESULTS_LIMIT ? ` (limited to ${RESULTS_LIMIT})` : ""}`
+              ? t("advancedSearch.results.searching")
+              : `${t("advancedSearch.results.count", { count: courses.length })}${
+                  courses.length >= RESULTS_LIMIT
+                    ? ` (${t("advancedSearch.results.limited", { limit: RESULTS_LIMIT })})`
+                    : ""
+                }`
             : canSearch
-              ? "Press Search to see results."
-              : "Set at least one filter to search."}
+              ? t("advancedSearch.results.pressSearch")
+              : t("advancedSearch.results.setFilter")}
         </span>
         {isAtLimit && (
           <span className="font-medium text-destructive">
-            Max {MAX_RESULTS_ALLOWED} courses
+            {t("advancedSearch.results.maxCourses", {
+              count: MAX_RESULTS_ALLOWED,
+            })}
           </span>
         )}
       </div>
@@ -56,8 +64,8 @@ export function AdvancedSearchResults({
             <BookOpenIcon className="size-8 text-muted-foreground/50" />
             <p className="max-w-[18rem] text-center text-sm">
               {canSearch
-                ? "Ready to search. Press the Search button or hit Enter."
-                : "Enter a subject code, select a year, or choose a language to get started."}
+                ? t("advancedSearch.results.ready")
+                : t("advancedSearch.results.empty")}
             </p>
           </div>
         )}
@@ -66,7 +74,7 @@ export function AdvancedSearchResults({
         {hasSubmitted && isLoading && (
           <div className="flex flex-col items-center justify-center gap-2 px-4 py-10 text-muted-foreground">
             <LoaderCircleIcon className="size-6 animate-spin text-primary/60" />
-            <p className="text-sm">Finding courses...</p>
+            <p className="text-sm">{t("advancedSearch.results.finding")}</p>
           </div>
         )}
 
@@ -74,7 +82,7 @@ export function AdvancedSearchResults({
         {hasSubmitted && !isLoading && courses.length === 0 && (
           <div className="flex flex-col items-center justify-center gap-2 px-4 py-10 text-muted-foreground">
             <SearchIcon className="size-6 text-muted-foreground/50" />
-            <p className="text-sm">No courses match those filters.</p>
+            <p className="text-sm">{t("advancedSearch.results.noMatch")}</p>
           </div>
         )}
 
@@ -110,12 +118,12 @@ export function AdvancedSearchResults({
                           strokeWidth={3}
                           className="mr-1 size-4 text-emerald-500"
                         />
-                        Added
+                        {t("advancedSearch.results.added")}
                       </>
                     ) : (
                       <>
                         <PlusIcon className="mr-1 size-3" />
-                        Add
+                        {t("advancedSearch.results.add")}
                       </>
                     )}
                   </Button>

@@ -1,0 +1,129 @@
+{
+  "term": {
+    "springSummer2025": "Trimestre printemps/été 2025"
+  },
+  "search": {
+    "placeholder": "Rechercher un cours..."
+  },
+  "scheduleGeneration": {
+    "off": "Génération d’horaire désactivée",
+    "on": "Génération d’horaire activée",
+    "noResults": "Aucun horaire",
+    "noSchedules": "Aucun horaire trouvé",
+    "of": "Horaire de ",
+    "tooltip": {
+      "on": "Revenir à la sélection manuelle des sections",
+      "off": "Générer automatiquement tous les horaires possibles"
+    }
+  },
+  "clearResults": {
+    "button": "Effacer les résultats",
+    "tooltip": "Effacer tous les résultats de recherche"
+  },
+  "footer": {
+    "maintainedBy": "Maintenu par"
+  },
+  "errors": {
+    "failedToAddCourse": "Impossible d’ajouter le cours",
+    "maxCoursesAllowed": "Un maximum de {{count}} cours est autorisé",
+    "alreadySelected": "{{courseCode}} est déjà sélectionné",
+    "missingEnvironmentVariables": "Variables d’environnement manquantes",
+    "noCourseFound": "Aucun cours trouvé"
+  },
+  "advancedSearch": {
+    "title": "Recherche avancée",
+    "description": "Filtrez par matière, année ou langue, puis ajoutez des cours à votre horaire.",
+    "subjectCode": "Code de matière",
+    "search": "Rechercher",
+    "year": "Année",
+    "years": {
+      "first": "1re",
+      "second": "2e",
+      "third": "3e",
+      "fourth": "4e",
+      "grad": "Cycles supérieurs"
+    },
+    "languages": {
+      "english": "Anglais",
+      "french": "Français",
+      "other": "Autre"
+    },
+    "languageDescriptions": {
+      "other": "Bilingue ou autres langues (ex. espagnol)"
+    },
+    "any": "Tous",
+    "language": "Langue",
+    "setFilter": "Sélectionnez au moins un filtre pour rechercher.",
+    "emptyState": "Entrez un code de matière, sélectionnez une année ou choisissez une langue pour commencer.",
+    "clearFilters": "Effacer les filtres",
+    "results": {
+      "searching": "Recherche en cours...",
+      "count_one": "{{count}} résultat",
+      "count_other": "{{count}} résultats",
+      "limited": "limité à {{limit}}",
+      "pressSearch": "Appuyez sur Rechercher pour voir les résultats.",
+      "setFilter": "Sélectionnez au moins un filtre pour rechercher.",
+      "maxCourses": "Max {{count}} cours",
+      "ready": "Prêt à rechercher. Appuyez sur Rechercher ou sur Entrée.",
+      "empty": "Entrez un code de matière, sélectionnez une année ou choisissez une langue pour commencer.",
+      "finding": "Recherche des cours...",
+      "noMatch": "Aucun cours ne correspond à ces filtres.",
+      "added": "Ajouté",
+      "add": "Ajouter"
+    }
+  },
+  "common": {
+    "loading": "Chargement..."
+  },
+  "grades": {
+    "uoGradesZone": "Notes sur uo.grades.zone"
+  },
+  "calendar": {
+    "termStart": "Début du trimestre",
+    "hideWeekends": "Masquer les fins de semaine",
+    "generate": "Générer",
+    "days": {
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mer",
+      "thu": "Jeu",
+      "fri": "Ven",
+      "sat": "Sam",
+      "sun": "Dim"
+    },
+    "monthsShort": [
+      "janv.",
+      "févr.",
+      "mars",
+      "avr.",
+      "mai",
+      "juin",
+      "juill.",
+      "août",
+      "sept.",
+      "oct.",
+      "nov.",
+      "déc."
+    ],
+    "monthsFull": [
+      "janvier",
+      "février",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "décembre"
+    ],
+    "previousWeek": "Semaine précédente",
+    "nextWeek": "Semaine suivante"
+  },
+  "theme": {
+    "switchToLight": "Passer au mode clair",
+    "switchToDark": "Passer au mode sombre"
+  }
+}

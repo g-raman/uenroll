@@ -30,7 +30,7 @@ export interface PositionedEvent extends CalendarEvent {
 
 export interface DayColumn {
   date: Temporal.PlainDate;
-  dayOfWeek: string;
+  dayOfWeekKey: string;
   dayNumber: number;
   isToday: boolean;
   events: PositionedEvent[];
