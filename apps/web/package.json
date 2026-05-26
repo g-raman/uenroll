@@ -24,6 +24,7 @@
     "@trpc/tanstack-react-query": "^11.17.0",
     "@vitejs/plugin-react": "^6.0.1",
     "fuse.js": "^7.3.0",
+    "i18next": "^26.2.0",
     "lucide-react": "^1.14.0",
     "lz-string": "^1.5.0",
     "minisearch": "^7.1.2",
@@ -35,15 +36,14 @@
     "posthog-node": "^5.33.4",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "react-i18next": "^17.0.8",
     "rrule": "^2.8.1",
     "sonner": "^2.0.6",
     "temporal-polyfill": "^0.3.2",
     "ts-ics": "^2.4.4",
     "vite": "^8.0.11",
     "zod": "^4.4.3",
-    "zustand": "^5.0.13",
-    "i18next": "^26.2.0",
-    "react-i18next": "^17.0.8"
+    "zustand": "^5.0.13"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.29.0",

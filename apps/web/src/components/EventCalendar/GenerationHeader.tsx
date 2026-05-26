@@ -147,8 +147,9 @@ export function GenerationHeader() {
       <div className="flex min-w-0 flex-1 justify-center">
         <div
           aria-hidden={!isGenerationMode}
-          className={`flex shrink-0 items-center gap-3 transition-all ${isGenerationMode ? "visible opacity-100" : "invisible opacity-0"
-            }`}
+          className={`flex shrink-0 items-center gap-3 transition-all ${
+            isGenerationMode ? "visible opacity-100" : "invisible opacity-0"
+          }`}
         >
           <div className="flex h-11 items-center overflow-hidden rounded-md border bg-background shadow-sm">
             <Button

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@repo/ui/components/button";
@@ -17,18 +16,13 @@ type ThemeSwitchingButtonProps = {
 
 export function ThemeSwitchingButton({ className }: ThemeSwitchingButtonProps) {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const { t } = useTranslation();
 
   const toggleTheme = () => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
-  const Icon = mounted && resolvedTheme === "dark" ? Sun : Moon;
-  const { t } = useTranslation();
+  const Icon = resolvedTheme === "dark" ? Sun : Moon;
 
   return (
     <Tooltip>

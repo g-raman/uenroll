@@ -6,7 +6,9 @@ type LanguageSwitcherButtonProps = {
   className?: string;
 };
 
-export function LanguageSwitcherButton({ className }: LanguageSwitcherButtonProps) {
+export function LanguageSwitcherButton({
+  className,
+}: LanguageSwitcherButtonProps) {
   const { i18n } = useTranslation();
 
   const nextLanguage = i18n.language === "fr" ? "en" : "fr";
