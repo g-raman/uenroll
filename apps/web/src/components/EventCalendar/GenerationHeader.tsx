@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton";
 import { useTranslation } from "react-i18next";
+import { LanguageSwitcherButton } from "../Buttons/LanguageSwitcherButton";
 
 export function GenerationHeader() {
   const [loading, setLoading] = useState(false);
@@ -198,6 +199,7 @@ export function GenerationHeader() {
           {loading ? t("common.loading") : t("calendar.generate")}
         </Button>
       </div>
+      <LanguageSwitcherButton/>
       <ThemeSwitchingButton />
     </div>
   );
