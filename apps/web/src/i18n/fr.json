@@ -21,7 +21,8 @@
     "tooltip": "Effacer tous les résultats de recherche"
   },
   "footer": {
-    "maintainedBy": "Maintenu par"
+    "openSourceOn": "Code source ouvert sur",
+    "copyright": "©{{year}}."
   },
   "errors": {
     "failedToAddCourse": "Impossible d’ajouter le cours",
@@ -125,5 +126,17 @@
   "theme": {
     "switchToLight": "Passer au mode clair",
     "switchToDark": "Passer au mode sombre"
+  },
+  "about": {
+    "button": "À propos",
+    "title": "À propos de uEnroll",
+    "description": "Un outil open source de planification d’horaire pour les étudiants de l’Université d’Ottawa.",
+    "body": "uEnroll aide les étudiants à rechercher des cours, comparer les sections et créer des horaires possibles plus facilement.",
+    "contributors": "Contributeurs",
+    "project": "Projet",
+    "github": "GitHub",
+    "founder": "Fondateur",
+    "loadingContributors": "Chargement des contributeurs...",
+    "copyright": "© {{year}} uEnroll. Projet open source."
   }
 }

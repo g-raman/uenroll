@@ -4,28 +4,14 @@ import { useTranslation } from "react-i18next";
 export const Footer = () => {
   const year = new Date().getFullYear();
   const { t } = useTranslation();
+
   return (
-    <div className="mt-auto hidden text-center text-sm md:block">
-      <p className="inline-block">{t("footer.maintainedBy")}</p>
-      &nbsp;
+    <footer className="mt-auto hidden border-t pt-4 text-center text-sm md:block">
+      <span className="text-muted-foreground">{t("footer.openSourceOn")} </span>
+
       <Button
         nativeButton={false}
-        className="p-0 text-foreground underline hover:opacity-70"
-        variant="link"
-        render={
-          <a
-            href="https://www.linkedin.com/in/gupta-raman/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Raman Gupta
-          </a>
-        }
-      />
-      ,&nbsp;
-      <Button
-        nativeButton={false}
-        className="p-0 text-foreground underline hover:opacity-70"
+        className="h-auto p-0 text-foreground underline underline-offset-4 hover:opacity-70"
         variant="link"
         render={
           <a
@@ -33,12 +19,15 @@ export const Footer = () => {
             target="_blank"
             rel="noreferrer"
           >
-            {" "}
-            GitHub{" "}
+            GitHub
           </a>
         }
       />
-      &nbsp;&copy;{year}.
-    </div>
+
+      <span className="text-muted-foreground">
+        {" "}
+        {t("footer.copyright", { year })}
+      </span>
+    </footer>
   );
 };

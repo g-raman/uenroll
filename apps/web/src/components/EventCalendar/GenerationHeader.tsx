@@ -25,6 +25,7 @@ import { useScreenSize } from "@/hooks/useScreenSize";
 import { ThemeSwitchingButton } from "@/components/Buttons/ThemeSwitchingButton";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcherButton } from "../Buttons/LanguageSwitcherButton";
+import { AboutButton } from "@/components/Buttons/AboutButton";
 
 export function GenerationHeader() {
   const [loading, setLoading] = useState(false);
@@ -205,9 +206,10 @@ export function GenerationHeader() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         <LanguageSwitcherButton className="h-12 w-full" />
         <ThemeSwitchingButton className="h-12 w-full" />
+        <AboutButton className="h-12 w-full px-4" />
       </div>
     </div>
   );
