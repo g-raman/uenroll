@@ -1,5 +1,13 @@
 # web
 
+## 3.0.1
+
+### Patch Changes
+
+- [#184](https://github.com/g-raman/uenroll/pull/184) [`47a5477`](https://github.com/g-raman/uenroll/commit/47a5477e5d674b4c2d8c3461cfd54fe928f0aa0b) Thanks [@yaselmo](https://github.com/yaselmo)! - Add initial i18n support with English and French translations.
+
+- [#189](https://github.com/g-raman/uenroll/pull/189) [`d1fbdab`](https://github.com/g-raman/uenroll/commit/d1fbdabe817a54e311bc9f78f2a1855e8f4c7f6e) Thanks [@g-raman](https://github.com/g-raman)! - Fix missing VITE_BASE_URL variable in cloudflare types file
+
 ## 3.0.0
 
 ### Major Changes
