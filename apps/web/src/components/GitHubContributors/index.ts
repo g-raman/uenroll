@@ -1,0 +1,1 @@
+export { GitHubContributors } from "./GitHubContributors";

@@ -21,7 +21,8 @@
     "tooltip": "Clear all search results"
   },
   "footer": {
-    "maintainedBy": "Maintained by"
+    "openSourceOn": "Open source on",
+    "copyright": "©{{year}}."
   },
   "errors": {
     "failedToAddCourse": "Failed to add course",
@@ -125,5 +126,17 @@
   "theme": {
     "switchToLight": "Switch to light mode",
     "switchToDark": "Switch to dark mode"
+  },
+  "about": {
+    "button": "About",
+    "title": "About uEnroll",
+    "description": "An open-source course schedule planning tool for uOttawa students.",
+    "body": "uEnroll helps students search courses, compare sections, and build possible schedules more easily.",
+    "contributors": "Contributors",
+    "project": "Project",
+    "github": "GitHub",
+    "founder": "Founder",
+    "loadingContributors": "Loading contributors...",
+    "copyright": "© {{year}} uEnroll. Open source project."
   }
 }

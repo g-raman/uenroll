@@ -15,6 +15,8 @@ import { GenerationHeader } from "./GenerationHeader";
 import { EventCalendar } from "@/components/EventCalendar/EventCalendar";
 
 const TERM_START_DATES = {
+  "2255": "2025-05-05", // Spring/Summer 2025
+  "2259": "2025-09-02", // Fall 2025
   "2261": "2026-01-01", // Winter 2026
   "2265": "2026-05-04", // 2026 Spring/Summer Term
   "2269": "2026-09-01", // Fall 2026
@@ -32,7 +34,7 @@ export function CalendarWrapper() {
   const courseQueries = useCourseQueries(
     selectedTerm,
     courseCodes,
-    courseCodes.length > 0,
+    !!selectedTerm && courseCodes.length > 0,
   );
 
   const schedules = useSchedules();
@@ -74,28 +76,28 @@ export function CalendarWrapper() {
     return termStartDate ? Temporal.PlainDate.from(termStartDate) : undefined;
   }, [events, termStartDate]);
 
-  if (!selectedTerm) return null;
-
-  if (!termStartDate) {
+  if (selectedTerm && !termStartDate) {
     console.error("Missing term start date for selected term", {
       selectedTerm,
       knownTerms: Object.keys(TERM_START_DATES),
     });
-    return null;
   }
-
-  const termStart = Temporal.PlainDate.from(termStartDate);
 
   return (
     <div className="flex flex-col gap-2 bg-black md:h-full md:gap-4">
       <GenerationHeader />
-      <div className="overflow-hidden rounded-t-md md:h-full">
-        <EventCalendar
-          key={initialDate?.toString() ?? "default"}
-          events={events}
-          config={{ initialDate, termStart }}
-        />
-      </div>
+      {selectedTerm && termStartDate && (
+        <div className="overflow-hidden rounded-t-md md:h-full">
+          <EventCalendar
+            key={initialDate?.toString() ?? "default"}
+            events={events}
+            config={{
+              initialDate,
+              termStart: Temporal.PlainDate.from(termStartDate),
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
