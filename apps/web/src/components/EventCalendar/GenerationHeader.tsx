@@ -38,7 +38,7 @@ export function GenerationHeader() {
   const courseQueries = useCourseQueries(
     selectedTerm,
     courseCodes,
-    courseCodes.length > 0,
+    !!selectedTerm && courseCodes.length > 0,
   );
 
   const isGenerationMode = useMode();

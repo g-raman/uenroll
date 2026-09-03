@@ -9,7 +9,11 @@ const handler = (req: Request) => {
     endpoint: "/api/trpc",
     req,
     router: appRouter,
-    createContext: () => ({ db: createDb(env), cache: env.DB_QUERY_CACHE }),
+    createContext: () => ({
+      db: createDb(env),
+      cache:
+        process.env.NODE_ENV === "development" ? undefined : env.DB_QUERY_CACHE,
+    }),
   });
 };
 
